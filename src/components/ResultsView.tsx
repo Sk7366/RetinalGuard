@@ -3,6 +3,8 @@ import {
   Activity,
   AlertOctagon,
   ArrowRight,
+  Bot,
+  Calendar,
   CheckCircle2,
   ChevronRight,
   Copy,
@@ -10,16 +12,20 @@ import {
   Eye,
   FileDown,
   Layers,
+  MapPin,
   Printer,
   RefreshCw,
   Share2,
   ShieldAlert,
-  Sparkles,
   Sliders,
+  Sparkles,
+  Stethoscope,
 } from 'lucide-react';
 import { DR_GRADES } from '../data/benchmarks';
+import { screeningApi } from '../services/screeningApi';
 import { DRGrade, MultimodalTriageResult } from '../types';
 import { generateClinicalPdfReport } from '../utils/pdfGenerator';
+import { ClinicalAssistantModal } from './ClinicalAssistantModal';
 import { RiskChip } from './RiskChip';
 import { ShareModal } from './ShareModal';
 
@@ -44,6 +50,11 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
 
   // Share modal state
   const [isShareModalOpen, setIsShareModalOpen] = useState<boolean>(false);
+  // Clinical AI Assistant modal state
+  const [isAssistantOpen, setIsAssistantOpen] = useState<boolean>(false);
+  // Referral created status
+  const [referralToken, setReferralToken] = useState<string | null>(null);
+  const [referralLoading, setReferralLoading] = useState<boolean>(false);
 
   const gradeInfo = DR_GRADES[result.finalGrade];
 
@@ -53,6 +64,17 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleCreateReferral = async () => {
+    setReferralLoading(true);
+    const ref = await screeningApi.createReferral(
+      result,
+      'Aravind Eye Hospital - Community Retina Unit',
+      'Automated triage referral token'
+    );
+    setReferralToken(ref.id);
+    setReferralLoading(false);
   };
 
   return (
@@ -100,6 +122,14 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
           </button>
 
           <button
+            onClick={() => setIsAssistantOpen(true)}
+            className="bg-white hover:bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] text-xs font-semibold px-3.5 py-2 rounded-lg transition-colors flex items-center gap-1.5"
+          >
+            <Bot className="w-3.5 h-3.5 text-[#EA580C]" />
+            <span>Ask Assistant</span>
+          </button>
+
+          <button
             id="share-link-btn"
             onClick={handleShare}
             className="bg-white hover:bg-[#FFFDFB] text-[#2E2628] border border-[#EFE4DC] text-xs font-semibold px-3.5 py-2 rounded-lg transition-colors flex items-center gap-1.5"
@@ -118,6 +148,48 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
           </button>
         </div>
       </div>
+
+      {/* CLOSED-LOOP SPECIALIST REFERRAL DISPATCH (FOR REFERABLE CASES: GRADE 2+) */}
+      {result.finalGrade >= 2 && (
+        <section className="bg-white rounded-2xl border border-[#FED7AA] p-5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 rounded-xl bg-[#FFF7ED] border border-[#FED7AA] flex items-center justify-center text-[#EA580C] shrink-0 mt-0.5">
+              <Stethoscope className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h3 className="font-serif font-bold text-sm text-[#2E2628]">
+                  Closed-Loop Specialist Referral Dispatch
+                </h3>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-[#FFF7ED] text-[#C2410C] font-semibold border border-[#FED7AA]">
+                  {result.urgencyLevel.toUpperCase()}
+                </span>
+              </div>
+              <p className="text-xs text-[#6E5C5F] mt-0.5 leading-relaxed">
+                Case flagged for ophthalmology review. Generate a tracked referral token to ensure follow-up attendance at your partner eye hospital.
+              </p>
+            </div>
+          </div>
+
+          <div className="shrink-0 self-stretch sm:self-auto flex items-center gap-2">
+            {referralToken ? (
+              <div className="px-3.5 py-2 rounded-xl bg-[#ECFDF5] border border-[#A7F3D0] text-xs font-bold text-[#059669] flex items-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4" />
+                <span>Token Dispatched: {referralToken}</span>
+              </div>
+            ) : (
+              <button
+                onClick={handleCreateReferral}
+                disabled={referralLoading}
+                className="w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-[#EA580C] to-[#DB2777] text-white hover:opacity-95 shadow-xs transition-opacity flex items-center justify-center gap-1.5"
+              >
+                <Stethoscope className="w-3.5 h-3.5" />
+                <span>{referralLoading ? 'Dispatching...' : 'Dispatch Specialist Referral'}</span>
+              </button>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* PRIMARY TRIAGE CARD: LARGE COLOR-CODED GRADE BADGE & ACTION PLAN */}
       <section
@@ -666,6 +738,13 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
       <ShareModal
         isOpen={isShareModalOpen}
         onClose={() => setIsShareModalOpen(false)}
+        result={result}
+      />
+
+      {/* Controlled Clinical AI Assistant Modal */}
+      <ClinicalAssistantModal
+        isOpen={isAssistantOpen}
+        onClose={() => setIsAssistantOpen(false)}
         result={result}
       />
     </div>

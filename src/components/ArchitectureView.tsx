@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Activity,
   ArrowDown,
+  BookOpen,
   CheckCircle2,
   Code,
   Cpu,
@@ -13,8 +14,16 @@ import {
   ShieldCheck,
   Terminal,
 } from 'lucide-react';
+import { InterviewView } from './InterviewView';
+import { MLflowSection } from './MLflowSection';
 
-export const ArchitectureView: React.FC = () => {
+interface ArchitectureViewProps {
+  initialTab?: 'pipeline' | 'faq' | 'mlflow';
+}
+
+export const ArchitectureView: React.FC<ArchitectureViewProps> = ({ initialTab = 'pipeline' }) => {
+  const [activeSubTab, setActiveSubTab] = useState<'pipeline' | 'faq' | 'mlflow'>(initialTab);
+
   return (
     <div className="max-w-6xl mx-auto space-y-8 pb-16">
       {/* HEADER */}
@@ -27,9 +36,56 @@ export const ArchitectureView: React.FC = () => {
           RetinaGuard Technical Architecture & Pipeline
         </h1>
         <p className="text-xs sm:text-sm text-[#6E5C5F] mt-1 max-w-3xl leading-relaxed">
-          Production stack specifications: PyTorch models exported to ONNX Runtime, served through FastAPI microservices, tracked with MLflow, and integrated into modern React clients.
+          Production stack specifications: PyTorch models exported to ONNX Runtime, served through FastAPI microservices, tracked with MLflow, and integrated with SaMD clinical AI standards.
         </p>
+
+        {/* Sub-Navigation Tabs */}
+        <div className="flex items-center gap-2 mt-6 pt-4 border-t border-[#EFE4DC] flex-wrap">
+          <button
+            onClick={() => setActiveSubTab('pipeline')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 ${
+              activeSubTab === 'pipeline'
+                ? 'bg-gradient-to-r from-[#EA580C] to-[#DB2777] text-white shadow-xs'
+                : 'bg-[#FAF8F6] text-[#6E5C5F] hover:text-[#2E2628] border border-[#EFE4DC]'
+            }`}
+          >
+            <Cpu className="w-3.5 h-3.5" />
+            <span>Inference Pipeline (~244ms)</span>
+          </button>
+
+          <button
+            onClick={() => setActiveSubTab('faq')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 ${
+              activeSubTab === 'faq'
+                ? 'bg-gradient-to-r from-[#EA580C] to-[#DB2777] text-white shadow-xs'
+                : 'bg-[#FAF8F6] text-[#6E5C5F] hover:text-[#2E2628] border border-[#EFE4DC]'
+            }`}
+          >
+            <BookOpen className="w-3.5 h-3.5" />
+            <span>Engineering & SaMD FAQ (10 Q&As)</span>
+          </button>
+
+          <button
+            onClick={() => setActiveSubTab('mlflow')}
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 ${
+              activeSubTab === 'mlflow'
+                ? 'bg-gradient-to-r from-[#EA580C] to-[#DB2777] text-white shadow-xs'
+                : 'bg-[#FAF8F6] text-[#6E5C5F] hover:text-[#2E2628] border border-[#EFE4DC]'
+            }`}
+          >
+            <Activity className="w-3.5 h-3.5" />
+            <span>MLflow Experiment Tracking</span>
+          </button>
+        </div>
       </div>
+
+      {activeSubTab === 'faq' && <InterviewView />}
+
+      {activeSubTab === 'mlflow' && <MLflowSection />}
+
+      {activeSubTab === 'pipeline' && (
+        <>
+
 
       {/* PIPELINE ARCHITECTURE FLOWCHART */}
       <section className="bg-white rounded-2xl border border-[#EFE4DC] p-6 sm:p-8 space-y-6">
@@ -228,6 +284,8 @@ export const ArchitectureView: React.FC = () => {
           </p>
         </div>
       </section>
+        </>
+      )}
     </div>
   );
 };

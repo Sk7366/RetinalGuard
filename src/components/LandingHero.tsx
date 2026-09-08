@@ -2,19 +2,28 @@ import React from 'react';
 import {
   ArrowRight,
   BarChart3,
+  BookOpen,
+  Camera,
   CheckCircle2,
   ChevronRight,
   Cpu,
   Database,
   Eye,
   FileCheck,
+  FileSpreadsheet,
   GitBranch,
+  HelpCircle,
   Layers,
-  Sparkles,
+  MapPin,
   ShieldAlert,
+  Sparkles,
+  Stethoscope,
+  Tent,
+  Users,
 } from 'lucide-react';
 import { BENCHMARK_COMPARISONS, ABLATION_STUDY } from '../data/benchmarks';
 import { PRESET_CASES } from '../data/sampleCases';
+import { UserRole } from '../types';
 import { RiskChip } from './RiskChip';
 import { HeroVisualScanner } from './HeroVisualScanner';
 import { ProblemWorkflowSection } from './ProblemWorkflowSection';
@@ -23,6 +32,8 @@ import { TechnologySection } from './TechnologySection';
 import { DatasetsSection } from './DatasetsSection';
 import { MLflowSection } from './MLflowSection';
 import { ResponsibleAiSection } from './ResponsibleAiSection';
+import { FindScreeningSection } from './FindScreeningSection';
+import { PatientEducationSection } from './PatientEducationSection';
 
 interface LandingHeroProps {
   onStartScreening: () => void;
@@ -30,6 +41,12 @@ interface LandingHeroProps {
   onViewAblation: () => void;
   onViewArchitecture?: () => void;
   onViewInterview?: () => void;
+  onStartCampMode?: () => void;
+  onOpenBatchScreening?: () => void;
+  onOpenGuideModal?: () => void;
+  onOpenTechFaqModal?: () => void;
+  onOpenRoleModal?: () => void;
+  userRole?: UserRole;
 }
 
 export const LandingHero: React.FC<LandingHeroProps> = ({
@@ -38,6 +55,12 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
   onViewAblation,
   onViewArchitecture,
   onViewInterview,
+  onStartCampMode,
+  onOpenBatchScreening,
+  onOpenGuideModal,
+  onOpenTechFaqModal,
+  onOpenRoleModal,
+  userRole = 'provider',
 }) => {
   return (
     <div className="space-y-16 pb-16">
@@ -86,6 +109,16 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                   <Sparkles className="w-4 h-4" />
                   <span>Try RetinaGuard →</span>
                 </button>
+
+                {onStartCampMode && (
+                  <button
+                    onClick={onStartCampMode}
+                    className="bg-white hover:bg-[#FFF7ED] text-[#EA580C] border border-[#FED7AA] px-4 py-3 rounded-xl text-sm font-semibold transition-colors flex items-center gap-2 shadow-xs"
+                  >
+                    <Tent className="w-4 h-4 text-[#EA580C]" />
+                    <span>Camp Mode</span>
+                  </button>
+                )}
 
                 <button
                   id="hero-view-ablation-btn"
@@ -361,7 +394,129 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
         </div>
       </section>
 
-      {/* 11. RESPONSIBLE AI & ETHICS SECTION */}
+      {/* 11. COMMUNITY & FIELD SCREENING TOOLKIT */}
+      <section className="bg-white rounded-2xl border border-[#EFE4DC] p-6 sm:p-10 shadow-xs space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EFE4DC] pb-4">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] mb-2">
+              <Tent className="w-3.5 h-3.5 text-[#EA580C]" />
+              <span>Field Screening & Clinical Tool Suite</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#2E2628] tracking-tight">
+              Built for Community Camps, Technicians & Researchers
+            </h2>
+            <p className="text-xs sm:text-sm text-[#6E5C5F] mt-0.5">
+              Specialized tools designed for real-world deployments in low-resource settings:
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Tool 1: Camp Mode */}
+          <div className="p-5 rounded-xl border border-[#FED7AA] bg-[#FFFDFB] flex flex-col justify-between space-y-3">
+            <div>
+              <div className="w-9 h-9 rounded-lg bg-[#FFF7ED] text-[#EA580C] flex items-center justify-center mb-3">
+                <Tent className="w-5 h-5" />
+              </div>
+              <h3 className="text-sm font-serif font-bold text-[#2E2628]">
+                Screening Camp Flow
+              </h3>
+              <p className="text-xs text-[#6E5C5F] mt-1 leading-relaxed">
+                Streamlined queue workflow optimized for high-throughput field screenings with auto-save.
+              </p>
+            </div>
+            {onStartCampMode && (
+              <button
+                onClick={onStartCampMode}
+                className="w-full py-2 px-3 rounded-lg text-xs font-semibold bg-[#FFF7ED] text-[#C2410C] hover:bg-[#FED7AA]/40 border border-[#FED7AA] flex items-center justify-center gap-1.5 transition-colors"
+              >
+                <span>Launch Camp Mode</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          {/* Tool 2: Batch Analysis */}
+          <div className="p-5 rounded-xl border border-[#FBCFE8] bg-[#FFFDFB] flex flex-col justify-between space-y-3">
+            <div>
+              <div className="w-9 h-9 rounded-lg bg-[#FDF2F8] text-[#DB2777] flex items-center justify-center mb-3">
+                <FileSpreadsheet className="w-5 h-5" />
+              </div>
+              <h3 className="text-sm font-serif font-bold text-[#2E2628]">
+                Batch Image Screening
+              </h3>
+              <p className="text-xs text-[#6E5C5F] mt-1 leading-relaxed">
+                Analyze dozens of fundus images in bulk. Flags ungradables and generates priority queues.
+              </p>
+            </div>
+            {onOpenBatchScreening && (
+              <button
+                onClick={onOpenBatchScreening}
+                className="w-full py-2 px-3 rounded-lg text-xs font-semibold bg-[#FDF2F8] text-[#BE185D] hover:bg-[#FBCFE8]/40 border border-[#FBCFE8] flex items-center justify-center gap-1.5 transition-colors"
+              >
+                <span>Open Batch Tool</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          {/* Tool 3: Image Capture Guide */}
+          <div className="p-5 rounded-xl border border-[#EFE4DC] bg-[#FFFDFB] flex flex-col justify-between space-y-3">
+            <div>
+              <div className="w-9 h-9 rounded-lg bg-[#FAF8F6] text-[#6E5C5F] flex items-center justify-center mb-3">
+                <Camera className="w-5 h-5 text-[#EA580C]" />
+              </div>
+              <h3 className="text-sm font-serif font-bold text-[#2E2628]">
+                Capture Quality Guide
+              </h3>
+              <p className="text-xs text-[#6E5C5F] mt-1 leading-relaxed">
+                Technician guidance on illumination, pupil centering, and avoiding blur or flare artifacts.
+              </p>
+            </div>
+            {onOpenGuideModal && (
+              <button
+                onClick={onOpenGuideModal}
+                className="w-full py-2 px-3 rounded-lg text-xs font-semibold bg-white text-[#2E2628] hover:bg-[#FAF8F6] border border-[#EFE4DC] flex items-center justify-center gap-1.5 transition-colors"
+              >
+                <span>View Guidelines</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+
+          {/* Tool 4: Engineering FAQ */}
+          <div className="p-5 rounded-xl border border-[#EFE4DC] bg-[#FFFDFB] flex flex-col justify-between space-y-3">
+            <div>
+              <div className="w-9 h-9 rounded-lg bg-[#FAF8F6] text-[#6E5C5F] flex items-center justify-center mb-3">
+                <BookOpen className="w-5 h-5 text-[#DB2777]" />
+              </div>
+              <h3 className="text-sm font-serif font-bold text-[#2E2628]">
+                Technical Architecture FAQ
+              </h3>
+              <p className="text-xs text-[#6E5C5F] mt-1 leading-relaxed">
+                10 in-depth architectural questions covering late fusion, calibration, ethics, and MLflow.
+              </p>
+            </div>
+            {onOpenTechFaqModal && (
+              <button
+                onClick={onOpenTechFaqModal}
+                className="w-full py-2 px-3 rounded-lg text-xs font-semibold bg-white text-[#2E2628] hover:bg-[#FAF8F6] border border-[#EFE4DC] flex items-center justify-center gap-1.5 transition-colors"
+              >
+                <span>Read 10 FAQs</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* 12. FIND SCREENING CLINICS & EYE HOSPITALS */}
+      <FindScreeningSection onSelectClinic={(c) => {}} />
+
+      {/* 13. PATIENT EDUCATION & DIABETIC RETINOPATHY AWARENESS */}
+      <PatientEducationSection />
+
+      {/* 14. RESPONSIBLE AI & ETHICS SECTION */}
       <ResponsibleAiSection />
     </div>
   );

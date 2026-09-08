@@ -132,3 +132,146 @@ export interface BenchmarkComparison {
   notes: string;
   isPlaceholder?: boolean;
 }
+
+// User & Mode Types
+export type AppMode = 'public' | 'provider';
+
+// Image Quality Assessment Types
+export type QualityStatus = 'GOOD' | 'UNCERTAIN' | 'UNGRADABLE';
+
+export interface QualityIssue {
+  id: string;
+  name: string;
+  detected: boolean;
+  severity: 'low' | 'moderate' | 'high';
+  description: string;
+  guidance: string;
+}
+
+export interface ImageQualityAssessment {
+  status: QualityStatus;
+  overallScore: number; // 0 to 100
+  isSuitableForAi: boolean;
+  issues: QualityIssue[];
+  primaryGuidance: string;
+  retakeRecommended: boolean;
+  metrics: {
+    sharpness: number; // 0-100
+    illumination: number; // 0-100
+    glareIndex: number; // 0-100 (lower is better)
+    fieldCoverage: number; // 0-100
+    contrast: number; // 0-100
+  };
+}
+
+// Audit Trail Record
+export interface AuditTrailItem {
+  id: string;
+  timestamp: string;
+  action: string;
+  actor: string;
+  role: string;
+  details: string;
+}
+
+// Referral Lifecycle Types
+export type ReferralStatus =
+  | 'Pending'
+  | 'Contacted'
+  | 'Appointment Booked'
+  | 'Specialist Reviewed'
+  | 'Follow-up Due'
+  | 'Completed';
+
+export interface ReferralRecord {
+  id: string;
+  screeningId: string;
+  patientCode: string;
+  patientAge: number;
+  createdAt: string;
+  updatedAt: string;
+  initialGrade: DRGrade;
+  priority: 'Routine' | 'Review Recommended' | 'Priority Specialist Referral' | 'Ungradable Retake';
+  status: ReferralStatus;
+  dmePresent: boolean;
+  assignedClinic: string;
+  specialistName?: string;
+  appointmentDate?: string;
+  clinicalNotes: string;
+  followUpTimeline: string;
+}
+
+// Verified Screening Centers
+export interface ScreeningCenter {
+  id: string;
+  name: string;
+  city: string;
+  state: string;
+  pinCode: string;
+  address: string;
+  distanceKm: number;
+  hours: string;
+  phone: string;
+  services: string[];
+  isCampActive: boolean;
+  campDates?: string;
+}
+
+// Batch Screening Item
+export interface BatchScreeningItem {
+  id: string;
+  filename: string;
+  patientCode: string;
+  patientAge: number;
+  hba1c?: number;
+  qualityStatus: QualityStatus;
+  predictedGrade?: DRGrade;
+  priority: 'Low Concern' | 'Review Recommended' | 'Priority' | 'Ungradable';
+  dmeDetected?: boolean;
+  processed: boolean;
+}
+
+// Accessibility & Platform Settings
+export interface AccessibilitySettings {
+  largeText: boolean;
+  highContrast: boolean;
+  reduceMotion?: boolean;
+  offlineMode?: boolean;
+  textToSpeech?: boolean;
+  liteMode?: boolean;
+  language?: string;
+}
+
+// User Roles in RetinaGuard
+export type UserRole =
+  | 'public'        // Public User
+  | 'technician'    // Screening Technician
+  | 'provider'      // Healthcare Provider
+  | 'admin'         // Administrator
+  | 'researcher';   // Researcher
+
+// Public Navigation Routes
+export type PublicRoute =
+  | 'get-screened'        // "Get your retina screened"
+  | 'find-screening'      // "Find Screening Near Me"
+  | 'learn'               // "Learn About Screening"
+  | 'explore-demo'        // "Explore Demo"
+  | 'overview'
+  | 'how-it-helps'
+  | 'research';
+
+// Provider Navigation Routes
+export type ProviderRoute =
+  | 'dashboard'           // Provider Dashboard
+  | 'camp-mode'           // Screening Camp Mode
+  | 'start-screening'     // Start Screening
+  | 'review-queue'        // Review Queue
+  | 'referrals'           // Referrals
+  | 'analytics'           // Analytics
+  | 'screenings'
+  | 'cases'
+  | 'research'
+  | 'technology'          // Tech & Research Architecture
+  | 'settings';           // Workspace Settings
+
+
