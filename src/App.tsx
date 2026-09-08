@@ -19,6 +19,7 @@ import { PublicExploreDemo } from './components/PublicExploreDemo';
 import { PublicGetScreened } from './components/PublicGetScreened';
 import { PublicHowItHelps } from './components/PublicHowItHelps';
 import { PublicLearn } from './components/PublicLearn';
+import { ReferralsView } from './components/ReferralsView';
 import { ResultsView } from './components/ResultsView';
 import { ReviewQueueView } from './components/ReviewQueueView';
 import { RoleModal } from './components/RoleModal';
@@ -84,6 +85,18 @@ export default function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '').trim();
+      
+      // Direct /referrals or #referrals route support
+      if (hash === 'referrals' || hash === '/referrals' || window.location.pathname === '/referrals') {
+        setIsProviderMode(true);
+        setProviderRoute('referrals');
+        setIsViewingActiveResult(false);
+        if (currentRole === 'public') {
+          setCurrentRole('provider');
+        }
+        return;
+      }
+
       if (!hash) return;
 
       if (hash.startsWith('provider/')) {
@@ -473,15 +486,14 @@ export default function App() {
 
             {/* PROVIDER: Referrals */}
             {providerRoute === 'referrals' && (
-              <HistoryView
+              <ReferralsView
                 history={history}
-                defaultSubTab="referrals"
                 onSelectResult={(selected) => {
                   setActiveResult(selected);
                   setIsViewingActiveResult(true);
                   window.location.hash = 'results';
                 }}
-                onNewScreening={() => {
+                onNavigateStartScreening={() => {
                   setActivePreset(null);
                   navigateProvider('start-screening');
                 }}

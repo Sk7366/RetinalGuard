@@ -183,22 +183,45 @@ export type ReferralStatus =
   | 'Follow-up Due'
   | 'Completed';
 
+export type ReferralStage =
+  | 'Screened'
+  | 'Flagged'
+  | 'Referred'
+  | 'Appointment'
+  | 'Specialist Review'
+  | 'Follow-up';
+
+export interface ReferralAuditEvent {
+  id: string;
+  stage: ReferralStage;
+  title: string; // e.g. "Image uploaded", "Quality checked", "AI analysis completed", "Explanation generated", "Provider reviewed", "Referral created"
+  timestamp: string;
+  actor: string;
+  details: string;
+  status: 'completed' | 'current' | 'pending';
+}
+
 export interface ReferralRecord {
   id: string;
   screeningId: string;
   patientCode: string;
+  patientName?: string;
   patientAge: number;
+  patientPhone?: string;
   createdAt: string;
   updatedAt: string;
   initialGrade: DRGrade;
   priority: 'Routine' | 'Review Recommended' | 'Priority Specialist Referral' | 'Ungradable Retake';
   status: ReferralStatus;
+  currentStage?: ReferralStage;
   dmePresent: boolean;
   assignedClinic: string;
   specialistName?: string;
   appointmentDate?: string;
   clinicalNotes: string;
   followUpTimeline: string;
+  auditTrail?: ReferralAuditEvent[];
+  isSimulated?: boolean;
 }
 
 // Verified Screening Centers
