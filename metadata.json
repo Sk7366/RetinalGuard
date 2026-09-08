@@ -1,0 +1,6 @@
+{
+  "name": "RetinaGuard — Multimodal DR Grading",
+  "description": "Multimodal AI decision-support grading Diabetic Retinopathy by fusing fundus photography, OCT scans, and clinical metadata with Grad-CAM and SHAP.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

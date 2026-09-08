@@ -1,0 +1,188 @@
+@import "tailwindcss";
+
+:root {
+  --orange-primary: #F97316;
+  --orange-600: #EA580C;
+  --orange-700: #C2410C;
+  --pink-primary: #EC4899;
+  --pink-600: #DB2777;
+  --pink-700: #BE185D;
+  --fusion-gradient: linear-gradient(135deg, #F97316 0%, #EC4899 100%);
+  --bg-warm: #FFFDFB;
+  --text-dark: #2E2628;
+  --border-muted: #EFE4DC;
+  --risk-severe: #E11D48;
+  --f-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --f-serif: 'Georgia', serif;
+}
+
+@theme {
+  --color-orange-primary: #F97316;
+  --color-orange-50: #FFF7ED;
+  --color-orange-100: #FFEDD5;
+  --color-orange-200: #FED7AA;
+  --color-orange-300: #FDBA74;
+  --color-orange-400: #FB923C;
+  --color-orange-500: #F97316;
+  --color-orange-600: #EA580C;
+  --color-orange-700: #C2410C;
+
+  --color-pink-primary: #EC4899;
+  --color-pink-50: #FDF2F8;
+  --color-pink-100: #FCE7F3;
+  --color-pink-200: #FBCFE8;
+  --color-pink-300: #F9A8D4;
+  --color-pink-400: #F472B6;
+  --color-pink-500: #EC4899;
+  --color-pink-600: #DB2777;
+  --color-pink-700: #BE185D;
+
+  --color-fusion-start: #F97316;
+  --color-fusion-end: #EC4899;
+  --color-fusion-light: #FFF1F2;
+  --color-fusion-dark: #9D174D;
+
+  --color-warm-bg: #FFFDFB;
+  --color-warm-surface: #FFFFFF;
+  --color-warm-surface-alt: #FBF4EE;
+  --color-warm-border: #EFE4DC;
+  --color-warm-text: #2E2628;
+  --color-warm-secondary: #6E5C5F;
+  --color-warm-muted: #9E8D91;
+
+  --color-risk-nodr: #10B981;
+  --color-risk-mild: #F59E0B;
+  --color-risk-moderate: #F97316;
+  --color-risk-severe: #E11D48;
+  --color-risk-pdr: #9F1239;
+
+  --font-serif: Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--bg-warm, #FFFDFB);
+  color: var(--text-dark, #2E2628);
+  font-family: var(--f-sans, 'Helvetica Neue', Helvetica, Arial, sans-serif);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Orange & Pink design system classes */
+.font-brand {
+  font-family: var(--f-serif, Georgia, serif);
+}
+
+.brand-title {
+  font-family: var(--f-serif, Georgia, serif);
+  background: linear-gradient(135deg, #EA580C 0%, #DB2777 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.patient-tag {
+  background: #FFF7ED;
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid #FED7AA;
+  color: #C2410C;
+}
+
+.patient-tag-pink {
+  background: #FDF2F8;
+  padding: 4px 12px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid #FBCFE8;
+  color: #BE185D;
+}
+
+.card-natural {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid var(--border-muted, #EFE4DC);
+}
+
+.btn-natural-primary {
+  background: linear-gradient(135deg, #EA580C 0%, #DB2777 100%);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(234, 88, 12, 0.2);
+}
+
+.btn-natural-primary:hover {
+  opacity: 0.95;
+  transform: translateY(-0.5px);
+  box-shadow: 0 4px 12px rgba(219, 39, 119, 0.25);
+}
+
+.btn-natural-secondary {
+  background: white;
+  color: var(--text-dark, #2E2628);
+  border: 1px solid var(--border-muted, #EFE4DC);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-natural-secondary:hover {
+  background: #FFF7ED;
+  border-color: #FED7AA;
+  color: #C2410C;
+}
+
+.fusion-gradient {
+  background: linear-gradient(135deg, #F97316 0%, #EC4899 100%);
+}
+
+.fusion-gradient-subtle {
+  background: linear-gradient(135deg, #FFF7ED 0%, #FDF2F8 100%);
+}
+
+.view-fundus-accent {
+  border-top: 4px solid #F97316;
+}
+
+.view-oct-accent {
+  border-top: 4px solid #EC4899;
+}
+
+/* Custom scrollbars with orange & pink touches */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #FFF7ED;
+}
+::-webkit-scrollbar-thumb {
+  background: #FED7AA;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #F97316;
+}
+
+@media print {
+  body {
+    background-color: #FFFFFF !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+}
+
