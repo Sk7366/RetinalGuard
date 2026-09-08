@@ -233,6 +233,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                 </button>
 
                 <button
+                  onClick={() => onNavigateProvider('batch-screening')}
+                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+                    providerRoute === 'batch-screening'
+                      ? 'bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] font-bold'
+                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#FFF7ED]/50'
+                  }`}
+                >
+                  <Layers className="w-3.5 h-3.5 text-[#EA580C]" />
+                  <span>Batch Screening</span>
+                </button>
+
+                <button
                   onClick={() => onNavigateProvider('referrals')}
                   className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
                     providerRoute === 'referrals'
@@ -531,6 +543,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                 >
                   <UserCheck className="w-4 h-4" />
                   <span>Review Queue</span>
+                </button>
+                <button
+                  onClick={() => {
+                    onNavigateProvider('batch-screening');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full text-left px-3 py-2 rounded-lg font-medium text-[#EA580C] hover:bg-[#FFF7ED] flex items-center gap-2"
+                >
+                  <Layers className="w-4 h-4" />
+                  <span>Batch Screening</span>
                 </button>
                 <button
                   onClick={() => {

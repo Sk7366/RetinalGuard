@@ -2,24 +2,41 @@ import React, { useState } from 'react';
 import {
   Activity,
   AlertCircle,
+  AlertTriangle,
+  ArrowLeft,
   ArrowRight,
   Camera,
+  Check,
   CheckCircle2,
   ChevronRight,
+  Clock,
   Eye,
   FileCheck,
+  FileText,
   HelpCircle,
   Layers,
+  MapPin,
+  Maximize2,
+  Plus,
+  Printer,
+  RefreshCw,
   RotateCcw,
+  Send,
   Sparkles,
+  Stethoscope,
   Tent,
+  Trash2,
+  Upload,
+  User,
   UserPlus,
   Users,
   Wifi,
   WifiOff,
   XCircle,
 } from 'lucide-react';
+import { DR_GRADES } from '../data/benchmarks';
 import { generateFundusSvg, PRESET_CASES } from '../data/sampleCases';
+import { imageQualityService } from '../services/imageQualityService';
 import {
   ClinicalMetadata,
   DRGrade,
@@ -40,381 +57,577 @@ export const ScreeningCampFlow: React.FC<ScreeningCampFlowProps> = ({
   onExitCampMode,
 }) => {
   // Camp Queue state
-  const [patientCounter, setPatientCounter] = useState(42);
-  const [patientId, setPatientId] = useState(`CAMP-BLR-042`);
-  const [patientAge, setPatientAge] = useState<number>(56);
-  const [diabetesDuration, setDiabetesDuration] = useState<number>(8);
+  const [patientCounter, setPatientCounter] = useState<number>(43);
+  const [patientCode, setPatientCode] = useState<string>('CAMP-BLR-043');
+  const [selectedEye, setSelectedEye] = useState<'OD' | 'OS'>('OD');
+  const [ageGroup, setAgeGroup] = useState<string>('56-65');
+  const [durationGroup, setDurationGroup] = useState<string>('5-10 yrs');
+  const [symptomTag, setSymptomTag] = useState<string>('Routine Outreach');
+
+  // Fundus Photo State
   const [selectedFundusGrade, setSelectedFundusGrade] = useState<DRGrade>(2);
+  const [fundusImageName, setFundusImageName] = useState<string>('camp_capture_pt043_od.png');
   const [customFundusUrl, setCustomFundusUrl] = useState<string | null>(null);
 
   // Quality check state
-  const [qualityChecked, setQualityChecked] = useState<boolean>(true);
   const [qualityStatus, setQualityStatus] = useState<'GOOD' | 'UNCERTAIN' | 'UNGRADABLE'>('GOOD');
+  const [qualityChecked, setQualityChecked] = useState<boolean>(true);
 
   // Offline status indicator
   const [isOffline, setIsOffline] = useState<boolean>(false);
-  const [syncedCount, setSyncedCount] = useState<number>(41);
+  const [syncedCount, setSyncedCount] = useState<number>(42);
 
-  // Stage in current patient loop
-  const [campStage, setCampStage] = useState<'capture' | 'analyzing' | 'result'>('capture');
-  const [lastResult, setLastResult] = useState<MultimodalTriageResult | null>(null);
+  // Camp screening stages: 'intake' | 'analyzing' | 'decision'
+  const [campStage, setCampStage] = useState<'intake' | 'analyzing' | 'decision'>('intake');
+  const [currentResult, setCurrentResult] = useState<MultimodalTriageResult | null>(null);
 
-  const handleNextPatient = () => {
-    const nextNum = patientCounter + 1;
-    setPatientCounter(nextNum);
-    setPatientId(`CAMP-BLR-0${nextNum}`);
-    setPatientAge(55);
-    setDiabetesDuration(6);
-    setSelectedFundusGrade(nextNum % 2 === 0 ? 0 : 2);
-    setCustomFundusUrl(null);
-    setQualityChecked(true);
-    setQualityStatus('GOOD');
-    setCampStage('capture');
-    setLastResult(null);
+  // Active fundus URL
+  const activeFundusUrl = customFundusUrl || generateFundusSvg(selectedFundusGrade, 'normal');
+
+  // Handle custom file upload
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFundusImageName(file.name);
+      const reader = new FileReader();
+      reader.onload = (uploadEvent) => {
+        setCustomFundusUrl(uploadEvent.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
-  const handleRunCampAnalysis = async () => {
+  // Run instant triage on current patient
+  const handleRunInstantTriage = async () => {
     setCampStage('analyzing');
-    await new Promise((r) => setTimeout(r, 650));
+
+    // Run mock quality check layer
+    const qualityReport = await imageQualityService.assessQuality({
+      fileName: fundusImageName,
+      imageDataUrl: activeFundusUrl,
+      forcedPreset: qualityStatus,
+    });
+
+    // Short simulated pipeline latency
+    await new Promise((r) => setTimeout(r, 600));
+
+    // Numerical age & duration estimates from taps
+    const estimatedAge =
+      ageGroup === '<45' ? 42 : ageGroup === '45-55' ? 51 : ageGroup === '56-65' ? 60 : 70;
+    const estimatedDuration =
+      durationGroup === '<5 yrs'
+        ? 3
+        : durationGroup === '5-10 yrs'
+        ? 8
+        : durationGroup === '10-15 yrs'
+        ? 12
+        : 18;
+
+    const clinicalInput: ClinicalMetadata = {
+      age: estimatedAge,
+      diabetesDurationYears: estimatedDuration,
+      hba1c: 8.4,
+      systolicBp: 140,
+      diastolicBp: 85,
+      serumCreatinine: 1.1,
+      bmi: 27.2,
+      insulinTherapy: true,
+      priorLaser: false,
+      visualAcuityLogMar: 0.3,
+    };
+
+    // Fundus features
+    const probs: [number, number, number, number, number] = [0, 0, 0, 0, 0];
+    probs[selectedFundusGrade] = 0.88;
+    if (selectedFundusGrade > 0) probs[selectedFundusGrade - 1] = 0.08;
+    if (selectedFundusGrade < 4) probs[selectedFundusGrade + 1] = 0.04;
 
     const fundusAnalysis: FundusAnalysis = {
       grade: selectedFundusGrade,
       gradeLabel: `Grade ${selectedFundusGrade}`,
-      probabilities: [0.1, 0.1, 0.7, 0.08, 0.02],
-      inferenceMs: 122,
+      probabilities: probs,
+      inferenceMs: 110,
       camHotspots: [
-        { x: 300, y: 220, radius: 40, label: 'Temporal Arcade Vascular Shift', intensity: 0.82 },
+        { x: 320, y: 220, radius: 40, label: 'Exudative ring cluster', intensity: 0.85 },
       ],
       featuresDetected:
         selectedFundusGrade === 0
-          ? ['Normal optic disc', 'No microaneurysms detected']
-          : ['Microaneurysms detected', 'Hard exudate cluster'],
+          ? ['Normal retina', 'Clear optic disc']
+          : selectedFundusGrade === 1
+          ? ['Microaneurysms only']
+          : selectedFundusGrade === 2
+          ? ['Hard exudates near fovea', 'Blot hemorrhages']
+          : selectedFundusGrade === 3
+          ? ['Severe 4-quadrant hemorrhages']
+          : ['Optic disc neovascularization'],
     };
 
-    const clinicalInput: ClinicalMetadata = {
-      hba1c: 8.4,
-      diabetesDurationYears: diabetesDuration,
-      systolicBp: 138,
-      diastolicBp: 86,
-      serumCreatinine: 1.1,
-      age: patientAge,
-      bmi: 27.8,
-      insulinTherapy: false,
-      priorLaser: false,
-      visualAcuityLogMar: 0.2,
-    };
-
-    const triageResult = executeMultimodalFusion({
+    const triage = executeMultimodalFusion({
       fundus: fundusAnalysis,
       clinicalInput,
-      patientId,
-      patientName: `Camp Participant ${patientId}`,
-      fundusImageName: `camp_fundus_${patientId}.png`,
-      fundusImageUrl: customFundusUrl || generateFundusSvg(selectedFundusGrade, 'normal'),
+      patientId: patientCode,
+      patientName: `Camp Intake #${patientCounter}`,
+      fundusImageName,
+      fundusImageUrl: activeFundusUrl,
       fundusClaheUrl: generateFundusSvg(selectedFundusGrade, 'clahe'),
       fundusCamUrl: generateFundusSvg(selectedFundusGrade, 'gradcam'),
     });
 
-    setLastResult(triageResult);
+    setCurrentResult(triage);
+    setCampStage('decision');
+  };
+
+  // "NEXT PATIENT" WORKFLOW: 1-tap reset to next queue item
+  const handleNextPatient = () => {
+    if (currentResult) {
+      onComplete(currentResult);
+    }
+    const nextNum = patientCounter + 1;
+    setPatientCounter(nextNum);
+    setPatientCode(`CAMP-BLR-0${nextNum}`);
+    setCustomFundusUrl(null);
+    setFundusImageName(`camp_capture_pt0${nextNum}_od.png`);
+    setSelectedFundusGrade(1); // Default to mild/moderate rotation
+    setQualityStatus('GOOD');
+    setCurrentResult(null);
     setSyncedCount((prev) => prev + 1);
-    setCampStage('result');
+    setCampStage('intake');
   };
 
   return (
-    <div className="max-w-4xl mx-auto py-4">
-      {/* Tablet-First Camp Header Bar */}
-      <div className="bg-gradient-to-r from-[#EA580C] to-[#DB2777] rounded-2xl p-4 sm:p-5 text-white shadow-md mb-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="p-1.5 rounded-lg bg-white/20 backdrop-blur-xs text-white">
-              <Tent className="w-4 h-4" />
-            </span>
-            <span className="text-xs font-bold uppercase tracking-wider text-white/90">
-              Community Screening Camp Mode • September 2026
-            </span>
-          </div>
-          <h2 className="text-xl sm:text-2xl font-serif font-bold tracking-tight">
-            Bengaluru Rural Outreach (Kengeri Camp #3)
-          </h2>
-          <p className="text-xs text-white/80 mt-0.5">
-            Optimized for fast-paced tablet entry & high throughput
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2 self-stretch sm:self-auto justify-between sm:justify-end">
-          {/* Offline/Online toggle */}
-          <button
-            onClick={() => setIsOffline(!isOffline)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold backdrop-blur-xs transition-colors ${
-              isOffline ? 'bg-amber-400 text-[#2E2628]' : 'bg-white/20 text-white hover:bg-white/30'
-            }`}
-          >
-            {isOffline ? <WifiOff className="w-3.5 h-3.5" /> : <Wifi className="w-3.5 h-3.5" />}
-            <span>{isOffline ? 'Offline (Syncing Local)' : 'Online Synced'}</span>
-          </button>
-
-          <button
-            onClick={onExitCampMode}
-            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-[#EA580C] hover:bg-[#FFF7ED] transition-colors"
-          >
-            Exit Camp Mode
-          </button>
-        </div>
-      </div>
-
-      {/* Camp Stats strip */}
-      <div className="grid grid-cols-3 gap-3 mb-6">
-        <div className="p-3.5 rounded-xl bg-white border border-[#EFE4DC] text-center shadow-xs">
-          <div className="text-xs font-semibold text-[#6E5C5F]">Patients Screened Today</div>
-          <div className="text-xl sm:text-2xl font-bold font-serif text-[#EA580C] mt-1">
-            {syncedCount}
-          </div>
-        </div>
-        <div className="p-3.5 rounded-xl bg-white border border-[#EFE4DC] text-center shadow-xs">
-          <div className="text-xs font-semibold text-[#6E5C5F]">Current In-Queue</div>
-          <div className="text-xl sm:text-2xl font-bold font-serif text-[#2E2628] mt-1">
-            #{patientCounter}
-          </div>
-        </div>
-        <div className="p-3.5 rounded-xl bg-white border border-[#EFE4DC] text-center shadow-xs">
-          <div className="text-xs font-semibold text-[#6E5C5F]">Avg Time per Person</div>
-          <div className="text-xl sm:text-2xl font-bold font-serif text-[#059669] mt-1">
-            1m 45s
-          </div>
-        </div>
-      </div>
-
-      {/* Main Workflow Card */}
-      <div className="bg-white rounded-2xl border border-[#EFE4DC] p-6 shadow-sm">
-        {campStage === 'capture' && (
-          <div className="space-y-6">
-            {/* Step 1: Rapid Patient Registration */}
-            <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-[#EFE4DC]">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-[#FFF7ED] border border-[#FED7AA] flex items-center justify-center text-[#EA580C]">
-                  <Users className="w-5 h-5" />
-                </div>
-                <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#C2410C]">
-                    Screening ID
-                  </span>
-                  <div className="font-mono font-bold text-base text-[#2E2628]">{patientId}</div>
-                </div>
+    <div className="space-y-4 max-w-5xl mx-auto pb-16 select-none" id="screening-camp-root">
+      {/* Tablet-Optimized Camp Banner */}
+      <div className="bg-white rounded-3xl border border-[#EFE4DC] p-4 sm:p-6 shadow-xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-2xl bg-[#FFF7ED] border border-[#FED7AA] flex items-center justify-center text-[#EA580C] shrink-0">
+              <Tent className="w-6 h-6" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-xs font-bold text-[#EA580C] uppercase tracking-wider">
+                  Mobile Camp High-Speed Mode
+                </span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
+                  SIMULATED DATA
+                </span>
               </div>
+              <h1 className="text-lg sm:text-xl font-bold text-[#2E2628]">
+                Community Camp: Bengaluru Rural (Kengeri PHC)
+              </h1>
+            </div>
+          </div>
 
-              <div className="flex items-center gap-4">
-                <div>
-                  <label className="text-xs font-semibold text-[#6E5C5F] block mb-1">Age</label>
-                  <input
-                    type="number"
-                    value={patientAge}
-                    onChange={(e) => setPatientAge(Number(e.target.value))}
-                    className="w-20 px-3 py-1.5 rounded-lg border border-[#EFE4DC] text-xs font-bold text-[#2E2628] text-center"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs font-semibold text-[#6E5C5F] block mb-1">
-                    Diabetes Yrs
-                  </label>
-                  <input
-                    type="number"
-                    value={diabetesDuration}
-                    onChange={(e) => setDiabetesDuration(Number(e.target.value))}
-                    className="w-20 px-3 py-1.5 rounded-lg border border-[#EFE4DC] text-xs font-bold text-[#2E2628] text-center"
-                  />
-                </div>
+          <div className="flex items-center gap-2 self-start sm:self-center">
+            {/* Offline Mode Toggle Pill */}
+            <button
+              type="button"
+              onClick={() => setIsOffline(!isOffline)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-colors ${
+                isOffline
+                  ? 'bg-[#FEF2F2] text-[#DC2626] border-[#FCA5A5]'
+                  : 'bg-[#F0FDF4] text-[#15803D] border-[#86EFAC]'
+              }`}
+            >
+              {isOffline ? <WifiOff className="w-3.5 h-3.5" /> : <Wifi className="w-3.5 h-3.5" />}
+              <span>{isOffline ? 'Offline (Local Cache)' : 'Online Synced'}</span>
+            </button>
+
+            {/* Exit Camp Mode */}
+            <button
+              type="button"
+              onClick={onExitCampMode}
+              className="px-3.5 py-1.5 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] text-[#6E5C5F] text-xs font-semibold hover:text-[#2E2628] hover:bg-white"
+            >
+              Exit Camp
+            </button>
+          </div>
+        </div>
+
+        {/* Camp Throughput Bar */}
+        <div className="mt-4 pt-3 border-t border-[#EFE4DC] flex items-center justify-between text-xs text-[#6E5C5F] flex-wrap gap-2">
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-1.5">
+              <Users className="w-3.5 h-3.5 text-[#EA580C]" />
+              <span>Today Screened: <strong className="text-[#2E2628]">{syncedCount}</strong></span>
+            </span>
+            <span>Target: <strong>80 patients</strong></span>
+            <span className="text-[#15803D] font-semibold">Speed: ~1.2 min/patient</span>
+          </div>
+
+          <div className="flex items-center gap-1 text-[11px] font-mono text-[#6E5C5F]">
+            <span>Active Station: Retinal Camera #01</span>
+          </div>
+        </div>
+      </div>
+
+      {/* =====================================================================
+          PHASE 1: TABLET INTAKE & PHOTO CAPTURE
+          ===================================================================== */}
+      {campStage === 'intake' && (
+        <div className="bg-white rounded-3xl border border-[#EFE4DC] p-5 sm:p-8 shadow-xs space-y-6">
+          {/* Top Token Bar */}
+          <div className="flex items-center justify-between p-3.5 bg-[#FAF8F6] rounded-2xl border border-[#EFE4DC]">
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-bold text-[#6E5C5F] uppercase">Current Patient:</span>
+              <span className="text-base sm:text-lg font-black font-mono text-[#EA580C] bg-white px-3 py-1 rounded-xl border border-[#EFE4DC] shadow-2xs">
+                {patientCode}
+              </span>
+            </div>
+
+            {/* Large Eye Toggle */}
+            <div className="flex items-center gap-1.5 p-1 bg-white rounded-2xl border border-[#EFE4DC]">
+              <button
+                type="button"
+                onClick={() => setSelectedEye('OD')}
+                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all ${
+                  selectedEye === 'OD'
+                    ? 'bg-[#EA580C] text-white shadow-xs'
+                    : 'text-[#6E5C5F] hover:bg-[#FAF8F6]'
+                }`}
+              >
+                OD (Right Eye)
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedEye('OS')}
+                className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all ${
+                  selectedEye === 'OS'
+                    ? 'bg-[#EA580C] text-white shadow-xs'
+                    : 'text-[#6E5C5F] hover:bg-[#FAF8F6]'
+                }`}
+              >
+                OS (Left Eye)
+              </button>
+            </div>
+          </div>
+
+          {/* Large-Tap Minimal Demographic Inputs */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Age Range Tap Buttons */}
+            <div className="p-4 rounded-2xl bg-[#FAF8F6] border border-[#EFE4DC] space-y-2">
+              <label className="text-xs font-bold text-[#2E2628] uppercase tracking-wider block">
+                1. Patient Age Range (1-Tap):
+              </label>
+              <div className="grid grid-cols-4 gap-2">
+                {['<45', '45-55', '56-65', '>65'].map((range) => (
+                  <button
+                    key={range}
+                    type="button"
+                    onClick={() => setAgeGroup(range)}
+                    className={`py-3 rounded-xl text-xs font-bold border transition-all ${
+                      ageGroup === range
+                        ? 'bg-[#EA580C] text-white border-[#EA580C] shadow-xs'
+                        : 'bg-white text-[#2E2628] border-[#EFE4DC] hover:bg-[#FFF7ED]'
+                    }`}
+                  >
+                    {range} yrs
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Step 2: Fundus Image Capture Area */}
-            <div>
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2">
-                  <Camera className="w-4 h-4 text-[#EA580C]" />
-                  <h3 className="font-serif font-bold text-sm text-[#2E2628]">
-                    Retinal Fundus Image (Required)
-                  </h3>
-                </div>
-
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-[#6E5C5F]">Quick Case:</span>
-                  <select
-                    value={selectedFundusGrade}
-                    onChange={(e) => setSelectedFundusGrade(Number(e.target.value) as DRGrade)}
-                    className="text-xs border border-[#EFE4DC] rounded-lg px-2.5 py-1 text-[#2E2628] font-medium bg-[#FAF8F6]"
+            {/* Diabetes Duration Tap Buttons */}
+            <div className="p-4 rounded-2xl bg-[#FAF8F6] border border-[#EFE4DC] space-y-2">
+              <label className="text-xs font-bold text-[#2E2628] uppercase tracking-wider block">
+                2. Known Diabetes Duration (1-Tap):
+              </label>
+              <div className="grid grid-cols-4 gap-2">
+                {['<5 yrs', '5-10 yrs', '10-15 yrs', '>15 yrs'].map((dur) => (
+                  <button
+                    key={dur}
+                    type="button"
+                    onClick={() => setDurationGroup(dur)}
+                    className={`py-3 rounded-xl text-xs font-bold border transition-all ${
+                      durationGroup === dur
+                        ? 'bg-[#EA580C] text-white border-[#EA580C] shadow-xs'
+                        : 'bg-white text-[#2E2628] border-[#EFE4DC] hover:bg-[#FFF7ED]'
+                    }`}
                   >
-                    <option value={0}>Normal (Grade 0)</option>
-                    <option value={1}>Mild NPDR (Grade 1)</option>
-                    <option value={2}>Moderate NPDR (Grade 2)</option>
-                    <option value={3}>Severe NPDR (Grade 3)</option>
-                    <option value={4}>Proliferative DR (Grade 4)</option>
-                  </select>
+                    {dur}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Easy Photo Upload / Camera Connection Box */}
+          <div className="p-5 rounded-2xl bg-[#FAF8F6] border border-[#EFE4DC] space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <label className="text-xs font-bold text-[#2E2628] uppercase tracking-wider flex items-center gap-2">
+                <Camera className="w-4 h-4 text-[#EA580C]" />
+                <span>3. Retinal Fundus Photo (OD/OS):</span>
+              </label>
+
+              {/* Sample Preset Selector for Offline/Field Demos */}
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[11px] font-semibold text-[#6E5C5F]">Field Preset:</span>
+                {[
+                  { grade: 0, label: 'Normal' },
+                  { grade: 1, label: 'Mild' },
+                  { grade: 2, label: 'Moderate' },
+                  { grade: 3, label: 'Severe' },
+                ].map((p) => (
+                  <button
+                    key={p.grade}
+                    type="button"
+                    onClick={() => {
+                      setSelectedFundusGrade(p.grade as DRGrade);
+                      setCustomFundusUrl(null);
+                      setFundusImageName(`camp_benchmark_gr${p.grade}.png`);
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-bold border transition-colors ${
+                      selectedFundusGrade === p.grade && !customFundusUrl
+                        ? 'bg-[#EA580C] text-white border-[#EA580C]'
+                        : 'bg-white text-[#2E2628] border-[#EFE4DC] hover:bg-[#FFF7ED]'
+                    }`}
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Photo Preview & Quality Quick Assessment */}
+            <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+              {/* Image Preview */}
+              <div className="sm:col-span-4 rounded-2xl bg-[#181517] overflow-hidden aspect-[4/3] flex items-center justify-center p-2 relative border border-[#EFE4DC]">
+                <img
+                  src={activeFundusUrl}
+                  alt="Camp Fundus"
+                  className="w-full h-full object-contain rounded-xl"
+                />
+                <div className="absolute top-2 left-2 bg-black/75 backdrop-blur-xs text-[10px] font-mono text-white px-2 py-0.5 rounded">
+                  {selectedEye} · 512×512
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Image Preview Box */}
-                <div className="aspect-square max-w-[280px] mx-auto rounded-xl overflow-hidden border border-[#EFE4DC] bg-black relative shadow-inner">
-                  <img
-                    src={customFundusUrl || generateFundusSvg(selectedFundusGrade, 'normal')}
-                    alt="Fundus scan"
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/60 text-white text-[10px] font-mono backdrop-blur-xs">
-                    45° Non-Mydriatic
-                  </div>
-                </div>
-
-                {/* Live Quality Check Card */}
-                <div className="p-4 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] flex flex-col justify-between">
-                  <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#6E5C5F] block mb-1">
-                      Automated Quality Check
-                    </span>
-
-                    <div className="flex items-center gap-2 mb-2">
-                      {qualityStatus === 'GOOD' ? (
-                        <div className="flex items-center gap-1.5 text-xs font-bold text-[#059669]">
-                          <CheckCircle2 className="w-4 h-4" />
-                          <span>Suitable for AI Screening (Score: 94/100)</span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center gap-1.5 text-xs font-bold text-[#EA580C]">
-                          <AlertCircle className="w-4 h-4" />
-                          <span>Uncertain / Slight Glare (Score: 68/100)</span>
-                        </div>
-                      )}
-                    </div>
-
-                    <p className="text-xs text-[#6E5C5F] leading-relaxed">
-                      {qualityStatus === 'GOOD'
-                        ? 'Image has sharp vascular contrast, centered foveal reflex, and adequate illumination. Ready for multimodal analysis.'
-                        : 'Slight illumination glare near margin. Technician judgment: proceed or recapture.'}
-                    </p>
-
-                    <div className="mt-4 pt-3 border-t border-[#EFE4DC] flex gap-2">
-                      <button
-                        onClick={() =>
-                          setQualityStatus(qualityStatus === 'GOOD' ? 'UNCERTAIN' : 'GOOD')
-                        }
-                        className="text-[11px] text-[#6E5C5F] hover:text-[#EA580C] underline"
-                      >
-                        Simulate Quality Toggle ({qualityStatus === 'GOOD' ? 'Test Blur' : 'Test Good'})
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="mt-4">
+              {/* Quality & Retake Fast Controls */}
+              <div className="sm:col-span-8 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-[#2E2628]">Image Quality Gate:</span>
+                  <div className="flex items-center gap-1 bg-white p-1 rounded-xl border border-[#EFE4DC]">
                     <button
-                      onClick={handleRunCampAnalysis}
-                      className="w-full py-3 px-4 rounded-xl text-xs sm:text-sm font-bold bg-gradient-to-r from-[#EA580C] to-[#DB2777] text-white hover:opacity-95 transition-opacity shadow-sm flex items-center justify-center gap-2"
+                      type="button"
+                      onClick={() => setQualityStatus('GOOD')}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-bold ${
+                        qualityStatus === 'GOOD'
+                          ? 'bg-[#15803D] text-white shadow-2xs'
+                          : 'text-[#6E5C5F]'
+                      }`}
                     >
-                      <Sparkles className="w-4 h-4" />
-                      <span>Analyze Retinal Image Now</span>
+                      Good
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setQualityStatus('UNCERTAIN')}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-bold ${
+                        qualityStatus === 'UNCERTAIN'
+                          ? 'bg-[#D97706] text-white shadow-2xs'
+                          : 'text-[#6E5C5F]'
+                      }`}
+                    >
+                      Uncertain
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setQualityStatus('UNGRADABLE')}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-bold ${
+                        qualityStatus === 'UNGRADABLE'
+                          ? 'bg-[#DC2626] text-white shadow-2xs'
+                          : 'text-[#6E5C5F]'
+                      }`}
+                    >
+                      Ungradable
                     </button>
                   </div>
                 </div>
+
+                <p className="text-xs text-[#6E5C5F] leading-relaxed">
+                  {qualityStatus === 'GOOD'
+                    ? 'Scan sharpness and illumination verified for automated AI inference.'
+                    : qualityStatus === 'UNCERTAIN'
+                    ? 'Mild motion blur detected. Patient can be evaluated with warning flag.'
+                    : 'Glare arc obscuring fovea. Ask patient to blink and reposition camera.'}
+                </p>
+
+                {/* File Upload / Camera Trigger Button */}
+                <div className="flex items-center gap-2 pt-1">
+                  <label className="cursor-pointer inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-[#EFE4DC] text-xs font-bold text-[#2E2628] hover:bg-[#FAF8F6] shadow-2xs">
+                    <Upload className="w-4 h-4 text-[#EA580C]" />
+                    <span>Upload from Camera / File</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                    />
+                  </label>
+
+                  {qualityStatus === 'UNGRADABLE' && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCustomFundusUrl(null);
+                        setQualityStatus('GOOD');
+                      }}
+                      className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-[#DC2626] text-white text-xs font-bold hover:bg-[#B91C1C]"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>Retake Required</span>
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        )}
 
-        {campStage === 'analyzing' && (
-          <div className="py-16 text-center">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#EA580C] to-[#DB2777] flex items-center justify-center text-white mx-auto mb-4 animate-pulse">
-              <Activity className="w-8 h-8" />
+          {/* HUGE PRIMARY ACTION BUTTON: RUN INSTANT TRIAGE */}
+          <div className="pt-2">
+            <button
+              type="button"
+              id="btn-camp-run-triage"
+              onClick={handleRunInstantTriage}
+              className="w-full py-4 rounded-2xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-base sm:text-lg font-black transition-all shadow-md flex items-center justify-center gap-3 active:scale-[0.99]"
+            >
+              <Sparkles className="w-6 h-6" />
+              <span>RUN INSTANT AI TRIAGE ({patientCode})</span>
+              <ArrowRight className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* =====================================================================
+          PHASE 2: ANALYZING (LIGHTNING FAST)
+          ===================================================================== */}
+      {campStage === 'analyzing' && (
+        <div className="bg-white rounded-3xl border border-[#EFE4DC] p-12 text-center space-y-4 shadow-xs">
+          <div className="w-16 h-16 rounded-3xl bg-[#FFEDD5] text-[#EA580C] flex items-center justify-center mx-auto shadow-xs animate-spin">
+            <Sparkles className="w-8 h-8" />
+          </div>
+          <h2 className="text-xl font-bold text-[#2E2628]">Evaluating Retinal Scan...</h2>
+          <p className="text-xs text-[#6E5C5F]">
+            Executing EfficientNet-B4 &amp; Local Illumination Normalization for {patientCode}
+          </p>
+        </div>
+      )}
+
+      {/* =====================================================================
+          PHASE 3: TRIAGE DECISION & "NEXT PATIENT" WORKFLOW
+          ===================================================================== */}
+      {campStage === 'decision' && currentResult && (
+        <div className="bg-white rounded-3xl border border-[#EFE4DC] p-6 sm:p-8 shadow-xs space-y-6">
+          {/* Top Result Banner */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#EFE4DC]">
+            <div>
+              <div className="text-xs font-bold text-[#6E5C5F] uppercase tracking-wider">
+                Instant Camp Triage Result
+              </div>
+              <div className="text-2xl sm:text-3xl font-black text-[#2E2628] mt-0.5 flex items-center gap-3">
+                <span>{patientCode}</span>
+                <span className="text-sm font-bold text-[#6E5C5F]">({selectedEye})</span>
+              </div>
             </div>
-            <h3 className="font-serif font-bold text-lg text-[#2E2628]">
-              Analyzing Participant {patientId}...
-            </h3>
-            <p className="text-xs text-[#6E5C5F] mt-1">
-              Checking vascular lesions, calculating risk score, and generating clinical recommendations.
+
+            <div className="flex items-center gap-2">
+              <RiskChip grade={currentResult.finalGrade} size="lg" />
+            </div>
+          </div>
+
+          {/* Large Visual Decision Matrix */}
+          <div
+            className={`p-6 rounded-3xl border space-y-3 ${
+              currentResult.finalGrade === 0
+                ? 'bg-[#F0FDF4] border-[#86EFAC]'
+                : currentResult.finalGrade === 1
+                ? 'bg-[#F0FDF4] border-[#86EFAC]'
+                : currentResult.finalGrade === 2
+                ? 'bg-[#FFFBEB] border-[#FCD34D]'
+                : 'bg-[#FEF2F2] border-[#FCA5A5]'
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg sm:text-xl font-black text-[#2E2628]">
+                Grade {currentResult.finalGrade}: {currentResult.gradeLabel}
+              </h3>
+              <span className="text-xs font-bold font-mono px-3 py-1 rounded-full bg-white text-[#2E2628] shadow-2xs">
+                Inference: {currentResult.fundus.inferenceMs} ms
+              </span>
+            </div>
+
+            <p className="text-xs sm:text-sm text-[#2E2628] font-medium leading-relaxed">
+              {currentResult.recommendation}
             </p>
+
+            {/* Fast Action Recommendation */}
+            <div className="pt-2 flex items-center gap-2 flex-wrap text-xs">
+              <span className="font-bold text-[#2E2628]">Clinical Disposition:</span>
+              <span className="px-3 py-1 rounded-lg bg-white font-bold text-[#EA580C] shadow-2xs">
+                {currentResult.finalGrade >= 3
+                  ? 'Priority Specialist Referral'
+                  : currentResult.finalGrade === 2
+                  ? 'Review Recommended in 3–6 Months'
+                  : 'Routine 12-Month Annual Recall'}
+              </span>
+            </div>
           </div>
-        )}
 
-        {campStage === 'result' && lastResult && (
-          <div className="space-y-6">
-            {/* Quick Result Header */}
-            <div className="p-4 rounded-xl bg-gradient-to-r from-[#FFF7ED] to-[#FDF2F8] border border-[#FED7AA] flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-[#C2410C]">
-                  Camp Screening Summary
-                </span>
-                <h3 className="font-serif font-bold text-lg text-[#2E2628] flex items-center gap-2 mt-0.5">
-                  <span>Participant {lastResult.patientId}</span>
-                  <RiskChip grade={lastResult.finalGrade} size="sm" />
-                </h3>
-              </div>
-
-              <div className="text-right">
-                <span className="text-xs text-[#6E5C5F] block">Triage Recommendation</span>
-                <span className="text-xs font-bold text-[#2E2628]">
-                  {lastResult.recommendation}
-                </span>
-              </div>
+          {/* Quick Snapshot Heatmap & Details */}
+          <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+            <div className="sm:col-span-4 rounded-2xl bg-[#181517] overflow-hidden aspect-[4/3] flex items-center justify-center p-2 border border-[#EFE4DC]">
+              <img
+                src={currentResult.fundusCamUrl}
+                alt="Grad-CAM"
+                className="w-full h-full object-contain rounded-xl"
+              />
             </div>
 
-            {/* Findings & Action */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-              <div className="p-4 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC]">
-                <h4 className="font-bold text-[#2E2628] mb-2">Key Model Findings</h4>
-                <ul className="space-y-1.5 text-[#6E5C5F]">
-                  {lastResult.fundus.featuresDetected.map((f, i) => (
-                    <li key={i} className="flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#EA580C] shrink-0" />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                  <li>
-                    • HbA1c: <strong>{lastResult.clinicalInput.hba1c}%</strong> | Diabetes:{' '}
-                    <strong>{lastResult.clinicalInput.diabetesDurationYears} yrs</strong>
-                  </li>
-                </ul>
+            <div className="sm:col-span-8 space-y-2 text-xs">
+              <div className="font-bold text-[#2E2628] uppercase text-[11px]">
+                Detected Micro-Lesions:
               </div>
-
-              <div className="p-4 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] flex flex-col justify-between">
-                <div>
-                  <h4 className="font-bold text-[#2E2628] mb-1">Referral / Follow-up Action</h4>
-                  <p className="text-[#6E5C5F] leading-relaxed">
-                    {lastResult.finalGrade >= 2
-                      ? 'Flagged for ophthalmologist review. Referral token created and sent to local PHC register.'
-                      : 'Low concern. Counsel participant on annual screening and healthy glycemic control.'}
-                  </p>
-                </div>
-
-                <div className="mt-3 pt-3 border-t border-[#EFE4DC] flex items-center justify-between text-[11px] text-[#6E5C5F]">
-                  <span>Status: Saved to Camp Record</span>
-                  <button
-                    onClick={() => onComplete(lastResult)}
-                    className="text-[#EA580C] font-semibold hover:underline"
+              <div className="flex flex-wrap gap-1.5">
+                {currentResult.fundus.featuresDetected.map((feat, idx) => (
+                  <span
+                    key={idx}
+                    className="px-2.5 py-1 rounded-lg bg-[#FAF8F6] border border-[#EFE4DC] text-[#2E2628]"
                   >
-                    View Full Clinical Report →
-                  </button>
-                </div>
+                    ✓ {feat}
+                  </span>
+                ))}
+              </div>
+
+              <div className="text-[11px] text-[#6E5C5F] pt-2">
+                Patient SMS directions queued for Victoria Hospital Retina Clinic. Encounter cached in local SQLite storage.
               </div>
             </div>
-
-            {/* Big Action: Next Patient Button */}
-            <div className="pt-4 border-t border-[#EFE4DC] flex flex-col sm:flex-row items-center gap-3">
-              <button
-                onClick={handleNextPatient}
-                className="w-full sm:flex-1 py-3.5 px-6 rounded-xl text-sm font-bold bg-gradient-to-r from-[#EA580C] to-[#DB2777] text-white hover:opacity-95 shadow-md flex items-center justify-center gap-2 transition-all transform active:scale-98"
-              >
-                <span>Next Patient in Queue →</span>
-                <ChevronRight className="w-4 h-4" />
-              </button>
-
-              <button
-                onClick={() => onComplete(lastResult)}
-                className="w-full sm:w-auto py-3.5 px-5 rounded-xl text-xs font-semibold border border-[#EFE4DC] text-[#2E2628] hover:bg-[#FAF8F6] transition-colors"
-              >
-                Open Full Result View
-              </button>
-            </div>
           </div>
-        )}
-      </div>
+
+          {/* HUGE "NEXT PATIENT" ACTION BUTTON */}
+          <div className="pt-4 border-t border-[#EFE4DC] flex flex-col sm:flex-row items-center justify-between gap-3">
+            <button
+              type="button"
+              onClick={() => setCampStage('intake')}
+              className="w-full sm:w-auto px-5 py-3 rounded-2xl bg-white border border-[#EFE4DC] text-[#2E2628] text-xs font-bold hover:bg-[#FAF8F6]"
+            >
+              <RotateCcw className="w-4 h-4 inline mr-1" />
+              <span>Modify Current Patient</span>
+            </button>
+
+            {/* The primary "NEXT PATIENT" button */}
+            <button
+              type="button"
+              id="btn-camp-next-patient"
+              onClick={handleNextPatient}
+              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-[#15803D] hover:bg-[#166534] text-white text-base font-black transition-all shadow-md flex items-center justify-center gap-3 active:scale-[0.99]"
+            >
+              <UserPlus className="w-5 h-5" />
+              <span>SAVE &amp; NEXT PATIENT (CAMP-BLR-0{patientCounter + 1}) →</span>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

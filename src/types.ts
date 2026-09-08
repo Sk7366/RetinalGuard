@@ -266,6 +266,7 @@ export type ProviderRoute =
   | 'camp-mode'           // Screening Camp Mode
   | 'start-screening'     // Start Screening
   | 'review-queue'        // Review Queue
+  | 'batch-screening'     // Batch Screening Architecture
   | 'referrals'           // Referrals
   | 'analytics'           // Analytics
   | 'screenings'

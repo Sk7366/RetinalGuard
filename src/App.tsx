@@ -3,6 +3,7 @@ import { AblationView } from './components/AblationView';
 import { ArchitectureView } from './components/ArchitectureView';
 import { AuthModal } from './components/AuthModal';
 import { BatchScreeningModal } from './components/BatchScreeningModal';
+import { BatchScreeningView } from './components/BatchScreeningView';
 import { DisclaimerBanner } from './components/DisclaimerBanner';
 import { FindScreeningSection } from './components/FindScreeningSection';
 import { Footer } from './components/Footer';
@@ -19,6 +20,7 @@ import { PublicGetScreened } from './components/PublicGetScreened';
 import { PublicHowItHelps } from './components/PublicHowItHelps';
 import { PublicLearn } from './components/PublicLearn';
 import { ResultsView } from './components/ResultsView';
+import { ReviewQueueView } from './components/ReviewQueueView';
 import { RoleModal } from './components/RoleModal';
 import { ScreeningCampFlow } from './components/ScreeningCampFlow';
 import { ScreeningFlow } from './components/ScreeningFlow';
@@ -440,12 +442,31 @@ export default function App() {
 
             {/* PROVIDER: Review Queue */}
             {providerRoute === 'review-queue' && (
-              <ProviderReviewQueue
+              <ReviewQueueView
                 history={history}
+                onSelectCase={(selected) => {
+                  setActiveResult(selected);
+                  setIsViewingActiveResult(true);
+                  window.location.hash = 'results';
+                }}
+                onNavigateStartScreening={() => {
+                  setActivePreset(null);
+                  navigateProvider('start-screening');
+                }}
+              />
+            )}
+
+            {/* PROVIDER: Batch Screening Architecture */}
+            {providerRoute === 'batch-screening' && (
+              <BatchScreeningView
                 onSelectResult={(selected) => {
                   setActiveResult(selected);
                   setIsViewingActiveResult(true);
                   window.location.hash = 'results';
+                }}
+                onNavigateStartScreening={() => {
+                  setActivePreset(null);
+                  navigateProvider('start-screening');
                 }}
               />
             )}
