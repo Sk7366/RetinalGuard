@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Activity,
   AlertCircle,
@@ -23,6 +23,7 @@ import {
   UserCheck,
   Users,
 } from 'lucide-react';
+import { screeningApi } from '../api';
 import { PRESET_CASES } from '../data/sampleCases';
 import { SIMULATED_TODAY_METRICS } from '../mock/mockData';
 import { MultimodalTriageResult, UserRole } from '../types';
@@ -47,6 +48,20 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
   onOpenBatch,
   userRole,
 }) => {
+  const [baseMetrics, setBaseMetrics] = useState(SIMULATED_TODAY_METRICS);
+
+  useEffect(() => {
+    let isMounted = true;
+    screeningApi.getTodayMetrics().then((metrics) => {
+      if (isMounted && metrics) {
+        setBaseMetrics(metrics);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   // Live session increments
   const liveTotal = history.length;
   const liveLow = history.filter((h) => h.finalGrade <= 1).length;
@@ -59,11 +74,11 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
   // 3. Review recommended
   // 4. Priority referral
   // 5. Ungradable
-  const todayScreenings = SIMULATED_TODAY_METRICS.totalScreened + liveTotal;
-  const lowConcern = SIMULATED_TODAY_METRICS.lowConcern + liveLow;
-  const reviewRecommended = SIMULATED_TODAY_METRICS.reviewRecommended + liveReview;
-  const priorityReferral = SIMULATED_TODAY_METRICS.priorityReferral + livePriority;
-  const ungradable = SIMULATED_TODAY_METRICS.ungradable; // 7 ungradable scans flagged for recapture
+  const todayScreenings = baseMetrics.totalScreened + liveTotal;
+  const lowConcern = baseMetrics.lowConcern + liveLow;
+  const reviewRecommended = baseMetrics.reviewRecommended + liveReview;
+  const priorityReferral = baseMetrics.priorityReferral + livePriority;
+  const ungradable = baseMetrics.ungradable; // 7 ungradable scans flagged for recapture
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-16" id="provider-dashboard-root">

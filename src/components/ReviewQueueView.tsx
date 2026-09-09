@@ -28,7 +28,7 @@ import {
   XCircle,
 } from 'lucide-react';
 import { DR_GRADES } from '../data/benchmarks';
-import { PRESET_CASES } from '../data/sampleCases';
+import { MOCK_REVIEW_QUEUE_ITEMS } from '../mock/mockData';
 import { DRGrade, MultimodalTriageResult, QualityStatus } from '../types';
 import { RiskChip } from './RiskChip';
 
@@ -61,107 +61,8 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
   onSelectCase,
   onNavigateStartScreening,
 }) => {
-  // Built-in simulated queue records combined with any newly added history
-  const initialQueueItems: QueueItem[] = [
-    {
-      id: 'Q-2026-091',
-      patientCode: 'PT-8831',
-      patientName: 'Devi Sundaram',
-      patientAge: 62,
-      gender: 'Female',
-      encounterDate: 'Today, 09:45 AM',
-      facility: 'Kengeri PHC Outreach Unit',
-      qualityStatus: 'GOOD',
-      fundusGrade: 3,
-      finalGrade: 3,
-      dmeDetected: true,
-      confidence: 'HIGH',
-      status: 'Pending',
-      triageResult: PRESET_CASES[2].expectedTriage,
-    },
-    {
-      id: 'Q-2026-092',
-      patientCode: 'PT-7104',
-      patientName: 'Mohan Kumar',
-      patientAge: 54,
-      gender: 'Male',
-      encounterDate: 'Today, 10:12 AM',
-      facility: 'Dharavi Mobile Screening Van',
-      qualityStatus: 'UNCERTAIN',
-      fundusGrade: 2,
-      finalGrade: 2,
-      dmeDetected: false,
-      confidence: 'MODERATE',
-      status: 'Pending',
-      reviewerNotes: 'Subtle motion blur along superior arcade; fovea still legible.',
-      triageResult: PRESET_CASES[1].expectedTriage,
-    },
-    {
-      id: 'Q-2026-093',
-      patientCode: 'PT-5529',
-      patientName: 'Fatima Begum',
-      patientAge: 49,
-      gender: 'Female',
-      encounterDate: 'Today, 10:30 AM',
-      facility: 'Victoria Regional Outpatient Unit',
-      qualityStatus: 'UNGRADABLE',
-      fundusGrade: 1,
-      finalGrade: 1,
-      dmeDetected: false,
-      confidence: 'LOW',
-      status: 'Retake Requested',
-      reviewerNotes: 'Corneal glare arc obscured 40% of optic disc and macula.',
-      triageResult: PRESET_CASES[0].expectedTriage,
-    },
-    {
-      id: 'Q-2026-094',
-      patientCode: 'PT-9941',
-      patientName: 'Ramesh Patel',
-      patientAge: 58,
-      gender: 'Male',
-      encounterDate: 'Today, 11:05 AM',
-      facility: 'Kengeri PHC Outreach Unit',
-      qualityStatus: 'GOOD',
-      fundusGrade: 2,
-      finalGrade: 2,
-      dmeDetected: true,
-      confidence: 'HIGH',
-      status: 'Pending',
-      triageResult: PRESET_CASES[2].expectedTriage,
-    },
-    {
-      id: 'Q-2026-095',
-      patientCode: 'PT-3312',
-      patientName: 'Anil Deshmukh',
-      patientAge: 67,
-      gender: 'Male',
-      encounterDate: 'Today, 11:40 AM',
-      facility: 'Sankara Nethralaya Community Clinic',
-      qualityStatus: 'GOOD',
-      fundusGrade: 4,
-      finalGrade: 4,
-      dmeDetected: true,
-      confidence: 'HIGH',
-      status: 'Pending',
-      triageResult: PRESET_CASES[3].expectedTriage,
-    },
-    {
-      id: 'Q-2026-096',
-      patientCode: 'PT-1049',
-      patientName: 'Sunita Rao',
-      patientAge: 45,
-      gender: 'Female',
-      encounterDate: 'Today, 12:15 PM',
-      facility: 'AIIMS Rural Outreach Center',
-      qualityStatus: 'GOOD',
-      fundusGrade: 0,
-      finalGrade: 0,
-      dmeDetected: false,
-      confidence: 'HIGH',
-      status: 'Approved',
-      triageResult: PRESET_CASES[0].expectedTriage,
-    },
-  ];
+  // Use centralized mock data records combined with newly added history
+  const initialQueueItems = MOCK_REVIEW_QUEUE_ITEMS;
 
   // Merge with live session history items
   const [queue, setQueue] = useState<QueueItem[]>(() => {

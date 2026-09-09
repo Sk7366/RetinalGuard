@@ -28,6 +28,9 @@ import { ScreeningFlow } from './components/ScreeningFlow';
 import { TechnicalFaqModal } from './components/TechnicalFaqModal';
 import { PRESET_CASES, PresetPatientCase } from './data/sampleCases';
 import { LanguageCode } from './i18n/translations';
+import { I18nProvider, useTranslation } from './i18n/I18nContext';
+import { VoiceReaderBar } from './components/VoiceReaderBar';
+import { SimplifiedPatientHome } from './components/SimplifiedPatientHome';
 import {
   AccessibilitySettings,
   MultimodalTriageResult,
@@ -36,7 +39,7 @@ import {
   UserRole,
 } from './types';
 
-export default function App() {
+function AppContent() {
   // Navigation State
   const [isProviderMode, setIsProviderMode] = useState<boolean>(false);
   const [publicRoute, setPublicRoute] = useState<PublicRoute>('overview');
@@ -56,8 +59,8 @@ export default function App() {
   const [isTechFaqOpen, setIsTechFaqOpen] = useState(false);
   const [isGuideOpen, setIsGuideOpen] = useState(false);
 
-  // Accessibility & Localization state
-  const [currentLanguage, setCurrentLanguage] = useState<LanguageCode>('en');
+  // Accessibility & Localization state from I18nContext
+  const { language: currentLanguage, setLanguage: setCurrentLanguage } = useTranslation();
   const [accessibilitySettings, setAccessibilitySettings] = useState<AccessibilitySettings>({
     highContrast: false,
     largeText: false,
@@ -309,32 +312,26 @@ export default function App() {
              PUBLIC ROUTES
              ========================================================================= */
           <>
-            {/* PUBLIC: Overview */}
+            {/* PUBLIC: Overview - Simplified Patient & Community Journey */}
             {publicRoute === 'overview' && (
-              <LandingHero
-                onStartScreening={() => {
+              <SimplifiedPatientHome
+                onGoToSampleCheck={() => {
                   setActivePreset(null);
                   navigatePublic('get-screened');
                 }}
-                onSelectPreset={handleSelectPreset}
-                onViewAblation={() => navigatePublic('research')}
-                onViewArchitecture={() => {
-                  setIsProviderMode(true);
-                  navigateProvider('technology');
-                }}
-                onViewInterview={() => {
-                  setIsProviderMode(true);
-                  navigateProvider('technology');
-                }}
-                onStartCampMode={() => {
-                  setIsProviderMode(true);
-                  navigateProvider('camp-mode');
-                }}
-                onOpenBatchScreening={() => setIsBatchModalOpen(true)}
-                onOpenGuideModal={() => setIsGuideOpen(true)}
-                onOpenTechFaqModal={() => setIsTechFaqOpen(true)}
-                onOpenRoleModal={() => setIsRoleModalOpen(true)}
-                userRole={currentRole}
+                onSwitchToProviderPortal={switchToProvider}
+                isHighContrast={accessibilitySettings.highContrast}
+                onToggleHighContrast={() =>
+                  handleUpdateAccessibilitySettings({
+                    highContrast: !accessibilitySettings.highContrast,
+                  })
+                }
+                onSetTextSize={(size) =>
+                  handleUpdateAccessibilitySettings({
+                    largeText: size !== 'standard',
+                  })
+                }
+                currentTextSize={accessibilitySettings.largeText ? 'large' : 'standard'}
               />
             )}
 
@@ -551,6 +548,9 @@ export default function App() {
       {/* Small Clinical Decision Support Notice in Bottom Right */}
       <DisclaimerBanner />
 
+      {/* Floating Voice Reader Bar when narration is active */}
+      <VoiceReaderBar />
+
       {/* Modals Suite */}
       <AuthModal
         isOpen={isAuthModalOpen}
@@ -580,5 +580,13 @@ export default function App() {
         onClose={() => setIsGuideOpen(false)}
       />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <I18nProvider>
+      <AppContent />
+    </I18nProvider>
   );
 }

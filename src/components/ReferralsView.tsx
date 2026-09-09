@@ -25,6 +25,7 @@ import {
   X,
 } from 'lucide-react';
 import { createDefaultAuditTrail, MOCK_REFERRAL_QUEUE } from '../mock/mockData';
+import { screeningApi } from '../api';
 import {
   DRGrade,
   MultimodalTriageResult,
@@ -258,6 +259,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
     });
 
     saveReferrals(updated);
+    screeningApi.updateReferralStatus(referralId, newStatus, auditDetails).catch(() => {});
     if (selectedReferral && selectedReferral.id === referralId) {
       setSelectedReferral(updated.find((r) => r.id === referralId) || null);
     }

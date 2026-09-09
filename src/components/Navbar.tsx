@@ -30,6 +30,7 @@ import {
 import { AccessibilitySettings, ProviderRoute, PublicRoute, UserRole } from '../types';
 import { LanguageCode } from '../i18n/translations';
 import { AccessibilityMenu } from './AccessibilityMenu';
+import { useTranslation } from '../i18n/I18nContext';
 
 interface NavbarProps {
   isProviderMode: boolean;
@@ -81,6 +82,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAuth,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { t } = useTranslation();
 
   const roleLabels: Record<UserRole, string> = {
     public: 'Public User',
@@ -91,7 +93,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   };
 
   return (
-    <header className="bg-white/95 backdrop-blur-md border-b border-[#E3DDD9] sticky top-0 z-40">
+    <header className="bg-white/85 backdrop-blur-md border-b border-stone-200/70 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-3">
           {/* Brand Logo */}
@@ -108,21 +110,21 @@ export const Navbar: React.FC<NavbarProps> = ({
               }}
               className="flex items-center gap-2.5 text-left focus:outline-none group"
             >
-              <div className="w-9 h-9 rounded-xl flex items-center justify-center text-white shadow-xs bg-gradient-to-br from-[#EA580C] to-[#DB2777] transition-transform group-hover:scale-105 shrink-0">
-                <Eye className="w-5 h-5" />
+              <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white shadow-2xs bg-gradient-to-br from-[#EA580C] to-[#DB2777] transition-all group-hover:scale-105 shrink-0">
+                <Eye className="w-4 h-4" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="font-serif font-bold text-xl tracking-tight bg-gradient-to-r from-[#EA580C] to-[#DB2777] bg-clip-text text-transparent">
-                    RetinaGuard<span className="font-light opacity-60 ml-0.5 text-xs font-sans text-[#2E2628]">AI</span>
+                  <span className="font-serif font-bold text-lg sm:text-xl tracking-tight text-stone-900">
+                    RetinaGuard<span className="font-sans text-[11px] font-semibold text-[#EA580C] ml-1">AI</span>
                   </span>
                   {isProviderMode && (
-                    <span className="text-[10px] font-semibold uppercase px-1.5 py-0.5 rounded bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA]">
+                    <span className="text-[10px] font-semibold uppercase px-1.5 py-0.5 rounded-md bg-stone-100 text-stone-600 border border-stone-200">
                       Provider
                     </span>
                   )}
                 </div>
-                <p className="text-[10px] text-[#6E5C5F] font-normal hidden sm:block">
+                <p className="text-[10px] text-stone-400 font-normal hidden sm:block tracking-tight">
                   Multimodal Retinopathy & DME Screening
                 </p>
               </div>
@@ -135,51 +137,51 @@ export const Navbar: React.FC<NavbarProps> = ({
               // PUBLIC NAVIGATION
               <>
                 <button
-                  onClick={() => onNavigatePublic('get-screened')}
-                  className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
-                    publicRoute === 'get-screened'
-                      ? 'bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] font-bold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#FFF7ED]/50'
-                  }`}
-                >
-                  <Eye className="w-3.5 h-3.5 text-[#EA580C]" />
-                  <span>Get your retina screened</span>
-                </button>
-
-                <button
                   onClick={() => onNavigatePublic('find-screening')}
-                  className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+                  className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                     publicRoute === 'find-screening'
-                      ? 'bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] font-bold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#FFF7ED]/50'
+                      ? 'bg-stone-100 text-stone-900 font-semibold'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                 >
                   <MapPin className="w-3.5 h-3.5 text-[#EA580C]" />
-                  <span>Find Screening Near Me</span>
+                  <span>{t('navFindScreening', 'Find Screening Near Me')}</span>
                 </button>
 
                 <button
                   onClick={() => onNavigatePublic('learn')}
-                  className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+                  className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                     publicRoute === 'learn'
-                      ? 'bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] font-bold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#FFF7ED]/50'
+                      ? 'bg-stone-100 text-stone-900 font-semibold'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                 >
-                  <BookOpen className="w-3.5 h-3.5 text-[#EA580C]" />
-                  <span>Learn About Screening</span>
+                  <BookOpen className="w-3.5 h-3.5 text-stone-500" />
+                  <span>{t('navLearn', 'Learn About Screening')}</span>
+                </button>
+
+                <button
+                  onClick={() => onNavigatePublic('get-screened')}
+                  className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+                    publicRoute === 'get-screened'
+                      ? 'bg-stone-100 text-stone-900 font-semibold'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
+                  }`}
+                >
+                  <Eye className="w-3.5 h-3.5 text-stone-500" />
+                  <span>{t('navPractice', 'Sample Eye Check')}</span>
                 </button>
 
                 <button
                   onClick={() => onNavigatePublic('explore-demo')}
-                  className={`px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+                  className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                     publicRoute === 'explore-demo'
-                      ? 'bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] font-bold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#FFF7ED]/50'
+                      ? 'bg-stone-100 text-stone-900 font-semibold'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                 >
                   <Sparkles className="w-3.5 h-3.5 text-[#DB2777]" />
-                  <span>Explore Demo</span>
+                  <span>{t('ctaSeePracticeCheck', 'Explore Demo')}</span>
                 </button>
               </>
             ) : (
@@ -187,10 +189,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               <>
                 <button
                   onClick={() => onNavigateProvider('dashboard')}
-                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors ${
+                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-all ${
                     providerRoute === 'dashboard'
-                      ? 'bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] font-bold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#FFF7ED]/50'
+                      ? 'bg-stone-100 text-stone-900 font-semibold'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                 >
                   Dashboard
@@ -198,10 +200,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                 <button
                   onClick={() => onNavigateProvider('camp-mode')}
-                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                     providerRoute === 'camp-mode'
-                      ? 'bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] font-bold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#FFF7ED]/50'
+                      ? 'bg-stone-100 text-stone-900 font-semibold'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                 >
                   <Tent className="w-3.5 h-3.5 text-[#EA580C]" />
@@ -210,46 +212,46 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                 <button
                   onClick={() => onNavigateProvider('start-screening')}
-                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                     providerRoute === 'start-screening'
-                      ? 'bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] font-bold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#FFF7ED]/50'
+                      ? 'bg-stone-100 text-stone-900 font-semibold'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                 >
-                  <Activity className="w-3.5 h-3.5 text-[#EA580C]" />
+                  <Activity className="w-3.5 h-3.5 text-stone-500" />
                   <span>Start Screening</span>
                 </button>
 
                 <button
                   onClick={() => onNavigateProvider('review-queue')}
-                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                     providerRoute === 'review-queue'
-                      ? 'bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] font-bold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#FFF7ED]/50'
+                      ? 'bg-stone-100 text-stone-900 font-semibold'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                 >
-                  <UserCheck className="w-3.5 h-3.5 text-[#EA580C]" />
+                  <UserCheck className="w-3.5 h-3.5 text-stone-500" />
                   <span>Review Queue</span>
                 </button>
 
                 <button
                   onClick={() => onNavigateProvider('batch-screening')}
-                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                     providerRoute === 'batch-screening'
-                      ? 'bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] font-bold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#FFF7ED]/50'
+                      ? 'bg-stone-100 text-stone-900 font-semibold'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                 >
-                  <Layers className="w-3.5 h-3.5 text-[#EA580C]" />
+                  <Layers className="w-3.5 h-3.5 text-stone-500" />
                   <span>Batch Screening</span>
                 </button>
 
                 <button
                   onClick={() => onNavigateProvider('referrals')}
-                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                     providerRoute === 'referrals'
-                      ? 'bg-[#FDF2F8] text-[#BE185D] border border-[#FBCFE8] font-bold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#FDF2F8]/50'
+                      ? 'bg-stone-100 text-stone-900 font-semibold'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                 >
                   <Send className="w-3.5 h-3.5 text-[#DB2777]" />
@@ -258,39 +260,39 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                 <button
                   onClick={() => onNavigateProvider('analytics')}
-                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                     providerRoute === 'analytics'
-                      ? 'bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] font-bold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#FFF7ED]/50'
+                      ? 'bg-stone-100 text-stone-900 font-semibold'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                 >
-                  <BarChart3 className="w-3.5 h-3.5 text-[#EA580C]" />
+                  <BarChart3 className="w-3.5 h-3.5 text-stone-500" />
                   <span>Analytics</span>
                 </button>
 
                 <button
                   onClick={() => onNavigateProvider('technology')}
-                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                     providerRoute === 'technology'
-                      ? 'bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] font-bold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#FFF7ED]/50'
+                      ? 'bg-stone-100 text-stone-900 font-semibold'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                   title="Architecture & Engineering FAQ"
                 >
-                  <Cpu className="w-3.5 h-3.5 text-[#EA580C]" />
+                  <Cpu className="w-3.5 h-3.5 text-stone-500" />
                   <span className="hidden xl:inline">Technology</span>
                 </button>
 
                 <button
                   onClick={() => onNavigateProvider('settings')}
-                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 ${
+                  className={`px-2.5 lg:px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
                     providerRoute === 'settings'
-                      ? 'bg-[#FAF8F6] text-[#2E2628] border border-[#EFE4DC] font-bold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#FAF8F6]'
+                      ? 'bg-stone-100 text-stone-900 font-semibold'
+                      : 'text-stone-600 hover:text-stone-900 hover:bg-stone-50'
                   }`}
                   title="Settings"
                 >
-                  <Settings className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                  <Settings className="w-3.5 h-3.5 text-stone-500" />
                 </button>
               </>
             )}
@@ -304,18 +306,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   id="for-providers-header-cta"
                   onClick={onSwitchToProvider}
-                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#EFE4DC] bg-white text-xs font-semibold text-[#2E2628] hover:border-[#EA580C] hover:text-[#EA580C] hover:bg-[#FFF7ED]/40 transition-all shadow-2xs"
+                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-stone-200 bg-white text-xs font-semibold text-stone-700 hover:bg-stone-50 hover:border-stone-300 hover:text-stone-900 transition-all shadow-2xs"
                 >
                   <Stethoscope className="w-3.5 h-3.5 text-[#EA580C]" />
-                  <span>For Providers</span>
+                  <span>{t('navForProviders', 'For Providers')}</span>
                 </button>
 
                 <button
                   id="try-demo-header-cta"
                   onClick={onTryDemo}
-                  className="bg-gradient-to-r from-[#EA580C] to-[#DB2777] hover:from-[#C2410C] hover:to-[#BE185D] text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-xs transition-all flex items-center gap-1.5 shrink-0"
+                  className="bg-[#1C1917] hover:bg-stone-800 text-white px-3.5 py-1.5 rounded-xl text-xs font-semibold shadow-2xs transition-all flex items-center gap-1.5 shrink-0"
                 >
-                  <Sparkles className="w-3.5 h-3.5" />
+                  <Sparkles className="w-3.5 h-3.5 text-[#FED7AA]" />
                   <span>Try Demo</span>
                 </button>
               </>
@@ -325,7 +327,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {/* Switch to Public Link */}
                 <button
                   onClick={onSwitchToPublic}
-                  className="hidden xl:flex items-center gap-1 text-xs text-[#6E5C5F] hover:text-[#EA580C] font-medium transition-colors mr-1"
+                  className="hidden xl:flex items-center gap-1 text-xs text-stone-500 hover:text-stone-900 font-medium transition-colors mr-1"
                   title="Switch to Public View"
                 >
                   <span>Public View</span>
@@ -335,12 +337,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {/* Role Switcher Pill */}
                 <button
                   onClick={onOpenRoleModal}
-                  className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-[#EFE4DC] bg-[#FFFDFB] text-xs font-semibold text-[#2E2628] hover:border-[#FED7AA] hover:bg-[#FFF7ED]/40 transition-colors"
+                  className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-stone-200 bg-stone-50/60 text-xs font-semibold text-stone-700 hover:border-stone-300 hover:bg-white transition-colors"
                   title="Switch user perspective / role"
                 >
-                  <Users className="w-3.5 h-3.5 text-[#EA580C]" />
+                  <Users className="w-3.5 h-3.5 text-stone-500" />
                   <span>{roleLabels[currentRole]}</span>
-                  <ChevronDown className="w-3 h-3 text-[#9E8D91]" />
+                  <ChevronDown className="w-3 h-3 text-stone-400" />
                 </button>
 
                 {/* Quick Demo Case Selector */}
@@ -353,7 +355,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       }
                     }}
                     defaultValue=""
-                    className="text-xs bg-[#FFFDFB] border border-[#EFE4DC] text-[#2E2628] rounded-xl px-2.5 py-1.5 font-medium focus:outline-none focus:border-[#EA580C]"
+                    className="text-xs bg-white border border-stone-200 text-stone-700 rounded-xl px-2.5 py-1.5 font-medium focus:outline-none focus:border-stone-400 shadow-2xs"
                   >
                     <option value="" disabled>
                       ⚡ Demo Cases...
@@ -388,8 +390,8 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Auth / Profile Button */}
             {userEmail ? (
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] text-xs text-[#2E2628]">
-                <User className="w-3.5 h-3.5 text-[#EA580C]" />
+              <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-stone-100 border border-stone-200 text-xs text-stone-800">
+                <User className="w-3.5 h-3.5 text-stone-500" />
                 <span className="hidden sm:inline font-medium truncate max-w-[100px]">
                   {userEmail.split('@')[0]}
                 </span>
@@ -397,9 +399,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             ) : (
               <button
                 onClick={onOpenAuth}
-                className="text-xs font-semibold text-[#6E5C5F] hover:text-[#2E2628] px-2 py-1.5 rounded-xl hover:bg-[#FAF8F6] transition-colors flex items-center gap-1"
+                className="text-xs font-semibold text-stone-600 hover:text-stone-900 px-2.5 py-1.5 rounded-xl hover:bg-stone-100 transition-colors flex items-center gap-1"
               >
-                <LogIn className="w-3.5 h-3.5 text-[#EA580C]" />
+                <LogIn className="w-3.5 h-3.5 text-stone-500" />
                 <span className="hidden sm:inline">Sign In</span>
               </button>
             )}
@@ -407,7 +409,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* Mobile menu toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-1.5 rounded-xl text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#FAF8F6]"
+              className="md:hidden p-1.5 rounded-xl text-stone-600 hover:text-stone-900 hover:bg-stone-100 transition-colors"
               aria-label="Toggle mobile menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -417,11 +419,11 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Mobile Navigation Drawer */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-3 border-t border-[#EFE4DC] space-y-1.5 text-xs">
+          <div className="md:hidden py-3 border-t border-stone-200/80 space-y-1.5 text-xs animate-in fade-in duration-150">
             {/* Perspective Switch Bar */}
-            <div className="flex items-center justify-between p-2 rounded-xl bg-[#FFF7ED] border border-[#FED7AA] mb-2">
-              <span className="font-bold text-[#C2410C]">
-                {isProviderMode ? 'Provider Experience' : 'Public Experience'}
+            <div className="flex items-center justify-between p-2.5 rounded-xl bg-stone-50 border border-stone-200 mb-2">
+              <span className="font-semibold text-stone-800">
+                {isProviderMode ? 'Provider Experience' : 'Public Patient View'}
               </span>
               <button
                 onClick={() => {
@@ -432,7 +434,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   }
                   setMobileMenuOpen(false);
                 }}
-                className="text-[11px] font-bold text-[#EA580C] underline"
+                className="text-xs font-semibold text-[#EA580C] hover:underline"
               >
                 Switch to {isProviderMode ? 'Public' : 'Provider'}
               </button>
@@ -443,20 +445,10 @@ export const Navbar: React.FC<NavbarProps> = ({
               <>
                 <button
                   onClick={() => {
-                    onNavigatePublic('get-screened');
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full text-left px-3 py-2 rounded-lg font-medium text-[#2E2628] hover:bg-[#FFF7ED] flex items-center gap-2"
-                >
-                  <Eye className="w-4 h-4 text-[#EA580C]" />
-                  <span>Get your retina screened</span>
-                </button>
-                <button
-                  onClick={() => {
                     onNavigatePublic('find-screening');
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full text-left px-3 py-2 rounded-lg font-medium text-[#2E2628] hover:bg-[#FFF7ED] flex items-center gap-2"
+                  className="w-full text-left px-3 py-2 rounded-xl font-medium text-stone-800 hover:bg-stone-100 flex items-center gap-2"
                 >
                   <MapPin className="w-4 h-4 text-[#EA580C]" />
                   <span>Find Screening Near Me</span>
@@ -466,28 +458,38 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onNavigatePublic('learn');
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full text-left px-3 py-2 rounded-lg font-medium text-[#2E2628] hover:bg-[#FFF7ED] flex items-center gap-2"
+                  className="w-full text-left px-3 py-2 rounded-xl font-medium text-stone-800 hover:bg-stone-100 flex items-center gap-2"
                 >
-                  <BookOpen className="w-4 h-4 text-[#EA580C]" />
+                  <BookOpen className="w-4 h-4 text-stone-500" />
                   <span>Learn About Screening</span>
+                </button>
+                <button
+                  onClick={() => {
+                    onNavigatePublic('get-screened');
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full text-left px-3 py-2 rounded-xl font-medium text-stone-800 hover:bg-stone-100 flex items-center gap-2"
+                >
+                  <Eye className="w-4 h-4 text-stone-500" />
+                  <span>Sample Eye Check</span>
                 </button>
                 <button
                   onClick={() => {
                     onNavigatePublic('explore-demo');
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full text-left px-3 py-2 rounded-lg font-medium text-[#2E2628] hover:bg-[#FFF7ED] flex items-center gap-2"
+                  className="w-full text-left px-3 py-2 rounded-xl font-medium text-stone-800 hover:bg-stone-100 flex items-center gap-2"
                 >
                   <Sparkles className="w-4 h-4 text-[#DB2777]" />
                   <span>Explore Demo</span>
                 </button>
-                <div className="pt-2 border-t border-[#EFE4DC] flex flex-col gap-1.5">
+                <div className="pt-2 border-t border-stone-200 flex flex-col gap-2">
                   <button
                     onClick={() => {
                       onSwitchToProvider();
                       setMobileMenuOpen(false);
                     }}
-                    className="w-full text-center py-2 rounded-xl bg-white border border-[#EA580C] text-[#EA580C] font-bold"
+                    className="w-full text-center py-2 rounded-xl bg-white border border-stone-200 text-stone-800 font-semibold hover:bg-stone-50"
                   >
                     For Providers →
                   </button>
@@ -496,7 +498,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       onTryDemo();
                       setMobileMenuOpen(false);
                     }}
-                    className="w-full text-center py-2 rounded-xl bg-gradient-to-r from-[#EA580C] to-[#DB2777] text-white font-bold"
+                    className="w-full text-center py-2 rounded-xl bg-[#1C1917] text-white font-semibold hover:bg-stone-800"
                   >
                     Try Demo
                   </button>
