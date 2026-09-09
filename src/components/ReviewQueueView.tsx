@@ -29,7 +29,14 @@ import {
 } from 'lucide-react';
 import { DR_GRADES } from '../data/benchmarks';
 import { MOCK_REVIEW_QUEUE_ITEMS } from '../mock/mockData';
-import { DRGrade, MultimodalTriageResult, QualityStatus } from '../types';
+import {
+  DRGrade,
+  MultimodalTriageResult,
+  QualityStatus,
+  ResponsibleAiUncertaintyState,
+} from '../types';
+import { RESPONSIBLE_AI_UNCERTAINTY_QUOTE } from '../utils/uncertaintyEngine';
+import { ResponsibleAiUncertaintyIndicator } from './ResponsibleAiUncertaintyIndicator';
 import { RiskChip } from './RiskChip';
 
 export interface QueueItem {
@@ -47,6 +54,7 @@ export interface QueueItem {
   confidence: 'HIGH' | 'MODERATE' | 'LOW';
   status: 'Pending' | 'Approved' | 'Overridden' | 'Referred' | 'Retake Requested';
   reviewerNotes?: string;
+  uncertaintyState?: ResponsibleAiUncertaintyState;
   triageResult: MultimodalTriageResult;
 }
 
@@ -88,6 +96,9 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
   const [activeTab, setActiveTab] = useState<
     'all' | 'priority' | 'review' | 'low_concern' | 'ungradable'
   >('all');
+  const [selectedUncertaintyFilter, setSelectedUncertaintyFilter] = useState<
+    ResponsibleAiUncertaintyState | 'ALL'
+  >('ALL');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCaseForOverride, setSelectedCaseForOverride] = useState<QueueItem | null>(null);
   const [overrideGrade, setOverrideGrade] = useState<DRGrade>(2);
@@ -107,6 +118,11 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
     if (activeTab === 'review' && (item.finalGrade !== 2 && item.qualityStatus !== 'UNCERTAIN')) return false;
     if (activeTab === 'low_concern' && (item.finalGrade > 1 || item.qualityStatus !== 'GOOD')) return false;
     if (activeTab === 'ungradable' && item.qualityStatus !== 'UNGRADABLE') return false;
+
+    // Uncertainty State filter
+    if (selectedUncertaintyFilter !== 'ALL') {
+      if (item.uncertaintyState !== selectedUncertaintyFilter) return false;
+    }
 
     // Search filter
     if (searchQuery.trim()) {
@@ -199,6 +215,34 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
         </div>
       </div>
 
+      {/* Responsible AI / Uncertainty Principle Banner */}
+      <div className="bg-gradient-to-r from-[#FFF7ED] via-white to-[#FAF8F6] rounded-2xl border-2 border-[#FED7AA] p-4 sm:p-5 shadow-2xs">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div className="flex items-start gap-3">
+            <div className="p-2 rounded-xl bg-[#EA580C] text-white shrink-0 mt-0.5 shadow-2xs">
+              <ShieldAlert className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#C2410C]">
+                  Responsible AI / Uncertainty Principle
+                </span>
+                <span className="w-1 h-1 rounded-full bg-[#EA580C]" />
+                <span className="text-[10px] text-[#059669] font-bold bg-[#ECFDF5] px-2 py-0.5 rounded-full border border-[#A7F3D0]">
+                  Zero Misleading %
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm font-serif font-semibold text-[#2E2628] mt-0.5 italic leading-relaxed">
+                "{RESPONSIBLE_AI_UNCERTAINTY_QUOTE}"
+              </p>
+              <p className="text-[11px] text-[#6E5C5F] mt-0.5">
+                RetinaGuard does not pretend to know by emitting pseudo-precise percentages. Encounters are sorted into transparent clinical uncertainty states to ensure safe human adjudication.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* 5 Filter Tabs with Live Badges */}
       <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
         <button
@@ -276,6 +320,85 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
         </button>
       </div>
 
+      {/* Secondary Filter: Responsible AI Uncertainty State Pills */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+        <span className="text-[11px] font-bold text-[#6E5C5F] mr-1 uppercase tracking-wider shrink-0">
+          Uncertainty Filter:
+        </span>
+        <button
+          onClick={() => setSelectedUncertaintyFilter('ALL')}
+          className={`px-3 py-1 rounded-full text-[11px] font-semibold transition-all border ${
+            selectedUncertaintyFilter === 'ALL'
+              ? 'bg-[#2E2628] text-white border-[#2E2628]'
+              : 'bg-white text-[#6E5C5F] border-[#EFE4DC] hover:bg-[#FAF8F6]'
+          }`}
+        >
+          All States
+        </button>
+        <button
+          onClick={() =>
+            setSelectedUncertaintyFilter(
+              selectedUncertaintyFilter === 'CONFIDENT ENOUGH FOR SCREENING SUPPORT'
+                ? 'ALL'
+                : 'CONFIDENT ENOUGH FOR SCREENING SUPPORT'
+            )
+          }
+          className={`px-3 py-1 rounded-full text-[11px] font-semibold transition-all border ${
+            selectedUncertaintyFilter === 'CONFIDENT ENOUGH FOR SCREENING SUPPORT'
+              ? 'bg-[#059669] text-white border-[#059669]'
+              : 'bg-[#ECFDF5] text-[#065F46] border-[#A7F3D0] hover:bg-[#D1FAE5]'
+          }`}
+        >
+          Confident Enough
+        </button>
+        <button
+          onClick={() =>
+            setSelectedUncertaintyFilter(
+              selectedUncertaintyFilter === 'HUMAN REVIEW RECOMMENDED'
+                ? 'ALL'
+                : 'HUMAN REVIEW RECOMMENDED'
+            )
+          }
+          className={`px-3 py-1 rounded-full text-[11px] font-semibold transition-all border ${
+            selectedUncertaintyFilter === 'HUMAN REVIEW RECOMMENDED'
+              ? 'bg-[#D97706] text-white border-[#D97706]'
+              : 'bg-[#FFFBEB] text-[#92400E] border-[#FDE68A] hover:bg-[#FEF3C7]'
+          }`}
+        >
+          Human Review
+        </button>
+        <button
+          onClick={() =>
+            setSelectedUncertaintyFilter(
+              selectedUncertaintyFilter === 'IMAGE UNGRADABLE' ? 'ALL' : 'IMAGE UNGRADABLE'
+            )
+          }
+          className={`px-3 py-1 rounded-full text-[11px] font-semibold transition-all border ${
+            selectedUncertaintyFilter === 'IMAGE UNGRADABLE'
+              ? 'bg-[#DC2626] text-white border-[#DC2626]'
+              : 'bg-[#FEF2F2] text-[#991B1B] border-[#FCA5A5] hover:bg-[#FEE2E2]'
+          }`}
+        >
+          Image Ungradable
+        </button>
+        <button
+          onClick={() =>
+            setSelectedUncertaintyFilter(
+              selectedUncertaintyFilter === 'MODALITY DISAGREEMENT'
+                ? 'ALL'
+                : 'MODALITY DISAGREEMENT'
+            )
+          }
+          className={`px-3 py-1 rounded-full text-[11px] font-semibold transition-all border ${
+            selectedUncertaintyFilter === 'MODALITY DISAGREEMENT'
+              ? 'bg-[#7C3AED] text-white border-[#7C3AED]'
+              : 'bg-[#F5F3FF] text-[#5B21B6] border-[#DDD6FE] hover:bg-[#EDE9FE]'
+          }`}
+        >
+          Modality Disagreement
+        </button>
+      </div>
+
       {/* Search & Filter Toolbar */}
       <div className="bg-white p-4 rounded-2xl border border-[#EFE4DC] flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
         <div className="relative w-full sm:w-80">
@@ -310,6 +433,7 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
                 <th className="py-3.5 px-4">Quality Gate</th>
                 <th className="py-3.5 px-4">AI Classification</th>
                 <th className="py-3.5 px-4">OCT DME Status</th>
+                <th className="py-3.5 px-4">Responsible AI State</th>
                 <th className="py-3.5 px-4">Review Status</th>
                 <th className="py-3.5 px-4 text-right">Actions</th>
               </tr>
@@ -391,6 +515,16 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
                             <span>No Foveal Fluid</span>
                           </span>
                         )}
+                      </td>
+
+                      {/* Responsible AI Uncertainty State */}
+                      <td className="py-3.5 px-4">
+                        <ResponsibleAiUncertaintyIndicator
+                          result={item.triageResult}
+                          qualityStatusOverride={item.qualityStatus}
+                          forcedState={item.uncertaintyState}
+                          variant="chip"
+                        />
                       </td>
 
                       {/* Review Status */}

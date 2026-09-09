@@ -293,5 +293,40 @@ export interface ReviewQueueItem {
   status: 'Pending' | 'Approved' | 'Overridden' | 'Referred' | 'Retake Requested';
   reviewerNotes?: string;
   triageResult: Screening;
+  uncertaintyState?: ResponsibleAiUncertaintyState;
 }
 export type QueueItem = ReviewQueueItem;
+
+/**
+ * Responsible AI / Uncertainty Capability
+ * Communicates that AI does not always have sufficient evidence.
+ * Explicitly avoids misleading numerical confidence percentages.
+ */
+export type ResponsibleAiUncertaintyState =
+  | 'CONFIDENT ENOUGH FOR SCREENING SUPPORT'
+  | 'HUMAN REVIEW RECOMMENDED'
+  | 'IMAGE UNGRADABLE'
+  | 'MODALITY DISAGREEMENT';
+
+export interface UncertaintyEvidenceFactor {
+  label: string;
+  status: 'pass' | 'caution' | 'fail';
+  detail: string;
+}
+
+export interface ResponsibleAiUncertaintyEvaluation {
+  state: ResponsibleAiUncertaintyState;
+  shortStatus: string;
+  badgeLabel: string;
+  badgeColor: string;
+  badgeBg: string;
+  badgeBorder: string;
+  iconName: 'ShieldCheck' | 'UserCheck' | 'EyeOff' | 'GitCompare';
+  primaryRationale: string;
+  clinicalAction: string;
+  evidenceFactors: UncertaintyEvidenceFactor[];
+  qualityPassed: boolean;
+  concordanceStatus: 'Concordant' | 'Mild Divergence' | 'Discordant';
+  reviewRecommended: boolean;
+  quoteMessage: string;
+}

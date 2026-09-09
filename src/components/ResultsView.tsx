@@ -31,6 +31,7 @@ import { screeningApi } from '../services/screeningApi';
 import { DRGrade, MultimodalTriageResult } from '../types';
 import { generateClinicalPdfReport } from '../utils/pdfGenerator';
 import { ClinicalAssistantModal } from './ClinicalAssistantModal';
+import { ResponsibleAiUncertaintyIndicator } from './ResponsibleAiUncertaintyIndicator';
 import { RiskChip } from './RiskChip';
 import { ShareModal } from './ShareModal';
 
@@ -290,6 +291,12 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
         </div>
       </div>
 
+      {/* 5.5 RESPONSIBLE AI / UNCERTAINTY CAPABILITY INDICATOR */}
+      <ResponsibleAiUncertaintyIndicator
+        result={result}
+        id="results-responsible-ai-uncertainty"
+      />
+
       {/* 6. PRIMARY ASSESSMENT CARD (GRADE & KEY ATTRIBUTION) */}
       <section
         id="primary-triage-card"
@@ -310,15 +317,10 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             </span>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono">
-            <span
-              className="text-[11px] px-2.5 py-0.5 rounded-full bg-white border font-bold"
-              style={{ borderColor: gradeInfo.borderColor, color: gradeInfo.color }}
-            >
-              Consensus: {result.confidence}
-            </span>
-            <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-white/80 border border-[#EFE4DC] text-[#6E5C5F]">
-              Raw Fusion: {result.rawFusionScore}
+          <div className="flex items-center gap-2">
+            <ResponsibleAiUncertaintyIndicator result={result} variant="chip" />
+            <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-white/80 border border-[#EFE4DC] text-[#6E5C5F] font-mono">
+              Late Fusion Protocol
             </span>
           </div>
         </div>
@@ -873,8 +875,8 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
                       {result.oct.dmeDetected ? 'DME DETECTED' : 'DME NEGATIVE'}
                     </div>
 
-                    <div className="absolute bottom-3 left-3 bg-[#FDF2F8] text-[#BE185D] text-xs font-semibold px-2 py-0.5 rounded border border-[#FBCFE8]">
-                      {result.oct.predictedClass} · {(result.oct.dmeProbability * 100).toFixed(1)}% DME Score
+                    <div className="absolute bottom-3 left-3 bg-[#FDF2F8] text-[#BE185D] text-xs font-semibold px-2.5 py-1 rounded-lg border border-[#FBCFE8]">
+                      {result.oct.predictedClass} · {result.oct.dmeDetected ? 'Fluid Escalation Active' : 'Normal Layer Profile'}
                     </div>
                   </div>
 
@@ -1057,16 +1059,15 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
                       </span>
                     </div>
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-[#6E5C5F]">DME Score:</span>
-                      <span className="font-mono font-bold text-[#BE185D]">
-                        {(result.oct.dmeProbability * 100).toFixed(1)}%
+                      <span className="text-[#6E5C5F]">Biomarker Signal:</span>
+                      <span className="font-bold text-[#BE185D]">
+                        {result.oct.dmeDetected ? 'Macular Edema Fluid' : 'Intact Retinal Contours'}
                       </span>
                     </div>
-                    <div className="h-1.5 w-full bg-[#EFE4DC] rounded-full overflow-hidden">
-                      <div
-                        className="h-full bg-[#DB2777] rounded-full"
-                        style={{ width: `${Math.round(result.oct.dmeProbability * 100)}%` }}
-                      />
+                    <div className="p-2 rounded-lg bg-[#FAF8F6] border border-[#EFE4DC] text-[11px] text-[#6E5C5F] leading-tight">
+                      {result.oct.dmeDetected
+                        ? 'Fluid cyst pockets identified in cross-section; escalated to specialist review.'
+                        : 'No fluid accumulation detected in foveal or parafoveal regions.'}
                     </div>
                   </div>
                 ) : (
