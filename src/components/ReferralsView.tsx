@@ -588,12 +588,12 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                       {item.clinicalNotes}
                     </div>
 
-                    <div className="flex items-center justify-between text-[11px] pt-2 border-t border-[#FAF8F6] text-[#9C8E91]">
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-3 h-3 text-[#EA580C]" />
-                        <span className="truncate max-w-[180px]">{item.assignedClinic.replace(' (Simulated)', '')}</span>
+                    <div className="flex items-center justify-between text-[11px] pt-2 border-t border-[#FAF8F6] text-[#9C8E91] gap-2">
+                      <span className="flex items-center gap-1 min-w-0 flex-1">
+                        <MapPin className="w-3 h-3 text-[#EA580C] shrink-0" />
+                        <span className="truncate">{item.assignedClinic.replace(' (Simulated)', '')}</span>
                       </span>
-                      <span className="font-mono text-[10px]">{item.updatedAt}</span>
+                      <span className="font-mono text-[10px] shrink-0">{item.updatedAt}</span>
                     </div>
 
                     {/* MINI PROGRESS TRACKER */}

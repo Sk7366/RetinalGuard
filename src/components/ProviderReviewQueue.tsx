@@ -122,28 +122,28 @@ export const ProviderReviewQueue: React.FC<ProviderReviewQueueProps> = ({
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] text-center min-w-[90px]">
-              <span className="text-lg font-bold text-[#EA580C] block">
+          <div className="grid grid-cols-3 gap-2 sm:gap-3 w-full sm:w-auto shrink-0">
+            <div className="p-2.5 sm:p-3 rounded-xl bg-stone-50 border border-stone-200/80 text-center flex-1 sm:min-w-[80px]">
+              <span className="text-base sm:text-lg font-bold text-[#EA580C] block">
                 {pendingCount}
               </span>
-              <span className="text-[10px] text-[#6E5C5F] uppercase font-bold">
+              <span className="text-[10px] text-stone-500 uppercase font-semibold tracking-wider">
                 Pending Audit
               </span>
             </div>
-            <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] text-center min-w-[90px]">
-              <span className="text-lg font-bold text-[#DC2626] block">
+            <div className="p-2.5 sm:p-3 rounded-xl bg-stone-50 border border-stone-200/80 text-center flex-1 sm:min-w-[80px]">
+              <span className="text-base sm:text-lg font-bold text-red-600 block">
                 {urgentCount}
               </span>
-              <span className="text-[10px] text-[#6E5C5F] uppercase font-bold">
-                Urgent High Risk
+              <span className="text-[10px] text-stone-500 uppercase font-semibold tracking-wider">
+                Urgent Risk
               </span>
             </div>
-            <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] text-center min-w-[90px]">
-              <span className="text-lg font-bold text-[#15803D] block">
+            <div className="p-2.5 sm:p-3 rounded-xl bg-stone-50 border border-stone-200/80 text-center flex-1 sm:min-w-[80px]">
+              <span className="text-base sm:text-lg font-bold text-emerald-700 block">
                 {completedCount}
               </span>
-              <span className="text-[10px] text-[#6E5C5F] uppercase font-bold">
+              <span className="text-[10px] text-stone-500 uppercase font-semibold tracking-wider">
                 Signed Off
               </span>
             </div>

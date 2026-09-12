@@ -39,7 +39,9 @@ export const ProviderSettings: React.FC<ProviderSettingsProps> = ({
   onLanguageChange,
 }) => {
   const roleNames: Record<UserRole, string> = {
+    patient: 'Patient & Public (Community Member)',
     public: 'Public User (Patient & Community)',
+    helper: 'Screening Helper (Field Worker / CHW)',
     technician: 'Screening Technician (Field Camp Operator)',
     provider: 'Healthcare Provider (Optometrist / Physician)',
     admin: 'Administrator (Facility & Clinical Governance)',

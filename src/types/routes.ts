@@ -2,14 +2,18 @@
  * Application Navigation Route Types
  */
 
-export type AppMode = 'public' | 'provider';
+export type AppExperience = 'patient' | 'helper' | 'researcher';
+
+export type AppMode = 'public' | 'provider' | 'helper' | 'researcher';
 
 export type PublicRoute =
-  | 'get-screened'
+  | 'overview'
+  | 'why-screening'
   | 'find-screening'
   | 'learn'
+  | 'help'
   | 'explore-demo'
-  | 'overview'
+  | 'get-screened'
   | 'how-it-helps'
   | 'research';
 
@@ -25,4 +29,16 @@ export type ProviderRoute =
   | 'cases'
   | 'research'
   | 'technology'
-  | 'settings';
+  | 'settings'
+  | 'help';
+
+export type HelperRoute = ProviderRoute;
+
+export type ResearcherRoute =
+  | 'research'
+  | 'experiments'
+  | 'datasets'
+  | 'models'
+  | 'explainability'
+  | 'architecture'
+  | 'help';

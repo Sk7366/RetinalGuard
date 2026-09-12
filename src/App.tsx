@@ -9,7 +9,6 @@ import { FindScreeningSection } from './components/FindScreeningSection';
 import { Footer } from './components/Footer';
 import { HistoryView } from './components/HistoryView';
 import { ImageCaptureGuideModal } from './components/ImageCaptureGuideModal';
-import { LandingHero } from './components/LandingHero';
 import { Navbar } from './components/Navbar';
 import { ProviderAnalytics } from './components/ProviderAnalytics';
 import { ProviderDashboard } from './components/ProviderDashboard';
@@ -22,42 +21,61 @@ import { PublicLearn } from './components/PublicLearn';
 import { ReferralsView } from './components/ReferralsView';
 import { ResultsView } from './components/ResultsView';
 import { ReviewQueueView } from './components/ReviewQueueView';
-import { RoleModal } from './components/RoleModal';
+import { RoleSelectionModal } from './components/RoleSelectionModal';
+import { HelpSupportModal } from './components/HelpSupportModal';
+import { VoiceAssistant } from './components/VoiceAssistant';
+import { ResearchWorkspaceView } from './components/ResearchWorkspaceView';
 import { ScreeningCampFlow } from './components/ScreeningCampFlow';
 import { ScreeningFlow } from './components/ScreeningFlow';
 import { TechnicalFaqModal } from './components/TechnicalFaqModal';
 import { PRESET_CASES, PresetPatientCase } from './data/sampleCases';
-import { LanguageCode } from './i18n/translations';
 import { I18nProvider, useTranslation } from './i18n/I18nContext';
 import { VoiceReaderBar } from './components/VoiceReaderBar';
 import { SimplifiedPatientHome } from './components/SimplifiedPatientHome';
+import { authService } from './auth/authService';
 import {
   AccessibilitySettings,
+  AppExperience,
   MultimodalTriageResult,
   ProviderRoute,
   PublicRoute,
+  User,
   UserRole,
 } from './types';
 
 function AppContent() {
+  // Current logged in user (defaults to guest patient)
+  const [currentUser, setCurrentUser] = useState<User>(() => authService.getCurrentUser());
+
+  // App Experience: 'patient' (default) | 'helper' | 'researcher'
+  const [experience, setExperience] = useState<AppExperience>(() => {
+    const user = authService.getCurrentUser();
+    if (user.role === 'researcher') return 'researcher';
+    if (user.role === 'helper' || user.role === 'technician' || user.role === 'provider') return 'helper';
+    return 'patient';
+  });
+
   // Navigation State
-  const [isProviderMode, setIsProviderMode] = useState<boolean>(false);
+  const [isProviderMode, setIsProviderMode] = useState<boolean>(() => {
+    const user = authService.getCurrentUser();
+    return user.role === 'helper' || user.role === 'provider' || user.role === 'technician' || user.role === 'researcher';
+  });
   const [publicRoute, setPublicRoute] = useState<PublicRoute>('overview');
   const [providerRoute, setProviderRoute] = useState<ProviderRoute>('dashboard');
   const [isViewingActiveResult, setIsViewingActiveResult] = useState<boolean>(false);
 
-  // Authentication state
+  // Authentication & Role modals
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
-
-  // User Role state (supports 5 personas)
-  const [currentRole, setCurrentRole] = useState<UserRole>('public');
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
 
   // Community & Tech Modals
   const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
   const [isTechFaqOpen, setIsTechFaqOpen] = useState(false);
   const [isGuideOpen, setIsGuideOpen] = useState(false);
+
+  // Voice Guidance state (narrates screening step-by-step for helpers)
+  const [voiceGuidanceEnabled, setVoiceGuidanceEnabled] = useState<boolean>(true);
 
   // Accessibility & Localization state from I18nContext
   const { language: currentLanguage, setLanguage: setCurrentLanguage } = useTranslation();
@@ -88,22 +106,26 @@ function AppContent() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '').trim();
-      
+
+      // Help route
+      if (hash === 'help') {
+        setIsHelpModalOpen(true);
+        return;
+      }
+
       // Direct /referrals or #referrals route support
       if (hash === 'referrals' || hash === '/referrals' || window.location.pathname === '/referrals') {
+        setExperience('helper');
         setIsProviderMode(true);
         setProviderRoute('referrals');
         setIsViewingActiveResult(false);
-        if (currentRole === 'public') {
-          setCurrentRole('provider');
-        }
         return;
       }
 
       if (!hash) return;
 
-      if (hash.startsWith('provider/')) {
-        const pRoute = hash.replace('provider/', '') as ProviderRoute;
+      if (hash.startsWith('helper/') || hash.startsWith('provider/')) {
+        const pRoute = hash.replace(/^(helper|provider)\//, '') as ProviderRoute;
         const validProviderRoutes: ProviderRoute[] = [
           'dashboard',
           'camp-mode',
@@ -118,29 +140,22 @@ function AppContent() {
           'settings',
         ];
         if (validProviderRoutes.includes(pRoute)) {
+          setExperience('helper');
           setIsProviderMode(true);
           setProviderRoute(pRoute);
           setIsViewingActiveResult(false);
-          if (currentRole === 'public') {
-            setCurrentRole('provider');
-          }
         }
-      } else if (hash.startsWith('public/')) {
-        const pubRoute = hash.replace('public/', '') as PublicRoute;
-        const validPublicRoutes: PublicRoute[] = [
-          'overview',
-          'how-it-helps',
-          'get-screened',
-          'find-screening',
-          'learn',
-          'explore-demo',
-          'research',
-        ];
-        if (validPublicRoutes.includes(pubRoute)) {
-          setIsProviderMode(false);
-          setPublicRoute(pubRoute);
-          setIsViewingActiveResult(false);
-        }
+      } else if (hash.startsWith('researcher/')) {
+        setExperience('researcher');
+        setIsProviderMode(true);
+        setProviderRoute('research');
+        setIsViewingActiveResult(false);
+      } else if (hash.startsWith('public/') || ['overview', 'why-screening', 'find-screening', 'learn', 'explore-demo', 'get-screened'].includes(hash)) {
+        const pubRoute = (hash.startsWith('public/') ? hash.replace('public/', '') : hash) as PublicRoute;
+        setExperience('patient');
+        setIsProviderMode(false);
+        setPublicRoute(pubRoute);
+        setIsViewingActiveResult(false);
       } else if (hash === 'results') {
         setIsViewingActiveResult(true);
       }
@@ -149,42 +164,48 @@ function AppContent() {
     handleHashChange();
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, [currentRole]);
-
-  // Sync state to URL hash
-  const updateHash = (mode: 'public' | 'provider', route: string) => {
-    window.location.hash = `${mode}/${route}`;
-  };
+  }, []);
 
   // Navigation handlers
   const navigatePublic = (route: PublicRoute) => {
+    if (route === 'help') {
+      setIsHelpModalOpen(true);
+      return;
+    }
+    setExperience('patient');
     setIsProviderMode(false);
     setPublicRoute(route);
     setIsViewingActiveResult(false);
-    updateHash('public', route);
+    window.location.hash = `public/${route}`;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const navigateProvider = (route: ProviderRoute) => {
+    if (route === 'help') {
+      setIsHelpModalOpen(true);
+      return;
+    }
+    if (route === 'research' || experience === 'researcher') {
+      setExperience('researcher');
+      window.location.hash = `researcher/overview`;
+    } else {
+      setExperience('helper');
+      window.location.hash = `helper/${route}`;
+    }
     setIsProviderMode(true);
     setProviderRoute(route);
     setIsViewingActiveResult(false);
-    if (currentRole === 'public') {
-      setCurrentRole('provider');
-    }
-    updateHash('provider', route);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const switchToProvider = () => {
+    setExperience('helper');
     setIsProviderMode(true);
-    if (currentRole === 'public') {
-      setCurrentRole('provider');
-    }
     navigateProvider('dashboard');
   };
 
   const switchToPublic = () => {
+    setExperience('patient');
     setIsProviderMode(false);
     navigatePublic('overview');
   };
@@ -215,16 +236,31 @@ function AppContent() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Handle role selection
-  const handleSelectRole = (role: UserRole) => {
-    setCurrentRole(role);
-    if (role === 'public') {
-      setIsProviderMode(false);
-      navigatePublic('overview');
-    } else {
+  // Handle successful login from RoleSelectionModal
+  const handleSuccessLogin = (user: User) => {
+    setCurrentUser(user);
+    if (user.role === 'researcher') {
+      setExperience('researcher');
+      setIsProviderMode(true);
+      navigateProvider('research');
+    } else if (user.role === 'helper' || user.role === 'technician' || user.role === 'provider') {
+      setExperience('helper');
       setIsProviderMode(true);
       navigateProvider('dashboard');
+    } else {
+      setExperience('patient');
+      setIsProviderMode(false);
+      navigatePublic('overview');
     }
+  };
+
+  // Logout handler
+  const handleLogout = () => {
+    const guest = authService.logout();
+    setCurrentUser(guest);
+    setExperience('patient');
+    setIsProviderMode(false);
+    navigatePublic('overview');
   };
 
   return (
@@ -235,6 +271,7 @@ function AppContent() {
     >
       {/* Primary Navigation Header */}
       <Navbar
+        experience={experience}
         isProviderMode={isProviderMode}
         publicRoute={publicRoute}
         providerRoute={providerRoute}
@@ -249,9 +286,14 @@ function AppContent() {
           window.location.hash = 'results';
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
-        currentRole={currentRole}
-        onSelectRole={handleSelectRole}
+        currentRole={currentUser.role}
+        currentUser={currentUser}
+        onSelectRole={(role) => {
+          const updated = authService.switchRole(role);
+          handleSuccessLogin(updated);
+        }}
         onOpenRoleModal={() => setIsRoleModalOpen(true)}
+        onOpenHelpModal={() => setIsHelpModalOpen(true)}
         onSelectPreset={handleSelectPreset}
         onOpenBatchModal={() => setIsBatchModalOpen(true)}
         onOpenGuide={() => setIsGuideOpen(true)}
@@ -259,8 +301,9 @@ function AppContent() {
         onUpdateAccessibilitySettings={handleUpdateAccessibilitySettings}
         currentLanguage={currentLanguage}
         onLanguageChange={setCurrentLanguage}
-        userEmail={userEmail}
-        onOpenAuth={() => setIsAuthModalOpen(true)}
+        userEmail={currentUser.email}
+        onOpenAuth={() => setIsRoleModalOpen(true)}
+        onLogout={handleLogout}
       />
 
       {/* Main Content Area */}
@@ -268,11 +311,12 @@ function AppContent() {
         {/* If user clicked to view active result */}
         {isViewingActiveResult && activeResult ? (
           <div className="space-y-4">
-            <div className="flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-[#EFE4DC] text-xs">
+            <div className="flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-[#EFE4DC] text-xs shadow-xs">
               <span className="font-semibold text-[#6E5C5F]">
                 Viewing Inspection Result: <span className="text-[#2E2628] font-bold">{activeResult.patientId}</span>
               </span>
               <button
+                type="button"
                 onClick={() => {
                   setIsViewingActiveResult(false);
                   if (isProviderMode) {
@@ -283,7 +327,7 @@ function AppContent() {
                 }}
                 className="font-bold text-[#EA580C] hover:underline"
               >
-                ← Return to {isProviderMode ? 'Provider View' : 'Public View'}
+                ← Return to {isProviderMode ? (experience === 'researcher' ? 'Research Lab' : 'Helper Dashboard') : 'Patient View'}
               </button>
             </div>
             <ResultsView
@@ -299,17 +343,18 @@ function AppContent() {
               }}
               onAblationClick={() => {
                 setIsViewingActiveResult(false);
-                if (isProviderMode) {
-                  navigateProvider('research');
-                } else {
-                  navigatePublic('research');
-                }
+                navigateProvider('research');
               }}
             />
           </div>
+        ) : experience === 'researcher' ? (
+          /* =========================================================================
+             RESEARCHER EXPERIENCE
+             ========================================================================= */
+          <ResearchWorkspaceView />
         ) : !isProviderMode ? (
           /* =========================================================================
-             PUBLIC ROUTES
+             PUBLIC PATIENT EXPERIENCE (DEFAULT)
              ========================================================================= */
           <>
             {/* PUBLIC: Overview - Simplified Patient & Community Journey */}
@@ -333,6 +378,16 @@ function AppContent() {
                 }
                 currentTextSize={accessibilitySettings.largeText ? 'large' : 'standard'}
               />
+            )}
+
+            {/* PUBLIC: Why Screening? */}
+            {publicRoute === 'why-screening' && (
+              <div className="space-y-6">
+                <PublicLearn
+                  onGetScreened={() => navigatePublic('get-screened')}
+                  onOpenFaq={() => setIsHelpModalOpen(true)}
+                />
+              </div>
             )}
 
             {/* PUBLIC: How It Helps */}
@@ -362,7 +417,7 @@ function AppContent() {
             {publicRoute === 'learn' && (
               <PublicLearn
                 onGetScreened={() => navigatePublic('get-screened')}
-                onOpenFaq={() => setIsTechFaqOpen(true)}
+                onOpenFaq={() => setIsHelpModalOpen(true)}
               />
             )}
 
@@ -374,15 +429,15 @@ function AppContent() {
               />
             )}
 
-            {/* PUBLIC: Research */}
-            {publicRoute === 'research' && <AblationView />}
+            {/* PUBLIC: Research Link */}
+            {publicRoute === 'research' && <ResearchWorkspaceView />}
           </>
         ) : (
           /* =========================================================================
-             PROVIDER ROUTES
+             SCREENING HELPER & CLINICAL WORKSPACE
              ========================================================================= */
           <>
-            {/* PROVIDER: Dashboard */}
+            {/* HELPER: Dashboard */}
             {providerRoute === 'dashboard' && (
               <ProviderDashboard
                 history={history}
@@ -400,11 +455,11 @@ function AppContent() {
                   navigateProvider('camp-mode');
                 }}
                 onOpenBatch={() => setIsBatchModalOpen(true)}
-                userRole={currentRole}
+                userRole={currentUser.role}
               />
             )}
 
-            {/* PROVIDER: Screening Camp Mode */}
+            {/* HELPER: Screening Camp Mode */}
             {providerRoute === 'camp-mode' && (
               <ScreeningCampFlow
                 onComplete={handleScreeningComplete}
@@ -412,28 +467,28 @@ function AppContent() {
               />
             )}
 
-            {/* PROVIDER: Start Screening / Screenings */}
+            {/* HELPER: Start Screening / Screenings */}
             {(providerRoute === 'start-screening' || providerRoute === 'screenings') && (
               <div className="space-y-6">
-                <div className="flex items-center justify-between bg-white p-4 rounded-2xl border border-[#EFE4DC] shadow-xs flex-wrap gap-3">
+                <div className="flex items-center justify-between bg-white p-4 sm:p-5 rounded-2xl border border-[#EFE4DC] shadow-xs flex-wrap gap-3">
                   <div>
-                    <h2 className="text-base font-bold text-[#2E2628]">Clinical Examination Encounter</h2>
-                    <p className="text-xs text-[#6E5C5F]">Fundus photography, OCT B-scans, and clinical laboratory input with real-time explainability.</p>
+                    <h2 className="text-base font-serif font-bold text-[#2E2628]">
+                      Screening Examination Encounter
+                    </h2>
+                    <p className="text-xs text-[#6E5C5F] mt-0.5">
+                      Non-mydriatic fundus capture with automated clarity assessment and optional OCT depth scanning.
+                    </p>
                   </div>
                   <div className="flex items-center gap-2">
                     <button
+                      type="button"
                       onClick={() => navigateProvider('camp-mode')}
                       className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-[#FED7AA] bg-[#FFF7ED] text-[#C2410C] hover:bg-[#FFEDD5] transition-colors"
                     >
-                      Switch to Camp Mode
+                      Camp Offline Mode
                     </button>
                     <button
-                      onClick={() => setIsBatchModalOpen(true)}
-                      className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-[#EFE4DC] bg-[#FAF8F6] text-[#2E2628] hover:border-[#EA580C] hover:text-[#EA580C] transition-colors"
-                    >
-                      Batch Triage Mode
-                    </button>
-                    <button
+                      type="button"
                       onClick={() => setIsGuideOpen(true)}
                       className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-[#EFE4DC] bg-[#FAF8F6] text-[#2E2628] hover:border-[#EA580C] hover:text-[#EA580C] transition-colors"
                     >
@@ -450,7 +505,7 @@ function AppContent() {
               </div>
             )}
 
-            {/* PROVIDER: Review Queue */}
+            {/* HELPER: Review Queue */}
             {providerRoute === 'review-queue' && (
               <ReviewQueueView
                 history={history}
@@ -466,7 +521,7 @@ function AppContent() {
               />
             )}
 
-            {/* PROVIDER: Batch Screening Architecture */}
+            {/* HELPER: Batch Screening Architecture */}
             {providerRoute === 'batch-screening' && (
               <BatchScreeningView
                 onSelectResult={(selected) => {
@@ -481,7 +536,7 @@ function AppContent() {
               />
             )}
 
-            {/* PROVIDER: Referrals */}
+            {/* HELPER: Referrals */}
             {providerRoute === 'referrals' && (
               <ReferralsView
                 history={history}
@@ -497,7 +552,7 @@ function AppContent() {
               />
             )}
 
-            {/* PROVIDER: Cases (Audit History) */}
+            {/* HELPER: Cases (Audit History) */}
             {providerRoute === 'cases' && (
               <HistoryView
                 history={history}
@@ -514,20 +569,23 @@ function AppContent() {
               />
             )}
 
-            {/* PROVIDER: Analytics */}
+            {/* HELPER: Analytics */}
             {providerRoute === 'analytics' && <ProviderAnalytics history={history} />}
 
-            {/* PROVIDER: Research */}
-            {providerRoute === 'research' && <AblationView />}
+            {/* HELPER: Research */}
+            {providerRoute === 'research' && <ResearchWorkspaceView />}
 
-            {/* PROVIDER: Technology (Inference Pipeline, SaMD FAQ, MLflow) */}
+            {/* HELPER: Technology */}
             {providerRoute === 'technology' && <ArchitectureView />}
 
-            {/* PROVIDER: Settings */}
+            {/* HELPER: Settings */}
             {providerRoute === 'settings' && (
               <ProviderSettings
-                currentRole={currentRole}
-                onSelectRole={handleSelectRole}
+                currentRole={currentUser.role}
+                onSelectRole={(role) => {
+                  const updated = authService.switchRole(role);
+                  handleSuccessLogin(updated);
+                }}
                 onOpenRoleModal={() => setIsRoleModalOpen(true)}
                 accessibilitySettings={accessibilitySettings}
                 onUpdateAccessibilitySettings={handleUpdateAccessibilitySettings}
@@ -539,32 +597,46 @@ function AppContent() {
         )}
       </main>
 
-      {/* Premium Dark Research Footer */}
+      {/* Global Footer */}
       <Footer
         onNavigatePublic={navigatePublic}
         onNavigateProvider={navigateProvider}
       />
 
-      {/* Small Clinical Decision Support Notice in Bottom Right */}
+      {/* Small Clinical Decision Support Notice in Bottom Left */}
       <DisclaimerBanner />
 
-      {/* Floating Voice Reader Bar when narration is active */}
+      {/* Floating Voice Reader Bar when narration is playing */}
       <VoiceReaderBar />
 
-      {/* Modals Suite */}
-      <AuthModal
-        isOpen={isAuthModalOpen}
-        onClose={() => setIsAuthModalOpen(false)}
-        onLoginSuccess={(email) => setUserEmail(email)}
+      {/* Persistent, Context-Aware Voice Assistant (Bottom-Right) */}
+      <VoiceAssistant
+        role={currentUser.role}
+        voiceGuidanceEnabled={voiceGuidanceEnabled}
+        onToggleVoiceGuidance={setVoiceGuidanceEnabled}
+        currentRoute={isProviderMode ? providerRoute : publicRoute}
       />
 
-      <RoleModal
+      {/* Role Selection Landing Modal (3 Clear Paths: Patient, Helper, Researcher) */}
+      <RoleSelectionModal
         isOpen={isRoleModalOpen}
         onClose={() => setIsRoleModalOpen(false)}
-        currentRole={currentRole}
-        onSelectRole={handleSelectRole}
+        onSuccessLogin={handleSuccessLogin}
       />
 
+      {/* Universal Help & Support Modal */}
+      <HelpSupportModal
+        isOpen={isHelpModalOpen}
+        onClose={() => setIsHelpModalOpen(false)}
+        role={currentUser.role}
+        onNavigate={(route) => {
+          if (route === 'find-screening') {
+            navigatePublic('find-screening');
+          }
+        }}
+      />
+
+      {/* Ancillary Modals Suite */}
       <BatchScreeningModal
         isOpen={isBatchModalOpen}
         onClose={() => setIsBatchModalOpen(false)}
