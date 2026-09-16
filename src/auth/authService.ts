@@ -38,6 +38,7 @@ export const authService = {
       role: 'public',
       experience: 'patient',
       verificationStatus: 'pending',
+      authorizedRoles: ['patient'],
       permissions: ROLE_PERMISSIONS.public,
     };
   },
@@ -50,6 +51,11 @@ export const authService = {
     role: UserRole = 'helper',
     meta?: Partial<User>
   ): Promise<User> {
+    const existing = this.getCurrentUser();
+    const existingAuth = existing.authorizedRoles || [];
+    const normalizedRole: UserRole = role === 'public' ? 'patient' : role;
+    const combinedRoles: UserRole[] = Array.from(new Set([...existingAuth, normalizedRole, ...(meta?.authorizedRoles || [])]));
+
     const user: User = {
       id: `usr-${Math.random().toString(36).substring(2, 9)}`,
       email,
@@ -62,6 +68,7 @@ export const authService = {
       verificationStatus: meta?.verificationStatus || 'verified',
       isDemoVerification: meta?.isDemoVerification ?? true,
       permissions: ROLE_PERMISSIONS[role] || ROLE_PERMISSIONS.helper,
+      authorizedRoles: combinedRoles.length > 0 ? combinedRoles : [normalizedRole],
       clinicId: 'clinic-blr-01',
       clinicName: 'Victoria Hospital Regional Eye Center',
       token: `jwt_mock_${Date.now()}`,
@@ -104,6 +111,7 @@ export const authService = {
       verificationStatus: 'verified',
       isDemoVerification: true,
       permissions: ROLE_PERMISSIONS.patient,
+      authorizedRoles: ['patient'],
       token: `jwt_patient_${Date.now()}`,
     };
 
@@ -195,6 +203,7 @@ export const authService = {
       role: 'public',
       experience: 'patient',
       verificationStatus: 'pending',
+      authorizedRoles: ['patient'],
       permissions: ROLE_PERMISSIONS.public,
     };
   },

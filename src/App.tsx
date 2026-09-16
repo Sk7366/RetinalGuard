@@ -132,6 +132,10 @@ function AppContent() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '').trim();
+      const activeUser = authService.getCurrentUser();
+      const authorizedRoles = activeUser.authorizedRoles || [activeUser.role];
+      const hasStaffAccess = authorizedRoles.some((r) => ['helper', 'technician', 'provider', 'admin'].includes(r));
+      const hasResearchAccess = authorizedRoles.includes('researcher') || activeUser.role === 'researcher';
 
       // Help route
       if (hash === 'help') {
@@ -141,6 +145,14 @@ function AppContent() {
 
       // Direct /referrals or #referrals route support
       if (hash === 'referrals' || hash === '/referrals' || window.location.pathname === '/referrals') {
+        if (!hasStaffAccess) {
+          // If a patient attempts to access provider referrals, redirect to patient overview
+          setExperience('patient');
+          setIsProviderMode(false);
+          setPublicRoute('overview');
+          window.location.hash = 'public/overview';
+          return;
+        }
         setExperience('helper');
         setIsProviderMode(true);
         setProviderRoute('referrals');
@@ -151,12 +163,22 @@ function AppContent() {
       if (!hash) return;
 
       if (hash.startsWith('helper/') || hash.startsWith('provider/')) {
+        if (!hasStaffAccess) {
+          // Block unauthorized access to helper/provider features for patient accounts
+          setExperience('patient');
+          setIsProviderMode(false);
+          setPublicRoute('overview');
+          window.location.hash = 'public/overview';
+          return;
+        }
         const pRoute = hash.replace(/^(helper|provider)\//, '') as ProviderRoute;
         const validProviderRoutes: ProviderRoute[] = [
           'dashboard',
           'camp-mode',
           'start-screening',
           'review-queue',
+          'appointments',
+          'batch-screening',
           'referrals',
           'analytics',
           'screenings',
@@ -172,9 +194,18 @@ function AppContent() {
           setIsViewingActiveResult(false);
         }
       } else if (hash.startsWith('researcher/')) {
+        if (!hasResearchAccess) {
+          // Block unauthorized access to researcher features for patient accounts
+          setExperience('patient');
+          setIsProviderMode(false);
+          setPublicRoute('overview');
+          window.location.hash = 'public/overview';
+          return;
+        }
+        const rSub = hash.replace('researcher/', '') as ProviderRoute;
         setExperience('researcher');
         setIsProviderMode(true);
-        setProviderRoute('research');
+        setProviderRoute(rSub || 'research');
         setIsViewingActiveResult(false);
       } else if (
         hash.startsWith('public/') ||
@@ -225,10 +256,19 @@ function AppContent() {
       setIsHelpModalOpen(true);
       return;
     }
+    const authorized = currentUser.authorizedRoles || [currentUser.role];
     if (route === 'research' || experience === 'researcher') {
+      if (!authorized.includes('researcher') && currentUser.role !== 'researcher') {
+        setIsRoleModalOpen(true);
+        return;
+      }
       setExperience('researcher');
       window.location.hash = `researcher/overview`;
     } else {
+      if (!authorized.some((r) => ['helper', 'technician', 'provider', 'admin'].includes(r))) {
+        setIsRoleModalOpen(true);
+        return;
+      }
       setExperience('helper');
       window.location.hash = `helper/${route}`;
     }
@@ -242,6 +282,12 @@ function AppContent() {
     setExperience('helper');
     setIsProviderMode(true);
     navigateProvider('dashboard');
+  };
+
+  const switchToResearcher = () => {
+    setExperience('researcher');
+    setIsProviderMode(true);
+    navigateProvider('research');
   };
 
   const switchToPublic = () => {
@@ -305,7 +351,7 @@ function AppContent() {
 
   return (
     <div
-      className={`min-h-screen flex flex-col bg-[#FFFDFB] text-[#2E2628] antialiased ${
+      className={`min-h-screen flex flex-col bg-[#FFFDFB] text-[#2E2628] antialiased overflow-x-clip ${
         accessibilitySettings.highContrast ? 'contrast-125 saturate-150' : ''
       } ${accessibilitySettings.largeText ? 'text-lg' : ''}`}
     >
@@ -403,7 +449,22 @@ function AppContent() {
           /* =========================================================================
              RESEARCHER EXPERIENCE
              ========================================================================= */
-          <ResearchWorkspaceView />
+          <ResearchWorkspaceView
+            initialTab={
+              providerRoute === 'models'
+                ? 'models'
+                : providerRoute === 'datasets'
+                ? 'datasets'
+                : providerRoute === 'experiments'
+                ? 'experiments'
+                : providerRoute === 'explainability'
+                ? 'explainability'
+                : providerRoute === 'technology'
+                ? 'architecture'
+                : 'overview'
+            }
+            onSwitchWorkspace={() => setIsRoleModalOpen(true)}
+          />
         ) : !isProviderMode ? (
           /* =========================================================================
              PUBLIC PATIENT EXPERIENCE (DEFAULT)
@@ -476,6 +537,7 @@ function AppContent() {
                 onNavigateToReports={() => navigatePublic('my-reports')}
                 onNavigateToJourney={() => navigatePublic('my-screening')}
                 onOpenAccessibility={() => setIsAccessibilityModalOpen(true)}
+                onSwitchWorkspace={() => setIsRoleModalOpen(true)}
                 onLogout={handleLogout}
               />
             )}
@@ -541,8 +603,8 @@ function AppContent() {
               />
             )}
 
-            {/* HELPER: Screening Camp Mode */}
-            {providerRoute === 'camp-mode' && (
+            {/* HELPER: Screening Camp & Appointments */}
+            {(providerRoute === 'camp-mode' || providerRoute === 'appointments') && (
               <ScreeningCampFlow
                 onComplete={handleScreeningComplete}
                 onExitCampMode={() => navigateProvider('dashboard')}
@@ -655,7 +717,9 @@ function AppContent() {
             {providerRoute === 'analytics' && <ProviderAnalytics history={history} />}
 
             {/* HELPER: Research */}
-            {providerRoute === 'research' && <ResearchWorkspaceView />}
+            {providerRoute === 'research' && (
+              <ResearchWorkspaceView onSwitchWorkspace={() => setIsRoleModalOpen(true)} />
+            )}
 
             {/* HELPER: Technology */}
             {providerRoute === 'technology' && <ArchitectureView />}
@@ -681,6 +745,7 @@ function AppContent() {
 
       {/* Global Footer */}
       <Footer
+        experience={experience}
         onNavigatePublic={navigatePublic}
         onNavigateProvider={navigateProvider}
       />
@@ -708,15 +773,20 @@ function AppContent() {
           setIsWelcomeModalOpen(false);
           localStorage.setItem('retinaguard_welcomed_v2', 'true');
         }}
-        onStartScreening={() => {
+        onContinueAsPatient={() => {
           setIsWelcomeModalOpen(false);
           localStorage.setItem('retinaguard_welcomed_v2', 'true');
-          navigatePublic('find-screening');
+          navigatePublic('overview');
         }}
-        onExploreDemo={() => {
+        onContinueAsHelper={() => {
           setIsWelcomeModalOpen(false);
           localStorage.setItem('retinaguard_welcomed_v2', 'true');
-          navigatePublic('explore-demo');
+          setIsRoleModalOpen(true);
+        }}
+        onContinueAsResearcher={() => {
+          setIsWelcomeModalOpen(false);
+          localStorage.setItem('retinaguard_welcomed_v2', 'true');
+          switchToResearcher();
         }}
       />
 

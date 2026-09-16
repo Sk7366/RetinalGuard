@@ -1,5 +1,6 @@
 export type TextSizeOption = 'standard' | 'large' | 'xl';
 export type ColorVisionOption = 'default' | 'highContrast' | 'redGreen' | 'blueYellow' | 'monochrome';
+export type ThemeModeOption = 'light' | 'dark' | 'system';
 
 export interface AccessibilityConfig {
   textSize: TextSizeOption;
@@ -7,6 +8,7 @@ export interface AccessibilityConfig {
   colorVision: ColorVisionOption;
   reduceMotion: boolean;
   readAloud: boolean;
+  themeMode: ThemeModeOption;
 }
 
 const STORAGE_KEY = 'retinaguard_accessibility_v2';
@@ -17,6 +19,7 @@ const DEFAULT_CONFIG: AccessibilityConfig = {
   colorVision: 'default',
   reduceMotion: false,
   readAloud: true,
+  themeMode: 'light',
 };
 
 class AccessibilityService {
@@ -106,6 +109,21 @@ class AccessibilityService {
       root.classList.add('reduce-motion');
     } else {
       root.classList.remove('reduce-motion');
+    }
+
+    // 5. Dark Mode
+    const isSystemDark =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const shouldBeDark =
+      this.config.themeMode === 'dark' ||
+      (this.config.themeMode === 'system' && isSystemDark);
+
+    if (shouldBeDark) {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
     }
   }
 }

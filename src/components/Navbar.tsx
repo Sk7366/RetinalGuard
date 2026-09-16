@@ -1,37 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Activity,
   ArrowRight,
   BarChart3,
   BookOpen,
+  Calendar,
   Camera,
+  Check,
   ChevronDown,
+  ChevronRight,
   Cpu,
   Database,
   Eye,
   FileSpreadsheet,
   FileText,
+  GitBranch,
   Globe,
   HeartHandshake,
   HelpCircle,
   Layers,
-  Lock,
+  LayoutDashboard,
   LogIn,
   LogOut,
   MapPin,
   Menu,
   RotateCcw,
-  Send,
+  Scale,
   Settings,
+  ShieldAlert,
   ShieldCheck,
-  Sliders,
   Sparkles,
-  Stethoscope,
-  Tent,
   User as UserIcon,
   UserCheck,
   Users,
-  Volume2,
   X,
 } from 'lucide-react';
 import {
@@ -82,32 +83,32 @@ export const Navbar: React.FC<NavbarProps> = ({
   providerRoute,
   onNavigatePublic,
   onNavigateProvider,
-  onSwitchToProvider,
-  onSwitchToPublic,
-  onTryDemo,
   hasActiveResult,
   onViewResults,
   currentRole,
   currentUser,
-  onSelectRole,
   onOpenRoleModal,
   onOpenHelpModal,
-  onSelectPreset,
-  onOpenBatchModal,
   accessibilitySettings,
   onUpdateAccessibilitySettings,
   currentLanguage,
   onLanguageChange,
-  userEmail,
-  onOpenAuth,
   onLogout,
 }) => {
+  const { t } = useTranslation();
+
+  // Dropdown states
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
-  const { t } = useTranslation();
 
+  // Refs for click outside handling
+  const moreRef = useRef<HTMLDivElement>(null);
+  const langRef = useRef<HTMLDivElement>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
+
+  // Roles identification
   const isPatient = experience === 'patient' && !isProviderMode;
   const isHelper = experience === 'helper' || (isProviderMode && currentRole !== 'researcher');
   const isResearcher = experience === 'researcher' || currentRole === 'researcher';
@@ -115,390 +116,335 @@ export const Navbar: React.FC<NavbarProps> = ({
   const currentLangObj =
     SUPPORTED_LANGUAGES.find((l) => l.code === currentLanguage) || SUPPORTED_LANGUAGES[0];
 
+  // Close menus on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (moreRef.current && !moreRef.current.contains(event.target as Node)) {
+        setMoreMenuOpen(false);
+      }
+      if (langRef.current && !langRef.current.contains(event.target as Node)) {
+        setLangMenuOpen(false);
+      }
+      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+        setProfileMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  // Close mobile drawer on route navigation
+  const handlePublicNav = (route: PublicRoute) => {
+    setMobileMenuOpen(false);
+    setMoreMenuOpen(false);
+    onNavigatePublic(route);
+  };
+
+  const handleProviderNav = (route: ProviderRoute) => {
+    setMobileMenuOpen(false);
+    setMoreMenuOpen(false);
+    onNavigateProvider(route);
+  };
+
   return (
-    <header className="bg-white/95 backdrop-blur-md border-b border-[#EFE4DC] sticky top-0 z-40 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 gap-3">
-          {/* BRAND LOGO */}
-          <div className="flex items-center gap-3 shrink-0">
+    <header
+      id="main-navbar-header"
+      className="bg-white/95 backdrop-blur-md border-b border-[#EFE4DC] sticky top-0 z-40 w-full overflow-x-clip"
+    >
+      <div className="max-w-7xl mx-auto px-3 sm:px-5 lg:px-8">
+        <div className="flex items-center justify-between h-16 gap-2 sm:gap-4 w-full min-w-0">
+          {/* =====================================================================
+              1. LOGO & BRAND
+              ===================================================================== */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <button
-              id="navbar-brand-button"
+              id="navbar-brand-logo-btn"
               type="button"
               onClick={() => {
                 if (isResearcher) {
-                  onNavigateProvider('research');
+                  handleProviderNav('research');
                 } else if (isHelper) {
-                  onNavigateProvider('dashboard');
+                  handleProviderNav('dashboard');
                 } else {
-                  onNavigatePublic('overview');
+                  handlePublicNav('overview');
                 }
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               className="flex items-center gap-2 text-left focus:outline-none group"
+              aria-label="RetinaGuard AI Home"
             >
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white shadow-2xs bg-[#EA580C] group-hover:bg-[#C2410C] transition-colors shrink-0">
+              <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white bg-[#EA580C] group-hover:bg-[#C2410C] transition-colors shrink-0 shadow-xs">
                 <Eye className="w-4 h-4" />
               </div>
-              <div>
-                <div className="flex items-center gap-1.5 leading-none">
+
+              <div className="flex flex-col justify-center">
+                <div className="flex items-center gap-1 leading-none">
                   <span className="font-serif font-bold text-base sm:text-lg tracking-tight text-[#2E2628]">
-                    RetinaGuard<span className="font-sans text-[10px] sm:text-[11px] font-bold text-[#EA580C] ml-1">AI</span>
+                    RetinaGuard
+                  </span>
+                  <span className="font-sans text-[10px] sm:text-[11px] font-bold text-[#EA580C]">
+                    AI
                   </span>
                 </div>
 
                 {/* Subtitle / Role Badge */}
                 {isHelper && (
-                  <span className="block text-[9px] font-semibold text-[#EA580C] tracking-wide uppercase mt-0.5">
-                    SCREENING HELPER • DEMO VERIFIED
+                  <span className="text-[9px] font-bold text-[#EA580C] tracking-wide uppercase mt-0.5">
+                    HELPER
                   </span>
                 )}
                 {isResearcher && (
-                  <span className="block text-[9px] font-semibold text-[#2E2628] tracking-wide uppercase mt-0.5">
-                    RESEARCH WORKSPACE
-                  </span>
-                )}
-                {isPatient && (
-                  <span className="block text-[9px] font-medium text-[#9E8D91] tracking-wide mt-0.5">
-                    Community Screening
+                  <span className="text-[9px] font-bold text-[#2E2628] tracking-wide uppercase mt-0.5">
+                    RESEARCH
                   </span>
                 )}
               </div>
             </button>
           </div>
 
-          {/* DESKTOP NAVIGATION (>= 1024px) */}
-          <nav aria-label="Main Navigation" className="hidden lg:flex items-center gap-1 xl:gap-2">
-            {/* 1. PUBLIC PATIENT LINKS */}
+          {/* =====================================================================
+              2. DESKTOP & TABLET NAVIGATION
+              ===================================================================== */}
+          <nav
+            id="desktop-main-navigation"
+            aria-label="Primary Navigation"
+            className="hidden lg:flex items-center gap-0.5 xl:gap-1.5 min-w-0"
+          >
+            {/* -------------------------------------------------------------
+                A. PATIENT NAVIGATION
+                Why Screening | How It Works | Find Screening | Learn | Help
+                ------------------------------------------------------------- */}
             {isPatient && (
               <>
-                {currentUser?.role === 'patient' && currentUser.id !== 'guest-public' ? (
-                  /* REGISTERED PATIENT NAVIGATION */
-                  <>
-                    <button
-                      type="button"
-                      onClick={() => onNavigatePublic('overview')}
-                      className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                        publicRoute === 'overview'
-                          ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                          : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
-                      }`}
-                    >
-                      {t('navHome', 'Home')}
-                    </button>
+                <button
+                  type="button"
+                  id="nav-patient-why-screening"
+                  onClick={() => handlePublicNav('why-screening')}
+                  className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
+                    publicRoute === 'why-screening'
+                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
+                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                  }`}
+                >
+                  Why Screening
+                </button>
 
-                    <button
-                      type="button"
-                      onClick={() => onNavigatePublic('find-screening')}
-                      className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                        publicRoute === 'find-screening'
-                          ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                          : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
-                      }`}
-                    >
-                      {t('navFindScreening', 'Find Screening')}
-                    </button>
+                <button
+                  type="button"
+                  id="nav-patient-how-it-works"
+                  onClick={() => handlePublicNav('how-it-works')}
+                  className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
+                    publicRoute === 'how-it-works'
+                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
+                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                  }`}
+                >
+                  How It Works
+                </button>
 
-                    <button
-                      type="button"
-                      onClick={() => onNavigatePublic('my-screening')}
-                      className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                        publicRoute === 'my-screening'
-                          ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                          : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
-                      }`}
-                    >
-                      My Screening
-                    </button>
+                <button
+                  type="button"
+                  id="nav-patient-find-screening"
+                  onClick={() => handlePublicNav('find-screening')}
+                  className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
+                    publicRoute === 'find-screening'
+                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
+                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                  }`}
+                >
+                  Find Screening
+                </button>
 
-                    <button
-                      type="button"
-                      onClick={() => onNavigatePublic('my-reports')}
-                      className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                        publicRoute === 'my-reports'
-                          ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                          : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
-                      }`}
-                    >
-                      My Reports
-                    </button>
+                <button
+                  type="button"
+                  id="nav-patient-learn"
+                  onClick={() => handlePublicNav('learn')}
+                  className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
+                    publicRoute === 'learn'
+                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
+                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                  }`}
+                >
+                  Learn
+                </button>
 
-                    <button
-                      type="button"
-                      onClick={onOpenHelpModal}
-                      className="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors"
-                    >
-                      {t('navHelp', 'Help')}
-                    </button>
-                  </>
-                ) : (
-                  /* GUEST PUBLIC NAVIGATION */
-                  <>
-                    <button
-                      type="button"
-                      onClick={() => onNavigatePublic('why-screening')}
-                      className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                        publicRoute === 'why-screening'
-                          ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                          : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
-                      }`}
-                    >
-                      {t('navWhyScreening', 'Why Screening?')}
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => onNavigatePublic('how-it-works')}
-                      className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                        publicRoute === 'how-it-works'
-                          ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                          : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
-                      }`}
-                    >
-                      How It Works
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => onNavigatePublic('find-screening')}
-                      className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                        publicRoute === 'find-screening'
-                          ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                          : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
-                      }`}
-                    >
-                      {t('navFindScreening', 'Find Screening')}
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => onNavigatePublic('learn')}
-                      className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                        publicRoute === 'learn'
-                          ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                          : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
-                      }`}
-                    >
-                      {t('navLearn', 'Learn')}
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={onOpenHelpModal}
-                      className="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors"
-                    >
-                      {t('navHelp', 'Help')}
-                    </button>
-                  </>
-                )}
-
-                {/* MORE DROPDOWN FOR PUBLIC */}
-                <div className="relative">
-                  <button
-                    type="button"
-                    onClick={() => setMoreMenuOpen(!moreMenuOpen)}
-                    className="px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors flex items-center gap-1"
-                  >
-                    <span>{t('navMore', 'More')}</span>
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${moreMenuOpen ? 'rotate-180' : ''}`} />
-                  </button>
-
-                  {moreMenuOpen && (
-                    <div
-                      onMouseLeave={() => setMoreMenuOpen(false)}
-                      className="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-[#EFE4DC] py-1.5 z-50 animate-in fade-in slide-in-from-top-2"
-                    >
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setMoreMenuOpen(false);
-                          onOpenRoleModal();
-                        }}
-                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#FFF7ED] hover:text-[#EA580C] flex items-center justify-between"
-                      >
-                        <span className="font-medium">{t('navForHelpers', 'For Screening Helpers')}</span>
-                        <Lock className="w-3.5 h-3.5 text-[#9E8D91]" />
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setMoreMenuOpen(false);
-                          onOpenRoleModal();
-                        }}
-                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#FFF7ED] hover:text-[#EA580C] flex items-center justify-between"
-                      >
-                        <span className="font-medium">{t('navForResearchers', 'For Researchers')}</span>
-                        <Lock className="w-3.5 h-3.5 text-[#9E8D91]" />
-                      </button>
-
-                      <div className="border-t border-[#EFE4DC] my-1" />
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setMoreMenuOpen(false);
-                          onNavigatePublic('explore-demo');
-                        }}
-                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
-                      >
-                        <Sparkles className="w-3.5 h-3.5 text-[#EA580C]" />
-                        <span>Explore AI Screening Demo</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setMoreMenuOpen(false);
-                          onOpenHelpModal();
-                        }}
-                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
-                      >
-                        <HelpCircle className="w-3.5 h-3.5 text-[#9E8D91]" />
-                        <span>About RetinaGuard & FAQ</span>
-                      </button>
-                    </div>
-                  )}
-                </div>
+                <button
+                  type="button"
+                  id="nav-patient-help"
+                  onClick={onOpenHelpModal}
+                  className="px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors whitespace-nowrap"
+                >
+                  Help
+                </button>
               </>
             )}
 
-            {/* 2. SCREENING HELPER LINKS */}
+            {/* -------------------------------------------------------------
+                B. SCREENING HELPER NAVIGATION
+                Dashboard | Start Screening | Review Queue | Appointments | Referrals | More
+                Tablet (1024-1279px): Collapses Appointments & Referrals into More
+                ------------------------------------------------------------- */}
             {isHelper && (
               <>
                 <button
                   type="button"
-                  onClick={() => onNavigateProvider('dashboard')}
-                  className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+                  id="nav-helper-dashboard"
+                  onClick={() => handleProviderNav('dashboard')}
+                  className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     providerRoute === 'dashboard'
                       ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  {t('navDashboard', 'Dashboard')}
+                  Dashboard
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => onNavigateProvider('start-screening')}
-                  className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+                  id="nav-helper-start-screening"
+                  onClick={() => handleProviderNav('start-screening')}
+                  className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     providerRoute === 'start-screening'
                       ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  {t('navStartScreening', 'Start Screening')}
+                  Start Screening
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => onNavigateProvider('review-queue')}
-                  className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+                  id="nav-helper-review-queue"
+                  onClick={() => handleProviderNav('review-queue')}
+                  className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     providerRoute === 'review-queue'
                       ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  {t('navReviewQueue', 'Review Queue')}
+                  Review Queue
+                </button>
+
+                {/* Visible on Desktop (>= 1280px), Collapsed into 'More' on Tablet (1024-1279px) */}
+                <button
+                  type="button"
+                  id="nav-helper-appointments-desktop"
+                  onClick={() => handleProviderNav('appointments')}
+                  className={`hidden xl:inline-block px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
+                    providerRoute === 'appointments'
+                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
+                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                  }`}
+                >
+                  Appointments
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => onNavigateProvider('referrals')}
-                  className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+                  id="nav-helper-referrals-desktop"
+                  onClick={() => handleProviderNav('referrals')}
+                  className={`hidden xl:inline-block px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     providerRoute === 'referrals'
                       ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  {t('navReferrals', 'Referrals')}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigateProvider('camp-mode')}
-                  className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                    providerRoute === 'camp-mode'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
-                  }`}
-                >
-                  {t('navCampMode', 'Camp Mode')}
+                  Referrals
                 </button>
 
                 {/* MORE DROPDOWN FOR HELPER */}
-                <div className="relative">
+                <div className="relative" ref={moreRef}>
                   <button
                     type="button"
+                    id="nav-helper-more-btn"
                     onClick={() => setMoreMenuOpen(!moreMenuOpen)}
-                    className="px-2.5 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors flex items-center gap-1"
+                    className="px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors flex items-center gap-1 whitespace-nowrap"
                   >
-                    <span>{t('navMore', 'More')}</span>
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform ${moreMenuOpen ? 'rotate-180' : ''}`} />
+                    <span>More</span>
+                    <ChevronDown
+                      className={`w-3.5 h-3.5 transition-transform ${
+                        moreMenuOpen ? 'rotate-180' : ''
+                      }`}
+                    />
                   </button>
 
                   {moreMenuOpen && (
                     <div
-                      onMouseLeave={() => setMoreMenuOpen(false)}
-                      className="absolute left-0 mt-2 w-52 bg-white rounded-xl shadow-lg border border-[#EFE4DC] py-1.5 z-50 animate-in fade-in slide-in-from-top-2"
+                      id="nav-helper-more-dropdown"
+                      className="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-[#EFE4DC] py-1.5 z-50 animate-in fade-in"
                     >
+                      {/* Secondary Items Collapsed on Tablet */}
+                      <div className="xl:hidden pb-1 mb-1 border-b border-[#EFE4DC]">
+                        <button
+                          type="button"
+                          onClick={() => handleProviderNav('appointments')}
+                          className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                        >
+                          <Calendar className="w-3.5 h-3.5 text-[#EA580C]" />
+                          <span>Appointments</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleProviderNav('referrals')}
+                          className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                        >
+                          <Users className="w-3.5 h-3.5 text-[#EA580C]" />
+                          <span>Referrals</span>
+                        </button>
+                      </div>
+
                       <button
                         type="button"
-                        onClick={() => {
-                          setMoreMenuOpen(false);
-                          onNavigateProvider('batch-screening');
-                        }}
+                        onClick={() => handleProviderNav('camp-mode')}
                         className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                       >
-                        <FileSpreadsheet className="w-3.5 h-3.5 text-[#EA580C]" />
-                        <span>{t('navBatchScreening', 'Batch Screening')}</span>
+                        <Activity className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                        <span>Camp Offline Mode</span>
                       </button>
 
                       <button
                         type="button"
-                        onClick={() => {
-                          setMoreMenuOpen(false);
-                          onNavigateProvider('cases');
-                        }}
+                        onClick={() => handleProviderNav('batch-screening')}
+                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                      >
+                        <FileSpreadsheet className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                        <span>Batch Screening</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleProviderNav('cases')}
                         className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                       >
                         <FileText className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                        <span>{t('navCases', 'Cases & History')}</span>
+                        <span>Cases & History</span>
                       </button>
 
                       <button
                         type="button"
-                        onClick={() => {
-                          setMoreMenuOpen(false);
-                          onNavigateProvider('analytics');
-                        }}
+                        onClick={() => handleProviderNav('analytics')}
                         className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                       >
                         <BarChart3 className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                        <span>{t('navAnalytics', 'Analytics')}</span>
+                        <span>Analytics</span>
                       </button>
 
                       <button
                         type="button"
-                        onClick={() => {
-                          setMoreMenuOpen(false);
-                          onNavigateProvider('technology');
-                        }}
+                        onClick={() => handleProviderNav('technology')}
                         className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                       >
                         <Cpu className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                        <span>{t('navTechnology', 'Technology & Architecture')}</span>
+                        <span>Technology & Architecture</span>
                       </button>
 
                       <button
                         type="button"
-                        onClick={() => {
-                          setMoreMenuOpen(false);
-                          onNavigateProvider('settings');
-                        }}
+                        onClick={() => handleProviderNav('settings')}
                         className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                       >
                         <Settings className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                        <span>{t('navSettings', 'Settings')}</span>
+                        <span>Settings</span>
                       </button>
 
                       <button
@@ -518,116 +464,246 @@ export const Navbar: React.FC<NavbarProps> = ({
               </>
             )}
 
-            {/* 3. RESEARCHER LINKS */}
+            {/* -------------------------------------------------------------
+                C. RESEARCHER NAVIGATION
+                Research | Models | Datasets | Experiments | Evaluation | Explainability | More
+                Tablet (1024-1279px): Collapses Evaluation & Explainability into More
+                ------------------------------------------------------------- */}
             {isResearcher && (
               <>
                 <button
                   type="button"
-                  onClick={() => onNavigateProvider('research')}
-                  className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+                  id="nav-researcher-overview"
+                  onClick={() => handleProviderNav('research')}
+                  className={`px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     providerRoute === 'research'
                       ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  {t('navResearchOverview', 'Research Overview')}
+                  Research
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => onNavigateProvider('research')}
-                  className="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors"
-                >
-                  {t('navExperiments', 'Experiments')}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigateProvider('research')}
-                  className="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors"
-                >
-                  {t('navDatasets', 'Datasets')}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigateProvider('research')}
-                  className="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors"
-                >
-                  {t('navModels', 'Models')}
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onNavigateProvider('technology')}
-                  className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                    providerRoute === 'technology'
+                  id="nav-researcher-models"
+                  onClick={() => handleProviderNav('models')}
+                  className={`px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
+                    providerRoute === 'models'
                       ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  {t('navArchitecture', 'Architecture & SaMD')}
+                  Models
                 </button>
 
                 <button
                   type="button"
-                  onClick={onOpenHelpModal}
-                  className="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors"
+                  id="nav-researcher-datasets"
+                  onClick={() => handleProviderNav('datasets')}
+                  className={`px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
+                    providerRoute === 'datasets'
+                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
+                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                  }`}
                 >
-                  {t('navHelp', 'Help')}
+                  Datasets
                 </button>
+
+                <button
+                  type="button"
+                  id="nav-researcher-experiments"
+                  onClick={() => handleProviderNav('experiments')}
+                  className={`px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
+                    providerRoute === 'experiments'
+                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
+                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                  }`}
+                >
+                  Experiments
+                </button>
+
+                {/* Visible on Desktop (>= 1280px), Collapsed into 'More' on Tablet (1024-1279px) */}
+                <button
+                  type="button"
+                  id="nav-researcher-evaluation-desktop"
+                  onClick={() => handleProviderNav('evaluation')}
+                  className={`hidden xl:inline-block px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
+                    providerRoute === 'evaluation'
+                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
+                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                  }`}
+                >
+                  Evaluation
+                </button>
+
+                <button
+                  type="button"
+                  id="nav-researcher-explainability-desktop"
+                  onClick={() => handleProviderNav('explainability')}
+                  className={`hidden xl:inline-block px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
+                    providerRoute === 'explainability'
+                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
+                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                  }`}
+                >
+                  Explainability
+                </button>
+
+                {/* MORE DROPDOWN FOR RESEARCHER */}
+                <div className="relative" ref={moreRef}>
+                  <button
+                    type="button"
+                    id="nav-researcher-more-btn"
+                    onClick={() => setMoreMenuOpen(!moreMenuOpen)}
+                    className="px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors flex items-center gap-1 whitespace-nowrap"
+                  >
+                    <span>More</span>
+                    <ChevronDown
+                      className={`w-3.5 h-3.5 transition-transform ${
+                        moreMenuOpen ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+
+                  {moreMenuOpen && (
+                    <div
+                      id="nav-researcher-more-dropdown"
+                      className="absolute left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-[#EFE4DC] py-1.5 z-50 animate-in fade-in"
+                    >
+                      {/* Secondary items collapsed on Tablet */}
+                      <div className="xl:hidden pb-1 mb-1 border-b border-[#EFE4DC]">
+                        <button
+                          type="button"
+                          onClick={() => handleProviderNav('evaluation')}
+                          className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                        >
+                          <BarChart3 className="w-3.5 h-3.5 text-[#EA580C]" />
+                          <span>Evaluation & Ablation Matrix</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleProviderNav('explainability')}
+                          className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                        >
+                          <ShieldAlert className="w-3.5 h-3.5 text-[#EA580C]" />
+                          <span>Explainability & Fairness</span>
+                        </button>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleProviderNav('technology')}
+                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                      >
+                        <Cpu className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                        <span>Architecture & SaMD Validation</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => handleProviderNav('settings')}
+                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                      >
+                        <Settings className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                        <span>Research Settings</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setMoreMenuOpen(false);
+                          onOpenHelpModal();
+                        }}
+                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2 border-t border-[#EFE4DC] mt-1 pt-1.5"
+                      >
+                        <HelpCircle className="w-3.5 h-3.5 text-[#EA580C]" />
+                        <span>Research Documentation & SOP</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
               </>
             )}
           </nav>
 
-          {/* RIGHT CONTROLS: ACTION BUTTONS, LANGUAGE, PROFILE */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* CONTEXTUAL ACTIVE RESULT BADGE (Only for Staff / Screening Helpers, NOT for Patients) */}
+          {/* =====================================================================
+              3. RIGHT SIDE CONTROLS
+              - Primary CTA (FIND A SCREENING)
+              - Language Selector
+              - Accessibility
+              - Sign In / Profile
+              - Hamburger Toggle (< 1024px)
+              ===================================================================== */}
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+            {/* -------------------------------------------------------------
+                ACTIVE RESULT INDICATOR:
+                CRITICAL REQUIREMENT: Strictly for Staff/Screening Helpers,
+                NEVER shown in Patient Navbar.
+                ------------------------------------------------------------- */}
             {!isPatient && hasActiveResult && (
               <button
                 type="button"
-                id="navbar-active-result-btn"
+                id="navbar-helper-active-result-btn"
                 onClick={onViewResults}
-                className="px-2.5 py-1.5 rounded-lg bg-[#FFF7ED] border border-[#FED7AA] text-[#C2410C] hover:bg-[#FFEDD5] text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-2xs"
+                className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#FFF7ED] border border-[#FED7AA] text-[#C2410C] hover:bg-[#FFEDD5] text-xs font-semibold transition-colors shadow-2xs whitespace-nowrap"
+                title="View active examination triage"
               >
                 <Activity className="w-3.5 h-3.5 text-[#EA580C] animate-pulse" />
-                <span>Results • 1 active</span>
+                <span className="hidden md:inline">Results • 1 active</span>
+                <span className="md:hidden">1 Active</span>
               </button>
             )}
 
-            {/* PRIMARY CTA FOR PUBLIC: FIND SCREENING */}
+            {/* -------------------------------------------------------------
+                PRIMARY CTA FOR PATIENT: "FIND A SCREENING"
+                Visually Prominent, Bold High-Contrast Styling
+                ------------------------------------------------------------- */}
             {isPatient && (
               <button
                 type="button"
-                id="navbar-patient-primary-cta"
-                onClick={() => onNavigatePublic('find-screening')}
-                className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-semibold shadow-xs transition-colors whitespace-nowrap"
+                id="navbar-primary-cta-find-screening"
+                onClick={() => handlePublicNav('find-screening')}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs uppercase tracking-wider shadow-sm hover:shadow-md transition-all whitespace-nowrap ring-2 ring-[#EA580C]/20 shrink-0"
               >
                 <MapPin className="w-3.5 h-3.5" />
-                <span>{t('ctaFindScreeningCenter', 'Find Screening')}</span>
+                <span className="hidden sm:inline">FIND A SCREENING</span>
+                <span className="sm:hidden text-[11px]">FIND SCREENING</span>
               </button>
             )}
 
-            {/* LANGUAGE SELECTOR WITH NATIVE LABELS */}
-            <div className="relative">
+            {/* -------------------------------------------------------------
+                LANGUAGE SELECTOR
+                ------------------------------------------------------------- */}
+            <div className="relative" ref={langRef}>
               <button
                 type="button"
-                id="language-selector-btn"
+                id="navbar-language-btn"
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
-                className="p-2 sm:px-2.5 sm:py-1.5 rounded-xl border border-[#EFE4DC] bg-[#FFFDFB] hover:bg-white text-xs text-[#2E2628] flex items-center gap-1.5 transition-colors"
-                title="Select language"
+                className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl border border-[#EFE4DC] bg-[#FFFDFB] hover:bg-white text-xs text-[#2E2628] flex items-center gap-1 sm:gap-1.5 transition-colors"
+                title="Change language"
+                aria-label="Language selection"
               >
                 <Globe className="w-3.5 h-3.5 text-[#EA580C]" />
-                <span className="font-semibold hidden sm:inline">{currentLangObj.nativeLabel}</span>
-                <ChevronDown className={`w-3 h-3 text-[#9E8D91] transition-transform ${langMenuOpen ? 'rotate-180' : ''}`} />
+                <span className="font-semibold hidden xl:inline text-xs">
+                  {currentLangObj.nativeLabel}
+                </span>
+                <span className="font-semibold hidden sm:inline xl:hidden text-xs uppercase">
+                  {currentLangObj.code}
+                </span>
+                <ChevronDown
+                  className={`w-3 h-3 text-[#9E8D91] transition-transform ${
+                    langMenuOpen ? 'rotate-180' : ''
+                  }`}
+                />
               </button>
 
               {langMenuOpen && (
                 <div
-                  onMouseLeave={() => setLangMenuOpen(false)}
-                  className="absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-lg border border-[#EFE4DC] py-1 z-50 animate-in fade-in"
+                  id="navbar-language-dropdown"
+                  className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-[#EFE4DC] py-1.5 z-50 animate-in fade-in"
                 >
-                  <div className="px-3 py-1.5 text-[10px] font-bold text-[#9E8D91] uppercase tracking-wider border-b border-[#EFE4DC]">
+                  <div className="px-3 py-1 text-[10px] font-bold text-[#9E8D91] uppercase tracking-wider border-b border-[#EFE4DC]">
                     Select Language
                   </div>
                   {SUPPORTED_LANGUAGES.map((lang) => (
@@ -652,55 +728,147 @@ export const Navbar: React.FC<NavbarProps> = ({
               )}
             </div>
 
-            {/* ACCESSIBILITY MENU */}
-            <AccessibilityMenu
-              settings={accessibilitySettings}
-              onUpdateSettings={onUpdateAccessibilitySettings}
-            />
+            {/* -------------------------------------------------------------
+                ACCESSIBILITY TOGGLE (Clean and Compact)
+                ------------------------------------------------------------- */}
+            <div className="hidden sm:block">
+              <AccessibilityMenu
+                settings={accessibilitySettings}
+                onUpdateSettings={onUpdateAccessibilitySettings}
+              />
+            </div>
 
-            {/* PROFILE OR SIGN IN BUTTON */}
+            {/* -------------------------------------------------------------
+                SIGN IN / PROFILE
+                ------------------------------------------------------------- */}
             {isPatient ? (
               currentUser?.role === 'patient' && currentUser.id !== 'guest-public' ? (
-                <button
-                  type="button"
-                  id="navbar-patient-profile-btn"
-                  onClick={() => onNavigatePublic('profile')}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#FED7AA] bg-[#FFF7ED] hover:bg-[#FFEDD5] text-xs font-semibold text-[#C2410C] transition-colors shadow-2xs"
-                >
-                  <div className="w-5 h-5 rounded-full bg-[#EA580C] text-white flex items-center justify-center text-[10px] font-bold">
-                    {currentUser.name ? currentUser.name[0].toUpperCase() : 'P'}
-                  </div>
-                  <span className="max-w-[80px] truncate">{currentUser.name.split(' ')[0]}</span>
-                </button>
+                /* Patient Profile Dropdown */
+                <div className="relative" ref={profileRef}>
+                  <button
+                    type="button"
+                    id="navbar-patient-profile-toggle"
+                    onClick={() => setProfileMenuOpen(!profileMenuOpen)}
+                    className="flex items-center gap-1.5 p-1 sm:px-2.5 sm:py-1.5 rounded-xl border border-[#FED7AA] bg-[#FFF7ED] hover:bg-[#FFEDD5] text-xs font-semibold text-[#C2410C] transition-colors shadow-2xs"
+                  >
+                    <div className="w-5 h-5 rounded-full bg-[#EA580C] text-white flex items-center justify-center text-[10px] font-bold">
+                      {currentUser.name ? currentUser.name[0].toUpperCase() : 'P'}
+                    </div>
+                    <span className="hidden md:inline max-w-[85px] truncate">
+                      {currentUser.name ? currentUser.name.split(' ')[0] : 'Profile'}
+                    </span>
+                    <ChevronDown className="w-3 h-3 text-[#EA580C]" />
+                  </button>
+
+                  {profileMenuOpen && (
+                    <div
+                      id="navbar-patient-profile-dropdown"
+                      className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-[#EFE4DC] p-2 z-50 animate-in fade-in"
+                    >
+                      <div className="px-3 py-2 border-b border-[#EFE4DC] mb-1">
+                        <div className="text-xs font-bold text-[#2E2628] truncate">
+                          {currentUser.name}
+                        </div>
+                        <div className="text-[10px] text-[#6E5C5F] truncate">
+                          {currentUser.email || 'Patient Account'}
+                        </div>
+                      </div>
+
+                      {/* Explicit links for patient results */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setProfileMenuOpen(false);
+                          handlePublicNav('my-reports');
+                        }}
+                        className="w-full text-left px-3 py-2 text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] rounded-lg flex items-center gap-2"
+                      >
+                        <FileText className="w-3.5 h-3.5 text-[#EA580C]" />
+                        <span>My Reports</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setProfileMenuOpen(false);
+                          handlePublicNav('my-screening');
+                        }}
+                        className="w-full text-left px-3 py-2 text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] rounded-lg flex items-center gap-2"
+                      >
+                        <Activity className="w-3.5 h-3.5 text-[#EA580C]" />
+                        <span>My Screening Journey</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setProfileMenuOpen(false);
+                          handlePublicNav('profile');
+                        }}
+                        className="w-full text-left px-3 py-2 text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] rounded-lg flex items-center gap-2"
+                      >
+                        <UserIcon className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                        <span>Account Profile</span>
+                      </button>
+
+                      <div className="border-t border-[#EFE4DC] my-1 pt-1">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setProfileMenuOpen(false);
+                            onOpenRoleModal();
+                          }}
+                          className="w-full text-left px-3 py-1.5 text-xs text-[#6E5C5F] hover:bg-[#F9F5F1] rounded-lg flex items-center justify-between"
+                        >
+                          <span>Switch Workspace</span>
+                          <RotateCcw className="w-3 h-3 text-[#9E8D91]" />
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setProfileMenuOpen(false);
+                            if (onLogout) onLogout();
+                          }}
+                          className="w-full text-left px-3 py-1.5 text-xs text-[#DC2626] hover:bg-red-50 rounded-lg flex items-center justify-between mt-0.5"
+                        >
+                          <span>Sign Out</span>
+                          <LogOut className="w-3 h-3 text-[#DC2626]" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               ) : (
+                /* Patient Guest Sign In Button */
                 <button
                   type="button"
-                  id="navbar-signin-btn"
+                  id="navbar-patient-signin-btn"
                   onClick={onOpenRoleModal}
-                  className="px-3 py-1.5 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] bg-white hover:bg-[#FFF7ED] text-xs font-semibold text-[#2E2628] hover:text-[#EA580C] flex items-center gap-1.5 transition-colors whitespace-nowrap shadow-2xs"
+                  className="px-2.5 sm:px-3 py-1.5 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] bg-white hover:bg-[#FFF7ED] text-xs font-semibold text-[#2E2628] hover:text-[#EA580C] flex items-center gap-1.5 transition-colors whitespace-nowrap shadow-2xs"
                 >
                   <LogIn className="w-3.5 h-3.5 text-[#EA580C]" />
-                  <span>{t('navSignIn', 'Sign In')}</span>
+                  <span className="hidden sm:inline">Sign In</span>
                 </button>
               )
             ) : (
-              /* LOGGED IN PROFILE MENU */
-              <div className="relative">
+              /* Staff / Provider / Researcher Profile Menu */
+              <div className="relative" ref={profileRef}>
                 <button
                   type="button"
-                  id="user-profile-menu-btn"
+                  id="navbar-staff-profile-btn"
                   onClick={() => setProfileMenuOpen(!profileMenuOpen)}
-                  className="flex items-center gap-2 p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl border border-[#EFE4DC] bg-[#FFFDFB] hover:bg-white transition-colors"
+                  className="flex items-center gap-1.5 p-1 sm:px-2 sm:py-1.5 rounded-xl border border-[#EFE4DC] bg-[#FFFDFB] hover:bg-white transition-colors"
                 >
                   <div className="w-6 h-6 rounded-full bg-[#EA580C] text-white flex items-center justify-center text-[10px] font-bold">
                     {currentUser?.name ? currentUser.name[0] : 'U'}
                   </div>
-                  <div className="text-left hidden md:block leading-tight">
-                    <span className="text-xs font-bold text-[#2E2628] block truncate max-w-[110px]">
+                  <div className="text-left hidden lg:block leading-tight">
+                    <span className="text-xs font-bold text-[#2E2628] block truncate max-w-[95px]">
                       {currentUser?.name || 'User'}
                     </span>
                     <span className="text-[10px] text-[#EA580C] font-semibold block">
-                      {currentUser?.helperRoleTitle || (isResearcher ? 'Researcher' : 'Verified')}
+                      {currentUser?.helperRoleTitle || (isResearcher ? 'Researcher' : 'Helper')}
                     </span>
                   </div>
                   <ChevronDown className="w-3 h-3 text-[#9E8D91]" />
@@ -708,29 +876,23 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                 {profileMenuOpen && (
                   <div
-                    onMouseLeave={() => setProfileMenuOpen(false)}
+                    id="navbar-staff-profile-dropdown"
                     className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-[#EFE4DC] p-3 z-50 animate-in fade-in"
                   >
-                    {/* User Card */}
                     <div className="pb-3 border-b border-[#EFE4DC] mb-2">
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 rounded-full bg-[#EA580C] text-white flex items-center justify-center font-bold text-xs">
                           {currentUser?.name ? currentUser.name[0] : 'U'}
                         </div>
-                        <div>
-                          <div className="text-xs font-bold text-[#2E2628]">{currentUser?.name}</div>
-                          <div className="text-[10px] text-[#6E5C5F] truncate max-w-[170px]">
+                        <div className="min-w-0">
+                          <div className="text-xs font-bold text-[#2E2628] truncate">
+                            {currentUser?.name}
+                          </div>
+                          <div className="text-[10px] text-[#6E5C5F] truncate">
                             {currentUser?.email}
                           </div>
                         </div>
                       </div>
-
-                      {currentUser?.organization && (
-                        <div className="mt-2 text-[10px] text-[#6E5C5F] bg-[#FFFDFB] p-1.5 rounded-lg border border-[#EFE4DC]">
-                          <span className="font-semibold block text-[#2E2628]">Organization:</span>
-                          {currentUser.organization}
-                        </div>
-                      )}
 
                       <div className="mt-2 flex items-center gap-1.5">
                         <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0] flex items-center gap-1">
@@ -740,7 +902,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                       </div>
                     </div>
 
-                    {/* Switch Workspace */}
                     <button
                       type="button"
                       onClick={() => {
@@ -749,11 +910,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                       }}
                       className="w-full text-left px-2.5 py-1.5 text-xs text-[#2E2628] hover:bg-[#F9F5F1] rounded-lg flex items-center justify-between transition-colors"
                     >
-                      <span className="font-medium">{t('profileSwitchWorkspace', 'Switch Workspace')}</span>
+                      <span className="font-medium">Switch Workspace</span>
                       <RotateCcw className="w-3.5 h-3.5 text-[#9E8D91]" />
                     </button>
 
-                    {/* Sign Out */}
                     <button
                       type="button"
                       onClick={() => {
@@ -762,7 +922,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       }}
                       className="w-full text-left px-2.5 py-1.5 text-xs text-[#DC2626] hover:bg-red-50 rounded-lg flex items-center justify-between transition-colors mt-1"
                     >
-                      <span className="font-medium">{t('profileSignOut', 'Sign Out')}</span>
+                      <span className="font-medium">Sign Out</span>
                       <LogOut className="w-3.5 h-3.5 text-[#DC2626]" />
                     </button>
                   </div>
@@ -770,13 +930,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               </div>
             )}
 
-            {/* MOBILE HAMBURGER BUTTON (< 1024px) */}
+            {/* -------------------------------------------------------------
+                HAMBURGER TOGGLE (< 1024px)
+                ------------------------------------------------------------- */}
             <button
               type="button"
-              id="navbar-mobile-hamburger"
+              id="navbar-mobile-hamburger-btn"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden p-2 rounded-xl text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors"
-              aria-label="Toggle Navigation Menu"
+              aria-label={mobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -784,198 +947,423 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
       </div>
 
-      {/* MOBILE FULL DRAWER NAVIGATION */}
+      {/* =====================================================================
+          4. MOBILE & TABLET HAMBURGER DRAWER (< 1024px)
+          Comprehensive, non-overflowing drawer with touch targets >= 44px
+          ===================================================================== */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-[#EFE4DC] bg-white px-4 pt-3 pb-6 space-y-3 animate-in slide-in-from-top-2">
+        <div
+          id="navbar-mobile-drawer"
+          className="lg:hidden border-t border-[#EFE4DC] bg-white px-4 pt-3 pb-6 space-y-4 max-h-[calc(100vh-4rem)] overflow-y-auto shadow-2xl animate-in slide-in-from-top-2"
+        >
+          {/* PATIENT MOBILE MENU */}
           {isPatient && (
-            <div className="space-y-1">
+            <div className="space-y-3">
+              {/* Prominent CTA in mobile drawer */}
               <button
                 type="button"
-                onClick={() => {
-                  onNavigatePublic('overview');
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-[#2E2628] hover:bg-[#F9F5F1]"
+                id="mobile-drawer-primary-cta"
+                onClick={() => handlePublicNav('find-screening')}
+                className="w-full py-3 px-4 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs uppercase tracking-wider shadow-sm flex items-center justify-center gap-2"
               >
-                {t('navHome', 'Home')}
+                <MapPin className="w-4 h-4" />
+                <span>FIND A SCREENING CENTER</span>
               </button>
-              <button
-                type="button"
-                onClick={() => {
-                  onNavigatePublic('why-screening');
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-[#2E2628] hover:bg-[#F9F5F1]"
-              >
-                {t('navWhyScreening', 'Why Screening?')}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  onNavigatePublic('find-screening');
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-[#2E2628] hover:bg-[#F9F5F1]"
-              >
-                {t('navFindScreening', 'Find Screening')}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  onNavigatePublic('learn');
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-[#2E2628] hover:bg-[#F9F5F1]"
-              >
-                {t('navLearn', 'Learn')}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  onOpenHelpModal();
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-[#2E2628] hover:bg-[#F9F5F1]"
-              >
-                {t('navHelp', 'Help & FAQs')}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  onNavigatePublic('explore-demo');
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-[#EA580C] hover:bg-[#FFF7ED]"
-              >
-                Explore AI Screening Demo
-              </button>
+
+              <div className="space-y-1">
+                <button
+                  type="button"
+                  onClick={() => handlePublicNav('why-screening')}
+                  className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                    publicRoute === 'why-screening'
+                      ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                      : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                  }`}
+                >
+                  Why Screening
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handlePublicNav('how-it-works')}
+                  className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                    publicRoute === 'how-it-works'
+                      ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                      : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                  }`}
+                >
+                  How It Works
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handlePublicNav('find-screening')}
+                  className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                    publicRoute === 'find-screening'
+                      ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                      : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                  }`}
+                >
+                  Find Screening
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handlePublicNav('learn')}
+                  className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                    publicRoute === 'learn'
+                      ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                      : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                  }`}
+                >
+                  Learn
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenHelpModal();
+                  }}
+                  className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium text-[#2E2628] hover:bg-[#F9F5F1]"
+                >
+                  Help & FAQs
+                </button>
+              </div>
+
+              {/* Patient Care & Results (For logged in patients) */}
+              {currentUser?.role === 'patient' && currentUser.id !== 'guest-public' && (
+                <div className="pt-3 border-t border-[#EFE4DC]">
+                  <div className="px-3.5 text-[10px] font-bold text-[#9E8D91] uppercase tracking-wider mb-1">
+                    My Care & Reports
+                  </div>
+                  <div className="space-y-1">
+                    <button
+                      type="button"
+                      onClick={() => handlePublicNav('my-reports')}
+                      className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center justify-between ${
+                        publicRoute === 'my-reports'
+                          ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                          : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                      }`}
+                    >
+                      <span>My Reports</span>
+                      <ChevronRight className="w-4 h-4 text-[#9E8D91]" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handlePublicNav('my-screening')}
+                      className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center justify-between ${
+                        publicRoute === 'my-screening'
+                          ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                          : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                      }`}
+                    >
+                      <span>My Screening Journey</span>
+                      <ChevronRight className="w-4 h-4 text-[#9E8D91]" />
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handlePublicNav('profile')}
+                      className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center justify-between ${
+                        publicRoute === 'profile'
+                          ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                          : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                      }`}
+                    >
+                      <span>Patient Profile</span>
+                      <ChevronRight className="w-4 h-4 text-[#9E8D91]" />
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
+          {/* SCREENING HELPER MOBILE MENU */}
           {isHelper && (
             <div className="space-y-1">
+              <div className="px-3.5 text-[10px] font-bold text-[#9E8D91] uppercase tracking-wider mb-1">
+                Clinical Workflow
+              </div>
               <button
                 type="button"
-                onClick={() => {
-                  onNavigateProvider('dashboard');
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-[#2E2628] hover:bg-[#F9F5F1]"
+                onClick={() => handleProviderNav('dashboard')}
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
+                  providerRoute === 'dashboard'
+                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                }`}
               >
-                {t('navDashboard', 'Dashboard')}
+                <LayoutDashboard className="w-4 h-4" />
+                <span>Dashboard</span>
               </button>
+
               <button
                 type="button"
-                onClick={() => {
-                  onNavigateProvider('start-screening');
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-[#2E2628] hover:bg-[#F9F5F1]"
+                onClick={() => handleProviderNav('start-screening')}
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
+                  providerRoute === 'start-screening'
+                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                }`}
               >
-                {t('navStartScreening', 'Start Screening')}
+                <Camera className="w-4 h-4 text-[#EA580C]" />
+                <span>Start Screening</span>
               </button>
+
               <button
                 type="button"
-                onClick={() => {
-                  onNavigateProvider('review-queue');
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-[#2E2628] hover:bg-[#F9F5F1]"
+                onClick={() => handleProviderNav('review-queue')}
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
+                  providerRoute === 'review-queue'
+                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                }`}
               >
-                {t('navReviewQueue', 'Review Queue')}
+                <ShieldCheck className="w-4 h-4" />
+                <span>Review Queue</span>
               </button>
+
               <button
                 type="button"
-                onClick={() => {
-                  onNavigateProvider('referrals');
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-[#2E2628] hover:bg-[#F9F5F1]"
+                onClick={() => handleProviderNav('appointments')}
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
+                  providerRoute === 'appointments'
+                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                }`}
               >
-                {t('navReferrals', 'Referrals')}
+                <Calendar className="w-4 h-4" />
+                <span>Appointments</span>
               </button>
+
               <button
                 type="button"
-                onClick={() => {
-                  onNavigateProvider('camp-mode');
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-[#2E2628] hover:bg-[#F9F5F1]"
+                onClick={() => handleProviderNav('referrals')}
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
+                  providerRoute === 'referrals'
+                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                }`}
               >
-                {t('navCampMode', 'Camp Mode')}
+                <Users className="w-4 h-4" />
+                <span>Referrals</span>
               </button>
-              <button
-                type="button"
-                onClick={() => {
-                  onNavigateProvider('batch-screening');
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-[#2E2628] hover:bg-[#F9F5F1]"
-              >
-                {t('navBatchScreening', 'Batch Screening')}
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  onNavigateProvider('analytics');
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-[#2E2628] hover:bg-[#F9F5F1]"
-              >
-                {t('navAnalytics', 'Analytics')}
-              </button>
+
+              <div className="pt-2 border-t border-[#EFE4DC]">
+                <div className="px-3.5 text-[10px] font-bold text-[#9E8D91] uppercase tracking-wider mb-1">
+                  Tools & Configuration
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => handleProviderNav('camp-mode')}
+                  className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                >
+                  <Activity className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                  <span>Camp Offline Mode</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleProviderNav('batch-screening')}
+                  className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                >
+                  <FileSpreadsheet className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                  <span>Batch Screening</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleProviderNav('cases')}
+                  className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                >
+                  <FileText className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                  <span>Cases & History</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleProviderNav('analytics')}
+                  className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                >
+                  <BarChart3 className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                  <span>Analytics</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleProviderNav('settings')}
+                  className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                >
+                  <Settings className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                  <span>Settings</span>
+                </button>
+              </div>
             </div>
           )}
 
+          {/* RESEARCHER MOBILE MENU */}
           {isResearcher && (
             <div className="space-y-1">
+              <div className="px-3.5 text-[10px] font-bold text-[#9E8D91] uppercase tracking-wider mb-1">
+                Research Workspace
+              </div>
               <button
                 type="button"
-                onClick={() => {
-                  onNavigateProvider('research');
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-[#2E2628] hover:bg-[#F9F5F1]"
+                onClick={() => handleProviderNav('research')}
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
+                  providerRoute === 'research'
+                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                }`}
               >
-                Research Overview
+                <Layers className="w-4 h-4" />
+                <span>Research</span>
               </button>
+
               <button
                 type="button"
-                onClick={() => {
-                  onNavigateProvider('technology');
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-[#2E2628] hover:bg-[#F9F5F1]"
+                onClick={() => handleProviderNav('models')}
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
+                  providerRoute === 'models'
+                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                }`}
               >
-                Architecture & SaMD
+                <GitBranch className="w-4 h-4" />
+                <span>Models</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleProviderNav('datasets')}
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
+                  providerRoute === 'datasets'
+                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                }`}
+              >
+                <Database className="w-4 h-4" />
+                <span>Datasets</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleProviderNav('experiments')}
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
+                  providerRoute === 'experiments'
+                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                }`}
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>Experiments</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleProviderNav('evaluation')}
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
+                  providerRoute === 'evaluation'
+                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                }`}
+              >
+                <BarChart3 className="w-4 h-4" />
+                <span>Evaluation</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleProviderNav('explainability')}
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
+                  providerRoute === 'explainability'
+                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                }`}
+              >
+                <ShieldAlert className="w-4 h-4" />
+                <span>Explainability</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleProviderNav('technology')}
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
+                  providerRoute === 'technology'
+                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
+                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                }`}
+              >
+                <Cpu className="w-4 h-4" />
+                <span>Architecture & SaMD</span>
               </button>
             </div>
           )}
 
-          {/* Quick Action Button */}
-          <div className="pt-2 border-t border-[#EFE4DC]">
+          {/* User Account / Sign In / Switch in Drawer */}
+          <div className="pt-3 border-t border-[#EFE4DC] space-y-2">
             {isPatient ? (
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenRoleModal();
-                }}
-                className="w-full py-2.5 rounded-xl bg-[#2E2628] text-white text-xs font-semibold text-center"
-              >
-                Sign In / Select Role
-              </button>
+              currentUser?.role === 'patient' && currentUser.id !== 'guest-public' ? (
+                <div className="flex items-center justify-between">
+                  <div className="text-xs">
+                    <span className="text-[#6E5C5F] block">Signed in as</span>
+                    <span className="font-bold text-[#2E2628]">{currentUser.name}</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      if (onLogout) onLogout();
+                    }}
+                    className="px-3 py-1.5 rounded-xl text-xs font-semibold text-red-600 hover:bg-red-50"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenRoleModal();
+                  }}
+                  className="w-full py-2.5 rounded-xl border border-[#EFE4DC] text-xs font-semibold text-[#2E2628] hover:bg-[#F9F5F1] flex items-center justify-center gap-2"
+                >
+                  <LogIn className="w-4 h-4 text-[#EA580C]" />
+                  <span>Sign In / Select Role</span>
+                </button>
+              )
             ) : (
-              <button
-                type="button"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  if (onLogout) onLogout();
-                }}
-                className="w-full py-2.5 rounded-xl bg-stone-100 text-[#DC2626] text-xs font-semibold text-center"
-              >
-                Sign Out
-              </button>
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onOpenRoleModal();
+                  }}
+                  className="w-full py-2.5 rounded-xl border border-[#EFE4DC] text-xs font-semibold text-[#2E2628] hover:bg-[#F9F5F1] flex items-center justify-center gap-2"
+                >
+                  <RotateCcw className="w-4 h-4 text-[#EA580C]" />
+                  <span>Switch Workspace</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    if (onLogout) onLogout();
+                  }}
+                  className="w-full py-2.5 rounded-xl bg-red-50 text-xs font-semibold text-red-600 hover:bg-red-100 flex items-center justify-center gap-2"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Sign Out</span>
+                </button>
+              </div>
             )}
           </div>
         </div>

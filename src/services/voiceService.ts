@@ -197,6 +197,18 @@ class VoiceService {
     }
   }
 
+  public replay(): void {
+    if (this.state.currentText) {
+      this.speak({
+        text: this.state.currentText,
+        title: this.state.currentTitle,
+        lang: this.state.currentLanguage,
+        sectionId: this.state.speakingSectionId || undefined,
+        rate: this.state.rate,
+      });
+    }
+  }
+
   public getState(): VoicePlaybackState {
     return { ...this.state };
   }

@@ -43,6 +43,13 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
   const { t } = useTranslation();
   const [view, setView] = useState<'select' | 'helper-auth' | 'researcher-auth'>(initialMode);
 
+  // Synchronize view with initialMode when modal opens or initialMode changes
+  React.useEffect(() => {
+    if (isOpen) {
+      setView(initialMode);
+    }
+  }, [isOpen, initialMode]);
+
   // Helper form state
   const [helperName, setHelperName] = useState('Ananya Rao');
   const [helperEmail, setHelperEmail] = useState('ananya.rao@healthmission.org');

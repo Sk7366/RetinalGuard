@@ -58,6 +58,7 @@ export interface User {
   avatarUrl?: string;
   token?: string;
   voiceGuidanceEnabled?: boolean;
+  authorizedRoles?: UserRole[];
 }
 
 export interface AccessibilitySettings {

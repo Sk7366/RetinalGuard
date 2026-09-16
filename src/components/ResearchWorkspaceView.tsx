@@ -11,6 +11,7 @@ import {
   CheckCircle2,
   FileText,
   Activity,
+  RotateCcw,
 } from 'lucide-react';
 import { AblationView } from './AblationView';
 import { DatasetsSection } from './DatasetsSection';
@@ -22,15 +23,23 @@ import { useTranslation } from '../i18n/I18nContext';
 interface ResearchWorkspaceViewProps {
   initialTab?: 'overview' | 'experiments' | 'datasets' | 'models' | 'explainability' | 'architecture';
   onNavigateTab?: (tab: string) => void;
+  onSwitchWorkspace?: () => void;
 }
 
 export const ResearchWorkspaceView: React.FC<ResearchWorkspaceViewProps> = ({
   initialTab = 'overview',
+  onSwitchWorkspace,
 }) => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<
     'overview' | 'experiments' | 'datasets' | 'models' | 'explainability' | 'architecture'
   >(initialTab);
+
+  React.useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
 
   return (
     <div className="max-w-7xl mx-auto space-y-6 pb-16 px-4 sm:px-6 lg:px-8">
@@ -52,6 +61,17 @@ export const ResearchWorkspaceView: React.FC<ResearchWorkspaceViewProps> = ({
           </div>
 
           <div className="flex items-center gap-3">
+            {onSwitchWorkspace && (
+              <button
+                type="button"
+                onClick={onSwitchWorkspace}
+                className="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] border border-[#EFE4DC] transition-colors"
+                title="Switch Workspace"
+              >
+                <RotateCcw className="w-3.5 h-3.5 text-[#EA580C]" />
+                <span>Switch Workspace</span>
+              </button>
+            )}
             <div className="p-3 bg-[#FFFDFB] rounded-xl border border-[#EFE4DC] text-center min-w-[100px]">
               <span className="text-[10px] text-[#9E8D91] block">Fusion AUC</span>
               <span className="text-lg font-mono font-bold text-[#EA580C]">0.942</span>

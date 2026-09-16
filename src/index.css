@@ -1,46 +1,58 @@
 @import "tailwindcss";
 
 :root {
-  --orange-primary: #EA580C;
-  --orange-600: #EA580C;
-  --orange-700: #C2410C;
-  --bg-clean: #FAFAF9;
-  --text-primary: #1C1917;
-  --text-secondary: #57534E;
-  --text-muted: #78716C;
-  --border-subtle: #E7E5E4;
+  --color-brand-primary: #F05A28; /* Warm Coral Orange */
+  --color-brand-secondary: #D94A78; /* Deep Raspberry */
+  --color-accent-peach: #FFE5D8; /* Soft Peach */
+  --color-accent-pink: #FBE4EC; /* Blush Pink */
+  --color-bg-ivory: #FFFDF9; /* Warm Ivory */
+  --color-surface-white: #FFFFFF;
+  --color-text-plum: #2B2024; /* Deep Plum / Charcoal */
+  --color-text-muted: #6F6267; /* Muted Plum Gray */
+  --color-success-teal: #087F6A; /* Accessible Teal */
+  --color-warning-amber: #B86B00; /* Warm Amber */
+  --color-error-red: #B42318; /* Deep Red */
+
+  --orange-primary: #F05A28;
+  --orange-600: #F05A28;
+  --orange-700: #D84818;
+  --bg-clean: #FFFDF9;
+  --text-primary: #2B2024;
+  --text-secondary: #6F6267;
+  --border-subtle: #EFE4DC;
+  --font-scale: 1;
   --f-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --f-serif: 'Newsreader', Georgia, serif;
 }
 
 @theme {
-  --color-orange-primary: #EA580C;
+  --color-orange-primary: #F05A28;
   --color-orange-50: #FFF7ED;
-  --color-orange-100: #FFEDD5;
+  --color-orange-100: #FFE5D8;
   --color-orange-200: #FED7AA;
   --color-orange-300: #FDBA74;
   --color-orange-400: #FB923C;
-  --color-orange-500: #EA580C;
-  --color-orange-600: #EA580C;
-  --color-orange-700: #C2410C;
+  --color-orange-500: #F05A28;
+  --color-orange-600: #F05A28;
+  --color-orange-700: #D84818;
 
-  --color-medical-green: #059669;
+  --color-medical-green: #087F6A;
   --color-medical-green-light: #ECFDF5;
   --color-medical-green-border: #A7F3D0;
 
-  --color-medical-amber: #D97706;
+  --color-medical-amber: #B86B00;
   --color-medical-amber-light: #FFFBEB;
   --color-medical-amber-border: #FDE68A;
 
-  --color-medical-red: #DC2626;
+  --color-medical-red: #B42318;
   --color-medical-red-light: #FEF2F2;
   --color-medical-red-border: #FECACA;
 
-  --color-clean-bg: #FAFAF9;
+  --color-clean-bg: #FFFDF9;
   --color-clean-surface: #FFFFFF;
-  --color-clean-border: #E7E5E4;
-  --color-clean-text: #1C1917;
-  --color-clean-muted: #78716C;
+  --color-clean-border: #EFE4DC;
+  --color-clean-text: #2B2024;
+  --color-clean-muted: #6F6267;
 
   --font-serif: 'Newsreader', Georgia, Cambria, 'Times New Roman', serif;
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -48,15 +60,63 @@
 
 /* Global Accessibility Scaling & Color Vision Modes */
 html.font-scale-default {
+  --font-scale: 1;
   font-size: 16px;
 }
 
 html.font-scale-large {
+  --font-scale: 1.15;
   font-size: 18.5px;
 }
 
 html.font-scale-xl {
+  --font-scale: 1.30;
   font-size: 21px;
+}
+
+/* Dark Mode (Part 32: Deliberate Dark Theme) */
+html.dark {
+  background-color: #171315 !important;
+  color: #FFF7F2 !important;
+}
+
+html.dark body {
+  background-color: #171315 !important;
+  color: #FFF7F2 !important;
+}
+
+html.dark .bg-white,
+html.dark .bg-\[\#FFFDFB\],
+html.dark .bg-\[\#FFFDF9\],
+html.dark .card-natural {
+  background-color: #211B1E !important;
+  color: #FFF7F2 !important;
+  border-color: #382E33 !important;
+}
+
+html.dark .text-\[\#2E2628\],
+html.dark .text-\[\#2B2024\],
+html.dark .text-stone-900,
+html.dark .text-stone-800 {
+  color: #FFF7F2 !important;
+}
+
+html.dark .text-\[\#6E5C5F\],
+html.dark .text-\[\#6F6267\],
+html.dark .text-stone-600,
+html.dark .text-stone-500 {
+  color: #D8C9CE !important;
+}
+
+html.dark .border-\[\#EFE4DC\],
+html.dark .border-stone-200 {
+  border-color: #382E33 !important;
+}
+
+html.dark .bg-stone-50,
+html.dark .bg-stone-100 {
+  background-color: #2A2226 !important;
+  color: #FFF7F2 !important;
 }
 
 html.high-contrast {

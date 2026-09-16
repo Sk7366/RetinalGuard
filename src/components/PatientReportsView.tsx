@@ -53,7 +53,15 @@ export const PatientReportsView: React.FC<PatientReportsViewProps> = ({
   const { t } = useTranslation();
   const [selectedReport, setSelectedReport] = useState<MockReport | null>(null);
   const [emailSentId, setEmailSentId] = useState<string | null>(null);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const [expandedTechId, setExpandedTechId] = useState<string | null>(null);
+
+  const handleDownloadPdf = (reportId: string) => {
+    setDownloadingId(reportId);
+    setTimeout(() => {
+      setDownloadingId(null);
+    }, 3000);
+  };
 
   const mockReports: MockReport[] = [
     {
@@ -261,11 +269,11 @@ export const PatientReportsView: React.FC<PatientReportsViewProps> = ({
                 <div className="flex items-center gap-2">
                   <button
                     type="button"
-                    onClick={() => alert(`Downloading signed screening report ${report.id}.pdf...`)}
+                    onClick={() => handleDownloadPdf(report.id)}
                     className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#2E2628] hover:bg-black text-white text-xs font-semibold transition-colors"
                   >
                     <Download className="w-3.5 h-3.5" />
-                    <span>Download PDF</span>
+                    <span>{downloadingId === report.id ? 'Generating PDF...' : 'Download PDF'}</span>
                   </button>
                 </div>
               </div>
@@ -276,6 +284,16 @@ export const PatientReportsView: React.FC<PatientReportsViewProps> = ({
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>
                     Report {report.id} was successfully sent to your verified address (<strong>{currentUser.email}</strong>). Please check your inbox.
+                  </span>
+                </div>
+              )}
+
+              {/* PDF DOWNLOAD IN-PROGRESS / PREPARATION BANNER */}
+              {downloadingId === report.id && (
+                <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-xs flex items-center gap-2 animate-in fade-in">
+                  <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span>
+                    Official encrypted PDF of report <strong>{report.id}</strong> is downloaded for your medical records and specialist consultation.
                   </span>
                 </div>
               )}
