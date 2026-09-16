@@ -44,6 +44,12 @@ export interface User {
   helperRoleTitle?: HelperRoleTitle;
   organization?: string;
   location?: string;
+  phone?: string;
+  emailVerified?: boolean;
+  phoneVerified?: boolean;
+  preferredLanguage?: string;
+  dateOfBirth?: string;
+  registeredAt?: string;
   verificationStatus?: VerificationStatus;
   isDemoVerification?: boolean;
   permissions: Permission[];

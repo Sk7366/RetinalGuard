@@ -9,9 +9,13 @@ export type AppMode = 'public' | 'provider' | 'helper' | 'researcher';
 export type PublicRoute =
   | 'overview'
   | 'why-screening'
+  | 'how-it-works'
   | 'find-screening'
   | 'learn'
   | 'help'
+  | 'my-screening'
+  | 'my-reports'
+  | 'profile'
   | 'explore-demo'
   | 'get-screened'
   | 'how-it-helps'

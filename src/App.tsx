@@ -32,6 +32,13 @@ import { PRESET_CASES, PresetPatientCase } from './data/sampleCases';
 import { I18nProvider, useTranslation } from './i18n/I18nContext';
 import { VoiceReaderBar } from './components/VoiceReaderBar';
 import { SimplifiedPatientHome } from './components/SimplifiedPatientHome';
+import { WelcomeModal } from './components/WelcomeModal';
+import { PatientAuthModal } from './components/PatientAuthModal';
+import { AccessibilitySettingsModal } from './components/AccessibilitySettingsModal';
+import { PatientReportsView } from './components/PatientReportsView';
+import { PatientJourneyView } from './components/PatientJourneyView';
+import { PatientProfileView } from './components/PatientProfileView';
+import { accessibilityService } from './services/accessibilityService';
 import { authService } from './auth/authService';
 import {
   AccessibilitySettings,
@@ -68,6 +75,12 @@ function AppContent() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+  const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(() => {
+    return localStorage.getItem('retinaguard_welcomed_v2') !== 'true';
+  });
+  const [isPatientAuthModalOpen, setIsPatientAuthModalOpen] = useState<boolean>(false);
+  const [patientAuthInitialTab, setPatientAuthInitialTab] = useState<'login' | 'register'>('register');
+  const [isAccessibilityModalOpen, setIsAccessibilityModalOpen] = useState<boolean>(false);
 
   // Community & Tech Modals
   const [isBatchModalOpen, setIsBatchModalOpen] = useState(false);
@@ -86,6 +99,19 @@ function AppContent() {
     offlineMode: false,
     textToSpeech: false,
   });
+
+  useEffect(() => {
+    const unsub = accessibilityService.subscribe((config) => {
+      setAccessibilitySettings({
+        highContrast: config.highContrast,
+        largeText: config.textSize !== 'standard',
+        reduceMotion: config.reduceMotion,
+        offlineMode: false,
+        textToSpeech: config.readAloud,
+      });
+    });
+    return () => unsub();
+  }, []);
 
   const handleUpdateAccessibilitySettings = (updated: Partial<AccessibilitySettings>) => {
     setAccessibilitySettings((prev) => ({ ...prev, ...updated }));
@@ -150,7 +176,21 @@ function AppContent() {
         setIsProviderMode(true);
         setProviderRoute('research');
         setIsViewingActiveResult(false);
-      } else if (hash.startsWith('public/') || ['overview', 'why-screening', 'find-screening', 'learn', 'explore-demo', 'get-screened'].includes(hash)) {
+      } else if (
+        hash.startsWith('public/') ||
+        [
+          'overview',
+          'why-screening',
+          'how-it-works',
+          'find-screening',
+          'learn',
+          'explore-demo',
+          'get-screened',
+          'my-screening',
+          'my-reports',
+          'profile',
+        ].includes(hash)
+      ) {
         const pubRoute = (hash.startsWith('public/') ? hash.replace('public/', '') : hash) as PublicRoute;
         setExperience('patient');
         setIsProviderMode(false);
@@ -292,7 +332,13 @@ function AppContent() {
           const updated = authService.switchRole(role);
           handleSuccessLogin(updated);
         }}
-        onOpenRoleModal={() => setIsRoleModalOpen(true)}
+        onOpenRoleModal={() => {
+          if (experience === 'patient') {
+            setIsPatientAuthModalOpen(true);
+          } else {
+            setIsRoleModalOpen(true);
+          }
+        }}
         onOpenHelpModal={() => setIsHelpModalOpen(true)}
         onSelectPreset={handleSelectPreset}
         onOpenBatchModal={() => setIsBatchModalOpen(true)}
@@ -302,7 +348,13 @@ function AppContent() {
         currentLanguage={currentLanguage}
         onLanguageChange={setCurrentLanguage}
         userEmail={currentUser.email}
-        onOpenAuth={() => setIsRoleModalOpen(true)}
+        onOpenAuth={() => {
+          if (experience === 'patient') {
+            setIsPatientAuthModalOpen(true);
+          } else {
+            setIsRoleModalOpen(true);
+          }
+        }}
         onLogout={handleLogout}
       />
 
@@ -395,6 +447,36 @@ function AppContent() {
               <PublicHowItHelps
                 onGetScreened={() => navigatePublic('get-screened')}
                 onTryDemo={handleTryDemo}
+              />
+            )}
+
+            {/* PUBLIC: How It Works / Journey */}
+            {(publicRoute === 'how-it-works' || publicRoute === 'my-screening') && (
+              <PatientJourneyView
+                currentUser={currentUser}
+                onNavigateToFindScreening={() => navigatePublic('find-screening')}
+                onNavigateToReports={() => navigatePublic('my-reports')}
+              />
+            )}
+
+            {/* PUBLIC: My Reports */}
+            {publicRoute === 'my-reports' && (
+              <PatientReportsView
+                currentUser={currentUser}
+                onOpenScreeningJourney={() => navigatePublic('my-screening')}
+                onFindScreening={() => navigatePublic('find-screening')}
+              />
+            )}
+
+            {/* PUBLIC: Patient Profile */}
+            {publicRoute === 'profile' && (
+              <PatientProfileView
+                currentUser={currentUser}
+                onNavigateToFindScreening={() => navigatePublic('find-screening')}
+                onNavigateToReports={() => navigatePublic('my-reports')}
+                onNavigateToJourney={() => navigatePublic('my-screening')}
+                onOpenAccessibility={() => setIsAccessibilityModalOpen(true)}
+                onLogout={handleLogout}
               />
             )}
 
@@ -609,12 +691,50 @@ function AppContent() {
       {/* Floating Voice Reader Bar when narration is playing */}
       <VoiceReaderBar />
 
-      {/* Persistent, Context-Aware Voice Assistant (Bottom-Right) */}
-      <VoiceAssistant
-        role={currentUser.role}
-        voiceGuidanceEnabled={voiceGuidanceEnabled}
-        onToggleVoiceGuidance={setVoiceGuidanceEnabled}
-        currentRoute={isProviderMode ? providerRoute : publicRoute}
+      {/* Persistent, Context-Aware Voice Assistant (Bottom-Right) - Only for Helpers/Staff/Researchers, NEVER in Patient mode */}
+      {experience !== 'patient' && (
+        <VoiceAssistant
+          role={currentUser.role}
+          voiceGuidanceEnabled={voiceGuidanceEnabled}
+          onToggleVoiceGuidance={setVoiceGuidanceEnabled}
+          currentRoute={isProviderMode ? providerRoute : publicRoute}
+        />
+      )}
+
+      {/* Patient Welcome & Voice-Guided Onboarding Modal */}
+      <WelcomeModal
+        isOpen={isWelcomeModalOpen}
+        onClose={() => {
+          setIsWelcomeModalOpen(false);
+          localStorage.setItem('retinaguard_welcomed_v2', 'true');
+        }}
+        onStartScreening={() => {
+          setIsWelcomeModalOpen(false);
+          localStorage.setItem('retinaguard_welcomed_v2', 'true');
+          navigatePublic('find-screening');
+        }}
+        onExploreDemo={() => {
+          setIsWelcomeModalOpen(false);
+          localStorage.setItem('retinaguard_welcomed_v2', 'true');
+          navigatePublic('explore-demo');
+        }}
+      />
+
+      {/* Patient Registration & OTP Verification Modal */}
+      <PatientAuthModal
+        isOpen={isPatientAuthModalOpen}
+        onClose={() => setIsPatientAuthModalOpen(false)}
+        onSuccess={(user) => {
+          handleSuccessLogin(user);
+          setIsPatientAuthModalOpen(false);
+        }}
+        initialTab={patientAuthInitialTab}
+      />
+
+      {/* Global Accessibility Settings Modal (Text size, contrast, color vision) */}
+      <AccessibilitySettingsModal
+        isOpen={isAccessibilityModalOpen}
+        onClose={() => setIsAccessibilityModalOpen(false)}
       />
 
       {/* Role Selection Landing Modal (3 Clear Paths: Patient, Helper, Researcher) */}

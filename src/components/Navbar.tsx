@@ -171,61 +171,125 @@ export const Navbar: React.FC<NavbarProps> = ({
             {/* 1. PUBLIC PATIENT LINKS */}
             {isPatient && (
               <>
-                <button
-                  type="button"
-                  onClick={() => onNavigatePublic('overview')}
-                  className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                    publicRoute === 'overview'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
-                  }`}
-                >
-                  {t('navHome', 'Home')}
-                </button>
+                {currentUser?.role === 'patient' && currentUser.id !== 'guest-public' ? (
+                  /* REGISTERED PATIENT NAVIGATION */
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => onNavigatePublic('overview')}
+                      className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+                        publicRoute === 'overview'
+                          ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
+                          : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      }`}
+                    >
+                      {t('navHome', 'Home')}
+                    </button>
 
-                <button
-                  type="button"
-                  onClick={() => onNavigatePublic('why-screening')}
-                  className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                    publicRoute === 'why-screening'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
-                  }`}
-                >
-                  {t('navWhyScreening', 'Why Screening?')}
-                </button>
+                    <button
+                      type="button"
+                      onClick={() => onNavigatePublic('find-screening')}
+                      className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+                        publicRoute === 'find-screening'
+                          ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
+                          : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      }`}
+                    >
+                      {t('navFindScreening', 'Find Screening')}
+                    </button>
 
-                <button
-                  type="button"
-                  onClick={() => onNavigatePublic('find-screening')}
-                  className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                    publicRoute === 'find-screening'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
-                  }`}
-                >
-                  {t('navFindScreening', 'Find Screening')}
-                </button>
+                    <button
+                      type="button"
+                      onClick={() => onNavigatePublic('my-screening')}
+                      className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+                        publicRoute === 'my-screening'
+                          ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
+                          : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      }`}
+                    >
+                      My Screening
+                    </button>
 
-                <button
-                  type="button"
-                  onClick={() => onNavigatePublic('learn')}
-                  className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
-                    publicRoute === 'learn'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
-                  }`}
-                >
-                  {t('navLearn', 'Learn')}
-                </button>
+                    <button
+                      type="button"
+                      onClick={() => onNavigatePublic('my-reports')}
+                      className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+                        publicRoute === 'my-reports'
+                          ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
+                          : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      }`}
+                    >
+                      My Reports
+                    </button>
 
-                <button
-                  type="button"
-                  onClick={onOpenHelpModal}
-                  className="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors"
-                >
-                  {t('navHelp', 'Help')}
-                </button>
+                    <button
+                      type="button"
+                      onClick={onOpenHelpModal}
+                      className="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors"
+                    >
+                      {t('navHelp', 'Help')}
+                    </button>
+                  </>
+                ) : (
+                  /* GUEST PUBLIC NAVIGATION */
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => onNavigatePublic('why-screening')}
+                      className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+                        publicRoute === 'why-screening'
+                          ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
+                          : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      }`}
+                    >
+                      {t('navWhyScreening', 'Why Screening?')}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => onNavigatePublic('how-it-works')}
+                      className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+                        publicRoute === 'how-it-works'
+                          ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
+                          : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      }`}
+                    >
+                      How It Works
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => onNavigatePublic('find-screening')}
+                      className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+                        publicRoute === 'find-screening'
+                          ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
+                          : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      }`}
+                    >
+                      {t('navFindScreening', 'Find Screening')}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => onNavigatePublic('learn')}
+                      className={`px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors ${
+                        publicRoute === 'learn'
+                          ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
+                          : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      }`}
+                    >
+                      {t('navLearn', 'Learn')}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={onOpenHelpModal}
+                      className="px-3 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors"
+                    >
+                      {t('navHelp', 'Help')}
+                    </button>
+                  </>
+                )}
 
                 {/* MORE DROPDOWN FOR PUBLIC */}
                 <div className="relative">
@@ -518,8 +582,8 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* RIGHT CONTROLS: ACTION BUTTONS, LANGUAGE, PROFILE */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* CONTEXTUAL ACTIVE RESULT BADGE (Helper / Patient) */}
-            {hasActiveResult && (
+            {/* CONTEXTUAL ACTIVE RESULT BADGE (Only for Staff / Screening Helpers, NOT for Patients) */}
+            {!isPatient && hasActiveResult && (
               <button
                 type="button"
                 id="navbar-active-result-btn"
@@ -531,16 +595,16 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             )}
 
-            {/* PRIMARY CTA FOR PUBLIC: FIND A SCREENING CENTER */}
+            {/* PRIMARY CTA FOR PUBLIC: FIND SCREENING */}
             {isPatient && (
               <button
                 type="button"
                 id="navbar-patient-primary-cta"
                 onClick={() => onNavigatePublic('find-screening')}
-                className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-semibold shadow-xs transition-colors whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-semibold shadow-xs transition-colors whitespace-nowrap"
               >
                 <MapPin className="w-3.5 h-3.5" />
-                <span>{t('ctaFindScreeningCenter', 'Find a Screening Center')}</span>
+                <span>{t('ctaFindScreeningCenter', 'Find Screening')}</span>
               </button>
             )}
 
@@ -596,15 +660,29 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* PROFILE OR SIGN IN BUTTON */}
             {isPatient ? (
-              <button
-                type="button"
-                id="navbar-signin-btn"
-                onClick={onOpenRoleModal}
-                className="px-3 py-1.5 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] bg-white hover:bg-[#FFF7ED] text-xs font-semibold text-[#2E2628] hover:text-[#EA580C] flex items-center gap-1.5 transition-colors whitespace-nowrap shadow-2xs"
-              >
-                <LogIn className="w-3.5 h-3.5 text-[#EA580C]" />
-                <span>{t('navSignIn', 'Sign In')}</span>
-              </button>
+              currentUser?.role === 'patient' && currentUser.id !== 'guest-public' ? (
+                <button
+                  type="button"
+                  id="navbar-patient-profile-btn"
+                  onClick={() => onNavigatePublic('profile')}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#FED7AA] bg-[#FFF7ED] hover:bg-[#FFEDD5] text-xs font-semibold text-[#C2410C] transition-colors shadow-2xs"
+                >
+                  <div className="w-5 h-5 rounded-full bg-[#EA580C] text-white flex items-center justify-center text-[10px] font-bold">
+                    {currentUser.name ? currentUser.name[0].toUpperCase() : 'P'}
+                  </div>
+                  <span className="max-w-[80px] truncate">{currentUser.name.split(' ')[0]}</span>
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  id="navbar-signin-btn"
+                  onClick={onOpenRoleModal}
+                  className="px-3 py-1.5 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] bg-white hover:bg-[#FFF7ED] text-xs font-semibold text-[#2E2628] hover:text-[#EA580C] flex items-center gap-1.5 transition-colors whitespace-nowrap shadow-2xs"
+                >
+                  <LogIn className="w-3.5 h-3.5 text-[#EA580C]" />
+                  <span>{t('navSignIn', 'Sign In')}</span>
+                </button>
+              )
             ) : (
               /* LOGGED IN PROFILE MENU */
               <div className="relative">

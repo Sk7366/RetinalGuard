@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Activity,
   AlertCircle,
@@ -27,6 +27,8 @@ import {
   Loader2,
   MapPin,
   Maximize2,
+  Pause,
+  Play,
   Printer,
   RefreshCw,
   RotateCcw,
@@ -35,13 +37,18 @@ import {
   ShieldCheck,
   Sliders,
   Sparkles,
+  Square,
   Stethoscope,
   Trash2,
   Upload,
   User,
   Users,
+  Volume2,
+  VolumeX,
   Zap,
 } from 'lucide-react';
+import { useTranslation } from '../i18n/I18nContext';
+import { voiceService, VoicePlaybackState } from '../services/voiceService';
 import { DR_GRADES } from '../data/benchmarks';
 import {
   generateFundusSvg,
@@ -74,15 +81,126 @@ interface ScreeningFlowProps {
 }
 
 export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initialPreset }) => {
+  const { language } = useTranslation();
+
   // Current active workflow step (1 to 9)
   const [currentStep, setCurrentStep] = useState<ScreeningStepNumber>(1);
   const [maxStepReached, setMaxStepReached] = useState<ScreeningStepNumber>(1);
+
+  // Voice Guidance State
+  const [voiceGuidanceEnabled, setVoiceGuidanceEnabled] = useState<boolean>(true);
+  const [voiceState, setVoiceState] = useState<VoicePlaybackState>(voiceService.getState());
+
+  useEffect(() => {
+    const unsub = voiceService.subscribe((s) => setVoiceState(s));
+    return () => unsub();
+  }, []);
+
+  // Localized Voice Instructions for each step
+  const STEP_INSTRUCTIONS: Record<ScreeningStepNumber, Record<string, string>> = {
+    1: {
+      en: "Step 1: Please enter the patient and screening information to register the case.",
+      hi: "चरण 1: कृपया रोगी और जांच की जानकारी दर्ज करें।",
+      kn: "ಹಂತ 1: ದಯವಿಟ್ಟು ರೋಗಿಯ ಮತ್ತು ತಪಾಸಣೆಯ ಮಾಹಿತಿಯನ್ನು ನಮೂದಿಸಿ.",
+      ta: "படி 1: நோயாளி மற்றும் பரிசோதனை விவரங்களை உள்ளிடவும்.",
+      te: "దశ 1: దయచేసి రోగి మరియు స్క్రీనింగ్ వివరాలను నమోదు చేయండి.",
+      ml: "ഘട്ടം 1: രോഗിയുടെയും പരിശോധനയുടെയും വിവരങ്ങൾ നൽകുക.",
+    },
+    2: {
+      en: "Step 2: Now capture or upload the retinal fundus image.",
+      hi: "चरण 2: अब रेटिना फंडस की तस्वीर लें या अपलोड करें।",
+      kn: "ಹಂತ 2: ಈಗ ರೆಟಿನಾ ಫಂಡಸ್ ಚಿತ್ರವನ್ನು ಸೆರೆಹಿಡಿಯಿರಿ ಅಥವಾ ಅಪ್‌ಲೋಡ್ ಮಾಡಿ.",
+      ta: "படி 2: விழித்திரை புகைப்படத்தை எடுக்கவும் அல்லது பதிவேற்றவும்.",
+      te: "దశ 2: రెటీనా ఫండస్ చిత్రాన్ని తీయండి లేదా అప్‌లోడ్ చేయండి.",
+      ml: "ഘട്ടം 2: റെറ്റിന ഫണ്ടസ് ചിത്രം എടുക്കുകയോ അപ്‌ലോഡ് ചെയ്യുകയോ ചെയ്യുക.",
+    },
+    3: {
+      en: "Step 3: Image quality check. Ensure the retina is sharp and clearly illuminated.",
+      hi: "चरण 3: छवि गुणवत्ता जांच। सुनिश्चित करें कि रेटिना स्पष्ट और पर्याप्त प्रकाश में है।",
+      kn: "ಹಂತ 3: ಚಿತ್ರದ ಗುಣಮಟ್ಟ ಪರಿಶೀಲನೆ. ರೆಟಿನಾ ಸ್ಪಷ್ಟವಾಗಿದೆ ಎಂದು ಖಚಿತಪಡಿಸಿಕೊಳ್ಳಿ.",
+      ta: "படி 3: படத்தின் தரம் சரிபார்ப்பு. விழித்திரை தெளிவாக உள்ளதா என்பதை உறுதிப்படுத்தவும்.",
+      te: "దశ 3: చిత్ర నాణ్యత తనిఖీ. రెటీనా స్పష్టంగా ఉందని నిర్ధారించుకోండి.",
+      ml: "ഘട്ടം 3: ചിത്രത്തിന്റെ ഗുണനിലവാരം പരിശോധിക്കുക. റെറ്റിന വ്യക്തമാണെന്ന് ഉറപ്പാക്കുക.",
+    },
+    4: {
+      en: "Step 4: If an OCT scan is available, you can add it here, or proceed with fundus only.",
+      hi: "चरण 4: यदि ओसीटी स्कैन उपलब्ध है, तो इसे जोड़ें, अन्यथा आगे बढ़ें।",
+      kn: "ಹಂತ 4: ಒಸಿಟಿ ಸ್ಕ್ಯಾನ್ ಲಭ್ಯವಿದ್ದರೆ ಸೇರಿಸಿ, ಅಥವಾ ಮುಂದುವರಿಯಿರಿ.",
+      ta: "படி 4: OCT ஸ்கேன் இருந்தால் சேர்க்கவும், அல்லது தொடரவும்.",
+      te: "దశ 4: OCT స్కాన్ ఉంటే జోడించండి, లేదంటే కొనసాగండి.",
+      ml: "ഘട്ടം 4: OCT സ്കാൻ ഉണ്ടെങ്കിൽ ചേർക്കുക, അല്ലെങ്കിൽ തുടരുക.",
+    },
+    5: {
+      en: "Step 5: Review diabetes duration and clinical context to enhance prediction accuracy.",
+      hi: "चरण 5: सटीकता बढ़ाने के लिए मधुमेह की अवधि और नैदानिक संदर्भ की समीक्षा करें।",
+      kn: "ಹಂತ 5: ಮಧುಮೇಹದ ಅವಧಿ ಮತ್ತು ವೈದ್ಯಕೀಯ ಹಿನ್ನೆಲೆಯನ್ನು ಪರಿಶೀಲಿಸಿ.",
+      ta: "படி 5: துல்லியத்தை அதிகரிக்க நீரிழிவு காலம் மற்றும் மருத்துவ சூழலை மதிப்பாய்வு செய்யவும்.",
+      te: "దశ 5: ఖచ్చితత్వం కోసం మధుమేహం వ్యవధి మరియు ఇతర వివరాలను సమీక్షించండి.",
+      ml: "ഘട്ടം 5: കൃത്യത ഉറപ്പാക്കാൻ പ്രമേഹ വിവരങ്ങൾ പരിശോധിക്കുക.",
+    },
+    6: {
+      en: "Step 6: RetinaGuard is analyzing the retinal images using multimodal deep learning.",
+      hi: "चरण 6: रेटिनागार्ड बहुविध डीप लर्निंग मॉडल के साथ छवियों का विश्लेषण कर रहा है।",
+      kn: "ಹಂತ 6: ರೆಟಿನಾಗಾರ್ಡ್ ಮಲ್ಟಿಮೋಡಲ್ ಡೀಪ್ ಲರ್ನಿಂಗ್ ಮೂಲಕ ಚಿತ್ರಗಳನ್ನು ವಿಶ್ಲೇಷಿಸುತ್ತಿದೆ.",
+      ta: "படி 6: ரெட்டினாகார்ட் டீப் லேர்னிங் முறையில் படங்களை ஆய்வு செய்கிறது.",
+      te: "దశ 6: రెటీనాగార్డ్ డీప్ లెర్నింగ్ ద్వారా చిత్రాలను విశ్లేషిస్తోంది.",
+      ml: "ഘട്ടം 6: റെറ്റിനാഗാർഡ് ഡീപ് ലേണിംഗ് വഴി ചിത്രങ്ങൾ വിശകലനം ചെയ്യുന്നു.",
+    },
+    7: {
+      en: "Step 7: Multimodal explanation ready. Inspect Grad-CAM heatmap and feature contributions.",
+      hi: "चरण 7: बहुविध व्याख्या तैयार है। ग्रेड-कैम और सुविधाओं के योगदान का निरीक्षण करें।",
+      kn: "ಹಂತ 7: ಗ್ರ್ಯಾಡ್-ಕ್ಯಾಮ್ ಮತ್ತು ವೈಶಿಷ್ಟ್ಯಗಳ ವಿವರಣೆ ಸಿದ್ಧವಾಗಿದೆ.",
+      ta: "படி 7: விளக்க வரைபடம் தயார். முக்கிய அம்சங்களை ஆய்வு செய்யவும்.",
+      te: "దశ 7: గ్రాడ్-క్యామ్ మరియు ముఖ్య ఫీచర్స్ వివరణ సిద్ధంగా ఉంది.",
+      ml: "ഘട്ടം 7: വിശദീകരണങ്ങൾ തയ്യാറാണ്. പ്രധാന മാറ്റങ്ങൾ പരിശോധിക്കുക.",
+    },
+    8: {
+      en: "Step 8: Triage assessment and clinical report generated.",
+      hi: "चरण 8: ट्राइएज मूल्यांकन और नैदानिक रिपोर्ट तैयार है।",
+      kn: "ಹಂತ 8: ತಪಾಸಣಾ ಮೌಲ್ಯಮಾಪನ ಮತ್ತು ವರದಿ ಸಿದ್ಧವಾಗಿದೆ.",
+      ta: "படி 8: மதிப்பீட்டு முடிவு மற்றும் அறிக்கை உருவாக்கப்பட்டது.",
+      te: "దశ 8: స్క్రీనింగ్ అంచనా మరియు రిపోర్ట్ రూపొందించబడింది.",
+      ml: "ഘട്ടം 8: പരിശോധനാ ഫലവും റിപ്പോർട്ടും തയ്യാറായിക്കഴിഞ്ഞു.",
+    },
+    9: {
+      en: "Step 9: Review referral recommendation, assign specialist clinic, and send patient summary.",
+      hi: "चरण 9: रेफरल सिफारिश की समीक्षा करें और विशेषज्ञ क्लिनिक को सौंपें।",
+      kn: "ಹಂತ 9: ರೆಫರಲ್ ಶಿಫಾರಸನ್ನು ಪರಿಶೀಲಿಸಿ ಮತ್ತು ತಜ್ಞರ ಆಸ್ಪತ್ರೆಗೆ ನಿಯೋಜಿಸಿ.",
+      ta: "படி 9: பரிந்துரையை மதிப்பாய்வு செய்து சிறப்பு மருத்துவமனைக்கு அனுப்பவும்.",
+      te: "దశ 9: రెఫరల్ సిఫార్సును సమీక్షించి స్పెషలిస్ట్ క్లినిక్‌ను ఎంచుకోండి.",
+      ml: "ഘട്ടം 9: നിർദ്ദേശം പരിശോധിച്ച് തുടർചികിത്സയ്ക്കായി അയക്കുക.",
+    },
+  };
+
+  const speakStepInstruction = (stepNum: ScreeningStepNumber) => {
+    const langDict = STEP_INSTRUCTIONS[stepNum] || STEP_INSTRUCTIONS[1];
+    const text = langDict[language] || langDict['en'];
+    voiceService.speak({
+      text,
+      title: `Step ${stepNum}`,
+      lang: language as any,
+      sectionId: `screening-step-${stepNum}`,
+    });
+  };
 
   // Helper to change step and track progress
   const goToStep = (step: ScreeningStepNumber) => {
     setCurrentStep(step);
     if (step > maxStepReached) {
       setMaxStepReached(step);
+    }
+    if (voiceGuidanceEnabled) {
+      speakStepInstruction(step);
+    }
+  };
+
+  const handleToggleVoiceGuidance = () => {
+    const nextVal = !voiceGuidanceEnabled;
+    setVoiceGuidanceEnabled(nextVal);
+    if (nextVal) {
+      speakStepInstruction(currentStep);
+    } else {
+      voiceService.stop();
     }
   };
 
@@ -356,6 +474,89 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
 
   return (
     <div className="space-y-6 pb-20 max-w-5xl mx-auto" id="screening-flow-container">
+      {/* =====================================================================
+          VOICE GUIDANCE TOP BAR (Multilingual Audio Navigation)
+          ===================================================================== */}
+      <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FFFDFB] border border-[#EFE4DC] shadow-2xs flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${voiceGuidanceEnabled ? 'bg-[#EA580C] text-white shadow-2xs' : 'bg-stone-100 text-stone-400'}`}>
+            {voiceGuidanceEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-[#2E2628]">Voice Guidance</span>
+              <button
+                type="button"
+                onClick={handleToggleVoiceGuidance}
+                className={`px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase transition-colors ${
+                  voiceGuidanceEnabled
+                    ? 'bg-emerald-100 text-emerald-800'
+                    : 'bg-stone-200 text-stone-600'
+                }`}
+              >
+                {voiceGuidanceEnabled ? 'ON' : 'OFF'}
+              </button>
+            </div>
+            <p className="text-[11px] text-[#6E5C5F]">
+              Spoken step-by-step instructions in your selected language
+            </p>
+          </div>
+        </div>
+
+        {/* Audio Action Controls: Play / Pause / Repeat / Stop */}
+        {voiceGuidanceEnabled && (
+          <div className="flex items-center gap-1.5 bg-white border border-[#EFE4DC] px-2 py-1 rounded-xl shadow-2xs">
+            {voiceState.isPlaying ? (
+              <button
+                type="button"
+                onClick={() => voiceService.pause()}
+                className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-700 transition-colors"
+                title="Pause audio"
+              >
+                <Pause className="w-3.5 h-3.5 text-[#EA580C]" />
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={() => {
+                  if (voiceState.isPaused) {
+                    voiceService.resume();
+                  } else {
+                    speakStepInstruction(currentStep);
+                  }
+                }}
+                className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-700 transition-colors"
+                title="Play audio instruction"
+              >
+                <Play className="w-3.5 h-3.5 text-[#EA580C]" />
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={() => speakStepInstruction(currentStep)}
+              className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-700 transition-colors"
+              title="Repeat instruction"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => voiceService.stop()}
+              className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-700 transition-colors"
+              title="Stop audio"
+            >
+              <Square className="w-3.5 h-3.5" />
+            </button>
+
+            <span className="text-[10px] font-semibold text-[#9E8D91] px-1 border-l border-stone-200 ml-1">
+              Step {currentStep}/9
+            </span>
+          </div>
+        )}
+      </div>
+
       {/* =====================================================================
           STEPPER PROGRESS HEADER (9 STEPS)
           ===================================================================== */}

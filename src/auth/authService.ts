@@ -78,6 +78,45 @@ export const authService = {
   },
 
   /**
+   * Register or sign in a verified patient
+   */
+  async registerPatient(data: {
+    name: string;
+    email: string;
+    phone: string;
+    preferredLanguage?: string;
+    dateOfBirth?: string;
+    emailVerified?: boolean;
+    phoneVerified?: boolean;
+  }): Promise<User> {
+    const user: User = {
+      id: `pt-${Math.random().toString(36).substring(2, 9)}`,
+      email: data.email,
+      name: data.name,
+      role: 'patient',
+      experience: 'patient',
+      phone: data.phone,
+      emailVerified: data.emailVerified ?? true,
+      phoneVerified: data.phoneVerified ?? true,
+      preferredLanguage: data.preferredLanguage || 'en',
+      dateOfBirth: data.dateOfBirth,
+      registeredAt: new Date().toISOString(),
+      verificationStatus: 'verified',
+      isDemoVerification: true,
+      permissions: ROLE_PERMISSIONS.patient,
+      token: `jwt_patient_${Date.now()}`,
+    };
+
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    } catch {
+      // ignore
+    }
+
+    return user;
+  },
+
+  /**
    * Quick demo login for Screening Helper
    */
   async loginDemoHelper(): Promise<User> {
