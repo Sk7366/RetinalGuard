@@ -81,7 +81,7 @@ interface ScreeningFlowProps {
 }
 
 export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initialPreset }) => {
-  const { language } = useTranslation();
+  const { language, t } = useTranslation();
 
   // Current active workflow step (1 to 9)
   const [currentStep, setCurrentStep] = useState<ScreeningStepNumber>(1);
@@ -461,15 +461,15 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
      WORKFLOW STEPS DEFINITION FOR NAVIGATION BAR
      ========================================================================= */
   const stepsList = [
-    { num: 1, title: 'Register', shortTitle: '01 Register' },
-    { num: 2, title: 'Fundus', shortTitle: '02 Fundus' },
-    { num: 3, title: 'Quality', shortTitle: '03 Quality' },
-    { num: 4, title: 'Optional OCT', shortTitle: '04 OCT' },
-    { num: 5, title: 'Optional Context', shortTitle: '05 Context' },
-    { num: 6, title: 'Analysis', shortTitle: '06 Analysis' },
-    { num: 7, title: 'Explanation', shortTitle: '07 Explanation' },
-    { num: 8, title: 'Triage', shortTitle: '08 Triage' },
-    { num: 9, title: 'Referral', shortTitle: '09 Referral' },
+    { num: 1, title: t('step1RegisterShort', 'Register'), shortTitle: '01 Register' },
+    { num: 2, title: t('step2FundusShort', 'Fundus'), shortTitle: '02 Fundus' },
+    { num: 3, title: t('step3QualityShort', 'Quality'), shortTitle: '03 Quality' },
+    { num: 4, title: t('step4OctShort', 'Optional OCT'), shortTitle: '04 OCT' },
+    { num: 5, title: t('step5ContextShort', 'Optional Context'), shortTitle: '05 Context' },
+    { num: 6, title: t('step6AnalysisShort', 'Analysis'), shortTitle: '06 Analysis' },
+    { num: 7, title: t('step7ExplanationShort', 'Explanation'), shortTitle: '07 Explanation' },
+    { num: 8, title: t('step8TriageShort', 'Triage'), shortTitle: '08 Triage' },
+    { num: 9, title: t('step9ReferralShort', 'Referral'), shortTitle: '09 Referral' },
   ];
 
   return (
@@ -484,7 +484,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-[#2E2628]">Voice Guidance</span>
+              <span className="text-xs font-bold text-[#2E2628]">{t('voiceGuidance', 'Voice Guidance')}</span>
               <button
                 type="button"
                 onClick={handleToggleVoiceGuidance}
@@ -494,11 +494,11 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                     : 'bg-stone-200 text-stone-600'
                 }`}
               >
-                {voiceGuidanceEnabled ? 'ON' : 'OFF'}
+                {voiceGuidanceEnabled ? t('on', 'ON') : t('off', 'OFF')}
               </button>
             </div>
             <p className="text-[11px] text-[#6E5C5F]">
-              Spoken step-by-step instructions in your selected language
+              {t('spokenStepByStepDesc', 'Spoken step-by-step instructions in your selected language')}
             </p>
           </div>
         </div>
@@ -511,7 +511,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                 type="button"
                 onClick={() => voiceService.pause()}
                 className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-700 transition-colors"
-                title="Pause audio"
+                title={t('pauseAudio', 'Pause audio')}
               >
                 <Pause className="w-3.5 h-3.5 text-[#EA580C]" />
               </button>
@@ -526,7 +526,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                   }
                 }}
                 className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-700 transition-colors"
-                title="Play audio instruction"
+                title={t('playAudioInstruction', 'Play audio instruction')}
               >
                 <Play className="w-3.5 h-3.5 text-[#EA580C]" />
               </button>
@@ -536,7 +536,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               type="button"
               onClick={() => speakStepInstruction(currentStep)}
               className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-700 transition-colors"
-              title="Repeat instruction"
+              title={t('repeatInstruction', 'Repeat instruction')}
             >
               <RotateCcw className="w-3.5 h-3.5" />
             </button>
@@ -545,13 +545,13 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               type="button"
               onClick={() => voiceService.stop()}
               className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-700 transition-colors"
-              title="Stop audio"
+              title={t('stopAudio', 'Stop audio')}
             >
               <Square className="w-3.5 h-3.5" />
             </button>
 
             <span className="text-[10px] font-semibold text-[#9E8D91] px-1 border-l border-stone-200 ml-1">
-              Step {currentStep}/9
+              {t('step', 'Step')} {currentStep}/9
             </span>
           </div>
         )}
@@ -615,7 +615,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               <div className="text-xs font-bold text-[#2E2628]">
                 {stepsList[currentStep - 1].title}
               </div>
-              <div className="text-[10px] text-[#6E5C5F]">Step {currentStep} of 09</div>
+              <div className="text-[10px] text-[#6E5C5F]">{t('step', 'Step')} {currentStep} {t('ofWord', 'of')} 09</div>
             </div>
           </div>
 
@@ -626,7 +626,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                 id="btn-mobile-prev-step"
                 onClick={() => goToStep((currentStep - 1) as ScreeningStepNumber)}
                 className="p-1.5 rounded-xl border border-[#EFE4DC] text-[#2E2628] hover:bg-[#FAF8F6]"
-                title="Previous step"
+                title={t('prevStep', 'Previous step')}
               >
                 <ArrowLeft className="w-4 h-4" />
               </button>
@@ -637,7 +637,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                 id="btn-mobile-next-step"
                 onClick={() => goToStep((currentStep + 1) as ScreeningStepNumber)}
                 className="p-1.5 rounded-xl bg-[#EA580C] text-white hover:bg-[#C2410C]"
-                title="Next step"
+                title={t('nextStep', 'Next step')}
               >
                 <ArrowRight className="w-4 h-4" />
               </button>
@@ -653,15 +653,15 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
         <div className="bg-white rounded-3xl border border-[#EFE4DC] p-6 sm:p-8 shadow-xs space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#EFE4DC]">
             <div>
-              <h2 className="text-xl font-bold text-[#2E2628]">Step 01: Register Screening Encounter</h2>
+              <h2 className="text-xl font-bold text-[#2E2628]">{t('step01Title', 'Step 01: Register Screening Encounter')}</h2>
               <p className="text-xs text-[#6E5C5F] mt-0.5">
-                Record patient demographics, field camp location, and capture device parameters.
+                {t('step01Sub', 'Record patient demographics, field camp location, and capture device parameters.')}
               </p>
             </div>
 
             {/* Benchmark Preset Quick Loader */}
             <div className="flex items-center gap-1.5 flex-wrap">
-              <span className="text-[11px] font-semibold text-[#6E5C5F]">Load Benchmark Case:</span>
+              <span className="text-[11px] font-semibold text-[#6E5C5F]">{t('loadBenchmarkCase', 'Load Benchmark Case:')}</span>
               {PRESET_CASES.map((preset, idx) => (
                 <button
                   key={preset.id}
@@ -675,7 +675,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                   }`}
                   title={preset.description}
                 >
-                  Case {idx + 1} ({preset.drGrade === 0 ? 'Normal' : `Gr.${preset.drGrade}`})
+                  {t('caseWord', 'Case')} {idx + 1} ({preset.drGrade === 0 ? t('normal', 'Normal') : `Gr.${preset.drGrade}`})
                 </button>
               ))}
             </div>
@@ -687,7 +687,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-[#2E2628] flex items-center gap-1.5">
                 <User className="w-3.5 h-3.5 text-[#EA580C]" />
-                <span>Patient MRN / ID</span>
+                <span>{t('patientMrnId', 'Patient MRN / ID')}</span>
               </label>
               <input
                 type="text"
@@ -701,7 +701,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
 
             {/* Patient Name */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#2E2628]">Full Name</label>
+              <label className="text-xs font-bold text-[#2E2628]">{t('fullName', 'Full Name')}</label>
               <input
                 type="text"
                 id="input-patient-name"
@@ -715,7 +715,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
             {/* Age & Gender */}
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#2E2628]">Age (yrs)</label>
+                <label className="text-xs font-bold text-[#2E2628]">{t('ageYrs', 'Age (yrs)')}</label>
                 <input
                   type="number"
                   id="input-patient-age"
@@ -726,16 +726,16 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-xs font-bold text-[#2E2628]">Gender</label>
+                <label className="text-xs font-bold text-[#2E2628]">{t('gender', 'Gender')}</label>
                 <select
                   id="select-patient-gender"
                   value={patientGender}
                   onChange={(e) => setPatientGender(e.target.value as any)}
                   className="w-full px-2 py-2.5 rounded-xl border border-[#EFE4DC] text-xs text-[#2E2628] focus:outline-none focus:border-[#EA580C] bg-white"
                 >
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                  <option value="Other">Other</option>
+                  <option value="Male">{t('genderMale', 'Male')}</option>
+                  <option value="Female">{t('genderFemale', 'Female')}</option>
+                  <option value="Other">{t('genderOther', 'Other')}</option>
                 </select>
               </div>
             </div>
@@ -744,7 +744,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
             <div className="space-y-1.5 sm:col-span-2">
               <label className="text-xs font-bold text-[#2E2628] flex items-center gap-1.5">
                 <MapPin className="w-3.5 h-3.5 text-[#EA580C]" />
-                <span>Screening Facility / Camp Site</span>
+                <span>{t('screeningFacilityCamp', 'Screening Facility / Camp Site')}</span>
               </label>
               <select
                 id="select-screening-facility"
@@ -754,7 +754,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               >
                 {MOCK_SCREENING_CENTERS.map((c) => (
                   <option key={c.id} value={c.id}>
-                    {c.name} ({c.city}, {c.state}) {c.isCampActive ? '— [Active Camp]' : ''}
+                    {c.name} ({c.city}, {c.state}) {c.isCampActive ? `— [${t('activeCamp', 'Active Camp')}]` : ''}
                   </option>
                 ))}
               </select>
@@ -762,23 +762,23 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
 
             {/* Encounter Reason */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#2E2628]">Encounter Reason</label>
+              <label className="text-xs font-bold text-[#2E2628]">{t('encounterReason', 'Encounter Reason')}</label>
               <select
                 id="select-encounter-reason"
                 value={encounterType}
                 onChange={(e) => setEncounterType(e.target.value)}
                 className="w-full px-3 py-2.5 rounded-xl border border-[#EFE4DC] text-xs text-[#2E2628] focus:outline-none focus:border-[#EA580C] bg-white"
               >
-                <option value="Routine Diabetic Eye Screening">Routine Diabetic Eye Screening</option>
-                <option value="Vision Change / Blurry Sight">Vision Change / Blurry Sight</option>
-                <option value="Camp Mass Community Outreach">Camp Mass Community Outreach</option>
-                <option value="Post-Laser Treatment Follow-up">Post-Laser Treatment Follow-up</option>
+                <option value="Routine Diabetic Eye Screening">{t('routineDiabeticEyeScreening', 'Routine Diabetic Eye Screening')}</option>
+                <option value="Vision Change / Blurry Sight">{t('visionChangeBlurrySight', 'Vision Change / Blurry Sight')}</option>
+                <option value="Camp Mass Community Outreach">{t('campMassCommunityOutreach', 'Camp Mass Community Outreach')}</option>
+                <option value="Post-Laser Treatment Follow-up">{t('postLaserTreatmentFollowUp', 'Post-Laser Treatment Follow-up')}</option>
               </select>
             </div>
 
             {/* Operator / Screener */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#2E2628]">Screener / Technician</label>
+              <label className="text-xs font-bold text-[#2E2628]">{t('screenerTechnician', 'Screener / Technician')}</label>
               <input
                 type="text"
                 id="input-operator-name"
@@ -790,7 +790,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
 
             {/* Camera Model */}
             <div className="space-y-1.5 sm:col-span-2">
-              <label className="text-xs font-bold text-[#2E2628]">Camera Equipment</label>
+              <label className="text-xs font-bold text-[#2E2628]">{t('cameraEquipment', 'Camera Equipment')}</label>
               <input
                 type="text"
                 id="input-camera-model"
@@ -809,7 +809,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               onClick={() => goToStep(2)}
               className="px-6 py-2.5 rounded-2xl bg-[#EA580C] text-white text-xs font-bold hover:bg-[#C2410C] transition-colors shadow-xs flex items-center gap-2"
             >
-              <span>Save &amp; Continue to Step 02 (Fundus Capture)</span>
+              <span>{t('saveContinueStep02', 'Save & Continue to Step 02 (Fundus Capture)')}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -824,19 +824,19 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#EFE4DC]">
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-bold text-[#2E2628]">Step 02: Fundus Photography</h2>
+                <h2 className="text-xl font-bold text-[#2E2628]">{t('step02Title', 'Step 02: Fundus Photography')}</h2>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#FEE2E2] text-[#DC2626]">
-                  Required Modality
+                  {t('requiredModality', 'Required Modality')}
                 </span>
               </div>
               <p className="text-xs text-[#6E5C5F] mt-0.5">
-                Upload or capture a 45° macular-centered color fundus photograph. Drag and drop, replace, or retake as needed.
+                {t('step02Sub', 'Upload or capture a 45° macular-centered color fundus photograph. Drag and drop, replace, or retake as needed.')}
               </p>
             </div>
 
             {/* Eye Selection OD / OS */}
             <div className="flex items-center gap-1.5 p-1 bg-[#FAF8F6] rounded-xl border border-[#EFE4DC]">
-              <span className="text-[10px] font-bold text-[#6E5C5F] px-2 uppercase">Eye Examined:</span>
+              <span className="text-[10px] font-bold text-[#6E5C5F] px-2 uppercase">{t('eyeExamined', 'Eye Examined:')}</span>
               <button
                 type="button"
                 id="btn-eye-od"
@@ -847,7 +847,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                     : 'bg-white text-[#2E2628] hover:bg-[#FFF7ED]'
                 }`}
               >
-                OD (Right Eye)
+                {t('odRightEye', 'OD (Right Eye)')}
               </button>
               <button
                 type="button"
@@ -859,15 +859,15 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                     : 'bg-white text-[#2E2628] hover:bg-[#FFF7ED]'
                 }`}
               >
-                OS (Left Eye)
+                {t('osLeftEye', 'OS (Left Eye)')}
               </button>
             </div>
           </div>
 
           {/* Reusable Image Uploader with Drag/Drop, Preview, Replace, Remove, Retake */}
           <ImageUploader
-            label="Retinal Surface Fundus Photograph"
-            sublabel="Standard macular field centered between optic disc and fovea (512×512 Ben Graham normalized input)"
+            label={t('retinalSurfaceFundusPhoto', 'Retinal Surface Fundus Photograph')}
+            sublabel={t('standardMacularFieldSub', 'Standard macular field centered between optic disc and fovea (512×512 Ben Graham normalized input)')}
             required={true}
             currentImageUrl={activeFundusUrl}
             currentImageName={fundusImageName}
@@ -932,7 +932,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               'Adjust chin rest joystick so corneal reflection light dots coalesce into one point.',
               'Trigger camera shutter cleanly without shaking the unit.',
             ]}
-            helperHint="Fundus is required for deep learning feature extraction."
+            helperHint={t('fundusHelperHint', 'Fundus is required for deep learning feature extraction.')}
             idPrefix="fundus-uploader"
           />
 
@@ -945,7 +945,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               className="px-5 py-2.5 rounded-2xl bg-white border border-[#EFE4DC] text-[#2E2628] text-xs font-bold hover:bg-[#FAF8F6] transition-colors flex items-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to Step 01</span>
+              <span>{t('backToStep01', 'Back to Step 01')}</span>
             </button>
 
             <button
@@ -955,7 +955,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               onClick={() => goToStep(3)}
               className="px-6 py-2.5 rounded-2xl bg-[#EA580C] text-white text-xs font-bold hover:bg-[#C2410C] transition-colors shadow-xs flex items-center gap-2 disabled:opacity-50"
             >
-              <span>Verify Image Quality (Step 03)</span>
+              <span>{t('verifyImageQualityStep03', 'Verify Image Quality (Step 03)')}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -987,13 +987,13 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#EFE4DC]">
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-bold text-[#2E2628]">Step 04: Optical Coherence Tomography (OCT)</h2>
+                <h2 className="text-xl font-bold text-[#2E2628]">{t('step04Title', 'Step 04: Optical Coherence Tomography (OCT)')}</h2>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#F5F1ED] text-[#6E5C5F]">
-                  Optional Modality
+                  {t('optionalModality', 'Optional Modality')}
                 </span>
               </div>
               <p className="text-xs text-[#6E5C5F] mt-0.5">
-                SD-OCT cross-sectional B-scan resolves sub-surface macular edema fluid pockets and central retinal thickness.
+                {t('step04Sub', 'SD-OCT cross-sectional B-scan resolves sub-surface macular edema fluid pockets and central retinal thickness.')}
               </p>
             </div>
 
@@ -1007,7 +1007,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                 className="w-4 h-4 text-[#EA580C] rounded focus:ring-[#EA580C]"
               />
               <span className="text-xs font-bold text-[#2E2628]">
-                {includeOct ? 'OCT Scan Included' : 'Skip OCT (Fundus Only)'}
+                {includeOct ? t('octScanIncluded', 'OCT Scan Included') : t('skipOctFundusOnly', 'Skip OCT (Fundus Only)')}
               </span>
             </label>
           </div>
@@ -1015,8 +1015,8 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
           {includeOct ? (
             <div className="space-y-4">
               <ImageUploader
-                label="Fovea-Centered SD-OCT B-Scan"
-                sublabel="Cross-sectional optical reflectance scan processed by DenseNet-121 for sub-retinal fluid detection"
+                label={t('foveaCenteredOctBScan', 'Fovea-Centered SD-OCT B-Scan')}
+                sublabel={t('octBScanSublabel', 'Cross-sectional optical reflectance scan processed by DenseNet-121 for sub-retinal fluid detection')}
                 required={false}
                 currentImageUrl={activeOctUrl}
                 currentImageName={octImageName}
@@ -1078,17 +1078,16 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                   'Instruct patient to fixate steadily on the blue central fixation star.',
                   'Monitor real-time B-scan signal quality bar (aim for signal strength index ≥ 7/10).',
                 ]}
-                helperHint="OCT is optional. When provided, automated DME escalation logic evaluates cystoid fluid."
+                helperHint={t('octHelperHint', 'OCT is optional. When provided, automated DME escalation logic evaluates cystoid fluid.')}
                 idPrefix="oct-uploader"
               />
             </div>
           ) : (
             <div className="p-6 rounded-2xl bg-[#FAF8F6] border border-[#EFE4DC] text-center space-y-2">
               <Eye className="w-8 h-8 text-[#6E5C5F] mx-auto opacity-70" />
-              <div className="text-sm font-bold text-[#2E2628]">OCT Cross-Section Skipped</div>
+              <div className="text-sm font-bold text-[#2E2628]">{t('octCrossSectionSkipped', 'OCT Cross-Section Skipped')}</div>
               <p className="text-xs text-[#6E5C5F] max-w-md mx-auto leading-relaxed">
-                The AI pipeline will triage diabetic retinopathy based on 2D fundus photography and clinical metadata.
-                Macular edema risk will be estimated via 2D hard exudate proximity.
+                {t('octSkippedNotice', 'The AI pipeline will triage diabetic retinopathy based on 2D fundus photography and clinical metadata. Macular edema risk will be estimated via 2D hard exudate proximity.')}
               </p>
             </div>
           )}
@@ -1102,7 +1101,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               className="px-5 py-2.5 rounded-2xl bg-white border border-[#EFE4DC] text-[#2E2628] text-xs font-bold hover:bg-[#FAF8F6] transition-colors flex items-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to Step 03 (Quality)</span>
+              <span>{t('backToStep03Quality', 'Back to Step 03 (Quality)')}</span>
             </button>
 
             <button
@@ -1111,7 +1110,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               onClick={() => goToStep(5)}
               className="px-6 py-2.5 rounded-2xl bg-[#EA580C] text-white text-xs font-bold hover:bg-[#C2410C] transition-colors shadow-xs flex items-center gap-2"
             >
-              <span>Continue to Step 05 (Clinical Context)</span>
+              <span>{t('continueToStep05Context', 'Continue to Step 05 (Clinical Context)')}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -1126,13 +1125,13 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#EFE4DC]">
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-bold text-[#2E2628]">Step 05: Patient Clinical Context</h2>
+                <h2 className="text-xl font-bold text-[#2E2628]">{t('step05Title', 'Step 05: Patient Clinical Context')}</h2>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#F5F1ED] text-[#6E5C5F]">
-                  Optional Modality
+                  {t('optionalModality', 'Optional Modality')}
                 </span>
               </div>
               <p className="text-xs text-[#6E5C5F] mt-0.5">
-                Laboratory metrics (HbA1c, duration, renal labs) processed via XGBoost surrogate with SHAP feature attribution.
+                {t('step05Sub', 'Laboratory metrics (HbA1c, duration, renal labs) processed via XGBoost surrogate with SHAP feature attribution.')}
               </p>
             </div>
 
@@ -1146,7 +1145,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                 className="w-4 h-4 text-[#EA580C] rounded focus:ring-[#EA580C]"
               />
               <span className="text-xs font-bold text-[#2E2628]">
-                {includeMetadata ? 'Clinical Labs Included' : 'Skip Clinical Context'}
+                {includeMetadata ? t('clinicalLabsIncluded', 'Clinical Labs Included') : t('skipClinicalContext', 'Skip Clinical Context')}
               </span>
             </label>
           </div>
@@ -1156,7 +1155,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               {/* HbA1c */}
               <div className="p-4 rounded-2xl bg-[#FAF8F6] border border-[#EFE4DC] space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-[#2E2628]">Glycated Hemoglobin (HbA1c)</label>
+                  <label className="text-xs font-bold text-[#2E2628]">{t('glycatedHemoglobinHbA1c', 'Glycated Hemoglobin (HbA1c)')}</label>
                   <span className="text-xs font-bold text-[#EA580C] font-mono">{clinicalData.hba1c}%</span>
                 </div>
                 <input
@@ -1172,18 +1171,18 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                   className="w-full accent-[#EA580C]"
                 />
                 <div className="flex justify-between text-[10px] text-[#6E5C5F]">
-                  <span>Normal &lt;5.7%</span>
-                  <span>Target &lt;7.0%</span>
-                  <span>High &gt;8.5%</span>
+                  <span>{t('normalLt57', 'Normal <5.7%')}</span>
+                  <span>{t('targetLt70', 'Target <7.0%')}</span>
+                  <span>{t('highGt85', 'High >8.5%')}</span>
                 </div>
               </div>
 
               {/* Diabetes Duration */}
               <div className="p-4 rounded-2xl bg-[#FAF8F6] border border-[#EFE4DC] space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-[#2E2628]">Diabetes Duration</label>
+                  <label className="text-xs font-bold text-[#2E2628]">{t('diabetesDurationLabel', 'Diabetes Duration')}</label>
                   <span className="text-xs font-bold text-[#EA580C] font-mono">
-                    {clinicalData.diabetesDurationYears} yrs
+                    {clinicalData.diabetesDurationYears} {t('yrs', 'yrs')}
                   </span>
                 </div>
                 <input
@@ -1201,16 +1200,16 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                   className="w-full accent-[#EA580C]"
                 />
                 <div className="flex justify-between text-[10px] text-[#6E5C5F]">
-                  <span>&lt;5 yrs (Low)</span>
-                  <span>10-15 yrs</span>
-                  <span>&gt;20 yrs (High Risk)</span>
+                  <span>{t('lt5yrsLow', '<5 yrs (Low)')}</span>
+                  <span>10-15 {t('yrs', 'yrs')}</span>
+                  <span>{t('gt20yrsHighRisk', '>20 yrs (High Risk)')}</span>
                 </div>
               </div>
 
               {/* Systolic BP */}
               <div className="p-4 rounded-2xl bg-[#FAF8F6] border border-[#EFE4DC] space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-[#2E2628]">Systolic BP (mmHg)</label>
+                  <label className="text-xs font-bold text-[#2E2628]">{t('systolicBpLabel', 'Systolic BP (mmHg)')}</label>
                   <span className="text-xs font-bold text-[#EA580C] font-mono">
                     {clinicalData.systolicBp} mmHg
                   </span>
@@ -1227,16 +1226,16 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                   className="w-full accent-[#EA580C]"
                 />
                 <div className="flex justify-between text-[10px] text-[#6E5C5F]">
-                  <span>Normal 120</span>
-                  <span>Pre-HTN 135</span>
-                  <span>Stage 2 &gt;140</span>
+                  <span>{t('normal120', 'Normal 120')}</span>
+                  <span>{t('preHtn135', 'Pre-HTN 135')}</span>
+                  <span>{t('stage2Gt140', 'Stage 2 >140')}</span>
                 </div>
               </div>
 
               {/* Serum Creatinine */}
               <div className="p-4 rounded-2xl bg-[#FAF8F6] border border-[#EFE4DC] space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-[#2E2628]">Serum Creatinine</label>
+                  <label className="text-xs font-bold text-[#2E2628]">{t('serumCreatinineLabel', 'Serum Creatinine')}</label>
                   <span className="text-xs font-bold text-[#EA580C] font-mono">
                     {clinicalData.serumCreatinine} mg/dL
                   </span>
@@ -1254,16 +1253,16 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                   className="w-full accent-[#EA580C]"
                 />
                 <div className="flex justify-between text-[10px] text-[#6E5C5F]">
-                  <span>Normal 0.8–1.1</span>
-                  <span>Renal Strain &gt;1.3</span>
+                  <span>{t('normalCreatinineRange', 'Normal 0.8–1.1')}</span>
+                  <span>{t('renalStrainWarning', 'Renal Strain >1.3')}</span>
                 </div>
               </div>
 
               {/* Insulin Therapy */}
               <div className="p-4 rounded-2xl bg-[#FAF8F6] border border-[#EFE4DC] flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-bold text-[#2E2628]">Insulin Therapy</div>
-                  <div className="text-[11px] text-[#6E5C5F]">Active daily insulin regimen</div>
+                  <div className="text-xs font-bold text-[#2E2628]">{t('insulinTherapyLabel', 'Insulin Therapy')}</div>
+                  <div className="text-[11px] text-[#6E5C5F]">{t('activeDailyInsulinRegimen', 'Active daily insulin regimen')}</div>
                 </div>
                 <button
                   type="button"
@@ -1280,15 +1279,15 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                       : 'bg-white text-[#2E2628] border-[#EFE4DC]'
                   }`}
                 >
-                  {clinicalData.insulinTherapy ? 'Yes (Insulin)' : 'Oral Only'}
+                  {clinicalData.insulinTherapy ? t('yesInsulin', 'Yes (Insulin)') : t('oralOnly', 'Oral Only')}
                 </button>
               </div>
 
               {/* Prior Laser */}
               <div className="p-4 rounded-2xl bg-[#FAF8F6] border border-[#EFE4DC] flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-bold text-[#2E2628]">Prior Laser</div>
-                  <div className="text-[11px] text-[#6E5C5F]">Photocoagulation history</div>
+                  <div className="text-xs font-bold text-[#2E2628]">{t('priorLaserLabel', 'Prior Laser')}</div>
+                  <div className="text-[11px] text-[#6E5C5F]">{t('photocoagulationHistory', 'Photocoagulation history')}</div>
                 </div>
                 <button
                   type="button"
@@ -1305,16 +1304,16 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                       : 'bg-white text-[#2E2628] border-[#EFE4DC]'
                   }`}
                 >
-                  {clinicalData.priorLaser ? 'Yes (Laser)' : 'None'}
+                  {clinicalData.priorLaser ? t('yesLaser', 'Yes (Laser)') : t('noneLaser', 'None')}
                 </button>
               </div>
             </div>
           ) : (
             <div className="p-6 rounded-2xl bg-[#FAF8F6] border border-[#EFE4DC] text-center space-y-2">
               <Stethoscope className="w-8 h-8 text-[#6E5C5F] mx-auto opacity-70" />
-              <div className="text-sm font-bold text-[#2E2628]">Clinical Metadata Skipped</div>
+              <div className="text-sm font-bold text-[#2E2628]">{t('clinicalMetadataSkipped', 'Clinical Metadata Skipped')}</div>
               <p className="text-xs text-[#6E5C5F] max-w-md mx-auto leading-relaxed">
-                Retinopathy grading will proceed purely through optical deep learning models without laboratory risk adjustment.
+                {t('clinicalMetadataSkippedNotice', 'Retinopathy grading will proceed purely through optical deep learning models without laboratory risk adjustment.')}
               </p>
             </div>
           )}
@@ -1328,7 +1327,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               className="px-5 py-2.5 rounded-2xl bg-white border border-[#EFE4DC] text-[#2E2628] text-xs font-bold hover:bg-[#FAF8F6] transition-colors flex items-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to Step 04 (OCT)</span>
+              <span>{t('backToStep04Oct', 'Back to Step 04 (OCT)')}</span>
             </button>
 
             <button
@@ -1338,7 +1337,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               className="px-7 py-2.5 rounded-2xl bg-[#EA580C] text-white text-xs font-bold hover:bg-[#C2410C] transition-colors shadow-xs flex items-center gap-2"
             >
               <Sparkles className="w-4 h-4" />
-              <span>Run Multimodal AI Pipeline (Step 06)</span>
+              <span>{t('runMultimodalAiPipeline', 'Run Multimodal AI Pipeline (Step 06)')}</span>
             </button>
           </div>
         </div>
@@ -1353,9 +1352,9 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
             <div className="w-16 h-16 rounded-3xl bg-[#FFEDD5] text-[#EA580C] flex items-center justify-center mx-auto shadow-xs animate-pulse">
               <Cpu className="w-8 h-8" />
             </div>
-            <h2 className="text-xl font-bold text-[#2E2628]">Step 06: Executing Multimodal Inference</h2>
+            <h2 className="text-xl font-bold text-[#2E2628]">{t('step06Title', 'Step 06: Executing Multimodal Inference')}</h2>
             <p className="text-xs text-[#6E5C5F]">
-              Fusing ResNet/EfficientNet fundus features, DenseNet-121 OCT fluid predictions, and XGBoost surrogate risk.
+              {t('step06Sub', 'Fusing ResNet/EfficientNet fundus features, DenseNet-121 OCT fluid predictions, and XGBoost surrogate risk.')}
             </p>
           </div>
 
@@ -1411,13 +1410,13 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#EFE4DC]">
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-bold text-[#2E2628]">Step 07: Model Interpretability &amp; Grad-CAM</h2>
+                <h2 className="text-xl font-bold text-[#2E2628]">{t('step07Title', 'Step 07: Model Interpretability & Grad-CAM')}</h2>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#DCFCE7] text-[#15803D]">
-                  Attribution Generated
+                  {t('attributionGenerated', 'Attribution Generated')}
                 </span>
               </div>
               <p className="text-xs text-[#6E5C5F] mt-0.5">
-                Visualizing pixel activation hotspots (Grad-CAM) and clinical feature attributions (TreeSHAP).
+                {t('step07Sub', 'Visualizing pixel activation hotspots (Grad-CAM) and clinical feature attributions (TreeSHAP).')}
               </p>
             </div>
 
@@ -1433,7 +1432,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-[#2E2628] uppercase tracking-wider flex items-center gap-1.5">
                   <Eye className="w-3.5 h-3.5 text-[#EA580C]" />
-                  <span>Fundus Grad-CAM Heatmap</span>
+                  <span>{t('fundusGradCamHeatmap', 'Fundus Grad-CAM Heatmap')}</span>
                 </span>
 
                 <div className="flex items-center gap-1 bg-[#FAF8F6] p-1 rounded-xl border border-[#EFE4DC]">
@@ -1446,7 +1445,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                         : 'text-[#6E5C5F]'
                     }`}
                   >
-                    Original
+                    {t('camOriginal', 'Original')}
                   </button>
                   <button
                     type="button"
@@ -1457,7 +1456,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                         : 'text-[#6E5C5F]'
                     }`}
                   >
-                    CLAHE
+                    {t('camClahe', 'CLAHE')}
                   </button>
                   <button
                     type="button"
@@ -1468,7 +1467,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                         : 'text-[#6E5C5F]'
                     }`}
                   >
-                    Grad-CAM
+                    {t('camGradCam', 'Grad-CAM')}
                   </button>
                 </div>
               </div>
@@ -1500,7 +1499,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               {/* Hotspot Findings Chips */}
               <div className="space-y-1.5 pt-1">
                 <span className="text-[10px] font-bold text-[#6E5C5F] uppercase tracking-wider block">
-                  Identified Retinal Micro-Lesions:
+                  {t('identifiedRetinalMicroLesions', 'Identified Retinal Micro-Lesions:')}
                 </span>
                 <div className="flex flex-wrap gap-1.5">
                   {triageResult.fundus.featuresDetected.map((feat, idx) => (
@@ -1522,7 +1521,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-[#2E2628] uppercase tracking-wider flex items-center gap-1.5">
                       <Layers className="w-3.5 h-3.5 text-[#EA580C]" />
-                      <span>OCT B-Scan Fluid Activation</span>
+                      <span>{t('octBScanFluidActivation', 'OCT B-Scan Fluid Activation')}</span>
                     </span>
 
                     <div className="flex items-center gap-1 bg-[#FAF8F6] p-1 rounded-xl border border-[#EFE4DC]">
@@ -1535,7 +1534,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                             : 'text-[#6E5C5F]'
                         }`}
                       >
-                        B-Scan
+                        {t('octTabBScan', 'B-Scan')}
                       </button>
                       <button
                         type="button"
@@ -1546,7 +1545,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                             : 'text-[#6E5C5F]'
                         }`}
                       >
-                        Activation
+                        {t('octTabActivation', 'Activation')}
                       </button>
                     </div>
                   </div>
@@ -1570,7 +1569,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                   <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] text-xs text-[#2E2628] space-y-1">
                     <div className="font-bold flex items-center gap-1.5 text-[#EA580C]">
                       <Info className="w-3.5 h-3.5" />
-                      <span>Layer Stratification Findings:</span>
+                      <span>{t('layerStratificationFindings', 'Layer Stratification Findings:')}</span>
                     </div>
                     <ul className="list-disc list-inside text-[11px] text-[#6E5C5F] space-y-0.5">
                       {triageResult.oct.retinalLayerFindings.map((f, idx) => (
@@ -1581,8 +1580,8 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                 </div>
               ) : (
                 <div className="p-6 rounded-2xl bg-[#FAF8F6] border border-[#EFE4DC] text-xs text-[#6E5C5F] text-center space-y-1">
-                  <div className="font-bold text-[#2E2628]">OCT Modality Not Provided</div>
-                  <p>Macular edema risk evaluated via fundus photography hard exudates.</p>
+                  <div className="font-bold text-[#2E2628]">{t('octModalityNotProvided', 'OCT Modality Not Provided')}</div>
+                  <p>{t('octNotProvidedNotice', 'Macular edema risk evaluated via fundus photography hard exudates.')}</p>
                 </div>
               )}
 
@@ -1592,7 +1591,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-[#2E2628] uppercase tracking-wider flex items-center gap-1.5">
                       <BarChart3 className="w-3.5 h-3.5 text-[#EA580C]" />
-                      <span>SHAP Risk Attributions</span>
+                      <span>{t('shapRiskAttributions', 'SHAP Risk Attributions')}</span>
                     </span>
                     <span className="text-[10px] font-mono text-[#6E5C5F]">TreeSHAP</span>
                   </div>
@@ -1637,7 +1636,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               className="px-5 py-2.5 rounded-2xl bg-white border border-[#EFE4DC] text-[#2E2628] text-xs font-bold hover:bg-[#FAF8F6] transition-colors flex items-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to Step 05</span>
+              <span>{t('backToStep05', 'Back to Step 05')}</span>
             </button>
 
             <button
@@ -1646,7 +1645,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               onClick={() => goToStep(8)}
               className="px-6 py-2.5 rounded-2xl bg-[#EA580C] text-white text-xs font-bold hover:bg-[#C2410C] transition-colors shadow-xs flex items-center gap-2"
             >
-              <span>View Triage Decision (Step 08)</span>
+              <span>{t('viewTriageDecisionStep08', 'View Triage Decision (Step 08)')}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -1661,18 +1660,18 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#EFE4DC]">
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-bold text-[#2E2628]">Step 08: Multimodal Late-Fusion Triage</h2>
+                <h2 className="text-xl font-bold text-[#2E2628]">{t('step08Title', 'Step 08: Multimodal Late-Fusion Triage')}</h2>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#DCFCE7] text-[#15803D]">
-                  Concordance Evaluated
+                  {t('concordanceEvaluated', 'Concordance Evaluated')}
                 </span>
               </div>
               <p className="text-xs text-[#6E5C5F] mt-0.5">
-                Late-fusion arbitration synthesizing fundus probability vector, OCT DME flag, and XGBoost surrogate risk.
+                {t('step08Sub', 'Late-fusion arbitration synthesizing fundus probability vector, OCT DME flag, and XGBoost surrogate risk.')}
               </p>
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-xs text-[#6E5C5F]">Patient:</span>
+              <span className="text-xs text-[#6E5C5F]">{t('patientLabel', 'Patient:')}</span>
               <span className="text-xs font-bold text-[#2E2628] font-mono">{triageResult.patientId}</span>
             </div>
           </div>
@@ -1682,10 +1681,10 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <div className="text-xs font-bold text-[#6E5C5F] uppercase tracking-wider">
-                  Final ICDR Retinopathy Classification
+                  {t('finalIcdrClassification', 'Final ICDR Retinopathy Classification')}
                 </div>
                 <div className="text-2xl sm:text-3xl font-black text-[#2E2628] mt-1">
-                  Grade {triageResult.finalGrade}: {triageResult.gradeLabel}
+                  {t('gradePrefix', 'Grade')} {triageResult.finalGrade}: {triageResult.gradeLabel}
                 </div>
               </div>
 
@@ -1698,7 +1697,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                       : 'bg-[#FEF3C7] text-[#B45309]'
                   }`}
                 >
-                  Confidence: {triageResult.confidence}
+                  {t('confidenceLabel', 'Confidence:')} {triageResult.confidence}
                 </span>
               </div>
             </div>
@@ -1709,10 +1708,10 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                 <AlertCircle className="w-5 h-5 text-[#DC2626] shrink-0 mt-0.5" />
                 <div>
                   <span className="font-bold block text-sm">
-                    DME Escalation Rule Triggered (Grade 2 Override)
+                    {t('dmeEscalationRuleTriggered', 'DME Escalation Rule Triggered (Grade 2 Override)')}
                   </span>
                   <p className="mt-0.5 leading-relaxed">
-                    OCT cross-sectional analysis confirmed intraretinal cystoid fluid / subretinal detachment. In accordance with clinical safety protocols, patient classification was automatically elevated to Grade 2 (Moderate NPDR with DME) regardless of initial fundus grade.
+                    {t('dmeEscalationNotice', 'OCT cross-sectional analysis confirmed intraretinal cystoid fluid / subretinal detachment. In accordance with clinical safety protocols, patient classification was automatically elevated to Grade 2 (Moderate NPDR with DME) regardless of initial fundus grade.')}
                   </p>
                 </div>
               </div>
@@ -1722,47 +1721,47 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
               <div className="p-3.5 rounded-2xl bg-white border border-[#EFE4DC]">
                 <span className="text-[10px] text-[#6E5C5F] uppercase font-bold block">
-                  Fundus 2D CNN
+                  {t('fundus2dCnn', 'Fundus 2D CNN')}
                 </span>
                 <span className="text-sm font-bold text-[#2E2628]">
-                  Grade {triageResult.fundus.grade} ({triageResult.fundus.gradeLabel})
+                  {t('gradePrefix', 'Grade')} {triageResult.fundus.grade} ({triageResult.fundus.gradeLabel})
                 </span>
                 <span className="text-[10px] text-[#15803D] block mt-0.5">
-                  {(triageResult.fundus.probabilities[triageResult.fundus.grade] * 100).toFixed(1)}% prob
+                  {(triageResult.fundus.probabilities[triageResult.fundus.grade] * 100).toFixed(1)}% {t('probShort', 'prob')}
                 </span>
               </div>
 
               <div className="p-3.5 rounded-2xl bg-white border border-[#EFE4DC]">
                 <span className="text-[10px] text-[#6E5C5F] uppercase font-bold block">
-                  OCT B-Scan CNN
+                  {t('octBScanCnn', 'OCT B-Scan CNN')}
                 </span>
                 <span className="text-sm font-bold text-[#2E2628]">
                   {triageResult.oct
                     ? `${triageResult.oct.predictedClass} (${
-                        triageResult.oct.dmeDetected ? 'DME+' : 'No DME'
+                        triageResult.oct.dmeDetected ? t('dmePositive', 'DME+') : t('noDme', 'No DME')
                       })`
-                    : 'Not Captured'}
+                    : t('notCaptured', 'Not Captured')}
                 </span>
                 <span className="text-[10px] text-[#6E5C5F] block mt-0.5">
                   {triageResult.oct
-                    ? `${(triageResult.oct.dmeProbability * 100).toFixed(1)}% fluid likelihood`
-                    : 'Omitted by screener'}
+                    ? `${(triageResult.oct.dmeProbability * 100).toFixed(1)}% ${t('fluidLikelihood', 'fluid likelihood')}`
+                    : t('omittedByScreener', 'Omitted by screener')}
                 </span>
               </div>
 
               <div className="p-3.5 rounded-2xl bg-white border border-[#EFE4DC]">
                 <span className="text-[10px] text-[#6E5C5F] uppercase font-bold block">
-                  Clinical XGBoost
+                  {t('clinicalXGBoost', 'Clinical XGBoost')}
                 </span>
                 <span className="text-sm font-bold text-[#2E2628]">
                   {triageResult.metadata
-                    ? `Grade ${triageResult.metadata.predictedGrade}`
-                    : 'Not Captured'}
+                    ? `${t('gradePrefix', 'Grade')} ${triageResult.metadata.predictedGrade}`
+                    : t('notCaptured', 'Not Captured')}
                 </span>
                 <span className="text-[10px] text-[#6E5C5F] block mt-0.5">
                   {triageResult.metadata
-                    ? `Risk score: ${triageResult.metadata.riskScore}`
-                    : 'Omitted by screener'}
+                    ? `${t('riskScoreLabel', 'Risk score:')} ${triageResult.metadata.riskScore}`
+                    : t('omittedByScreener', 'Omitted by screener')}
                 </span>
               </div>
             </div>
@@ -1771,7 +1770,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
             <div className="p-4 rounded-2xl bg-white border border-[#EFE4DC] space-y-2">
               <div className="text-xs font-bold text-[#2E2628] uppercase tracking-wider flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-[#15803D]" />
-                <span>Clinical Triage Recommendation</span>
+                <span>{t('clinicalTriageRecommendation', 'Clinical Triage Recommendation')}</span>
               </div>
               <p className="text-xs sm:text-sm text-[#2E2628] leading-relaxed">
                 {triageResult.recommendation}
@@ -1788,7 +1787,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               className="px-5 py-2.5 rounded-2xl bg-white border border-[#EFE4DC] text-[#2E2628] text-xs font-bold hover:bg-[#FAF8F6] transition-colors flex items-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to Step 07 (Explanation)</span>
+              <span>{t('backToStep07Explanation', 'Back to Step 07 (Explanation)')}</span>
             </button>
 
             <button
@@ -1797,7 +1796,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               onClick={() => goToStep(9)}
               className="px-6 py-2.5 rounded-2xl bg-[#EA580C] text-white text-xs font-bold hover:bg-[#C2410C] transition-colors shadow-xs flex items-center gap-2"
             >
-              <span>Referral &amp; Follow-up (Step 09)</span>
+              <span>{t('referralFollowUpStep09', 'Referral & Follow-up (Step 09)')}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
@@ -1812,13 +1811,13 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#EFE4DC]">
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-xl font-bold text-[#2E2628]">Step 09: Referral &amp; Closed-Loop Follow-up</h2>
+                <h2 className="text-xl font-bold text-[#2E2628]">{t('step09Title', 'Step 09: Referral & Closed-Loop Follow-up')}</h2>
                 <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#FFEDD5] text-[#EA580C]">
-                  Final Step
+                  {t('finalStepBadge', 'Final Step')}
                 </span>
               </div>
               <p className="text-xs text-[#6E5C5F] mt-0.5">
-                Generate specialist referrals, schedule clinic appointments, send patient SMS, and export clinical audit reports.
+                {t('step09Sub', 'Generate specialist referrals, schedule clinic appointments, send patient SMS, and export clinical audit reports.')}
               </p>
             </div>
 
@@ -1830,7 +1829,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                 className="px-3.5 py-1.5 rounded-xl bg-white border border-[#EFE4DC] text-[#2E2628] text-xs font-bold hover:bg-[#FAF8F6] transition-colors flex items-center gap-1.5 shadow-2xs"
               >
                 <Download className="w-3.5 h-3.5 text-[#EA580C]" />
-                <span>Export Clinical PDF</span>
+                <span>{t('exportClinicalPdf', 'Export Clinical PDF')}</span>
               </button>
             </div>
           </div>
@@ -1840,10 +1839,10 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
             <div className="p-5 rounded-2xl bg-[#F0FDF4] border border-[#86EFAC] space-y-2">
               <div className="flex items-center gap-2 text-sm font-bold text-[#15803D]">
                 <CheckCircle2 className="w-5 h-5 text-[#15803D]" />
-                <span>Specialist Referral Dispatched Successfully</span>
+                <span>{t('specialistReferralDispatchedSuccessfully', 'Specialist Referral Dispatched Successfully')}</span>
               </div>
               <p className="text-xs text-[#2E2628] leading-relaxed">
-                Referral Token <strong>{referralDispatched.id}</strong> has been created and synced to the regional review queue for <strong>{referralDispatched.assignedClinic}</strong>. Follow-up timeline: <em>{referralDispatched.followUpTimeline}</em>.
+                {t('referralTokenLabel', 'Referral Token')} <strong>{referralDispatched.id}</strong> {t('hasBeenCreatedAndSynced', 'has been created and synced to the regional review queue for')} <strong>{referralDispatched.assignedClinic}</strong>. {t('followUpTimelineLabel', 'Follow-up timeline:')} <em>{referralDispatched.followUpTimeline}</em>.
               </p>
             </div>
           )}
@@ -1852,27 +1851,27 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
             {/* Priority Urgency */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#2E2628]">Referral Priority</label>
+              <label className="text-xs font-bold text-[#2E2628]">{t('referralPriorityLabel', 'Referral Priority')}</label>
               <select
                 id="select-referral-urgency"
                 value={referralUrgency}
                 onChange={(e) => setReferralUrgency(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-[#EFE4DC] text-xs text-[#2E2628] focus:outline-none focus:border-[#EA580C] bg-white font-medium"
               >
-                <option value="Routine Annual (12 months)">Routine Annual (12 months)</option>
-                <option value="Review Recommended (6 months)">Review Recommended (6 months)</option>
+                <option value="Routine Annual (12 months)">{t('urgencyRoutineAnnual', 'Routine Annual (12 months)')}</option>
+                <option value="Review Recommended (6 months)">{t('urgencyReview6Months', 'Review Recommended (6 months)')}</option>
                 <option value="Priority Specialist Referral (2–4 weeks)">
-                  Priority Specialist Referral (2–4 weeks)
+                  {t('urgencyPrioritySpecialist', 'Priority Specialist Referral (2–4 weeks)')}
                 </option>
                 <option value="Urgent Vitreoretinal (< 72 hours)">
-                  Urgent Vitreoretinal (&lt; 72 hours)
+                  {t('urgencyUrgentVitreoretinal', 'Urgent Vitreoretinal (< 72 hours)')}
                 </option>
               </select>
             </div>
 
             {/* Assigned Clinic */}
             <div className="space-y-1.5 sm:col-span-2">
-              <label className="text-xs font-bold text-[#2E2628]">Assigned Eye Hospital / Unit</label>
+              <label className="text-xs font-bold text-[#2E2628]">{t('assignedEyeHospitalUnit', 'Assigned Eye Hospital / Unit')}</label>
               <select
                 id="select-assigned-clinic"
                 value={assignedClinic}
@@ -1889,7 +1888,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
 
             {/* Patient Phone */}
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#2E2628]">Patient Phone (SMS / WhatsApp)</label>
+              <label className="text-xs font-bold text-[#2E2628]">{t('patientPhoneSms', 'Patient Phone (SMS / WhatsApp)')}</label>
               <input
                 type="text"
                 id="input-patient-phone"
@@ -1910,21 +1909,21 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                   className="w-4 h-4 text-[#EA580C] rounded focus:ring-[#EA580C]"
                 />
                 <span className="text-xs text-[#2E2628]">
-                  Send automated SMS appointment alert &amp; directions in patient local language
+                  {t('sendAutomatedSmsAlert', 'Send automated SMS appointment alert & directions in patient local language')}
                 </span>
               </label>
             </div>
 
             {/* Clinical Hand-off Notes */}
             <div className="space-y-1.5 sm:col-span-3">
-              <label className="text-xs font-bold text-[#2E2628]">Clinical Handoff &amp; Triage Notes</label>
+              <label className="text-xs font-bold text-[#2E2628]">{t('clinicalHandoffTriageNotes', 'Clinical Handoff & Triage Notes')}</label>
               <textarea
                 id="textarea-referral-notes"
                 rows={3}
                 value={referralNotes}
                 onChange={(e) => setReferralNotes(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl border border-[#EFE4DC] text-xs text-[#2E2628] focus:outline-none focus:border-[#EA580C] leading-relaxed"
-                placeholder="Include relevant clinical findings, systemic diabetes medications, or screener observations..."
+                placeholder={t('referralNotesPlaceholder', 'Include relevant clinical findings, systemic diabetes medications, or screener observations...')}
               />
             </div>
           </div>
@@ -1938,7 +1937,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-white border border-[#EFE4DC] text-[#2E2628] text-xs font-bold hover:bg-[#FAF8F6] transition-colors flex items-center justify-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to Step 08 (Triage)</span>
+              <span>{t('backToStep08Triage', 'Back to Step 08 (Triage)')}</span>
             </button>
 
             <div className="w-full sm:w-auto flex flex-col sm:flex-row items-center gap-3">
@@ -1955,7 +1954,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                   <Send className="w-4 h-4" />
                 )}
                 <span>
-                  {referralDispatched ? 'Referral Dispatched' : 'Dispatch Specialist Referral'}
+                  {referralDispatched ? t('referralDispatched', 'Referral Dispatched') : t('dispatchSpecialistReferral', 'Dispatch Specialist Referral')}
                 </span>
               </button>
 
@@ -1966,7 +1965,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
                 className="w-full sm:w-auto px-7 py-2.5 rounded-2xl bg-[#EA580C] text-white text-xs font-bold hover:bg-[#C2410C] transition-colors shadow-xs flex items-center justify-center gap-2"
               >
                 <CheckCircle2 className="w-4 h-4" />
-                <span>Complete Screening &amp; Save Encounter</span>
+                <span>{t('completeScreeningSaveEncounter', 'Complete Screening & Save Encounter')}</span>
               </button>
             </div>
           </div>

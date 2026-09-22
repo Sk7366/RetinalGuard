@@ -127,13 +127,13 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
               {view === 'select'
                 ? t('roleModalTitle', 'How will you use RetinaGuard?')
                 : view === 'helper-auth'
-                ? 'Screening Helper Sign In & Verification'
-                : 'Researcher Workspace Sign In'}
+                ? t('roleHelperSignIn', 'Screening Helper Sign In & Verification')
+                : t('roleResearcherSignIn', 'Researcher Workspace Sign In')}
             </h2>
             <p className="text-xs text-[#6E5C5F] mt-0.5">
               {view === 'select'
                 ? t('roleModalSubtitle', 'Select your dedicated workspace to access tailored tools and clear guidance.')
-                : 'Role verification ensures authorized access to clinical data and screening telemetry.'}
+                : t('roleVerificationNote', 'Role verification ensures authorized access to clinical data and screening telemetry.')}
             </p>
           </div>
 
@@ -264,10 +264,10 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
                 <div>
                   <div className="flex items-center gap-1.5 text-xs font-bold text-[#C2410C]">
                     <Sparkles className="w-4 h-4 text-[#EA580C]" />
-                    <span>Quick Demo Screening Helper Access</span>
+                    <span>{t('roleQuickDemoHelper', 'Quick Demo Screening Helper Access')}</span>
                   </div>
                   <p className="text-xs text-[#9A3412] mt-0.5">
-                    Preloaded profile: Ananya Rao (Community Health Worker • Bengaluru Urban Eye Mission)
+                    {t('rolePreloadedAnanya', 'Preloaded profile: Ananya Rao (Community Health Worker • Bengaluru Urban Eye Mission)')}
                   </p>
                 </div>
                 <button
@@ -275,7 +275,7 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
                   onClick={handleQuickDemoHelper}
                   className="px-3 py-1.5 rounded-lg bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-semibold transition-colors whitespace-nowrap shadow-xs"
                 >
-                  Sign In with Demo Helper
+                  {t('roleSignInDemoHelper', 'Sign In with Demo Helper')}
                 </button>
               </div>
 
@@ -283,7 +283,7 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
                 <div>
                   <label className="block text-xs font-medium text-[#2E2628] mb-1">
-                    Full Name
+                    {t('fullNameLabel', 'Full Name')}
                   </label>
                   <input
                     type="text"
@@ -296,7 +296,7 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
 
                 <div>
                   <label className="block text-xs font-medium text-[#2E2628] mb-1">
-                    Work Email / ID
+                    {t('workEmailLabel', 'Work Email / ID')}
                   </label>
                   <input
                     type="email"
@@ -309,7 +309,7 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
 
                 <div>
                   <label className="block text-xs font-medium text-[#2E2628] mb-1">
-                    Specific Healthcare Role
+                    {t('healthcareRoleLabel', 'Specific Healthcare Role')}
                   </label>
                   <select
                     value={helperRole}
@@ -326,7 +326,7 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
 
                 <div>
                   <label className="block text-xs font-medium text-[#2E2628] mb-1">
-                    Affiliated Organization
+                    {t('affiliatedOrgLabel', 'Affiliated Organization')}
                   </label>
                   <input
                     type="text"
@@ -339,7 +339,7 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
 
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-medium text-[#2E2628] mb-1">
-                    District / Camp Location
+                    {t('districtLocationLabel', 'District / Camp Location')}
                   </label>
                   <input
                     type="text"
@@ -355,9 +355,9 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
               <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200 text-xs text-[#6E5C5F] flex items-start gap-2.5">
                 <ShieldCheck className="w-4 h-4 text-[#EA580C] flex-shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-semibold text-[#2E2628]">DEMO VERIFICATION APPLIED</span>
+                  <span className="font-semibold text-[#2E2628]">{t('demoVerificationBadge', 'DEMO VERIFICATION APPLIED')}</span>
                   <p className="text-[11px] mt-0.5 leading-relaxed">
-                    In production deployments, account credentials and clinical licenses are vetted by district health coordinators. For this evaluation, your account will be granted verified screening privileges instantly.
+                    {t('demoVerificationNote', 'In production deployments, account credentials and clinical licenses are vetted by district health coordinators. For this evaluation, your account will be granted verified screening privileges instantly.')}
                   </p>
                 </div>
               </div>
@@ -369,13 +369,13 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
                   onClick={() => setView('select')}
                   className="px-4 py-2 text-xs font-medium text-[#6E5C5F] hover:text-[#2E2628] transition-colors"
                 >
-                  ← Back to Workspace Selection
+                  {t('backToSelectionBtn', '← Back to Workspace Selection')}
                 </button>
                 <button
                   type="submit"
                   className="px-5 py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-semibold transition-colors shadow-xs"
                 >
-                  Enter Screening Helper Dashboard
+                  {t('enterHelperDashboardBtn', 'Enter Screening Helper Dashboard')}
                 </button>
               </div>
             </form>
@@ -389,10 +389,10 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
                 <div>
                   <div className="flex items-center gap-1.5 text-xs font-bold text-[#2E2628]">
                     <Layers className="w-4 h-4 text-[#EA580C]" />
-                    <span>Quick Demo Researcher Access</span>
+                    <span>{t('roleQuickDemoResearcher', 'Quick Demo Researcher Access')}</span>
                   </div>
                   <p className="text-xs text-[#6E5C5F] mt-0.5">
-                    Preloaded profile: Dr. Sai Krishnan (Medical AI & Retina Imaging Lab • IISc / AIIMS)
+                    {t('rolePreloadedResearcher', 'Preloaded profile: Dr. Sai Krishnan (Medical AI & Retina Imaging Lab • IISc / AIIMS)')}
                   </p>
                 </div>
                 <button
@@ -400,14 +400,14 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
                   onClick={handleQuickDemoResearcher}
                   className="px-3 py-1.5 rounded-lg bg-[#2E2628] hover:bg-stone-800 text-white text-xs font-semibold transition-colors whitespace-nowrap shadow-xs"
                 >
-                  Sign In with Demo Researcher
+                  {t('roleSignInDemoResearcher', 'Sign In with Demo Researcher')}
                 </button>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
                 <div>
                   <label className="block text-xs font-medium text-[#2E2628] mb-1">
-                    Researcher Full Name
+                    {t('fullNameLabel', 'Researcher Full Name')}
                   </label>
                   <input
                     type="text"
@@ -420,7 +420,7 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
 
                 <div>
                   <label className="block text-xs font-medium text-[#2E2628] mb-1">
-                    Institutional Email
+                    {t('instEmailLabel', 'Institutional Email')}
                   </label>
                   <input
                     type="email"
@@ -433,7 +433,7 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
 
                 <div className="sm:col-span-2">
                   <label className="block text-xs font-medium text-[#2E2628] mb-1">
-                    Research Institute / University
+                    {t('researchOrgLabel', 'Research Institute / University')}
                   </label>
                   <input
                     type="text"
@@ -447,7 +447,7 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
 
               {/* NOTICE */}
               <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200 text-xs text-[#6E5C5F]">
-                Access granted to multimodal ablation matrices, ROC/PR curves, ONNX inference benchmarks, and SaMD compliance documentation.
+                {t('researchAccessNotice', 'Access granted to multimodal ablation matrices, ROC/PR curves, ONNX inference benchmarks, and SaMD compliance documentation.')}
               </div>
 
               {/* BUTTONS */}
@@ -457,13 +457,13 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
                   onClick={() => setView('select')}
                   className="px-4 py-2 text-xs font-medium text-[#6E5C5F] hover:text-[#2E2628] transition-colors"
                 >
-                  ← Back to Workspace Selection
+                  {t('backToSelectionBtn', '← Back to Workspace Selection')}
                 </button>
                 <button
                   type="submit"
                   className="px-5 py-2.5 rounded-xl bg-[#2E2628] hover:bg-stone-800 text-white text-xs font-semibold transition-colors shadow-xs"
                 >
-                  Enter Research Workspace
+                  {t('enterResearchWorkspaceBtn', 'Enter Research Workspace')}
                 </button>
               </div>
             </form>

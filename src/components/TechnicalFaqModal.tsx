@@ -11,6 +11,7 @@ import {
   Stethoscope,
   X,
 } from 'lucide-react';
+import { useTranslation } from '../i18n/I18nContext';
 
 interface TechnicalFaqModalProps {
   isOpen: boolean;
@@ -27,6 +28,7 @@ interface FaqItem {
 }
 
 export const TechnicalFaqModal: React.FC<TechnicalFaqModalProps> = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
   if (!isOpen) return null;
 
   const [activeCategory, setActiveCategory] = useState<'all' | 'architecture' | 'clinical' | 'deployment'>('all');
@@ -202,10 +204,10 @@ export const TechnicalFaqModal: React.FC<TechnicalFaqModalProps> = ({ isOpen, on
             </div>
             <div>
               <h3 className="font-serif font-bold text-base text-[#2E2628]">
-                Technical & Engineering Architecture FAQ
+                {t('technicalFaqModalTitle', 'Technical & Engineering Architecture FAQ')}
               </h3>
               <p className="text-xs text-[#6E5C5F]">
-                10 In-Depth Questions on Multimodal Triage, Grad-CAM Saliency, and Deployment Safety
+                {t('technicalFaqModalSubtitle', '10 In-Depth Questions on Multimodal Triage, Grad-CAM Saliency, and Deployment Safety')}
               </p>
             </div>
           </div>
@@ -229,7 +231,7 @@ export const TechnicalFaqModal: React.FC<TechnicalFaqModalProps> = ({ isOpen, on
                   : 'bg-white border border-[#EFE4DC] text-[#6E5C5F] hover:text-[#2E2628]'
               }`}
             >
-              All Topics (10)
+              {t('allTopicsTab', 'All Topics (10)')}
             </button>
             <button
               onClick={() => setActiveCategory('architecture')}
@@ -239,7 +241,7 @@ export const TechnicalFaqModal: React.FC<TechnicalFaqModalProps> = ({ isOpen, on
                   : 'bg-white border border-[#EFE4DC] text-[#6E5C5F] hover:text-[#2E2628]'
               }`}
             >
-              Architecture & Fusion
+              {t('architectureFusionTab', 'Architecture & Fusion')}
             </button>
             <button
               onClick={() => setActiveCategory('clinical')}
@@ -249,7 +251,7 @@ export const TechnicalFaqModal: React.FC<TechnicalFaqModalProps> = ({ isOpen, on
                   : 'bg-white border border-[#EFE4DC] text-[#6E5C5F] hover:text-[#2E2628]'
               }`}
             >
-              Clinical & Saliency
+              {t('clinicalSaliencyTab', 'Clinical & Saliency')}
             </button>
             <button
               onClick={() => setActiveCategory('deployment')}
@@ -259,7 +261,7 @@ export const TechnicalFaqModal: React.FC<TechnicalFaqModalProps> = ({ isOpen, on
                   : 'bg-white border border-[#EFE4DC] text-[#6E5C5F] hover:text-[#2E2628]'
               }`}
             >
-              Public Health & Edge
+              {t('publicHealthEdgeTab', 'Public Health & Edge')}
             </button>
           </div>
 
@@ -270,7 +272,7 @@ export const TechnicalFaqModal: React.FC<TechnicalFaqModalProps> = ({ isOpen, on
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search architecture concepts..."
+              placeholder={t('searchConceptsPlaceholder', 'Search architecture concepts...')}
               className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-[#EFE4DC] bg-white text-xs text-[#2E2628] focus:outline-none focus:border-[#EA580C]"
             />
           </div>
@@ -306,7 +308,7 @@ export const TechnicalFaqModal: React.FC<TechnicalFaqModalProps> = ({ isOpen, on
                   </div>
 
                   <span className="text-xs font-bold text-[#EA580C] shrink-0 mt-1">
-                    {isExpanded ? '− Hide' : '+ Details'}
+                    {isExpanded ? t('faqHide', '− Hide') : t('faqDetails', '+ Details')}
                   </span>
                 </div>
 
@@ -320,7 +322,7 @@ export const TechnicalFaqModal: React.FC<TechnicalFaqModalProps> = ({ isOpen, on
                     ))}
 
                     <div className="mt-3 p-3 rounded-xl bg-[#FFF7ED] border border-[#FED7AA] text-[11px] text-[#C2410C] leading-relaxed">
-                      <strong>Key Architectural Principle:</strong> {faq.keyTakeaway}
+                      <strong>{t('keyArchitecturalPrinciple', 'Key Architectural Principle:')}</strong> {faq.keyTakeaway}
                     </div>
                   </div>
                 )}
@@ -331,12 +333,12 @@ export const TechnicalFaqModal: React.FC<TechnicalFaqModalProps> = ({ isOpen, on
 
         {/* Modal Footer */}
         <div className="p-4 border-t border-[#EFE4DC] bg-[#FAF8F6] flex items-center justify-between text-xs text-[#6E5C5F] shrink-0">
-          <span>Prepared for technical evaluators, clinicians, and ML system architects</span>
+          <span>{t('preparedForEvaluators', 'Prepared for technical evaluators, clinicians, and ML system architects')}</span>
           <button
             onClick={onClose}
             className="px-4 py-1.5 rounded-lg bg-white border border-[#EFE4DC] text-[#2E2628] font-semibold hover:bg-[#FAF8F6]"
           >
-            Close Architecture FAQ
+            {t('closeArchitectureFaq', 'Close Architecture FAQ')}
           </button>
         </div>
       </div>

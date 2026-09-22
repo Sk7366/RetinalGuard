@@ -58,7 +58,14 @@
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Global Accessibility Scaling & Color Vision Modes */
+/* Global Accessibility Scaling, High Contrast, Color Vision, & Dark Theme Tokens */
+
+/* 1. TEXT SIZE SCALING TOKEN SYSTEM */
+:root {
+  --font-scale: 1;
+  --font-scale-factor: 1;
+}
+
 html.font-scale-default {
   --font-scale: 1;
   font-size: 16px;
@@ -66,61 +73,202 @@ html.font-scale-default {
 
 html.font-scale-large {
   --font-scale: 1.15;
-  font-size: 18.5px;
+  font-size: 18.4px;
 }
 
 html.font-scale-xl {
   --font-scale: 1.30;
-  font-size: 21px;
+  font-size: 20.8px;
 }
 
-/* Dark Mode (Part 32: Deliberate Dark Theme) */
+/* Headings and body text proportional scaling */
+html.font-scale-large h1 { font-size: calc(1.875rem * 1.08) !important; line-height: 1.25 !important; }
+html.font-scale-large h2 { font-size: calc(1.5rem * 1.08) !important; line-height: 1.3 !important; }
+html.font-scale-large h3 { font-size: calc(1.25rem * 1.08) !important; line-height: 1.35 !important; }
+html.font-scale-large h4 { font-size: calc(1.125rem * 1.08) !important; line-height: 1.4 !important; }
+
+html.font-scale-xl h1 { font-size: calc(1.875rem * 1.18) !important; line-height: 1.25 !important; }
+html.font-scale-xl h2 { font-size: calc(1.5rem * 1.18) !important; line-height: 1.3 !important; }
+html.font-scale-xl h3 { font-size: calc(1.25rem * 1.18) !important; line-height: 1.35 !important; }
+html.font-scale-xl h4 { font-size: calc(1.125rem * 1.18) !important; line-height: 1.4 !important; }
+
+/* Arbitrary pixel scaling across entire application (badges, labels, forms, microcopy) */
+html.font-scale-large .text-\[9px\],
+html.font-scale-large .text-\[10px\] { font-size: calc(10px * 1.15) !important; line-height: 1.4 !important; }
+html.font-scale-large .text-\[11px\] { font-size: calc(11px * 1.15) !important; line-height: 1.4 !important; }
+html.font-scale-large .text-\[12px\] { font-size: calc(12px * 1.15) !important; line-height: 1.4 !important; }
+html.font-scale-large .text-\[13px\] { font-size: calc(13px * 1.15) !important; line-height: 1.4 !important; }
+html.font-scale-large .text-\[14px\] { font-size: calc(14px * 1.15) !important; line-height: 1.4 !important; }
+html.font-scale-large .text-\[15px\] { font-size: calc(15px * 1.15) !important; line-height: 1.45 !important; }
+
+html.font-scale-xl .text-\[9px\],
+html.font-scale-xl .text-\[10px\] { font-size: calc(10px * 1.30) !important; line-height: 1.45 !important; }
+html.font-scale-xl .text-\[11px\] { font-size: calc(11px * 1.30) !important; line-height: 1.45 !important; }
+html.font-scale-xl .text-\[12px\] { font-size: calc(12px * 1.30) !important; line-height: 1.45 !important; }
+html.font-scale-xl .text-\[13px\] { font-size: calc(13px * 1.30) !important; line-height: 1.45 !important; }
+html.font-scale-xl .text-\[14px\] { font-size: calc(14px * 1.30) !important; line-height: 1.45 !important; }
+html.font-scale-xl .text-\[15px\] { font-size: calc(15px * 1.30) !important; line-height: 1.45 !important; }
+
+/* Buttons & Navigation reflow with text expansion */
+html.font-scale-large button,
+html.font-scale-large .btn-natural-primary,
+html.font-scale-large .btn-natural-secondary,
+html.font-scale-large .btn-brand-accent {
+  min-height: 2.5rem;
+  padding-top: 0.45rem;
+  padding-bottom: 0.45rem;
+}
+
+html.font-scale-xl button,
+html.font-scale-xl .btn-natural-primary,
+html.font-scale-xl .btn-natural-secondary,
+html.font-scale-xl .btn-brand-accent {
+  min-height: 2.85rem;
+  padding-top: 0.55rem;
+  padding-bottom: 0.55rem;
+}
+
+/* Forms & Tables scaling */
+html.font-scale-large input,
+html.font-scale-large select,
+html.font-scale-large textarea {
+  min-height: 2.5rem;
+}
+
+html.font-scale-xl input,
+html.font-scale-xl select,
+html.font-scale-xl textarea {
+  min-height: 2.85rem;
+}
+
+html.font-scale-large table th,
+html.font-scale-large table td {
+  padding-top: 0.65rem !important;
+  padding-bottom: 0.65rem !important;
+}
+
+html.font-scale-xl table th,
+html.font-scale-xl table td {
+  padding-top: 0.8rem !important;
+  padding-bottom: 0.8rem !important;
+}
+
+/* Layout reflow without horizontal scrolling */
+html, body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* 2. DELIBERATE PREMIUM DARK THEME */
 html.dark {
-  background-color: #171315 !important;
-  color: #FFF7F2 !important;
+  background-color: #121012 !important;
+  color: #FAF5F7 !important;
+  color-scheme: dark;
 }
 
 html.dark body {
-  background-color: #171315 !important;
-  color: #FFF7F2 !important;
+  background-color: #121012 !important;
+  color: #FAF5F7 !important;
 }
 
 html.dark .bg-white,
 html.dark .bg-\[\#FFFDFB\],
 html.dark .bg-\[\#FFFDF9\],
+html.dark .bg-\[\#FAF8F6\],
 html.dark .card-natural {
-  background-color: #211B1E !important;
-  color: #FFF7F2 !important;
-  border-color: #382E33 !important;
+  background-color: #1B161A !important;
+  color: #FAF5F7 !important;
+  border-color: #33292F !important;
 }
 
+html.dark .bg-\[\#FFF7ED\],
+html.dark .bg-orange-50 {
+  background-color: #271C17 !important;
+  color: #FDBA74 !important;
+  border-color: #43281C !important;
+}
+
+html.dark .bg-stone-50,
+html.dark .bg-stone-100 {
+  background-color: #211B1F !important;
+  color: #FAF5F7 !important;
+  border-color: #382E34 !important;
+}
+
+html.dark .bg-\[\#FBE4EC\]\/30,
+html.dark .bg-\[\#FFE5D8\]\/40,
+html.dark .bg-\[\#FFE5D8\]\/20 {
+  background-color: #2C1E24 !important;
+  color: #FAF5F7 !important;
+}
+
+/* Dark theme typography */
 html.dark .text-\[\#2E2628\],
 html.dark .text-\[\#2B2024\],
 html.dark .text-stone-900,
-html.dark .text-stone-800 {
-  color: #FFF7F2 !important;
+html.dark .text-stone-800,
+html.dark .text-stone-700 {
+  color: #FAF5F7 !important;
 }
 
 html.dark .text-\[\#6E5C5F\],
 html.dark .text-\[\#6F6267\],
 html.dark .text-stone-600,
 html.dark .text-stone-500 {
-  color: #D8C9CE !important;
+  color: #C4B6BC !important;
 }
 
+html.dark .text-stone-400 {
+  color: #94868C !important;
+}
+
+/* Dark theme borders & dividers */
 html.dark .border-\[\#EFE4DC\],
-html.dark .border-stone-200 {
-  border-color: #382E33 !important;
+html.dark .border-stone-200,
+html.dark .border-stone-100,
+html.dark .border-stone-300 {
+  border-color: #33292F !important;
 }
 
-html.dark .bg-stone-50,
-html.dark .bg-stone-100 {
-  background-color: #2A2226 !important;
-  color: #FFF7F2 !important;
+/* Dark theme inputs & selects */
+html.dark input,
+html.dark select,
+html.dark textarea {
+  background-color: #1B161A !important;
+  color: #FAF5F7 !important;
+  border-color: #3B3037 !important;
 }
 
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: #8C7D84 !important;
+}
+
+/* Dark theme buttons */
+html.dark .btn-natural-secondary {
+  background-color: #211B1F !important;
+  color: #FAF5F7 !important;
+  border-color: #382E34 !important;
+}
+
+html.dark .btn-natural-secondary:hover {
+  background-color: #2A2328 !important;
+  border-color: #483C43 !important;
+}
+
+/* Dark theme dialogs & dropdowns */
+html.dark [role="dialog"],
+html.dark [aria-modal="true"],
+html.dark .shadow-xl,
+html.dark .shadow-2xl {
+  background-color: #1E181C !important;
+  color: #FAF5F7 !important;
+  border-color: #3B3037 !important;
+}
+
+/* 3. GLOBAL HIGH CONTRAST SYSTEM */
 html.high-contrast {
-  filter: contrast(130%);
+  --border-subtle: #000000;
 }
 
 html.high-contrast body {
@@ -128,29 +276,182 @@ html.high-contrast body {
   color: #000000 !important;
 }
 
-html.high-contrast button,
 html.high-contrast .card-natural,
-html.high-contrast [class*="border-"] {
-  border-color: #1C1917 !important;
+html.high-contrast .bg-white,
+html.high-contrast .bg-\[\#FFFDFB\],
+html.high-contrast .bg-\[\#FFFDF9\],
+html.high-contrast [role="dialog"],
+html.high-contrast nav,
+html.high-contrast header {
+  background-color: #FFFFFF !important;
+  border: 2px solid #000000 !important;
+  box-shadow: none !important;
 }
 
-/* Color Vision Modes */
-html.color-vision-protan {
-  /* Red-Green friendly adjustment */
-  filter: contrast(110%) hue-rotate(-20deg) saturate(115%);
+html.high-contrast .text-\[\#2E2628\],
+html.high-contrast .text-\[\#2B2024\],
+html.high-contrast .text-\[\#6E5C5F\],
+html.high-contrast .text-\[\#6F6267\],
+html.high-contrast .text-stone-900,
+html.high-contrast .text-stone-800,
+html.high-contrast .text-stone-700,
+html.high-contrast .text-stone-600,
+html.high-contrast .text-stone-500,
+html.high-contrast p,
+html.high-contrast span,
+html.high-contrast h1,
+html.high-contrast h2,
+html.high-contrast h3,
+html.high-contrast h4,
+html.high-contrast label {
+  color: #000000 !important;
+  font-weight: 600 !important;
 }
 
-html.color-vision-tritan {
-  /* Blue-Yellow friendly adjustment */
-  filter: contrast(110%) hue-rotate(40deg) saturate(110%);
+html.high-contrast button,
+html.high-contrast .btn-natural-primary,
+html.high-contrast .btn-natural-secondary,
+html.high-contrast .btn-brand-accent {
+  border: 2px solid #000000 !important;
+  box-shadow: none !important;
+  font-weight: 700 !important;
 }
 
+html.high-contrast input,
+html.high-contrast select,
+html.high-contrast textarea {
+  border: 2px solid #000000 !important;
+  background-color: #FFFFFF !important;
+  color: #000000 !important;
+  font-weight: 600 !important;
+}
+
+html.high-contrast input::placeholder {
+  color: #333333 !important;
+}
+
+/* High Contrast Focus Indicators (WCAG AAA compliant) */
+html.high-contrast *:focus-visible,
+*:focus-visible {
+  outline: 3px solid #F05A28 !important;
+  outline-offset: 3px !important;
+}
+
+/* High Contrast combined with Dark Mode */
+html.dark.high-contrast body {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+html.dark.high-contrast .card-natural,
+html.dark.high-contrast .bg-white,
+html.dark.high-contrast .bg-\[\#FFFDFB\],
+html.dark.high-contrast .bg-\[\#FFFDF9\],
+html.dark.high-contrast [role="dialog"],
+html.dark.high-contrast nav,
+html.dark.high-contrast header {
+  background-color: #050505 !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+html.dark.high-contrast p,
+html.dark.high-contrast span,
+html.dark.high-contrast h1,
+html.dark.high-contrast h2,
+html.dark.high-contrast h3,
+html.dark.high-contrast h4,
+html.dark.high-contrast label,
+html.dark.high-contrast .text-\[\#2E2628\],
+html.dark.high-contrast .text-\[\#2B2024\],
+html.dark.high-contrast .text-\[\#6E5C5F\],
+html.dark.high-contrast .text-\[\#6F6267\],
+html.dark.high-contrast .text-stone-900,
+html.dark.high-contrast .text-stone-800,
+html.dark.high-contrast .text-stone-700,
+html.dark.high-contrast .text-stone-600 {
+  color: #FFFFFF !important;
+  font-weight: 600 !important;
+}
+
+html.dark.high-contrast button,
+html.dark.high-contrast input,
+html.dark.high-contrast select,
+html.dark.high-contrast textarea {
+  border: 2px solid #FFFFFF !important;
+  background-color: #050505 !important;
+  color: #FFFFFF !important;
+}
+
+html.dark.high-contrast *:focus-visible {
+  outline: 3px solid #FDBA74 !important;
+  outline-offset: 3px !important;
+}
+
+/* 4. COLOR VISION ACCESSIBILITY MODES */
+/* Red-Green Friendly (Protan / Deutan) */
+html.color-vision-protan,
+html.color-vision-redgreen {
+  --color-medical-red: #9333EA;
+  --color-medical-green: #0284C7;
+  --color-medical-amber: #D97706;
+}
+
+html.color-vision-protan .text-emerald-700,
+html.color-vision-protan .text-emerald-800,
+html.color-vision-protan .text-green-700,
+html.color-vision-protan .text-green-800 {
+  color: #0284C7 !important;
+}
+
+html.color-vision-protan .text-red-600,
+html.color-vision-protan .text-red-700,
+html.color-vision-protan .text-rose-600,
+html.color-vision-protan .text-rose-700 {
+  color: #9333EA !important;
+}
+
+html.color-vision-protan .bg-emerald-50,
+html.color-vision-protan .bg-green-50 {
+  background-color: #F0F9FF !important;
+  border-color: #BAE6FD !important;
+}
+
+html.color-vision-protan .bg-red-50,
+html.color-vision-protan .bg-rose-50 {
+  background-color: #FAF5FF !important;
+  border-color: #E9D5FF !important;
+}
+
+/* Blue-Yellow Friendly (Tritan) */
+html.color-vision-tritan,
+html.color-vision-blueyellow {
+  --color-medical-amber: #DC2626;
+  --color-brand-primary: #DB2777;
+}
+
+html.color-vision-tritan .text-amber-600,
+html.color-vision-tritan .text-amber-700,
+html.color-vision-tritan .text-yellow-700 {
+  color: #DB2777 !important;
+}
+
+html.color-vision-tritan .text-blue-600,
+html.color-vision-tritan .text-blue-700 {
+  color: #0D9488 !important;
+}
+
+/* Monochrome High Distinction */
 html.color-vision-mono {
-  /* High contrast monochrome */
-  filter: grayscale(100%) contrast(125%);
+  filter: grayscale(100%) contrast(120%);
 }
 
-/* Reduced Motion */
+html.color-vision-mono .card-natural,
+html.color-vision-mono button,
+html.color-vision-mono [class*="border-"] {
+  border-width: 1.5px !important;
+}
+
+/* 5. REDUCE MOTION SYSTEM */
 html.reduce-motion *,
 html.reduce-motion *::before,
 html.reduce-motion *::after {
@@ -159,6 +460,27 @@ html.reduce-motion *::after {
   transition-duration: 0.001ms !important;
   scroll-behavior: auto !important;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Loading animation reduction */
+html.reduce-motion .animate-spin,
+html.reduce-motion .animate-pulse,
+html.reduce-motion .animate-ping,
+html.reduce-motion .animate-bounce {
+  animation: none !important;
+  opacity: 0.85 !important;
+}
+
 
 html, body {
   max-width: 100vw;

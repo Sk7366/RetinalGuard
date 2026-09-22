@@ -28,6 +28,7 @@ import {
   UNCERTAINTY_STATE_DEFINITIONS,
   UncertaintyStateDefinition,
 } from '../utils/uncertaintyEngine';
+import { useTranslation } from '../i18n/I18nContext';
 
 interface ResponsibleAiUncertaintyIndicatorProps {
   result?: MultimodalTriageResult | Screening;
@@ -50,6 +51,7 @@ export const ResponsibleAiUncertaintyIndicator: React.FC<
   className = '',
   id = 'responsible-ai-uncertainty-indicator',
 }) => {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [selectedDemoState, setSelectedDemoState] = useState<ResponsibleAiUncertaintyState | null>(
     null
@@ -182,7 +184,7 @@ export const ResponsibleAiUncertaintyIndicator: React.FC<
             <div>
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-[10px] font-bold tracking-wider uppercase text-[#6E5C5F]">
-                  Responsible AI / Uncertainty
+                  {t('responsibleAiUncertaintyTitle', 'Responsible AI / Uncertainty')}
                 </span>
                 <span
                   className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border bg-white"
@@ -205,7 +207,7 @@ export const ResponsibleAiUncertaintyIndicator: React.FC<
               {activeDef.shortStatus}
             </span>
             <span className="text-[10px] text-[#6E5C5F]">
-              Zero misleading % · Evidence grounded
+              {t('zeroMisleadingPctLabel', 'Zero misleading % · Evidence grounded')}
             </span>
           </div>
         </div>
@@ -238,15 +240,15 @@ export const ResponsibleAiUncertaintyIndicator: React.FC<
           <div>
             <div className="flex items-center gap-2">
               <span className="text-[11px] font-bold tracking-wider uppercase text-[#6E5C5F]">
-                Product Capability
+                {t('productCapabilityLabel', 'Product Capability')}
               </span>
               <span className="w-1 h-1 rounded-full bg-[#9C8E91]" />
               <span className="text-[11px] font-semibold text-[#2E2628]">
-                Evidence-Grounded Triaging
+                {t('evidenceGroundedTriaging', 'Evidence-Grounded Triaging')}
               </span>
             </div>
             <h3 className="text-base sm:text-lg font-serif font-bold text-[#2E2628] leading-tight">
-              Responsible AI / Uncertainty
+              {t('responsibleAiUncertaintyTitle', 'Responsible AI / Uncertainty')}
             </h3>
           </div>
         </div>
@@ -271,11 +273,11 @@ export const ResponsibleAiUncertaintyIndicator: React.FC<
             <button
               onClick={() => setIsExpanded(!isExpanded)}
               className="p-1.5 rounded-lg bg-white/80 hover:bg-white text-[#6E5C5F] hover:text-[#2E2628] border border-stone-200 text-xs font-semibold flex items-center gap-1 transition-colors"
-              title="Toggle Uncertainty Framework explanation"
+              title={t('toggleUncertaintyFrameworkAria', 'Toggle Uncertainty Framework explanation')}
             >
               <Info className="w-3.5 h-3.5" />
               <span className="text-[11px] hidden sm:inline">
-                {isExpanded ? 'Hide Framework' : 'How It Works'}
+                {isExpanded ? t('hideFrameworkBtn', 'Hide Framework') : t('howItWorksBtn', 'How It Works')}
               </span>
               {isExpanded ? (
                 <ChevronUp className="w-3.5 h-3.5" />
@@ -299,7 +301,7 @@ export const ResponsibleAiUncertaintyIndicator: React.FC<
                 {RESPONSIBLE_AI_UNCERTAINTY_QUOTE}
               </p>
               <p className="text-[11px] text-[#6E5C5F]">
-                RetinaGuard does not emit misleading numerical confidence percentages (e.g. "89.4% confident"). In clinical decision-support, uncertainty is communicated through qualitative evidence sufficiency and transparent consensus guardrails.
+                {t('uncertaintyExplanationParagraph', 'RetinaGuard does not emit misleading numerical confidence percentages (e.g. "89.4% confident"). In clinical decision-support, uncertainty is communicated through qualitative evidence sufficiency and transparent consensus guardrails.')}
               </p>
             </div>
           </div>
@@ -311,7 +313,7 @@ export const ResponsibleAiUncertaintyIndicator: React.FC<
           <div className="md:col-span-7 bg-white p-4 sm:p-5 rounded-2xl border border-stone-200/80 shadow-2xs space-y-3">
             <div>
               <span className="text-[10px] font-bold uppercase tracking-wider text-[#6E5C5F] block">
-                Evidence Sufficiency Assessment
+                {t('evidenceSufficiencyAssessment', 'Evidence Sufficiency Assessment')}
               </span>
               <h4 className="text-sm sm:text-base font-bold text-[#2E2628] mt-0.5">
                 {activeDef.title}
@@ -326,7 +328,7 @@ export const ResponsibleAiUncertaintyIndicator: React.FC<
             <div className="pt-2 border-t border-stone-100 space-y-1.5">
               <span className="text-[11px] font-bold text-[#2E2628] flex items-center gap-1.5">
                 <ArrowRight className="w-3.5 h-3.5 text-[#EA580C]" />
-                <span>Protocol Safeguard Triggered:</span>
+                <span>{t('protocolSafeguardTriggered', 'Protocol Safeguard Triggered:')}</span>
               </span>
               <p className="text-xs text-[#2E2628] bg-[#FAF8F6] p-2.5 rounded-xl border border-[#EFE4DC]">
                 {selectedDemoState
@@ -340,10 +342,10 @@ export const ResponsibleAiUncertaintyIndicator: React.FC<
           <div className="md:col-span-5 bg-white p-4 sm:p-5 rounded-2xl border border-stone-200/80 shadow-2xs space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-bold uppercase tracking-wider text-[#6E5C5F]">
-                Evidence Factor Checks
+                {t('evidenceFactorChecks', 'Evidence Factor Checks')}
               </span>
               <span className="text-[10px] text-[#059669] font-bold bg-[#ECFDF5] px-2 py-0.5 rounded-md border border-[#A7F3D0]">
-                Qualitative
+                {t('qualitativeBadge', 'Qualitative')}
               </span>
             </div>
 
@@ -385,11 +387,11 @@ export const ResponsibleAiUncertaintyIndicator: React.FC<
             <div className="flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-[#EA580C]" />
               <span className="text-xs font-bold text-[#2E2628]">
-                Responsible AI Differentiator: 4 Strict Uncertainty States
+                {t('responsibleAiDifferentiatorStates', 'Responsible AI Differentiator: 4 Strict Uncertainty States')}
               </span>
             </div>
             <span className="text-[10px] text-[#6E5C5F]">
-              Click any state to preview RetinaGuard's clinical posture:
+              {t('clickStateToPreviewPosture', "Click any state to preview RetinaGuard's clinical posture:")}
             </span>
           </div>
 
@@ -435,7 +437,7 @@ export const ResponsibleAiUncertaintyIndicator: React.FC<
                 onClick={() => setSelectedDemoState(null)}
                 className="text-[11px] text-[#EA580C] hover:underline font-semibold"
               >
-                Reset to this scan's live state ({baseEvaluation.shortStatus})
+                {t('resetToLiveState', "Reset to this scan's live state")} ({baseEvaluation.shortStatus})
               </button>
             </div>
           )}
@@ -448,20 +450,20 @@ export const ResponsibleAiUncertaintyIndicator: React.FC<
               <div className="p-3.5 rounded-xl bg-white border border-stone-200 space-y-1.5">
                 <span className="font-bold text-[#2E2628] flex items-center gap-1.5 text-xs">
                   <HelpCircle className="w-3.5 h-3.5 text-[#EA580C]" />
-                  Why we reject numerical confidence percentages (e.g., "89.4%")
+                  {t('whyWeRejectPercentagesTitle', 'Why we reject numerical confidence percentages (e.g., "89.4%")')}
                 </span>
                 <p className="text-[11px] leading-relaxed">
-                  Deep neural networks are notoriously overconfident on out-of-distribution optical distortions, lens dust, and media opacities. Showing a precise percentage like <em>"89.7% confidence"</em> provides dangerous false reassurance to community health workers. RetinaGuard instead forces hard categorical decisions based on image quality and multimodal concordance.
+                  {t('whyWeRejectPercentagesDesc', 'Deep neural networks are notoriously overconfident on out-of-distribution optical distortions, lens dust, and media opacities. Showing a precise percentage like "89.7% confidence" provides dangerous false reassurance to community health workers. RetinaGuard instead forces hard categorical decisions based on image quality and multimodal concordance.')}
                 </p>
               </div>
 
               <div className="p-3.5 rounded-xl bg-white border border-stone-200 space-y-1.5">
                 <span className="font-bold text-[#2E2628] flex items-center gap-1.5 text-xs">
                   <ShieldCheck className="w-3.5 h-3.5 text-[#059669]" />
-                  Clinical Safety: Prioritizing Human Review
+                  {t('clinicalSafetyPrioritizingHuman', 'Clinical Safety: Prioritizing Human Review')}
                 </span>
                 <p className="text-[11px] leading-relaxed">
-                  Whenever an image is ungradable or modalities disagree, the system deliberately halts automated scoring and prioritizes ophthalmologist review. This clinical humility prevents unnecessary treatment errors and guards against irreversible vision loss.
+                  {t('clinicalSafetyPrioritizingHumanDesc', 'Whenever an image is ungradable or modalities disagree, the system deliberately halts automated scoring and prioritizes ophthalmologist review. This clinical humility prevents unnecessary treatment errors and guards against irreversible vision loss.')}
                 </p>
               </div>
             </div>

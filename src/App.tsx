@@ -91,7 +91,7 @@ function AppContent() {
   const [voiceGuidanceEnabled, setVoiceGuidanceEnabled] = useState<boolean>(true);
 
   // Accessibility & Localization state from I18nContext
-  const { language: currentLanguage, setLanguage: setCurrentLanguage } = useTranslation();
+  const { language: currentLanguage, setLanguage: setCurrentLanguage, t } = useTranslation();
   const [accessibilitySettings, setAccessibilitySettings] = useState<AccessibilitySettings>({
     highContrast: false,
     largeText: false,
@@ -351,9 +351,7 @@ function AppContent() {
 
   return (
     <div
-      className={`min-h-screen flex flex-col bg-[#FFFDFB] text-[#2E2628] antialiased overflow-x-clip ${
-        accessibilitySettings.highContrast ? 'contrast-125 saturate-150' : ''
-      } ${accessibilitySettings.largeText ? 'text-lg' : ''}`}
+      className="min-h-screen flex flex-col bg-[#FFFDFB] dark:bg-[#151014] text-[#2E2628] dark:text-[#FAF5F7] antialiased overflow-x-clip"
     >
       {/* Primary Navigation Header */}
       <Navbar
@@ -402,6 +400,7 @@ function AppContent() {
           }
         }}
         onLogout={handleLogout}
+        onOpenAccessibilityModal={() => setIsAccessibilityModalOpen(true)}
       />
 
       {/* Main Content Area */}
@@ -617,10 +616,10 @@ function AppContent() {
                 <div className="flex items-center justify-between bg-white p-4 sm:p-5 rounded-2xl border border-[#EFE4DC] shadow-xs flex-wrap gap-3">
                   <div>
                     <h2 className="text-base font-serif font-bold text-[#2E2628]">
-                      Screening Examination Encounter
+                      {t("encounterTitle", "Screening Examination Encounter")}
                     </h2>
                     <p className="text-xs text-[#6E5C5F] mt-0.5">
-                      Non-mydriatic fundus capture with automated clarity assessment and optional OCT depth scanning.
+                      {t("encounterDesc", "Non-mydriatic fundus capture with automated clarity assessment and optional OCT depth scanning.")}
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
@@ -629,14 +628,14 @@ function AppContent() {
                       onClick={() => navigateProvider('camp-mode')}
                       className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-[#FED7AA] bg-[#FFF7ED] text-[#C2410C] hover:bg-[#FFEDD5] transition-colors"
                     >
-                      Camp Offline Mode
+                      {t("campOfflineModeBtn", "Camp Offline Mode")}
                     </button>
                     <button
                       type="button"
                       onClick={() => setIsGuideOpen(true)}
                       className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-[#EFE4DC] bg-[#FAF8F6] text-[#2E2628] hover:border-[#EA580C] hover:text-[#EA580C] transition-colors"
                     >
-                      Capture Guidelines
+                      {t("captureGuidelinesBtn", "Capture Guidelines")}
                     </button>
                   </div>
                 </div>

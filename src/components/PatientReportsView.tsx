@@ -124,13 +124,13 @@ export const PatientReportsView: React.FC<PatientReportsViewProps> = ({
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] mb-1.5">
             <ShieldCheck className="w-3.5 h-3.5 text-[#EA580C]" />
-            <span>CONFIDENTIAL PATIENT RECORDS</span>
+            <span>{t("confidentialPatientRecordsTag", "CONFIDENTIAL PATIENT RECORDS")}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#2E2628]">
-            My Screening Reports
+            {t("myScreeningReportsTitle", "My Screening Reports")}
           </h2>
           <p className="text-xs sm:text-sm text-[#6E5C5F] mt-1">
-            Access, download, and securely email your past retinal screening results.
+            {t("myScreeningReportsDesc", "Access, download, and securely email your past retinal screening results.")}
           </p>
         </div>
 
@@ -140,7 +140,7 @@ export const PatientReportsView: React.FC<PatientReportsViewProps> = ({
           className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-semibold shadow-xs transition-colors self-start sm:self-auto"
         >
           <Eye className="w-4 h-4" />
-          <span>Find a Screening Center</span>
+          <span>{t("findScreeningCenterBtn", "Find a Screening Center")}</span>
         </button>
       </div>
 
@@ -149,15 +149,15 @@ export const PatientReportsView: React.FC<PatientReportsViewProps> = ({
         <div className="flex items-center gap-2.5">
           <Mail className="w-4 h-4 text-[#EA580C]" />
           <div>
-            <span className="font-semibold text-[#2E2628]">Delivery Email: </span>
+            <span className="font-semibold text-[#2E2628]">{t("deliveryEmailLabel", "Delivery Email:")} </span>
             <span className="text-[#6E5C5F] font-mono">{currentUser.email}</span>
             {currentUser.emailVerified ? (
               <span className="ml-2 inline-flex items-center text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                Verified ✓
+                {t("verifiedBadge", "Verified ✓")}
               </span>
             ) : (
               <span className="ml-2 inline-flex items-center text-[10px] font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full border border-amber-200">
-                Unverified (Verify to send)
+                {t("unverifiedBadge", "Unverified (Verify to send)")}
               </span>
             )}
           </div>
@@ -169,7 +169,7 @@ export const PatientReportsView: React.FC<PatientReportsViewProps> = ({
             onClick={onOpenAuth}
             className="text-xs font-semibold text-[#EA580C] hover:underline shrink-0"
           >
-            Verify Email Now →
+            {t("verifyEmailNowLink", "Verify Email Now →")}
           </button>
         )}
       </div>
@@ -201,19 +201,19 @@ export const PatientReportsView: React.FC<PatientReportsViewProps> = ({
                   {isNormal && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                      <span>✓ Normal • No Concerning Signs</span>
+                      <span>{t("statusNormalClean", "✓ Normal • No Concerning Signs")}</span>
                     </span>
                   )}
                   {isReview && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-800 border border-amber-200">
                       <AlertTriangle className="w-4 h-4 text-amber-600" />
-                      <span>⚠ Needs Review • Follow-Up Recommended</span>
+                      <span>{t("statusReviewFollowUp", "⚠ Needs Review • Follow-Up Recommended")}</span>
                     </span>
                   )}
                   {isUrgent && (
                     <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-red-50 text-red-700 border border-red-200">
                       <AlertOctagon className="w-4 h-4 text-red-600" />
-                      <span>! Further Clinical Evaluation Required</span>
+                      <span>{t("statusUrgentClinical", "! Further Clinical Evaluation Required")}</span>
                     </span>
                   )}
                 </div>
@@ -234,7 +234,7 @@ export const PatientReportsView: React.FC<PatientReportsViewProps> = ({
                   {report.plainSummary}
                 </p>
                 <div className="pt-2 border-t border-[#EFE4DC]/60 flex items-start gap-2 text-xs text-[#2E2628]">
-                  <span className="font-bold text-[#EA580C] shrink-0">Recommended Next Step:</span>
+                  <span className="font-bold text-[#EA580C] shrink-0">{t("recommendedNextStepLabel", "Recommended Next Step:")}</span>
                   <span>{report.recommendedAction}</span>
                 </div>
               </div>
@@ -251,8 +251,8 @@ export const PatientReportsView: React.FC<PatientReportsViewProps> = ({
                     <Send className="w-3.5 h-3.5 text-[#EA580C]" />
                     <span>
                       {emailSentId === report.id
-                        ? 'Sent to Email ✓'
-                        : 'Send Report to Verified Email'}
+                        ? t("sentToEmailSuccess", "Sent to Email ✓")
+                        : t("sendReportToEmailBtn", "Send Report to Verified Email")}
                     </span>
                   </button>
 
@@ -261,7 +261,7 @@ export const PatientReportsView: React.FC<PatientReportsViewProps> = ({
                     onClick={() => setExpandedTechId(isTechExpanded ? null : report.id)}
                     className="inline-flex items-center gap-1 text-xs text-[#6E5C5F] hover:text-[#2E2628] font-medium px-2 py-1"
                   >
-                    <span>{isTechExpanded ? 'Hide Technical Details' : 'View Technical Details (Optional)'}</span>
+                    <span>{isTechExpanded ? t("hideTechDetails", "Hide Technical Details") : t("viewTechDetailsOptional", "View Technical Details (Optional)")}</span>
                     {isTechExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                   </button>
                 </div>
@@ -273,7 +273,7 @@ export const PatientReportsView: React.FC<PatientReportsViewProps> = ({
                     className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#2E2628] hover:bg-black text-white text-xs font-semibold transition-colors"
                   >
                     <Download className="w-3.5 h-3.5" />
-                    <span>{downloadingId === report.id ? 'Generating PDF...' : 'Download PDF'}</span>
+                    <span>{downloadingId === report.id ? t("generatingPdf", "Generating PDF...") : t("downloadPdfBtn", "Download PDF")}</span>
                   </button>
                 </div>
               </div>
@@ -283,7 +283,7 @@ export const PatientReportsView: React.FC<PatientReportsViewProps> = ({
                 <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center gap-2 animate-in fade-in">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>
-                    Report {report.id} was successfully sent to your verified address (<strong>{currentUser.email}</strong>). Please check your inbox.
+                    {t("reportSentNotification", "Report was successfully sent to your verified email address. Please check your inbox.")}
                   </span>
                 </div>
               )}
@@ -293,7 +293,7 @@ export const PatientReportsView: React.FC<PatientReportsViewProps> = ({
                 <div className="p-3 rounded-xl bg-blue-50 border border-blue-200 text-blue-800 text-xs flex items-center gap-2 animate-in fade-in">
                   <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
                   <span>
-                    Official encrypted PDF of report <strong>{report.id}</strong> is downloaded for your medical records and specialist consultation.
+                    {t("officialEncryptedPdfNotice", "Official encrypted PDF is downloaded for your medical records and specialist consultation.")}
                   </span>
                 </div>
               )}
@@ -302,31 +302,31 @@ export const PatientReportsView: React.FC<PatientReportsViewProps> = ({
               {isTechExpanded && report.technicalDetails && (
                 <div className="p-4 rounded-xl bg-[#FFFDFB] border border-[#EFE4DC] space-y-3 text-xs animate-in fade-in">
                   <div className="flex items-center justify-between font-bold text-[#2E2628] pb-1 border-b border-[#EFE4DC]">
-                    <span>Technical Decision Support Details (For Clinicians)</span>
+                    <span>{t("techDecisionSupportTitle", "Technical Decision Support Details (For Clinicians)")}</span>
                     <span className="text-[10px] text-[#9E8D91]">SaMD IEC 62304 / IMDRF Compliant</span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-[#6E5C5F]">
                     <div>
-                      <span className="font-semibold text-[#2E2628] block">Inference Model:</span>
+                      <span className="font-semibold text-[#2E2628] block">{t("inferenceModelLabel", "Inference Model:")}</span>
                       <span>{report.technicalDetails.model}</span>
                     </div>
                     <div>
-                      <span className="font-semibold text-[#2E2628] block">Modalities Analyzed:</span>
+                      <span className="font-semibold text-[#2E2628] block">{t("modalitiesAnalyzedLabel", "Modalities Analyzed:")}</span>
                       <span>{report.technicalDetails.modalities}</span>
                     </div>
                     <div>
-                      <span className="font-semibold text-[#2E2628] block">Model Confidence:</span>
+                      <span className="font-semibold text-[#2E2628] block">{t("modelConfidenceLabel", "Model Confidence:")}</span>
                       <span className="font-mono font-bold text-[#EA580C]">{report.technicalDetails.confidence}</span>
                     </div>
                     <div>
-                      <span className="font-semibold text-[#2E2628] block">Grad-CAM Salience Focus:</span>
+                      <span className="font-semibold text-[#2E2628] block">{t("gradCamSalienceFocusLabel", "Grad-CAM Salience Focus:")}</span>
                       <span>{report.technicalDetails.gradCamRegion}</span>
                     </div>
                   </div>
 
                   <div>
-                    <span className="font-semibold text-[#2E2628] block mb-1">Key Contributing SHAP Factors:</span>
+                    <span className="font-semibold text-[#2E2628] block mb-1">{t("keyContributingShapLabel", "Key Contributing SHAP Factors:")}</span>
                     <ul className="list-disc list-inside text-[#6E5C5F] space-y-0.5">
                       {report.technicalDetails.shapTopFactors.map((factor, idx) => (
                         <li key={idx} className="font-mono text-[11px]">{factor}</li>

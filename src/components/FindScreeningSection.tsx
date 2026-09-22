@@ -14,6 +14,7 @@ import {
 import { screeningApi } from '../api';
 import { MOCK_SCREENING_CENTERS } from '../mock/mockData';
 import { ScreeningCenter } from '../types';
+import { useTranslation } from '../i18n/I18nContext';
 
 interface FindScreeningSectionProps {
   onStartDemoScreening?: () => void;
@@ -22,6 +23,7 @@ interface FindScreeningSectionProps {
 export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
   onStartDemoScreening,
 }) => {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCity, setSelectedCity] = useState<string>('All');
   const [userLocationDetected, setUserLocationDetected] = useState<boolean>(false);
@@ -79,13 +81,13 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
       <div className="max-w-3xl mb-8">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-stone-100 border border-stone-200/80 text-stone-700 text-xs font-semibold mb-3">
           <MapPin className="w-3.5 h-3.5 text-[#EA580C]" />
-          <span>Community Access Directory</span>
+          <span>{t('commAccessDirectory', 'Community Access Directory')}</span>
         </div>
         <h2 className="text-2xl sm:text-3xl font-serif font-semibold text-stone-900 tracking-tight">
-          Find Retinal Screening Near You
+          {t('findScreeningTitle', 'Find Retinal Screening Near You')}
         </h2>
         <p className="text-sm text-stone-600 mt-2 leading-relaxed">
-          Diabetic retinopathy often develops silently with no early symptoms. Regular non-invasive retinal imaging at a nearby community clinic or screening camp can detect early changes before vision is affected.
+          {t('findScreeningSubtitle', 'Diabetic retinopathy often develops silently with no early symptoms. Regular non-invasive retinal imaging at a nearby community clinic or screening camp can detect early changes before vision is affected.')}
         </p>
       </div>
 
@@ -98,7 +100,7 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Enter your PIN code, city, or clinic name (e.g. 560060, Bengaluru)..."
+              placeholder={t('searchPinPlaceholder', 'Enter your PIN code, city, or clinic name (e.g. 560060, Bengaluru)...')}
               className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50/50 text-xs sm:text-sm text-stone-900 placeholder:text-stone-400 focus:outline-none focus:border-stone-400 focus:bg-white transition-colors"
             />
           </div>
@@ -108,13 +110,13 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
             className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-xs font-semibold text-stone-700 hover:bg-stone-100 transition-colors shrink-0"
           >
             <Navigation className="w-3.5 h-3.5 text-[#EA580C]" />
-            <span>{userLocationDetected ? 'Location Detected (Bengaluru)' : 'Use My Location'}</span>
+            <span>{userLocationDetected ? t('locationDetected', 'Location Detected (Bengaluru)') : t('useMyLocation', 'Use My Location')}</span>
           </button>
         </div>
 
         {/* City Filter Pills */}
         <div className="flex items-center gap-2 mt-4 pt-4 border-t border-stone-100 overflow-x-auto pb-1">
-          <span className="text-xs font-medium text-stone-500 shrink-0 mr-1">Filter City:</span>
+          <span className="text-xs font-medium text-stone-500 shrink-0 mr-1">{t('filterCity', 'Filter City:')}</span>
           {cities.map((city) => (
             <button
               key={city}
@@ -125,7 +127,7 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
                   : 'bg-stone-50 text-stone-600 hover:text-stone-900 border border-stone-200'
               }`}
             >
-              {city}
+              {city === 'All' ? t('cityAll', 'All') : city}
             </button>
           ))}
         </div>
@@ -143,16 +145,16 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
               <div className="flex items-center justify-between gap-2 mb-3">
                 <span className="inline-flex items-center gap-1 text-[11px] font-medium text-stone-600 bg-stone-100 px-2.5 py-1 rounded-md border border-stone-200/60">
                   <Navigation className="w-3 h-3 text-stone-500" />
-                  ~{center.distanceKm} km away
+                  ~{center.distanceKm} {t('kmAway', 'km away')}
                 </span>
 
                 {center.isCampActive ? (
                   <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-800 bg-amber-50 px-2.5 py-1 rounded-md border border-amber-200">
                     <Tent className="w-3 h-3 text-amber-600" />
-                    Camp Active
+                    {t('campActive', 'Camp Active')}
                   </span>
                 ) : (
-                  <span className="text-[11px] text-stone-400 font-normal">Permanent Clinic</span>
+                  <span className="text-[11px] text-stone-400 font-normal">{t('permanentClinic', 'Permanent Clinic')}</span>
                 )}
               </div>
 
@@ -212,7 +214,7 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
                 }}
                 className="flex-1 text-center py-2 px-3 rounded-xl text-xs font-semibold bg-[#EA580C] text-white hover:bg-[#C2410C] transition-colors shadow-2xs"
               >
-                Inquire / Book Slot
+                {t('inquireBookSlot', 'Inquire / Book Slot')}
               </button>
 
               <a
@@ -222,7 +224,7 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
                 target="_blank"
                 rel="noreferrer"
                 className="p-2 rounded-xl border border-stone-200 text-stone-500 hover:text-stone-900 hover:bg-stone-50 transition-colors"
-                title="Open Google Maps Directions"
+                title={t('openGoogleMapsDirections', 'Open Google Maps Directions')}
               >
                 <ExternalLink className="w-4 h-4" />
               </a>
@@ -234,9 +236,9 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
       {filteredCenters.length === 0 && (
         <div className="text-center py-12 bg-white rounded-2xl border border-stone-200/80 p-6">
           <MapPin className="w-8 h-8 text-stone-400 mx-auto mb-2" />
-          <h3 className="text-sm font-semibold text-stone-900">No screening centers found</h3>
+          <h3 className="text-sm font-semibold text-stone-900">{t('noCentersFound', 'No screening centers found')}</h3>
           <p className="text-xs text-stone-500 mt-1">
-            Try adjusting your search query or selecting "All" cities.
+            {t('noCentersSub', 'Try adjusting your search query or selecting "All" cities.')}
           </p>
         </div>
       )}
@@ -250,42 +252,42 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
                 <div className="flex items-center gap-2 text-[#EA580C] mb-2">
                   <Calendar className="w-4 h-4" />
                   <span className="text-xs font-semibold uppercase tracking-wider">
-                    Community Screening Inquiry
+                    {t('communityScreeningInquiry', 'Community Screening Inquiry')}
                   </span>
                 </div>
                 <h3 className="text-lg font-serif font-semibold text-stone-900">
                   {bookingCenter.name}
                 </h3>
                 <p className="text-xs text-stone-600 mt-1">
-                  Non-invasive retinal photograph takes less than 5 minutes. No eye drops required for non-mydriatic screening.
+                  {t('bookingModalSub', 'Non-invasive retinal photograph takes less than 5 minutes. No eye drops required for non-mydriatic screening.')}
                 </p>
 
                 <div className="my-4 p-3.5 rounded-xl bg-stone-50 border border-stone-200/80 text-xs space-y-1.5 text-stone-800">
                   <div>
-                    <span className="text-stone-500 font-medium">Operating hours:</span> {bookingCenter.hours}
+                    <span className="text-stone-500 font-medium">{t('operatingHoursLabel', 'Operating hours:')}</span> {bookingCenter.hours}
                   </div>
                   <div>
-                    <span className="text-stone-500 font-medium">Helpline:</span> {bookingCenter.phone}
+                    <span className="text-stone-500 font-medium">{t('helplineLabel', 'Helpline:')}</span> {bookingCenter.phone}
                   </div>
                   <div>
-                    <span className="text-stone-500 font-medium">Address:</span> {bookingCenter.address}
+                    <span className="text-stone-500 font-medium">{t('addressLabel', 'Address:')}</span> {bookingCenter.address}
                   </div>
                 </div>
 
                 <div className="space-y-3">
                   <div>
                     <label className="text-xs font-semibold text-stone-800 block mb-1">
-                      Patient Name / Initials
+                      {t('patientNameInitialsLabel', 'Patient Name / Initials')}
                     </label>
                     <input
                       type="text"
-                      defaultValue="Diabetic Screening Participant"
+                      defaultValue={t('diabeticScreeningParticipantDefault', 'Diabetic Screening Participant')}
                       className="w-full px-3 py-2 rounded-xl border border-stone-200 text-xs text-stone-900 focus:outline-none focus:border-stone-400 focus:bg-white bg-stone-50/50"
                     />
                   </div>
                   <div>
                     <label className="text-xs font-semibold text-stone-800 block mb-1">
-                      Contact Phone (for SMS confirmation)
+                      {t('contactPhoneLabel', 'Contact Phone (for SMS confirmation)')}
                     </label>
                     <input
                       type="tel"
@@ -300,13 +302,13 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
                     onClick={() => setBookingCenter(null)}
                     className="flex-1 py-2 px-3 rounded-xl text-xs font-semibold border border-stone-200 text-stone-600 hover:bg-stone-50 transition-colors"
                   >
-                    Cancel
+                    {t('cancelBtn', 'Cancel')}
                   </button>
                   <button
                     onClick={() => setBookingConfirmed(true)}
                     className="flex-1 py-2 px-3 rounded-xl text-xs font-semibold bg-[#EA580C] text-white hover:bg-[#C2410C] transition-colors shadow-2xs"
                   >
-                    Confirm Demo Booking
+                    {t('confirmDemoBooking', 'Confirm Demo Booking')}
                   </button>
                 </div>
               </div>
@@ -316,10 +318,10 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
                   <CheckCircle2 className="w-6 h-6" />
                 </div>
                 <h3 className="text-base font-serif font-semibold text-stone-900">
-                  Screening Slot Request Registered
+                  {t('slotRegisteredTitle', 'Screening Slot Request Registered')}
                 </h3>
                 <p className="text-xs text-stone-600 mt-2 leading-relaxed">
-                  Your appointment request for <strong>{bookingCenter.name}</strong> has been logged in simulated demonstration mode. In a production deployment, an SMS token with queue timing is dispatched to the participant.
+                  {t('slotRegisteredDesc', `Your appointment request for ${bookingCenter.name} has been logged in simulated demonstration mode. In a production deployment, an SMS token with queue timing is dispatched to the participant.`)}
                 </p>
 
                 <div className="mt-5 flex gap-2 justify-center">
@@ -327,7 +329,7 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
                     onClick={() => setBookingCenter(null)}
                     className="py-2 px-4 rounded-xl text-xs font-semibold bg-stone-100 border border-stone-200 text-stone-800 hover:bg-stone-200 transition-colors"
                   >
-                    Close
+                    {t('closeBtn', 'Close')}
                   </button>
                   {onStartDemoScreening && (
                     <button
@@ -338,7 +340,7 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
                       className="py-2 px-4 rounded-xl text-xs font-semibold bg-[#EA580C] hover:bg-[#C2410C] text-white flex items-center gap-1.5 transition-colors shadow-2xs"
                     >
                       <Sparkles className="w-3.5 h-3.5" />
-                      <span>Try Demo Screening Now →</span>
+                      <span>{t('tryDemoScreeningNow', 'Try Demo Screening Now →')}</span>
                     </button>
                   )}
                 </div>

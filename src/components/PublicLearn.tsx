@@ -13,6 +13,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import { DR_GRADES } from '../data/benchmarks';
+import { useTranslation } from '../i18n/I18nContext';
 
 interface PublicLearnProps {
   onGetScreened: () => void;
@@ -20,28 +21,29 @@ interface PublicLearnProps {
 }
 
 export const PublicLearn: React.FC<PublicLearnProps> = ({ onGetScreened, onOpenFaq }) => {
+  const { t } = useTranslation();
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
 
   const patientFaqs = [
     {
-      q: 'How often should a person with diabetes have their eyes checked?',
-      a: 'The American Diabetes Association (ADA) and International Council of Ophthalmology recommend: For Type 2 Diabetes, have a comprehensive screening at initial diagnosis and at least annually thereafter. For Type 1 Diabetes, screening should begin within 5 years of diagnosis and recur every 12 months.',
+      q: t('faq1Q', 'How often should a person with diabetes have their eyes checked?'),
+      a: t('faq1A', 'The American Diabetes Association (ADA) and International Council of Ophthalmology recommend: For Type 2 Diabetes, have a comprehensive screening at initial diagnosis and at least annually thereafter. For Type 1 Diabetes, screening should begin within 5 years of diagnosis and recur every 12 months.'),
     },
     {
-      q: 'Can I have Diabetic Retinopathy if my vision still feels completely normal?',
-      a: 'Yes, absolutely. This is why it is called a "silent condition". Early diabetic retinopathy causes tiny microaneurysms and subtle capillary leakage that do not yet obscure your central vision. Waiting until vision becomes blurry often means the disease has already progressed to advanced or proliferative stages.',
+      q: t('faq2Q', 'Can I have Diabetic Retinopathy if my vision still feels completely normal?'),
+      a: t('faq2A', 'Yes, absolutely. This is why it is called a "silent condition". Early diabetic retinopathy causes tiny microaneurysms and subtle capillary leakage that do not yet obscure your central vision. Waiting until vision becomes blurry often means the disease has already progressed to advanced or proliferative stages.'),
     },
     {
-      q: 'What is Diabetic Macular Edema (DME)?',
-      a: 'The macula is the central part of your retina responsible for sharp, detailed, color vision used for reading and recognizing faces. When damaged blood vessels leak fluid and proteins directly into the macula, it swells like a sponge. This swelling is called Macular Edema, and it can occur at any stage of Diabetic Retinopathy.',
+      q: t('faq3Q', 'What is Diabetic Macular Edema (DME)?'),
+      a: t('faq3A', 'The macula is the central part of your retina responsible for sharp, detailed, color vision used for reading and recognizing faces. When damaged blood vessels leak fluid and proteins directly into the macula, it swells like a sponge. This swelling is called Macular Edema, and it can occur at any stage of Diabetic Retinopathy.'),
     },
     {
-      q: 'How does artificial intelligence assist my eye doctor?',
-      a: 'RetinaGuard AI acts as an expert digital second opinion and rapid triage filter. It evaluates microscopic features across millions of pixels in less than a second, generates heatmaps showing exactly where potential damage is located, and ensures anyone needing urgent specialist attention is fast-tracked.',
+      q: t('faq4Q', 'How does artificial intelligence assist my eye doctor?'),
+      a: t('faq4A', 'RetinaGuard AI acts as an expert digital second opinion and rapid triage filter. It evaluates microscopic features across millions of pixels in less than a second, generates heatmaps showing exactly where potential damage is located, and ensures anyone needing urgent specialist attention is fast-tracked.'),
     },
     {
-      q: 'Can eye damage from diabetes be reversed or prevented?',
-      a: 'Tight control of blood sugar (HbA1c < 7.0%), blood pressure (< 130/80 mmHg), and serum cholesterol dramatically slows down or halts progression. If advanced disease is caught early, modern ophthalmology treatments such as anti-VEGF eye injections and focal laser photocoagulation can stabilize and even restore visual acuity.',
+      q: t('faq5Q', 'Can eye damage from diabetes be reversed or prevented?'),
+      a: t('faq5A', 'Tight control of blood sugar (HbA1c < 7.0%), blood pressure (< 130/80 mmHg), and serum cholesterol dramatically slows down or halts progression. If advanced disease is caught early, modern ophthalmology treatments such as anti-VEGF eye injections and focal laser photocoagulation can stabilize and even restore visual acuity.'),
     },
   ];
 
@@ -51,15 +53,15 @@ export const PublicLearn: React.FC<PublicLearnProps> = ({ onGetScreened, onOpenF
       <div className="bg-white rounded-3xl border border-stone-200/80 p-7 sm:p-10 shadow-xs space-y-3">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-semibold bg-stone-100 text-stone-700 border border-stone-200/80">
           <BookOpen className="w-3.5 h-3.5 text-stone-500" />
-          <span>Patient & Community Eye Health Guide</span>
+          <span>{t('patientGuideBadge', 'Patient & Community Eye Health Guide')}</span>
         </div>
 
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-semibold text-stone-900 tracking-tight">
-          Understanding Diabetic Retinopathy & Eye Health
+          {t('understandingDrTitle', 'Understanding Diabetic Retinopathy & Eye Health')}
         </h1>
 
         <p className="text-sm sm:text-base text-stone-600 max-w-3xl leading-relaxed">
-          Diabetic eye disease occurs when chronically elevated blood glucose weakens the microscopic blood vessels nourishing the retina. Learn how early detection, regular screening, and multimodal imaging safeguard your eyesight.
+          {t('understandingDrSubtitle', 'Diabetic eye disease occurs when chronically elevated blood glucose weakens the microscopic blood vessels nourishing the retina. Learn how early detection, regular screening, and multimodal imaging safeguard your eyesight.')}
         </p>
       </div>
 
@@ -67,10 +69,10 @@ export const PublicLearn: React.FC<PublicLearnProps> = ({ onGetScreened, onOpenF
       <div className="bg-white rounded-2xl border border-stone-200/80 p-6 sm:p-8 shadow-xs space-y-5">
         <div>
           <h2 className="text-xl sm:text-2xl font-serif font-semibold text-stone-900">
-            The 5 Stages of Diabetic Retinopathy (ICDR Scale)
+            {t('stagesTitle', 'The 5 Stages of Diabetic Retinopathy (ICDR Scale)')}
           </h2>
           <p className="text-xs sm:text-sm text-stone-500 mt-1">
-            Standard clinical stages defined by the International Council of Ophthalmology:
+            {t('stagesSubtitle', 'Standard clinical stages defined by the International Council of Ophthalmology:')}
           </p>
         </div>
 
@@ -86,7 +88,7 @@ export const PublicLearn: React.FC<PublicLearnProps> = ({ onGetScreened, onOpenF
                     className="text-[11px] font-semibold px-2 py-0.5 rounded text-white"
                     style={{ backgroundColor: grade.color }}
                   >
-                    Grade {grade.grade}
+                    {t('gradeLabel', 'Grade')} {grade.grade}
                   </span>
                   <span className="text-[10px] font-mono text-stone-500 font-medium">
                     {grade.shortName}
@@ -99,7 +101,7 @@ export const PublicLearn: React.FC<PublicLearnProps> = ({ onGetScreened, onOpenF
               </div>
 
               <div className="pt-2 border-t border-stone-200/80 text-[11px]">
-                <span className="text-stone-400 block text-[10px] uppercase font-medium tracking-wider">Action</span>
+                <span className="text-stone-400 block text-[10px] uppercase font-medium tracking-wider">{t('actionLabel', 'Action')}</span>
                 <span className="font-medium text-stone-800">{grade.action}</span>
               </div>
             </div>
@@ -113,26 +115,26 @@ export const PublicLearn: React.FC<PublicLearnProps> = ({ onGetScreened, onOpenF
           <div className="w-9 h-9 rounded-xl bg-stone-100 border border-stone-200 flex items-center justify-center text-stone-700">
             <AlertCircle className="w-4 h-4 text-[#EA580C]" />
           </div>
-          <h3 className="text-base sm:text-lg font-semibold text-stone-900">Warning Symptoms to Never Ignore</h3>
+          <h3 className="text-base sm:text-lg font-semibold text-stone-900">{t('warningSignsTitle', 'Warning Symptoms to Never Ignore')}</h3>
           <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
-            If you experience any of these vision changes, do not wait for an annual screening—contact an eye doctor or hospital right away:
+            {t('warningSignsSubtitle', 'If you experience any of these vision changes, do not wait for an annual screening—contact an eye doctor or hospital right away:')}
           </p>
           <ul className="space-y-2 text-xs text-stone-700 pt-1">
             <li className="flex items-start gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#EA580C] mt-1.5 shrink-0" />
-              <span>Sudden onset of dark spots or floating cobweb strings in your vision</span>
+              <span>{t('warnBullet1', 'Sudden onset of dark spots or floating cobweb strings in your vision')}</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#EA580C] mt-1.5 shrink-0" />
-              <span>Blurriness or distortion where straight lines appear wavy or bent</span>
+              <span>{t('warnBullet2', 'Blurriness or distortion where straight lines appear wavy or bent')}</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#EA580C] mt-1.5 shrink-0" />
-              <span>Fluctuating vision that changes dramatically between morning and evening</span>
+              <span>{t('warnBullet3', 'Fluctuating vision that changes dramatically between morning and evening')}</span>
             </li>
             <li className="flex items-start gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-[#EA580C] mt-1.5 shrink-0" />
-              <span>Dark or empty patches in the very center of your visual field</span>
+              <span>{t('warnBullet4', 'Dark or empty patches in the very center of your visual field')}</span>
             </li>
           </ul>
         </div>
@@ -141,24 +143,24 @@ export const PublicLearn: React.FC<PublicLearnProps> = ({ onGetScreened, onOpenF
           <div className="w-9 h-9 rounded-xl bg-stone-100 border border-stone-200 flex items-center justify-center text-stone-700">
             <Calendar className="w-4 h-4 text-stone-600" />
           </div>
-          <h3 className="text-base sm:text-lg font-semibold text-stone-900">Recommended Screening Schedule</h3>
+          <h3 className="text-base sm:text-lg font-semibold text-stone-900">{t('recommendedScheduleTitle', 'Recommended Screening Schedule')}</h3>
           <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
-            Clinical guidelines from the ADA, WHO, and AAO:
+            {t('scheduleSubtitle', 'Clinical guidelines from the ADA, WHO, and AAO:')}
           </p>
           <div className="space-y-2.5 pt-1 text-xs">
             <div className="p-3 rounded-xl bg-stone-50 border border-stone-200/70">
-              <div className="font-semibold text-stone-900">Type 2 Diabetes</div>
-              <div className="text-stone-600">First screening immediately at diagnosis; repeat annually thereafter.</div>
+              <div className="font-semibold text-stone-900">{t('type2Diabetes', 'Type 2 Diabetes')}</div>
+              <div className="text-stone-600">{t('type2Schedule', 'First screening immediately at diagnosis; repeat annually thereafter.')}</div>
             </div>
 
             <div className="p-3 rounded-xl bg-stone-50 border border-stone-200/70">
-              <div className="font-semibold text-stone-900">Type 1 Diabetes</div>
-              <div className="text-stone-600">Initial screening within 5 years of diagnosis; repeat every 12 months.</div>
+              <div className="font-semibold text-stone-900">{t('type1Diabetes', 'Type 1 Diabetes')}</div>
+              <div className="text-stone-600">{t('type1Schedule', 'Initial screening within 5 years of diagnosis; repeat every 12 months.')}</div>
             </div>
 
             <div className="p-3 rounded-xl bg-stone-50 border border-stone-200/70">
-              <div className="font-semibold text-stone-900">Pregnancy in Women with Pre-existing Diabetes</div>
-              <div className="text-stone-600">Screening prior to conception or in first trimester; repeat every trimester.</div>
+              <div className="font-semibold text-stone-900">{t('pregnancyDiabetes', 'Pregnancy in Women with Pre-existing Diabetes')}</div>
+              <div className="text-stone-600">{t('pregnancySchedule', 'Screening prior to conception or in first trimester; repeat every trimester.')}</div>
             </div>
           </div>
         </div>
@@ -168,10 +170,10 @@ export const PublicLearn: React.FC<PublicLearnProps> = ({ onGetScreened, onOpenF
       <div className="bg-white rounded-2xl border border-stone-200/80 p-6 sm:p-8 shadow-xs space-y-5">
         <div>
           <h2 className="text-xl sm:text-2xl font-serif font-semibold text-stone-900">
-            Frequently Asked Patient Questions
+            {t('frequentlyAskedQuestions', 'Frequently Asked Patient Questions')}
           </h2>
           <p className="text-xs sm:text-sm text-stone-500 mt-1">
-            Common questions about diabetes, diabetic retinopathy, and AI point-of-care screening:
+            {t('faqSectionSubtitle', 'Common questions about diabetes, diabetic retinopathy, and AI point-of-care screening:')}
           </p>
         </div>
 
@@ -211,10 +213,10 @@ export const PublicLearn: React.FC<PublicLearnProps> = ({ onGetScreened, onOpenF
       <div className="p-7 sm:p-8 rounded-2xl bg-stone-900 text-white flex flex-col sm:flex-row sm:items-center justify-between gap-5 shadow-sm border border-stone-800">
         <div className="space-y-1.5 max-w-xl">
           <h3 className="text-lg sm:text-xl font-serif font-semibold text-white">
-            Ready to perform a screening evaluation?
+            {t('ctaEvaluationTitle', 'Ready to perform a screening evaluation?')}
           </h3>
           <p className="text-xs sm:text-sm text-stone-300 leading-relaxed">
-            Evaluate retinal photos with explainable multimodal AI or explore pre-loaded clinical cases.
+            {t('ctaEvaluationSubtitle', 'Evaluate retinal photos with explainable multimodal AI or explore pre-loaded clinical cases.')}
           </p>
         </div>
         <button
@@ -222,7 +224,7 @@ export const PublicLearn: React.FC<PublicLearnProps> = ({ onGetScreened, onOpenF
           className="bg-[#EA580C] hover:bg-[#C2410C] text-white px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold shadow-2xs transition-all shrink-0 flex items-center justify-center gap-2"
         >
           <Sparkles className="w-4 h-4 text-white" />
-          <span>Get Screened Now</span>
+          <span>{t('getScreenedNowBtn', 'Get Screened Now')}</span>
         </button>
       </div>
     </div>

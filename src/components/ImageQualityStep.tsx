@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { ImageQualityAssessment, QualityStatus } from '../types';
 import { imageQualityService } from '../services/imageQualityService';
+import { useTranslation } from '../i18n/I18nContext';
 
 export interface ImageQualityStepProps {
   fundusImageName: string;
@@ -40,6 +41,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
   onRetake,
   onQualityAssessed,
 }) => {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [assessment, setAssessment] = useState<ImageQualityAssessment | null>(null);
   const [selectedPresetStatus, setSelectedPresetStatus] = useState<QualityStatus | null>(null);
@@ -90,20 +92,20 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#EFE4DC]">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="text-xl font-bold text-[#2E2628]">Step 03: Image Quality Assessment</h2>
+            <h2 className="text-xl font-bold text-[#2E2628]">{t('step03QualityAssessmentTitle', 'Step 03: Image Quality Assessment')}</h2>
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#FFEDD5] text-[#EA580C]">
-              Pre-Analysis QC Gate
+              {t('preAnalysisQcGateBadge', 'Pre-Analysis QC Gate')}
             </span>
           </div>
           <p className="text-xs text-[#6E5C5F] mt-1">
-            Automated pre-screening quality gate evaluating retinal illumination, motion blur, and foveal field coverage.
+            {t('imageQualityAssessmentSub', 'Automated pre-screening quality gate evaluating retinal illumination, motion blur, and foveal field coverage.')}
           </p>
         </div>
 
         {/* Status Simulator Pills (Demo & QA Testing) */}
         <div className="flex items-center gap-1.5 p-1 bg-[#FAF8F6] rounded-xl border border-[#EFE4DC]">
           <span className="text-[10px] font-bold text-[#6E5C5F] px-2 uppercase tracking-wider">
-            Test State:
+            {t('testStateLabel', 'Test State:')}
           </span>
           <button
             type="button"
@@ -115,7 +117,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                 : 'bg-white text-[#2E2628] hover:bg-[#DCFCE7] border border-[#EFE4DC]'
             }`}
           >
-            Good
+            {t('qualityGood', 'Good')}
           </button>
           <button
             type="button"
@@ -127,7 +129,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                 : 'bg-white text-[#2E2628] hover:bg-[#FEF3C7] border border-[#EFE4DC]'
             }`}
           >
-            Uncertain
+            {t('qualityUncertain', 'Uncertain')}
           </button>
           <button
             type="button"
@@ -139,7 +141,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                 : 'bg-white text-[#2E2628] hover:bg-[#FEE2E2] border border-[#EFE4DC]'
             }`}
           >
-            Ungradable
+            {t('qualityUngradable', 'Ungradable')}
           </button>
         </div>
       </div>
@@ -148,10 +150,9 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
       <div className="p-3.5 rounded-2xl bg-[#FFFDFB] border border-[#EFE4DC] flex items-start gap-3 text-xs text-[#6E5C5F]">
         <Info className="w-4 h-4 text-[#EA580C] shrink-0 mt-0.5" />
         <div className="space-y-0.5">
-          <span className="font-semibold text-[#2E2628]">Heuristic Quality Verification Notice:</span>
+          <span className="font-semibold text-[#2E2628]">{t('heuristicQualityNoticeTitle', 'Heuristic Quality Verification Notice:')}</span>
           <p className="leading-relaxed">
-            Evaluates image heuristics (contrast, Laplacian blur metric, corneal specular reflection) client-side.
-            Dedicated deep-learning quality CNN (e.g., MobileNetV3 QC) is configured in cloud microservices.
+            {t('heuristicQualityNoticeDesc', 'Evaluates image heuristics (contrast, Laplacian blur metric, corneal specular reflection) client-side. Dedicated deep-learning quality CNN (e.g., MobileNetV3 QC) is configured in cloud microservices.')}
           </p>
         </div>
       </div>
@@ -160,8 +161,8 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
       {loading ? (
         <div className="p-12 rounded-3xl bg-white border border-[#EFE4DC] flex flex-col items-center justify-center space-y-3">
           <Loader2 className="w-8 h-8 text-[#EA580C] animate-spin" />
-          <div className="text-sm font-semibold text-[#2E2628]">Analyzing Retinal Optical Quality...</div>
-          <p className="text-xs text-[#6E5C5F]">Scanning foveal field, pupillary illumination, and motion blur</p>
+          <div className="text-sm font-semibold text-[#2E2628]">{t('analyzingRetinalOpticalQuality', 'Analyzing Retinal Optical Quality...')}</div>
+          <p className="text-xs text-[#6E5C5F]">{t('scanningFovealFieldNotice', 'Scanning foveal field, pupillary illumination, and motion blur')}</p>
         </div>
       ) : assessment ? (
         <div className="space-y-6">
@@ -206,18 +207,18 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                           : 'bg-[#FEE2E2] text-[#B91C1C]'
                       }`}
                     >
-                      Quality Status: {status}
+                      {t('qualityStatusLabel', 'Quality Status')}: {status}
                     </span>
                     <span className="text-xs font-bold text-[#2E2628]">
-                      Score: {assessment.overallScore}/100
+                      {t('scoreLabel', 'Score')}: {assessment.overallScore}/100
                     </span>
                   </div>
                   <h3 className="text-base sm:text-lg font-bold text-[#2E2628] mt-1">
                     {isGood
-                      ? 'Scan Quality Meets Diagnostic Standards'
+                      ? t('scanMeetsStandards', 'Scan Quality Meets Diagnostic Standards')
                       : isUncertain
-                      ? 'Uncertain Diagnostic Quality (Motion Blur / Illumination Deficit)'
-                      : 'Ungradable Retinal Scan (Corneal Glare / Vignetting)'}
+                      ? t('uncertainDiagnosticQuality', 'Uncertain Diagnostic Quality (Motion Blur / Illumination Deficit)')
+                      : t('ungradableRetinalScan', 'Ungradable Retinal Scan (Corneal Glare / Vignetting)')}
                   </h3>
                 </div>
               </div>
@@ -227,12 +228,12 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                 {isGood ? (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white text-[#15803D] text-xs font-bold border border-[#86EFAC] shadow-2xs">
                     <CheckCircle2 className="w-4 h-4" />
-                    <span>Safe for AI Grading</span>
+                    <span>{t('safeForAiGradingChip', 'Safe for AI Grading')}</span>
                   </span>
                 ) : (
                   <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white text-[#DC2626] text-xs font-bold border border-[#FCA5A5] shadow-2xs">
                     <RotateCcw className="w-4 h-4" />
-                    <span>Retake Strongly Recommended</span>
+                    <span>{t('retakeStronglyRecommendedChip', 'Retake Strongly Recommended')}</span>
                   </span>
                 )}
               </div>
@@ -255,7 +256,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                     className="w-full h-full object-contain rounded-xl"
                   />
                 ) : (
-                  <div className="text-xs text-[#EFE4DC]">No Image Available</div>
+                  <div className="text-xs text-[#EFE4DC]">{t('noImageAvailable', 'No Image Available')}</div>
                 )}
                 <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-xs text-[10px] font-mono text-white px-2 py-0.5 rounded border border-white/10">
                   {fundusImageName || 'fundus_scan.png'}
@@ -263,7 +264,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
               </div>
 
               <div className="flex items-center justify-between text-xs text-[#6E5C5F]">
-                <span>Retinal Photo Quality Map</span>
+                <span>{t('retinalPhotoQualityMap', 'Retinal Photo Quality Map')}</span>
                 <button
                   type="button"
                   id="btn-trigger-retake-from-preview"
@@ -271,7 +272,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                   className="text-[#EA580C] font-semibold hover:underline flex items-center gap-1"
                 >
                   <RotateCcw className="w-3 h-3" />
-                  <span>Retake Scan</span>
+                  <span>{t('retakeScanBtn', 'Retake Scan')}</span>
                 </button>
               </div>
             </div>
@@ -282,15 +283,15 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                 <div className="flex items-center justify-between pb-2 border-b border-[#EFE4DC]">
                   <h4 className="text-xs font-bold text-[#2E2628] uppercase tracking-wider flex items-center gap-1.5">
                     <Sliders className="w-3.5 h-3.5 text-[#EA580C]" />
-                    <span>Optical Metric Breakdown</span>
+                    <span>{t('opticalMetricBreakdownTitle', 'Optical Metric Breakdown')}</span>
                   </h4>
-                  <span className="text-[11px] font-mono text-[#6E5C5F]">Threshold: ≥70%</span>
+                  <span className="text-[11px] font-mono text-[#6E5C5F]">{t('thresholdMin70', 'Threshold: ≥70%')}</span>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {/* Sharpness */}
                   <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] space-y-1">
-                    <div className="text-[10px] font-bold text-[#6E5C5F] uppercase">Sharpness</div>
+                    <div className="text-[10px] font-bold text-[#6E5C5F] uppercase">{t('sharpnessMetric', 'Sharpness')}</div>
                     <div className="flex items-baseline justify-between">
                       <span
                         className={`text-lg font-black font-mono ${
@@ -299,7 +300,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                       >
                         {assessment.metrics.sharpness}%
                       </span>
-                      <span className="text-[10px] text-[#6E5C5F]">Laplacian</span>
+                      <span className="text-[10px] text-[#6E5C5F]">{t('laplacianLabel', 'Laplacian')}</span>
                     </div>
                     <div className="w-full bg-[#E5D7CE] h-1.5 rounded-full overflow-hidden">
                       <div
@@ -313,7 +314,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
 
                   {/* Illumination */}
                   <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] space-y-1">
-                    <div className="text-[10px] font-bold text-[#6E5C5F] uppercase">Illumination</div>
+                    <div className="text-[10px] font-bold text-[#6E5C5F] uppercase">{t('illuminationMetric', 'Illumination')}</div>
                     <div className="flex items-baseline justify-between">
                       <span
                         className={`text-lg font-black font-mono ${
@@ -322,7 +323,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                       >
                         {assessment.metrics.illumination}%
                       </span>
-                      <span className="text-[10px] text-[#6E5C5F]">Uniformity</span>
+                      <span className="text-[10px] text-[#6E5C5F]">{t('uniformityLabel', 'Uniformity')}</span>
                     </div>
                     <div className="w-full bg-[#E5D7CE] h-1.5 rounded-full overflow-hidden">
                       <div
@@ -336,7 +337,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
 
                   {/* Field Coverage */}
                   <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] space-y-1">
-                    <div className="text-[10px] font-bold text-[#6E5C5F] uppercase">Field View</div>
+                    <div className="text-[10px] font-bold text-[#6E5C5F] uppercase">{t('fieldViewMetric', 'Field View')}</div>
                     <div className="flex items-baseline justify-between">
                       <span
                         className={`text-lg font-black font-mono ${
@@ -359,7 +360,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
 
                   {/* Glare Index */}
                   <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] space-y-1">
-                    <div className="text-[10px] font-bold text-[#6E5C5F] uppercase">Corneal Glare</div>
+                    <div className="text-[10px] font-bold text-[#6E5C5F] uppercase">{t('cornealGlareMetric', 'Corneal Glare')}</div>
                     <div className="flex items-baseline justify-between">
                       <span
                         className={`text-lg font-black font-mono ${
@@ -368,7 +369,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                       >
                         {assessment.metrics.glareIndex}%
                       </span>
-                      <span className="text-[10px] text-[#6E5C5F]">Target &lt;20%</span>
+                      <span className="text-[10px] text-[#6E5C5F]">{t('targetUnder20', 'Target <20%')}</span>
                     </div>
                     <div className="w-full bg-[#E5D7CE] h-1.5 rounded-full overflow-hidden">
                       <div
@@ -382,7 +383,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
 
                   {/* Contrast */}
                   <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] space-y-1">
-                    <div className="text-[10px] font-bold text-[#6E5C5F] uppercase">Contrast</div>
+                    <div className="text-[10px] font-bold text-[#6E5C5F] uppercase">{t('contrastMetric', 'Contrast')}</div>
                     <div className="flex items-baseline justify-between">
                       <span
                         className={`text-lg font-black font-mono ${
@@ -391,7 +392,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                       >
                         {assessment.metrics.contrast}%
                       </span>
-                      <span className="text-[10px] text-[#6E5C5F]">Arcade Diff</span>
+                      <span className="text-[10px] text-[#6E5C5F]">{t('arcadeDiffLabel', 'Arcade Diff')}</span>
                     </div>
                     <div className="w-full bg-[#E5D7CE] h-1.5 rounded-full overflow-hidden">
                       <div
@@ -413,7 +414,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                       className="w-full flex items-center justify-between text-xs font-bold text-[#2E2628]"
                     >
                       <span className="text-[#DC2626]">
-                        {assessment.issues.length} Optical Defects Flagged
+                        {assessment.issues.length} {t('opticalDefectsFlagged', 'Optical Defects Flagged')}
                       </span>
                       {showIssuesExpanded ? (
                         <ChevronUp className="w-4 h-4 text-[#6E5C5F]" />
@@ -439,7 +440,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                               {issue.description}
                             </p>
                             <div className="text-[11px] text-[#2E2628] font-medium pt-0.5 flex items-start gap-1">
-                              <span className="text-[#EA580C]">↳ Fix:</span>
+                              <span className="text-[#EA580C]">{t('fixLabelPrefix', '↳ Fix:')}</span>
                               <span>{issue.guidance}</span>
                             </div>
                           </div>
@@ -458,7 +459,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 text-sm font-bold text-[#EA580C] uppercase tracking-wider">
                   <Camera className="w-4 h-4" />
-                  <span>Screener Retake Protocol &amp; Optical Guidance</span>
+                  <span>{t('screenerRetakeProtocolTitle', 'Screener Retake Protocol & Optical Guidance')}</span>
                 </div>
                 <button
                   type="button"
@@ -467,12 +468,12 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                   className="px-3.5 py-1.5 rounded-xl bg-[#EA580C] text-white text-xs font-bold hover:bg-[#C2410C] transition-colors shadow-2xs flex items-center gap-1.5"
                 >
                   <RotateCcw className="w-3.5 h-3.5" />
-                  <span>Retake Fundus Scan Now</span>
+                  <span>{t('retakeFundusScanNowBtn', 'Retake Fundus Scan Now')}</span>
                 </button>
               </div>
 
               <p className="text-xs text-[#2E2628] leading-relaxed">
-                To ensure microaneurysms and faint exudates are accurately graded by the deep learning pipeline, follow this 4-point realignment protocol before proceeding:
+                {t('retakeProtocolIntro', 'To ensure microaneurysms and faint exudates are accurately graded by the deep learning pipeline, follow this 4-point realignment protocol before proceeding:')}
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -500,7 +501,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
               className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-white border border-[#EFE4DC] text-[#2E2628] text-xs font-bold hover:bg-[#FAF8F6] transition-colors flex items-center justify-center gap-2"
             >
               <ArrowLeft className="w-4 h-4" />
-              <span>Back to Step 02 (Fundus)</span>
+              <span>{t('backToStep02Fundus', 'Back to Step 02 (Fundus)')}</span>
             </button>
 
             <div className="w-full sm:w-auto flex flex-col sm:flex-row items-center gap-3">
@@ -512,7 +513,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                   className="w-full sm:w-auto px-5 py-2.5 rounded-2xl bg-white border border-[#EA580C] text-[#EA580C] text-xs font-bold hover:bg-[#FFF7ED] transition-colors flex items-center justify-center gap-2"
                 >
                   <RotateCcw className="w-4 h-4" />
-                  <span>Retake Retinal Photo</span>
+                  <span>{t('retakeRetinalPhotoBtn', 'Retake Retinal Photo')}</span>
                 </button>
               )}
 
@@ -523,7 +524,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                   onClick={onProceed}
                   className="w-full sm:w-auto px-7 py-2.5 rounded-2xl bg-[#EA580C] text-white text-xs font-bold hover:bg-[#C2410C] transition-colors shadow-xs flex items-center justify-center gap-2"
                 >
-                  <span>Quality Approved · Proceed to Step 04 (Optional OCT)</span>
+                  <span>{t('qualityApprovedProceedBtn', 'Quality Approved · Proceed to Step 04 (Optional OCT)')}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               ) : isUncertain ? (
@@ -541,13 +542,13 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                 >
                   <AlertTriangle className="w-4 h-4" />
                   <span>
-                    {showOverrideWarning ? 'Confirm Override & Proceed' : 'Proceed with Caution (Override)'}
+                    {showOverrideWarning ? t('confirmOverrideAndProceed', 'Confirm Override & Proceed') : t('proceedWithCautionOverride', 'Proceed with Caution (Override)')}
                   </span>
                 </button>
               ) : (
                 <div className="w-full sm:w-auto flex items-center gap-2">
                   <span className="text-[11px] text-[#DC2626] font-medium hidden sm:inline">
-                    Ungradable scans must be retaken.
+                    {t('ungradableMustBeRetaken', 'Ungradable scans must be retaken.')}
                   </span>
                   <button
                     type="button"
@@ -556,7 +557,7 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
                     className="w-full sm:w-auto px-6 py-2.5 rounded-2xl bg-[#DC2626] text-white text-xs font-bold hover:bg-[#B91C1C] transition-colors shadow-xs flex items-center justify-center gap-2"
                   >
                     <RotateCcw className="w-4 h-4" />
-                    <span>Retake Required</span>
+                    <span>{t('retakeRequiredBtn', 'Retake Required')}</span>
                   </button>
                 </div>
               )}
@@ -568,10 +569,10 @@ export const ImageQualityStep: React.FC<ImageQualityStepProps> = ({
             <div className="p-4 rounded-2xl bg-[#FFFBEB] border border-[#FCD34D] text-xs text-[#92400E] space-y-2">
               <div className="flex items-center gap-2 font-bold">
                 <AlertTriangle className="w-4 h-4 text-[#D97706]" />
-                <span>Clinical Override Acknowledgment</span>
+                <span>{t('clinicalOverrideAcknowledgmentTitle', 'Clinical Override Acknowledgment')}</span>
               </div>
               <p className="leading-relaxed">
-                You are proceeding with an UNCERTAIN quality image. The deep learning model will note this optical uncertainty in the final audit trail. If you are in a field camp and cannot retake, click <strong>"Confirm Override &amp; Proceed"</strong> above to continue.
+                {t('clinicalOverrideAcknowledgmentDesc', 'You are proceeding with an UNCERTAIN quality image. The deep learning model will note this optical uncertainty in the final audit trail. If you are in a field camp and cannot retake, click "Confirm Override & Proceed" above to continue.')}
               </p>
             </div>
           )}

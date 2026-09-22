@@ -18,6 +18,7 @@ import { MOCK_REFERRAL_QUEUE } from '../mock/mockData';
 import { MultimodalTriageResult, ReferralRecord, ReferralStatus } from '../types';
 import { generateClinicalPdfReport } from '../utils/pdfGenerator';
 import { RiskChip } from './RiskChip';
+import { useTranslation } from '../i18n/I18nContext';
 
 interface HistoryViewProps {
   history: MultimodalTriageResult[];
@@ -32,6 +33,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
   onNewScreening,
   defaultSubTab = 'screenings',
 }) => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'screenings' | 'referrals'>(defaultSubTab);
 
   React.useEffect(() => {
@@ -67,13 +69,13 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] mb-2">
             <Clock className="w-3.5 h-3.5 text-[#EA580C]" />
-            <span>Audit Trail & Care Coordination</span>
+            <span>{t("auditTrailTag", "Audit Trail & Care Coordination")}</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#2E2628] tracking-tight">
-            Screening & Referral Audit Registry
+            {t("historyRegistryTitle", "Screening & Referral Audit Registry")}
           </h1>
           <p className="text-xs sm:text-sm text-[#6E5C5F] mt-1">
-            Track completed evaluations, closed-loop specialist referrals, and follow-up adherence:
+            {t("historyRegistryDesc", "Track completed evaluations, closed-loop specialist referrals, and follow-up adherence:")}
           </p>
         </div>
 
@@ -83,7 +85,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
             className="bg-gradient-to-r from-[#EA580C] to-[#DB2777] hover:from-[#C2410C] hover:to-[#BE185D] text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors flex items-center gap-2 shadow-xs"
           >
             <RefreshCw className="w-3.5 h-3.5" />
-            <span>New Screening</span>
+            <span>{t("newScreeningBtn", "New Screening")}</span>
           </button>
         </div>
       </div>
@@ -99,7 +101,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           }`}
         >
           <FileText className="w-4 h-4 text-[#EA580C]" />
-          <span>Completed Screenings ({history.length})</span>
+          <span>{t("completedScreeningsTab", "Completed Screenings")} ({history.length})</span>
         </button>
 
         <button
@@ -111,7 +113,7 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           }`}
         >
           <Stethoscope className="w-4 h-4 text-[#DB2777]" />
-          <span>Closed-Loop Referral Queue ({referrals.length})</span>
+          <span>{t("closedLoopQueueTab", "Closed-Loop Referral Queue")} ({referrals.length})</span>
         </button>
       </div>
 
@@ -122,13 +124,13 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="border-b border-[#EFE4DC] bg-[#FFFDFB] text-[#6E5C5F] font-semibold">
-                  <th className="py-3 px-4">Session & Date</th>
-                  <th className="py-3 px-4">Patient ID</th>
-                  <th className="py-3 px-4">Final DR Grade</th>
-                  <th className="py-3 px-3 text-center">OCT DME</th>
-                  <th className="py-3 px-4">HbA1c</th>
-                  <th className="py-3 px-4">Action Recommendation</th>
-                  <th className="py-3 px-4 text-right">Actions</th>
+                  <th className="py-3 px-4">{t("thSessionDate", "Session & Date")}</th>
+                  <th className="py-3 px-4">{t("thPatientId", "Patient ID")}</th>
+                  <th className="py-3 px-4">{t("thFinalGrade", "Final DR Grade")}</th>
+                  <th className="py-3 px-3 text-center">{t("thOctDme", "OCT DME")}</th>
+                  <th className="py-3 px-4">{t("thHba1c", "HbA1c")}</th>
+                  <th className="py-3 px-4">{t("thRecommendation", "Action Recommendation")}</th>
+                  <th className="py-3 px-4 text-right">{t("thActions", "Actions")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#EFE4DC]">
@@ -155,10 +157,10 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                               : 'bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0]'
                           }`}
                         >
-                          {item.oct.dmeDetected ? 'DME Fluid' : 'No DME'}
+                          {item.oct.dmeDetected ? t("dmeFluid", "DME Fluid") : t("noDme", "No DME")}
                         </span>
                       ) : (
-                        <span className="text-[10px] text-[#9E8D91]">Omitted</span>
+                        <span className="text-[10px] text-[#9E8D91]">{t("omittedStatus", "Omitted")}</span>
                       )}
                     </td>
                     <td className="py-3.5 px-4 font-mono font-semibold text-[#2E2628]">
@@ -171,15 +173,15 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                       <button
                         onClick={() => onSelectResult(item)}
                         className="inline-flex items-center gap-1 text-xs font-semibold text-[#EA580C] hover:text-[#C2410C] p-1.5 rounded-lg hover:bg-[#FFF7ED]"
-                        title="Inspect Triage Results & Heatmap"
+                        title={t("inspectTriageTooltip", "Inspect Triage Results & Heatmap")}
                       >
                         <Eye className="w-3.5 h-3.5" />
-                        <span>Inspect</span>
+                        <span>{t("inspectBtn", "Inspect")}</span>
                       </button>
                       <button
                         onClick={() => generateClinicalPdfReport(item)}
                         className="inline-flex items-center gap-1 text-xs font-semibold text-[#DB2777] hover:text-[#BE185D] p-1.5 rounded-lg hover:bg-[#FDF2F8]"
-                        title="Download PDF"
+                        title={t("downloadPdfTooltip", "Download PDF")}
                       >
                         <Download className="w-3.5 h-3.5" />
                         <span>PDF</span>
@@ -199,10 +201,10 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <h2 className="font-serif font-bold text-lg text-[#2E2628]">
-                Active Tertiary Clinic Referrals
+                {t("activeTertiaryReferralsTitle", "Active Tertiary Clinic Referrals")}
               </h2>
               <p className="text-xs text-[#6E5C5F]">
-                Closing the loop: Tracking patients from screening identification to confirmed ophthalmology visit
+                {t("activeTertiaryReferralsDesc", "Closing the loop: Tracking patients from screening identification to confirmed ophthalmology visit")}
               </p>
             </div>
 
@@ -228,13 +230,13 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
             <table className="w-full text-left text-xs border-collapse">
               <thead>
                 <tr className="border-b border-[#EFE4DC] bg-[#FAF8F6] text-[#6E5C5F] font-semibold">
-                  <th className="p-3">Referral ID</th>
-                  <th className="p-3">Patient Code</th>
-                  <th className="p-3">Initial Grade</th>
-                  <th className="p-3">Assigned Eye Center</th>
-                  <th className="p-3">Timeline Target</th>
-                  <th className="p-3">Current Status</th>
-                  <th className="p-3 text-right">Update Progression</th>
+                  <th className="p-3">{t("thReferralId", "Referral ID")}</th>
+                  <th className="p-3">{t("thPatientCode", "Patient Code")}</th>
+                  <th className="p-3">{t("thInitialGrade", "Initial Grade")}</th>
+                  <th className="p-3">{t("thAssignedCenter", "Assigned Eye Center")}</th>
+                  <th className="p-3">{t("thTimelineTarget", "Timeline Target")}</th>
+                  <th className="p-3">{t("thCurrentStatus", "Current Status")}</th>
+                  <th className="p-3 text-right">{t("thUpdateProgression", "Update Progression")}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#EFE4DC]">
@@ -243,13 +245,13 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
                     <td className="p-3 font-mono font-bold text-[#EA580C]">{ref.id}</td>
                     <td className="p-3">
                       <div className="font-semibold text-[#2E2628]">{ref.patientCode}</div>
-                      <div className="text-[10px] text-[#9E8D91]">Age: {ref.patientAge}</div>
+                      <div className="text-[10px] text-[#9E8D91]">{t("ageLabel", "Age")}: {ref.patientAge}</div>
                     </td>
                     <td className="p-3">
                       <RiskChip grade={ref.initialGrade} size="sm" />
                       {ref.dmePresent && (
                         <span className="block text-[10px] font-bold text-[#BE185D] mt-0.5">
-                          + DME Detected
+                          {t("dmeDetectedLabel", "+ DME Detected")}
                         </span>
                       )}
                     </td>
@@ -309,9 +311,9 @@ export const HistoryView: React.FC<HistoryViewProps> = ({
           <div className="p-4 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] flex items-center justify-between text-xs text-[#6E5C5F]">
             <span className="flex items-center gap-1.5">
               <UserCheck className="w-4 h-4 text-[#EA580C]" />
-              Status updates synchronize directly with community health worker (ASHA) task lists
+              <span>{t("ashaSyncNotice", "Status updates synchronize directly with community health worker (ASHA) task lists")}</span>
             </span>
-            <span className="text-[11px] font-mono">Simulated API: Active</span>
+            <span className="text-[11px] font-mono">{t("simulatedApiActive", "Simulated API: Active")}</span>
           </div>
         </section>
       )}

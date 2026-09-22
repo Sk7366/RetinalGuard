@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowUpRight, ExternalLink, Eye, Github, Shield } from 'lucide-react';
 import { ProviderRoute, PublicRoute, UserExperience } from '../types';
+import { useTranslation } from '../i18n/I18nContext';
 
 interface FooterProps {
   experience?: UserExperience;
@@ -9,6 +10,7 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ experience = 'patient', onNavigatePublic, onNavigateProvider }) => {
+  const { t } = useTranslation();
   const isStaffOrResearcher = experience === 'helper' || experience === 'researcher';
 
   return (
@@ -27,10 +29,10 @@ export const Footer: React.FC<FooterProps> = ({ experience = 'patient', onNaviga
             </div>
 
             <p className="text-sm text-stone-300 max-w-sm leading-relaxed font-serif italic">
-              "Multimodal AI. Explainable by design."
+              {t('footerMissionQuote', '"Multimodal AI. Explainable by design."')}
             </p>
             <p className="text-xs text-stone-400 max-w-sm leading-relaxed">
-              A research-grade clinical decision support architecture fusing color fundus photography, cross-sectional OCT depth imaging, and structured clinical metadata for explainable diabetic retinopathy triage.
+              {t('footerDescription', 'A research-grade clinical decision support architecture fusing color fundus photography, cross-sectional OCT depth imaging, and structured clinical metadata for explainable diabetic retinopathy triage.')}
             </p>
 
             <div className="flex items-center gap-2.5 pt-1 text-xs">
@@ -46,7 +48,7 @@ export const Footer: React.FC<FooterProps> = ({ experience = 'patient', onNaviga
           {/* Col 2: Public Portal */}
           <div className="space-y-3 text-xs">
             <p className="font-semibold uppercase tracking-wider text-white text-[11px]">
-              Public Portal
+              {t('footerPublicPortal', 'Public Portal')}
             </p>
             <ul className="space-y-2 text-stone-400">
               <li>
@@ -54,7 +56,7 @@ export const Footer: React.FC<FooterProps> = ({ experience = 'patient', onNaviga
                   onClick={() => onNavigatePublic('get-screened')}
                   className="hover:text-white transition-colors text-left"
                 >
-                  Get your retina screened
+                  {t('ctaGetScreened', 'Get your retina screened')}
                 </button>
               </li>
               <li>
@@ -62,7 +64,7 @@ export const Footer: React.FC<FooterProps> = ({ experience = 'patient', onNaviga
                   onClick={() => onNavigatePublic('find-screening')}
                   className="hover:text-white transition-colors text-left"
                 >
-                  Find Screening Near Me
+                  {t('ctaFindScreeningNearMe', 'Find Screening Near Me')}
                 </button>
               </li>
               <li>
@@ -70,7 +72,7 @@ export const Footer: React.FC<FooterProps> = ({ experience = 'patient', onNaviga
                   onClick={() => onNavigatePublic('learn')}
                   className="hover:text-white transition-colors text-left"
                 >
-                  Learn About Screening
+                  {t('ctaLearnAboutScreening', 'Learn About Screening')}
                 </button>
               </li>
               <li>
@@ -78,7 +80,7 @@ export const Footer: React.FC<FooterProps> = ({ experience = 'patient', onNaviga
                   onClick={() => onNavigatePublic('explore-demo')}
                   className="hover:text-white transition-colors text-left"
                 >
-                  Explore Demo
+                  {t('footerExploreDemo', 'Explore Demo')}
                 </button>
               </li>
             </ul>
@@ -88,7 +90,7 @@ export const Footer: React.FC<FooterProps> = ({ experience = 'patient', onNaviga
           {isStaffOrResearcher && (
             <div className="space-y-3 text-xs">
               <p className="font-semibold uppercase tracking-wider text-white text-[11px]">
-                Provider Workspace
+                {t('footerProviderWorkspace', 'Provider Workspace')}
               </p>
               <ul className="space-y-2 text-stone-400">
                 <li>
@@ -96,7 +98,7 @@ export const Footer: React.FC<FooterProps> = ({ experience = 'patient', onNaviga
                     onClick={() => onNavigateProvider('dashboard')}
                     className="hover:text-white transition-colors text-left"
                   >
-                    Provider Dashboard
+                    {t('navDashboard', 'Provider Dashboard')}
                   </button>
                 </li>
                 <li>
@@ -104,7 +106,7 @@ export const Footer: React.FC<FooterProps> = ({ experience = 'patient', onNaviga
                     onClick={() => onNavigateProvider('camp-mode')}
                     className="hover:text-white transition-colors text-left"
                   >
-                    Screening Camp Mode
+                    {t('navCampOfflineMode', 'Screening Camp Mode')}
                   </button>
                 </li>
                 <li>
@@ -112,7 +114,7 @@ export const Footer: React.FC<FooterProps> = ({ experience = 'patient', onNaviga
                     onClick={() => onNavigateProvider('start-screening')}
                     className="hover:text-white transition-colors text-left"
                   >
-                    Start Screening
+                    {t('navStartScreening', 'Start Screening')}
                   </button>
                 </li>
                 <li>
@@ -120,7 +122,7 @@ export const Footer: React.FC<FooterProps> = ({ experience = 'patient', onNaviga
                     onClick={() => onNavigateProvider('review-queue')}
                     className="hover:text-white transition-colors text-left"
                   >
-                    Review Queue
+                    {t('navReviewQueue', 'Review Queue')}
                   </button>
                 </li>
                 <li>
@@ -128,7 +130,7 @@ export const Footer: React.FC<FooterProps> = ({ experience = 'patient', onNaviga
                     onClick={() => onNavigateProvider('referrals')}
                     className="hover:text-white transition-colors text-left"
                   >
-                    Referrals
+                    {t('navReferrals', 'Referrals')}
                   </button>
                 </li>
                 <li>
@@ -136,7 +138,7 @@ export const Footer: React.FC<FooterProps> = ({ experience = 'patient', onNaviga
                     onClick={() => onNavigateProvider('analytics')}
                     className="hover:text-white transition-colors text-left"
                   >
-                    Analytics
+                    {t('navAnalytics', 'Analytics')}
                   </button>
                 </li>
               </ul>
@@ -146,7 +148,7 @@ export const Footer: React.FC<FooterProps> = ({ experience = 'patient', onNaviga
           {/* Col 4: Standards & Compliance */}
           <div className="space-y-3 text-xs">
             <p className="font-semibold uppercase tracking-wider text-white text-[11px]">
-              Compliance & Safety
+              {t('footerComplianceSafety', 'Compliance & Safety')}
             </p>
             <ul className="space-y-2 text-stone-400">
               <li className="flex items-center gap-1.5 text-stone-300">
@@ -163,9 +165,9 @@ export const Footer: React.FC<FooterProps> = ({ experience = 'patient', onNaviga
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-stone-800 flex flex-col sm:flex-row items-center justify-between text-xs text-stone-400 gap-4">
-          <p>© 2026 RetinaGuard Multimodal Consortium. All rights reserved.</p>
+          <p>© 2026 RetinaGuard Multimodal Consortium. {t('footerAllRightsReserved', 'All rights reserved.')}</p>
           <div className="flex items-center gap-6">
-            <span className="text-white font-medium">Research-Grade Demonstrator</span>
+            <span className="text-white font-medium">{t('footerResearchDemonstrator', 'Research-Grade Demonstrator')}</span>
             <span>Version 2.4.0-prod</span>
           </div>
         </div>

@@ -95,8 +95,8 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
   const samplePresets = [
     {
       id: 0,
-      title: 'Sample A: Healthy Baseline',
-      desc: 'Clear retinal vessels, no microaneurysms. Normal regular screening.',
+      title: t('sampleATitle', 'Sample A: Healthy Baseline'),
+      desc: t('sampleADesc', 'Clear retinal vessels, no microaneurysms. Normal regular screening.'),
       grade: 0 as DRGrade,
       hasDme: false,
       years: 3,
@@ -105,8 +105,8 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
     },
     {
       id: 1,
-      title: 'Sample B: Early Capillary Changes',
-      desc: 'Scattered microaneurysms detected in peripheral retina. Annual monitor advised.',
+      title: t('sampleBTitle', 'Sample B: Early Capillary Changes'),
+      desc: t('sampleBDesc', 'Scattered microaneurysms detected in peripheral retina. Annual monitor advised.'),
       grade: 1 as DRGrade,
       hasDme: false,
       years: 7,
@@ -115,8 +115,8 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
     },
     {
       id: 2,
-      title: 'Sample C: Moderate Changes with Fluid',
-      desc: 'Noticeable exudates and macular thickening on OCT. Evaluation recommended.',
+      title: t('sampleCTitle', 'Sample C: Moderate Changes with Fluid'),
+      desc: t('sampleCDesc', 'Noticeable exudates and macular thickening on OCT. Evaluation recommended.'),
       grade: 2 as DRGrade,
       hasDme: true,
       years: 12,
@@ -143,8 +143,8 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
     } else {
       setVoiceGuidanceEnabled(true);
       speakSection(
-        'Voice guidance enabled. This tool helps you check an existing retinal image. Upload your photo or choose a sample, then select Check Retinal Health.',
-        'Screening Voice Guidance'
+        t('voiceEnabledNarration', 'Voice guidance enabled. This tool helps you check an existing retinal image. Upload your photo or choose a sample, then select Check Retinal Health.'),
+        t('screeningVoiceGuidanceTitle', 'Screening Voice Guidance')
       );
     }
   };
@@ -161,8 +161,8 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
       setUseCustomUpload(true);
       setFundusQualityStatus('adequate');
       speakSection(
-        'Retinal image uploaded successfully. Quality is verified as adequate for AI evaluation.',
-        'Image Uploaded'
+        t('retinalUploadedVoice', 'Retinal image uploaded successfully. Quality is verified as adequate for AI evaluation.'),
+        t('imageUploadedTitle', 'Image Uploaded')
       );
     };
     reader.readAsDataURL(file);
@@ -178,7 +178,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
     reader.onload = () => {
       setCustomOctFile(reader.result as string);
       setIncludeOct(true);
-      speakSection('Optical Coherence Tomography scan attached.', 'OCT Attached');
+      speakSection(t('octAttachedVoice', 'Optical Coherence Tomography scan attached.'), t('octAttachedTitle', 'OCT Attached'));
     };
     reader.readAsDataURL(file);
   };
@@ -216,8 +216,8 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
     setResult(null);
 
     speakSection(
-      'Evaluating retinal image and health history. Please wait a moment.',
-      'Analyzing'
+      t('evaluatingVoice', 'Evaluating retinal image and health history. Please wait a moment.'),
+      t('analyzingTitle', 'Analyzing')
     );
 
     setTimeout(() => {
@@ -258,11 +258,11 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
       // Spoken result
       const spokenSummary =
         triage.finalGrade === 0
-          ? 'Screening complete. Retinal appearance is clear. Routine follow-up is recommended in 12 months.'
+          ? t('spokenGrade0', 'Screening complete. Retinal appearance is clear. Routine follow-up is recommended in 12 months.')
           : triage.finalGrade === 1
-          ? 'Screening complete. Screening information suggests that further professional evaluation with an eye doctor may be appropriate.'
-          : 'Screening complete. Notable retinal changes observed. Comprehensive examination with an eye specialist is advised.';
-      speakSection(spokenSummary, 'Screening Outcome');
+          ? t('spokenGrade1', 'Screening complete. Screening information suggests that further professional evaluation with an eye doctor may be appropriate.')
+          : t('spokenGrade2Plus', 'Screening complete. Notable retinal changes observed. Comprehensive examination with an eye specialist is advised.');
+      speakSection(spokenSummary, t('screeningOutcomeTitle', 'Screening Outcome'));
     }, 850);
   };
 
@@ -273,7 +273,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFF7ED] text-[#F05A28] border border-[#FED7AA]">
             <Eye className="w-3.5 h-3.5 text-[#F05A28]" />
-            <span>COMMUNITY SELF-CHECK</span>
+            <span>{t('communitySelfCheckBadge', 'COMMUNITY SELF-CHECK')}</span>
           </div>
 
           {/* VOICE GUIDANCE TOGGLE & CONTROLS */}
@@ -289,7 +289,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
               title="Toggle Voice Guidance narration"
             >
               {voiceGuidanceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
-              <span>Voice Guidance: {voiceGuidanceEnabled ? 'ON' : 'OFF'}</span>
+              <span>{t('voiceGuidanceLabel', 'Voice Guidance')}: {voiceGuidanceEnabled ? t('voiceOn', 'ON') : t('voiceOff', 'OFF')}</span>
             </button>
 
             {voiceGuidanceEnabled && (
@@ -340,10 +340,10 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
 
         <div>
           <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#2B2024] tracking-tight">
-            Check an Existing Screening Image
+            {t('checkExistingImageTitle', 'Check an Existing Screening Image')}
           </h1>
           <p className="text-xs sm:text-sm text-[#6E5C5F] mt-1.5 leading-relaxed">
-            If you already have a retinal image or report from a screening visit, you can upload it here for AI-assisted informational assessment.
+            {t('checkExistingImageDesc', 'If you already have a retinal image or report from a screening visit, you can upload it here for AI-assisted informational assessment.')}
           </p>
         </div>
 
@@ -351,9 +351,9 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
         <div className="p-4 rounded-2xl bg-[#FFFDF9] border border-[#FED7AA] flex items-start gap-3 text-xs leading-relaxed">
           <ShieldAlert className="w-5 h-5 text-[#F05A28] shrink-0 mt-0.5" />
           <div className="space-y-1">
-            <span className="font-bold text-[#2B2024] block">Important Medical Notice:</span>
+            <span className="font-bold text-[#2B2024] block">{t('importantMedicalNoticeLabel', 'Important Medical Notice:')}</span>
             <p className="text-[#6E5C5F]">
-              This result does not confirm or rule out a diagnosis. Please consult a qualified eye-care professional for clinical evaluation. Screening algorithms are designed to support early detection and care coordination, not replace comprehensive ophthalmologic examination.
+              {t('publicScreeningNoticeText', 'This result does not confirm or rule out a diagnosis. Please consult a qualified eye-care professional for clinical evaluation. Screening algorithms are designed to support early detection and care coordination, not replace comprehensive ophthalmologic examination.')}
             </p>
           </div>
         </div>
@@ -371,16 +371,16 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
                 1
               </span>
               <h2 className="text-sm font-bold text-[#2B2024] uppercase tracking-wider">
-                Step 1 · Retinal Fundus Photograph (Primary)
+                {t('step1FundusTitle', 'Step 1 · Retinal Fundus Photograph (Primary)')}
               </h2>
             </div>
             <span className="text-[11px] font-semibold text-[#15803D] bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-              Required
+              {t('requiredBadge', 'Required')}
             </span>
           </div>
 
           <p className="text-xs text-[#6E5C5F]">
-            Upload a color fundus photograph from your past screening or select one of the verified sample photos below to explore the AI evaluation.
+            {t('step1FundusDesc', 'Upload a color fundus photograph from your past screening or select one of the verified sample photos below to explore the AI evaluation.')}
           </p>
 
           {/* Upload or Choose Presets Tabs */}
@@ -401,7 +401,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
               </div>
               <div className="space-y-0.5 overflow-hidden">
                 <span className="text-xs font-bold text-[#2B2024] block">
-                  {customFundusFileName ? 'Replace Uploaded Image' : 'Upload Your Fundus Image'}
+                  {customFundusFileName ? t('replaceUploadedImage', 'Replace Uploaded Image') : t('uploadYourFundusImage', 'Upload Your Fundus Image')}
                 </span>
                 <span className="text-[11px] text-[#6E5C5F] truncate block">
                   {customFundusFileName || 'JPEG, PNG, DICOM or TIFF'}
@@ -419,7 +419,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
 
             <div className="p-2 rounded-2xl bg-[#FAF8F6] border border-[#EFE4DC] flex items-center justify-around gap-2 text-xs">
               <span className="text-[11px] font-semibold text-[#6E5C5F] px-1">
-                Or Test Samples:
+                {t('orTestSamplesLabel', 'Or Test Samples:')}
               </span>
               {samplePresets.map((p, idx) => (
                 <button
@@ -432,7 +432,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
                       : 'bg-white text-[#6E5C5F] hover:text-[#2B2024] border border-[#EFE4DC]'
                   }`}
                 >
-                  Sample {String.fromCharCode(65 + idx)}
+                  {t('sampleWord', 'Sample')} {String.fromCharCode(65 + idx)}
                 </button>
               ))}
             </div>
@@ -467,12 +467,12 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
                   {useCustomUpload ? customFundusFileName : samplePresets[selectedPresetIdx].title}
                 </span>
                 <span className="text-[10px] font-mono text-[#6E5C5F]">
-                  {useCustomUpload ? 'Patient File' : 'Verified Standard'}
+                  {useCustomUpload ? t('patientFileBadge', 'Patient File') : t('verifiedStandardBadge', 'Verified Standard')}
                 </span>
               </div>
               <p className="text-[11px] text-[#6E5C5F] leading-relaxed">
                 {useCustomUpload
-                  ? 'Color retinal surface image submitted for non-mydriatic screening review.'
+                  ? t('customUploadDesc', 'Color retinal surface image submitted for non-mydriatic screening review.')
                   : samplePresets[selectedPresetIdx].desc}
               </p>
 
@@ -480,7 +480,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
               <div className="flex items-center justify-center sm:justify-start gap-2 pt-1">
                 <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
                   <CheckCircle2 className="w-3 h-3" />
-                  Image Quality: Adequate (Clear macula & optic disc)
+                  {t('imageQualityAdequateMsg', 'Image Quality: Adequate (Clear macula & optic disc)')}
                 </span>
               </div>
             </div>
@@ -497,16 +497,16 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
                 2
               </span>
               <h2 className="text-sm font-bold text-[#2B2024] uppercase tracking-wider">
-                Step 2 · OCT Macular Scan (Optional)
+                {t('step2OctTitle', 'Step 2 · OCT Macular Scan (Optional)')}
               </h2>
             </div>
             <span className="text-[11px] font-semibold text-[#6E5C5F] bg-gray-100 px-2 py-0.5 rounded-full border border-gray-200">
-              Optional / Cross-Section
+              {t('optionalCrossSectionBadge', 'Optional / Cross-Section')}
             </span>
           </div>
 
           <p className="text-xs text-[#6E5C5F]">
-            Add an Optical Coherence Tomography (OCT) scan if you received one from your eye doctor. OCT captures cross-sectional layers of the macula to detect deep fluid swelling.
+            {t('step2OctDesc', 'Add an Optical Coherence Tomography (OCT) scan if you received one from your eye doctor. OCT captures cross-sectional layers of the macula to detect deep fluid swelling.')}
           </p>
 
           <div className="flex flex-col sm:flex-row items-center gap-3">
@@ -516,7 +516,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
               className="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-[#EFE4DC] bg-[#FFFDF9] hover:bg-white text-xs font-semibold text-[#2B2024] flex items-center justify-center gap-2 transition-colors"
             >
               <Upload className="w-3.5 h-3.5 text-[#F05A28]" />
-              <span>{customOctFileName ? 'Replace OCT Scan' : 'Attach OCT Scan File'}</span>
+              <span>{customOctFileName ? t('replaceOctScanBtn', 'Replace OCT Scan') : t('attachOctScanBtn', 'Attach OCT Scan File')}</span>
             </button>
 
             <input
@@ -536,7 +536,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
                   : 'border-[#EFE4DC] bg-[#FAF8F6] text-[#6E5C5F]'
               }`}
             >
-              {includeOct ? '✓ OCT Included in Triage' : '+ Include Sample OCT Macula Slice'}
+              {includeOct ? t('octIncludedInTriageBtn', '✓ OCT Included in Triage') : t('includeSampleOctSliceBtn', '+ Include Sample OCT Macula Slice')}
             </button>
 
             {includeOct && (
@@ -545,7 +545,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
                 onClick={handleRemoveOct}
                 className="text-xs text-[#6E5C5F] hover:text-rose-600 underline"
               >
-                Skip / Remove OCT
+                {t('skipRemoveOctBtn', 'Skip / Remove OCT')}
               </button>
             )}
           </div>
@@ -564,10 +564,10 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
               </div>
               <div className="text-xs space-y-0.5">
                 <span className="font-bold text-[#2B2024] block">
-                  {customOctFileName || 'Macular B-Scan Slice'}
+                  {customOctFileName || t('macularBScanSlice', 'Macular B-Scan Slice')}
                 </span>
                 <span className="text-[11px] text-[#6E5C5F] block">
-                  Automated retinal layer boundary segmentation enabled.
+                  {t('automatedRetinalBoundarySegmentation', 'Automated retinal layer boundary segmentation enabled.')}
                 </span>
               </div>
             </div>
@@ -584,18 +584,18 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
                 3
               </span>
               <h2 className="text-sm font-bold text-[#2B2024] uppercase tracking-wider">
-                Step 3 · Clinical Information / Report (Optional)
+                {t('step3ClinicalInfoTitle', 'Step 3 · Clinical Information / Report (Optional)')}
               </h2>
             </div>
             <span className="text-[11px] font-semibold text-[#6E5C5F] bg-gray-100 px-2 py-0.5 rounded-full border border-gray-200">
-              Optional Health Context
+              {t('optionalHealthContextBadge', 'Optional Health Context')}
             </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="p-3.5 rounded-2xl bg-[#FFFDF9] border border-[#EFE4DC]">
               <label className="text-xs font-semibold text-[#6E5C5F] block mb-1">
-                Diabetes Duration
+                {t('diabetesDurationLabel', 'Diabetes Duration')}
               </label>
               <div className="flex items-center gap-2">
                 <input
@@ -606,13 +606,13 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
                   onChange={(e) => setDiabetesYears(Number(e.target.value))}
                   className="w-full bg-[#FAF8F6] border border-[#EFE4DC] rounded-xl px-2.5 py-1.5 text-xs font-bold text-[#2B2024]"
                 />
-                <span className="text-xs text-[#6E5C5F]">years</span>
+                <span className="text-xs text-[#6E5C5F]">{t('yearsUnit', 'years')}</span>
               </div>
             </div>
 
             <div className="p-3.5 rounded-2xl bg-[#FFFDF9] border border-[#EFE4DC]">
               <label className="text-xs font-semibold text-[#6E5C5F] block mb-1">
-                Most Recent HbA1c
+                {t('mostRecentHba1cLabel', 'Most Recent HbA1c')}
               </label>
               <div className="flex items-center gap-2">
                 <input
@@ -630,7 +630,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
 
             <div className="p-3.5 rounded-2xl bg-[#FFFDF9] border border-[#EFE4DC]">
               <label className="text-xs font-semibold text-[#6E5C5F] block mb-1">
-                Blood Pressure (Systolic)
+                {t('bloodPressureSystolicLabel', 'Blood Pressure (Systolic)')}
               </label>
               <div className="flex items-center gap-2">
                 <input
@@ -649,7 +649,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
           {/* Reported Symptoms */}
           <div className="p-3.5 rounded-2xl bg-[#FAF8F6] border border-[#EFE4DC] space-y-2">
             <span className="text-xs font-semibold text-[#2B2024] block">
-              Are you currently experiencing any vision symptoms?
+              {t('symptomsQuestionLabel', 'Are you currently experiencing any vision symptoms?')}
             </span>
             <div className="flex flex-wrap gap-4 text-xs">
               <label className="flex items-center gap-2 cursor-pointer">
@@ -661,7 +661,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
                   }
                   className="rounded text-[#F05A28] focus:ring-[#F05A28]"
                 />
-                <span>No symptoms (Vision feels normal)</span>
+                <span>{t('noSymptomsOption', 'No symptoms (Vision feels normal)')}</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -672,7 +672,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
                   }
                   className="rounded text-[#F05A28] focus:ring-[#F05A28]"
                 />
-                <span>Blurry or fluctuating vision</span>
+                <span>{t('blurryVisionOption', 'Blurry or fluctuating vision')}</span>
               </label>
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
@@ -683,7 +683,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
                   }
                   className="rounded text-[#F05A28] focus:ring-[#F05A28]"
                 />
-                <span>Dark spots or floaters</span>
+                <span>{t('darkSpotsOption', 'Dark spots or floaters')}</span>
               </label>
             </div>
           </div>
@@ -694,7 +694,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
             ========================================================================= */}
         <div className="pt-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-[#EFE4DC]">
           <div className="text-xs text-[#6E5C5F]">
-            Assessment combines primary fundus evaluation + optional OCT & risk metadata.
+            {t('assessmentCombinesSummary', 'Assessment combines primary fundus evaluation + optional OCT & risk metadata.')}
           </div>
 
           <button
@@ -706,12 +706,12 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
             {isProcessing ? (
               <>
                 <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                <span>Evaluating Retinal Health...</span>
+                <span>{t('evaluatingRetinalHealth', 'Evaluating Retinal Health...')}</span>
               </>
             ) : (
               <>
                 <Sparkles className="w-4 h-4" />
-                <span>Check Retinal Health Now →</span>
+                <span>{t('checkRetinalHealthNowBtn', 'Check Retinal Health Now →')}</span>
               </>
             )}
           </button>
@@ -728,11 +728,11 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
               <h3 className="text-xs font-bold text-[#2B2024] uppercase tracking-wider">
-                Screening Assessment Report
+                {t('screeningAssessmentReportHeading', 'Screening Assessment Report')}
               </h3>
             </div>
             <span className="text-[11px] text-[#6E5C5F]">
-              Assessment based on available information · {new Date().toLocaleDateString()}
+              {t('assessmentBasedOnInfo', 'Assessment based on available information')} · {new Date().toLocaleDateString()}
             </span>
           </div>
 
@@ -774,16 +774,16 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
                   }`}
                 >
                   {result.finalGrade === 0
-                    ? 'Routine Follow-up (Clear Retinal View)'
+                    ? t('outcomeGrade0Title', 'Routine Follow-up (Clear Retinal View)')
                     : result.finalGrade === 1
-                    ? 'Screening Information Suggests Professional Evaluation May Be Appropriate'
-                    : 'Notable Retinal Changes Observed — Professional Evaluation Recommended'}
+                    ? t('outcomeGrade1Title', 'Screening Information Suggests Professional Evaluation May Be Appropriate')
+                    : t('outcomeGrade2Title', 'Notable Retinal Changes Observed — Professional Evaluation Recommended')}
                 </h4>
 
                 <p className="text-xs sm:text-sm text-[#2B2024] leading-relaxed pt-1">
                   {result.finalGrade === 0
-                    ? 'The uploaded fundus photograph shows a healthy retinal surface with clear blood vessels and optic nerve. No signs of diabetic microvascular leakage were detected.'
-                    : 'RetinaGuard identified features in the retinal photograph that warrant clinical review. Remember that screening algorithms assist early detection and do not provide a final medical diagnosis.'}
+                    ? t('outcomeGrade0Desc', 'The uploaded fundus photograph shows a healthy retinal surface with clear blood vessels and optic nerve. No signs of diabetic microvascular leakage were detected.')
+                    : t('outcomeGrade1Desc', 'RetinaGuard identified features in the retinal photograph that warrant clinical review. Remember that screening algorithms assist early detection and do not provide a final medical diagnosis.')}
                 </p>
               </div>
             </div>
@@ -793,27 +793,27 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-5 rounded-2xl bg-[#FFFDF9] border border-[#EFE4DC] space-y-2">
               <span className="text-xs font-bold text-[#2B2024] uppercase tracking-wider block">
-                Next Step Recommended
+                {t('nextStepRecommendedTitle', 'Next Step Recommended')}
               </span>
               <p className="text-xs font-semibold text-[#2B2024]">
                 {result.finalGrade === 0
-                  ? 'Continue routine annual eye examinations.'
+                  ? t('nextStepGrade0', 'Continue routine annual eye examinations.')
                   : result.finalGrade === 1
-                  ? 'Schedule a comprehensive dilated eye exam with an eye-care professional within 30 to 60 days.'
-                  : 'Visit an ophthalmologist or retinal specialist for a complete dilated examination within 2 to 4 weeks.'}
+                  ? t('nextStepGrade1', 'Schedule a comprehensive dilated eye exam with an eye-care professional within 30 to 60 days.')
+                  : t('nextStepGrade2', 'Visit an ophthalmologist or retinal specialist for a complete dilated examination within 2 to 4 weeks.')}
               </p>
               <p className="text-[11px] text-[#6E5C5F] leading-relaxed">
-                Regular blood sugar, cholesterol, and blood pressure monitoring significantly protect your eye capillaries.
+                {t('nextStepHealthTip', 'Regular blood sugar, cholesterol, and blood pressure monitoring significantly protect your eye capillaries.')}
               </p>
             </div>
 
             <div className="p-5 rounded-2xl bg-[#FFFDF9] border border-[#EFE4DC] space-y-2 flex flex-col justify-between">
               <div>
                 <span className="text-xs font-bold text-[#2B2024] uppercase tracking-wider block">
-                  Find an In-Person Clinic
+                  {t('findInPersonClinicTitle', 'Find an In-Person Clinic')}
                 </span>
                 <p className="text-xs text-[#6E5C5F] leading-relaxed">
-                  Connect with a verified community screening camp, hospital eye department, or optometrist near your location.
+                  {t('findInPersonClinicDesc', 'Connect with a verified community screening camp, hospital eye department, or optometrist near your location.')}
                 </p>
               </div>
 
@@ -823,7 +823,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
                   onClick={onFindClinic}
                   className="inline-flex items-center gap-1.5 text-xs font-bold text-[#F05A28] hover:text-[#D94A78] pt-2 self-start"
                 >
-                  <span>Find a Screening Center Near You</span>
+                  <span>{t('findCenterNearYouBtn', 'Find a Screening Center Near You')}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               )}
@@ -839,7 +839,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
             >
               <span className="flex items-center gap-2">
                 <Cpu className="w-3.5 h-3.5 text-[#F05A28]" />
-                <span>Technical & AI Model Details (For Clinicians & Researchers)</span>
+                <span>{t('technicalAiModelDetailsTitle', 'Technical & AI Model Details (For Clinicians & Researchers)')}</span>
               </span>
               <ChevronDown
                 className={`w-4 h-4 text-[#6E5C5F] transition-transform ${
@@ -852,25 +852,25 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
               <div className="mt-3 p-4 rounded-2xl bg-[#FFFDF9] border border-[#EFE4DC] text-xs space-y-3">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                   <div>
-                    <span className="text-[#6E5C5F] block text-[10px]">ICDR Grade</span>
+                    <span className="text-[#6E5C5F] block text-[10px]">{t('icdrGradeLabel', 'ICDR Grade')}</span>
                     <span className="font-bold text-[#2B2024] text-sm">
-                      Grade {result.finalGrade}
+                      {t('gradeLabel', 'Grade')} {result.finalGrade}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[#6E5C5F] block text-[10px]">OCT DME Status</span>
+                    <span className="text-[#6E5C5F] block text-[10px]">{t('octDmeStatusLabel', 'OCT DME Status')}</span>
                     <span className="font-bold text-[#F05A28] text-sm">
-                      {result.oct.dmeDetected ? 'Positive (Detected)' : 'Negative (Clear)'}
+                      {result.oct.dmeDetected ? t('positiveDetected', 'Positive (Detected)') : t('negativeClear', 'Negative (Clear)')}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[#6E5C5F] block text-[10px]">Central Thickness</span>
+                    <span className="text-[#6E5C5F] block text-[10px]">{t('centralThicknessLabel', 'Central Thickness')}</span>
                     <span className="font-bold text-[#2B2024] text-sm font-mono">
                       {result.oct.centralSubfieldThicknessMicrons} µm
                     </span>
                   </div>
                   <div>
-                    <span className="text-[#6E5C5F] block text-[10px]">Confidence Level</span>
+                    <span className="text-[#6E5C5F] block text-[10px]">{t('confidenceLevelLabel', 'Confidence Level')}</span>
                     <span className="font-bold text-emerald-700 text-sm">
                       {result.confidence}
                     </span>
@@ -878,7 +878,7 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
                 </div>
 
                 <div className="pt-2 border-t border-[#EFE4DC] text-[11px] text-[#6E5C5F]">
-                  <strong>Fusion Architecture:</strong> EfficientNet-B4 (Fundus Color) + ResNet-50 (Macular OCT) + XGBoost (Clinical Risk Factors) with attention-gated feature fusion.
+                  <strong>{t('fusionArchitectureLabel', 'Fusion Architecture:')}</strong> {t('fusionArchitectureDesc', 'EfficientNet-B4 (Fundus Color) + ResNet-50 (Macular OCT) + XGBoost (Clinical Risk Factors) with attention-gated feature fusion.')}
                 </div>
               </div>
             )}

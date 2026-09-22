@@ -1,3 +1,10 @@
+import enJson from './locales/en.json';
+import hiJson from './locales/hi.json';
+import knJson from './locales/kn.json';
+import taJson from './locales/ta.json';
+import teJson from './locales/te.json';
+import mlJson from './locales/ml.json';
+
 export type LanguageCode = "en" | "hi" | "kn" | "ta" | "te" | "ml";
 
 export interface LanguageOption {
@@ -18,6 +25,7 @@ export const SUPPORTED_LANGUAGES: LanguageOption[] = [
 
 export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
   en: {
+    ...enJson,
     appTitle: "RetinaGuard",
     appSubtitle: "Community Retinal Health & Early Screening",
     tagline: "Simple, painless eye screening to protect your sight from diabetes.",
@@ -182,6 +190,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
   },
 
   hi: {
+    ...hiJson,
     appTitle: "रेटिनागार्ड (RetinaGuard)",
     appSubtitle: "सामुदायिक नेत्र स्वास्थ्य एवं प्रारंभिक जांच",
     tagline: "मधुमेह में आपकी आंखों की रोशनी सुरक्षित रखने के लिए आसान और दर्दरहित जांच।",
@@ -346,6 +355,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
   },
 
   kn: {
+    ...knJson,
     appTitle: "ರೆಟಿನಾಗಾರ್ಡ್ (RetinaGuard)",
     appSubtitle: "ಸಮುದಾಯ ಕಣ್ಣಿನ ಆರೋಗ್ಯ ಮತ್ತು ಪ್ರಾಥಮಿಕ ತಪಾಸಣೆ",
     tagline: "ಮಧುಮೇಹದಿಂದ ನಿಮ್ಮ ಕಣ್ಣಿನ ದೃಷ್ಟಿ ರಕ್ಷಿಸಲು ಸರಳ ಮತ್ತು ನೋವಿಲ್ಲದ ತಪಾಸಣೆ.",
@@ -510,6 +520,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
   },
 
   ta: {
+    ...taJson,
     appTitle: "ரெட்டினாகார்ட் (RetinaGuard)",
     appSubtitle: "சமூக கண் நலன் மற்றும் ஆரம்ப விழித்திரை பரிசோதனை",
     tagline: "சர்க்கரை நோயால் கண்பார்வை பாதிக்கப்படாமல் பாதுகாக்க எளிய, வலியற்ற பரிசோதனை.",
@@ -674,6 +685,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
   },
 
   te: {
+    ...teJson,
     appTitle: "రెటీనాగార్డ్ (RetinaGuard)",
     appSubtitle: "కమ్యూనిటీ కంటి ఆరోగ్యం & ప్రాథమిక స్క్రీనింగ్",
     tagline: "మధుమేహం వల్ల కంటి చూపు కోల్పోకుండా కాపాడే సులువైన, నొప్పిలేని స్క్రీనింగ్.",
@@ -838,6 +850,7 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
   },
 
   ml: {
+    ...mlJson,
     appTitle: "റെറ്റിനാഗാർഡ് (RetinaGuard)",
     appSubtitle: "കമ്മ്യൂണിറ്റി നേത്ര സംരക്ഷണവും ആദ്യഘട്ട പരിശോധനയും",
     tagline: "പ്രമേഹത്തിൽ നിന്ന് കാഴ്ച നഷ്ടപ്പെടാതെ സംരക്ഷിക്കാൻ ലളിതവും വേദനാജനകമല്ലാത്തതുമായ പരിശോധന.",

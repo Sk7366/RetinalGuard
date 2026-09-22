@@ -12,6 +12,7 @@ import {
   X,
 } from 'lucide-react';
 import { MultimodalTriageResult } from '../types';
+import { useTranslation } from '../i18n/I18nContext';
 
 interface ClinicalAssistantModalProps {
   isOpen: boolean;
@@ -31,25 +32,30 @@ export const ClinicalAssistantModal: React.FC<ClinicalAssistantModalProps> = ({
   onClose,
   result,
 }) => {
-  if (!isOpen) return null;
+  const { t } = useTranslation();
 
   const [inputQuery, setInputQuery] = useState('');
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
       id: 'welcome',
       sender: 'assistant',
-      text: `Hello. I am the RetinaGuard Clinical Decision Support Assistant. I can explain the AI model attributions, explain Grad-CAM heatmap regions, or clarify why Case ${result.patientId} was flagged as Grade ${result.finalGrade} (${result.gradeLabel}). How can I assist your review?`,
-      timestamp: 'Just now',
+      text: t(
+        'clinicalAssistantInitialMsg',
+        `Hello. I am the RetinaGuard Clinical Decision Support Assistant. I can explain the AI model attributions, explain Grad-CAM heatmap regions, or clarify why Case ${result.patientId} was flagged as Grade ${result.finalGrade} (${result.gradeLabel}). How can I assist your review?`
+      ),
+      timestamp: t('justNowWord', 'Just now'),
     },
   ]);
   const [isThinking, setIsThinking] = useState(false);
 
+  if (!isOpen) return null;
+
   const suggestedQueries = [
-    'What does this screening result mean?',
-    'Why was this case flagged by the models?',
-    'What is Grad-CAM showing here?',
-    'What does DME mean in this scan?',
-    'What are the recommended next steps?',
+    t('suggestedPromptMean', 'What does this screening result mean?'),
+    t('suggestedPromptFlagged', 'Why was this case flagged by the models?'),
+    t('suggestedPromptGradCam', 'What is Grad-CAM showing here?'),
+    t('suggestedPromptDme', 'What does DME mean in this scan?'),
+    t('suggestedPromptNextSteps', 'What are the recommended next steps?'),
   ];
 
   const handleSend = (queryText?: string) => {
@@ -80,28 +86,37 @@ export const ClinicalAssistantModal: React.FC<ClinicalAssistantModalProps> = ({
         lower.includes('diagnose me') ||
         lower.includes('cure')
       ) {
-        reply =
-          'RetinaGuard is a decision-support and screening platform, not a diagnostic or prescriptive medical device. It cannot provide clinical diagnoses, recommend medications, or alter medical treatment plans. Please consult a qualified ophthalmologist or physician for individualized clinical care.';
+        reply = t(
+          'assistantGuardrailPrescription',
+          'RetinaGuard is a decision-support and screening platform, not a diagnostic or prescriptive medical device. It cannot provide clinical diagnoses, recommend medications, or alter medical treatment plans. Please consult a qualified ophthalmologist or physician for individualized clinical care.'
+        );
       } else if (lower.includes('mean') || lower.includes('result')) {
-        reply = `The preliminary assessment for Case ${result.patientId} is Grade ${result.finalGrade} (${result.gradeLabel}). The fundus model estimated a probability of ${(result.fundus.probabilities[result.finalGrade] * 100).toFixed(0)}% for this category based on detected lesions (${result.fundus.featuresDetected.join(', ')}). This indicates that the case warrants ${result.recommendation.toLowerCase()}.`;
+        reply = t(
+          'assistantMeanReply',
+          `The preliminary assessment for Case ${result.patientId} is Grade ${result.finalGrade} (${result.gradeLabel}). The fundus model estimated a probability of ${(result.fundus.probabilities[result.finalGrade] * 100).toFixed(0)}% for this category based on detected lesions (${result.fundus.featuresDetected.join(', ')}). This indicates that the case warrants ${result.recommendation.toLowerCase()}.`
+        );
       } else if (lower.includes('why') || lower.includes('flagged') || lower.includes('contribute')) {
         const dmePart = result.oct.dmeDetected
-          ? 'OCT analysis detected intraretinal fluid / macular edema, triggering the clinical escalation rule.'
-          : 'OCT showed no evident diabetic macular edema.';
+          ? t('dmeDetectedAssistantPart', 'OCT analysis detected intraretinal fluid / macular edema, triggering the clinical escalation rule.')
+          : t('dmeNotDetectedAssistantPart', 'OCT showed no evident diabetic macular edema.');
         const shapPart = result.metadata.provided
-          ? `Clinical risk factors (HbA1c ${result.clinicalInput.hba1c}%, duration ${result.clinicalInput.diabetesDurationYears} years) contributed an additional risk weight of ${result.metadata.riskScore.toFixed(2)}.`
-          : 'Clinical metadata was omitted; screening relied on optical modalities.';
-        reply = `This screening was prioritized due to the following multimodal factors:\n1. Fundus findings: ${result.fundus.gradeLabel} with detected vascular changes.\n2. OCT findings: ${dmePart}\n3. Clinical Context: ${shapPart}\nModel agreement is rated as ${result.confidence}.`;
+          ? `${t('clinicalRiskFactorsWord', 'Clinical risk factors')} (HbA1c ${result.clinicalInput.hba1c}%, ${t('durationWord', 'duration')} ${result.clinicalInput.diabetesDurationYears} ${t('yearsWord', 'years')}) ${t('contributedWeightWord', 'contributed an additional risk weight of')} ${result.metadata.riskScore.toFixed(2)}.`
+          : t('clinicalMetadataOmittedAssistantPart', 'Clinical metadata was omitted; screening relied on optical modalities.');
+        reply = `${t('screeningPrioritizedPrefix', 'This screening was prioritized due to the following multimodal factors:')}\n1. ${t('fundusStreamLabelShort', 'Fundus')}: ${result.fundus.gradeLabel}.\n2. OCT: ${dmePart}\n3. ${t('clinicalContextLabel', 'Clinical Context:')} ${shapPart}\n${t('modelAgreementLabel', 'Model agreement is rated as')} ${result.confidence}.`;
       } else if (lower.includes('grad-cam') || lower.includes('cam') || lower.includes('heatmap') || lower.includes('look')) {
-        reply =
-          'Grad-CAM (Gradient-weighted Class Activation Mapping) visualizes the spatial gradients in the final convolutional layer of EfficientNet-B4. Warmer colors (red/orange) highlight areas where model neurons fired most strongly—in this image, focused around the temporal vascular arcade and macular exudate boundaries. Remember: model attention indicates mathematical saliency, not definitive clinical proof.';
+        reply = t(
+          'gradCamAssistantReply',
+          'Grad-CAM (Gradient-weighted Class Activation Mapping) visualizes the spatial gradients in the final convolutional layer of EfficientNet-B4. Warmer colors (red/orange) highlight areas where model neurons fired most strongly—in this image, focused around the temporal vascular arcade and macular exudate boundaries. Remember: model attention indicates mathematical saliency, not definitive clinical proof.'
+        );
       } else if (lower.includes('dme') || lower.includes('edema')) {
-        reply =
-          'DME stands for Diabetic Macular Edema, an accumulation of fluid within the central retina (macula). Because the macula is responsible for sharp central vision, DME is a major cause of vision loss and requires ophthalmology evaluation regardless of baseline non-proliferative grade.';
+        reply = t(
+          'dmeExplanationAssistantReply',
+          'DME stands for Diabetic Macular Edema, an accumulation of fluid within the central retina (macula). Because the macula is responsible for sharp central vision, DME is a major cause of vision loss and requires ophthalmology evaluation regardless of baseline non-proliferative grade.'
+        );
       } else if (lower.includes('next') || lower.includes('step') || lower.includes('recommend')) {
-        reply = `Recommended pathway for ${result.gradeLabel}:\n- Urgency: ${result.urgencyLevel.toUpperCase()}\n- Pathway: ${result.recommendation}\n- Clinical Action: Complete standard dilated slit-lamp examination by an ophthalmologist. ${result.oct.dmeDetected ? 'Consider optical coherence tomography angiography (OCTA) or anti-VEGF consultation.' : ''}`;
+        reply = `${t('recommendedPathwayPrefix', 'Recommended pathway for')} ${result.gradeLabel}:\n- ${t('urgencyLabel', 'Urgency')}: ${result.urgencyLevel.toUpperCase()}\n- ${t('pathwayLabel', 'Pathway')}: ${result.recommendation}\n- ${t('clinicalActionLabel', 'Clinical Action')}: ${t('completeStandardDilatedExam', 'Complete standard dilated slit-lamp examination by an ophthalmologist.')} ${result.oct.dmeDetected ? t('considerOctaOrAntiVegf', 'Consider optical coherence tomography angiography (OCTA) or anti-VEGF consultation.') : ''}`;
       } else {
-        reply = `Regarding "${q}": RetinaGuard combines fundus photography, cross-sectional OCT, and clinical metadata through late rule-based fusion. The final grade (${result.gradeLabel}) is intended to help screening workers prioritize specialist review. All AI outputs must be validated by a clinician before patient management decisions are made.`;
+        reply = `${t('regardingPrefix', 'Regarding')} "${q}": ${t('generalAssistantExplanation', 'RetinaGuard combines fundus photography, cross-sectional OCT, and clinical metadata through late rule-based fusion.')} ${t('theFinalGradeIs', 'The final grade')} (${result.gradeLabel}) ${t('intendedToHelpScreeningWorkers', 'is intended to help screening workers prioritize specialist review. All AI outputs must be validated by a clinician before patient management decisions are made.')}`;
       }
 
       const assistantMsg: ChatMessage = {
@@ -127,14 +142,14 @@ export const ClinicalAssistantModal: React.FC<ClinicalAssistantModalProps> = ({
             <div>
               <div className="flex items-center gap-1.5">
                 <h3 className="font-serif font-bold text-sm text-[#2E2628]">
-                  Clinical Decision Support Assistant
+                  {t('clinicalAssistantTitle', 'Clinical Decision Support Assistant')}
                 </h3>
                 <span className="text-[10px] px-2 py-0.2 rounded-full bg-white border border-[#EFE4DC] text-[#6E5C5F] font-semibold">
-                  Controlled Model Explainer
+                  {t('controlledModelExplainerBadge', 'Controlled Model Explainer')}
                 </span>
               </div>
               <p className="text-[11px] text-[#6E5C5F]">
-                Grounded in structured model outputs for Case {result.patientId}
+                {t('groundedInOutputsForCase', `Grounded in structured model outputs for Case ${result.patientId}`)}
               </p>
             </div>
           </div>
@@ -150,7 +165,7 @@ export const ClinicalAssistantModal: React.FC<ClinicalAssistantModalProps> = ({
         <div className="bg-[#FFF7ED] px-4 py-2 border-b border-[#FED7AA] flex items-center gap-2 text-[11px] text-[#C2410C] shrink-0">
           <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
           <span>
-            Decision support only. Assistant cannot prescribe or establish a clinical diagnosis.
+            {t('clinicalAssistantSafetyWarning', 'Decision support only. Assistant cannot prescribe or establish a clinical diagnosis.')}
           </span>
         </div>
 
@@ -189,7 +204,7 @@ export const ClinicalAssistantModal: React.FC<ClinicalAssistantModalProps> = ({
           {isThinking && (
             <div className="flex items-center gap-2 text-[#6E5C5F] text-xs p-2">
               <Bot className="w-4 h-4 text-[#EA580C] animate-pulse" />
-              <span>Analyzing case parameters...</span>
+              <span>{t('analyzingCaseParameters', 'Analyzing case parameters...')}</span>
             </div>
           )}
         </div>
@@ -197,7 +212,7 @@ export const ClinicalAssistantModal: React.FC<ClinicalAssistantModalProps> = ({
         {/* Suggested Queries */}
         <div className="p-2.5 bg-[#FAF8F6] border-t border-[#EFE4DC] overflow-x-auto shrink-0">
           <div className="flex items-center gap-1.5 whitespace-nowrap">
-            <span className="text-[10px] font-bold text-[#6E5C5F] mr-1 uppercase">Quick Prompts:</span>
+            <span className="text-[10px] font-bold text-[#6E5C5F] mr-1 uppercase">{t('quickPromptsLabel', 'Quick Prompts:')}</span>
             {suggestedQueries.map((q, i) => (
               <button
                 key={i}
@@ -217,14 +232,14 @@ export const ClinicalAssistantModal: React.FC<ClinicalAssistantModalProps> = ({
             value={inputQuery}
             onChange={(e) => setInputQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Ask a question about this screening result..."
+            placeholder={t('askQuestionAssistantPlaceholder', 'Ask a question about this screening result...')}
             className="flex-1 px-3 py-2 rounded-xl border border-[#EFE4DC] text-xs text-[#2E2628] focus:outline-none focus:border-[#EA580C]"
           />
           <button
             onClick={() => handleSend()}
             disabled={!inputQuery.trim() || isThinking}
             className="p-2 rounded-xl bg-gradient-to-r from-[#EA580C] to-[#DB2777] text-white disabled:opacity-40 hover:opacity-95 transition-opacity"
-            aria-label="Send query"
+            aria-label={t('sendQueryAria', 'Send query')}
           >
             <Send className="w-4 h-4" />
           </button>

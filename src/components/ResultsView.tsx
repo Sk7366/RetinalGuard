@@ -34,6 +34,7 @@ import { ClinicalAssistantModal } from './ClinicalAssistantModal';
 import { ResponsibleAiUncertaintyIndicator } from './ResponsibleAiUncertaintyIndicator';
 import { RiskChip } from './RiskChip';
 import { ShareModal } from './ShareModal';
+import { useTranslation } from '../i18n/I18nContext';
 
 interface ResultsViewProps {
   result: MultimodalTriageResult;
@@ -48,6 +49,8 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
   onNewScreening,
   onAblationClick,
 }) => {
+  const { t } = useTranslation();
+
   // Active view perspective tab: "Clinical view" | "Simple explanation" | "Technical details"
   const [activeTab, setActiveTab] = useState<ViewPerspective>('clinical');
 
@@ -120,13 +123,13 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
           <Shield className="w-5 h-5 text-[#EA580C] shrink-0 mt-0.5" />
           <div className="space-y-1 text-xs">
             <div className="flex items-center gap-2 font-bold text-[#C2410C] uppercase tracking-wider text-[11px]">
-              <span>AI-Assisted Screening Assessment</span>
+              <span>{t('aiAssistedScreeningAssessmentTitle', 'AI-Assisted Screening Assessment')}</span>
               <span className="bg-white px-2 py-0.5 rounded text-[10px] border border-[#FED7AA] font-mono text-[#9A3412]">
-                DECISION-SUPPORT ONLY
+                {t('decisionSupportOnlyBadge', 'DECISION-SUPPORT ONLY')}
               </span>
             </div>
             <p className="text-[#9A3412] leading-relaxed font-medium">
-              This screening tool provides an <strong>AI-assisted screening assessment</strong> to help prioritize ophthalmic review. It does not provide a definitive medical diagnosis. <strong>Clinical confirmation is required.</strong> <strong>Further specialist evaluation may be appropriate.</strong>
+              {t('aiAssistedScreeningNoticeText', 'This screening tool provides an AI-assisted screening assessment to help prioritize ophthalmic review. It does not provide a definitive medical diagnosis. Clinical confirmation is required. Further specialist evaluation may be appropriate.')}
             </p>
           </div>
         </div>
@@ -137,13 +140,13 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
         <div className="bg-[#FEF2F2] border-2 border-[#FCA5A5] rounded-2xl p-5 shadow-xs space-y-2">
           <div className="flex items-center gap-2.5 text-[#B91C1C] font-bold text-sm">
             <AlertTriangle className="w-5 h-5 text-[#DC2626]" />
-            <span>Image Quality Assessment: Ungradable</span>
+            <span>{t('imageQualityAssessmentUngradableTitle', 'Image Quality Assessment: Ungradable')}</span>
           </div>
           <p className="text-xs text-[#991B1B] font-bold">
-            Retake image or seek appropriate clinical evaluation.
+            {t('retakeImageWarning', 'Retake image or seek appropriate clinical evaluation.')}
           </p>
           <p className="text-xs text-[#7F1D1D] leading-relaxed">
-            Severe glare, media opacity, or poor focus prevented reliable automated feature extraction. Automated grading has been suspended to protect patient safety.
+            {t('ungradableDesc', 'Severe glare, media opacity, or poor focus prevented reliable automated feature extraction. Automated grading has been suspended to protect patient safety.')}
           </p>
           <div className="pt-2">
             <button
@@ -151,7 +154,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
               className="bg-[#DC2626] hover:bg-[#B91C1C] text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors inline-flex items-center gap-1.5"
             >
               <RefreshCw className="w-3.5 h-3.5" />
-              <span>Retake Fundus Photograph</span>
+              <span>{t('retakeFundusBtn', 'Retake Fundus Photograph')}</span>
             </button>
           </div>
         </div>
@@ -162,13 +165,13 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
         <div className="bg-[#FFFBEB] border-2 border-[#FDE68A] rounded-2xl p-4 sm:p-5 shadow-xs space-y-1.5">
           <div className="flex items-center gap-2 text-[#92400E] font-bold text-xs uppercase tracking-wider">
             <AlertOctagon className="w-4 h-4 text-[#D97706]" />
-            <span>Modality Concordance Flag</span>
+            <span>{t('modalityConcordanceFlagTitle', 'Modality Concordance Flag')}</span>
           </div>
           <p className="text-sm font-bold text-[#B45309]">
-            Low agreement — human review recommended.
+            {t('lowAgreementHumanReviewMsg', 'Low agreement — human review recommended.')}
           </p>
           <p className="text-xs text-[#78350F] leading-relaxed">
-            The fundus photograph grading (Grade {fundusGrade}) diverged noticeably from the clinical metadata prediction (Grade {metaPredictedGrade}) or cross-sectional OCT indicators. A trained human clinician must verify these findings prior to any clinical intervention.
+            {t('disagreementExplanation', `The fundus photograph grading (Grade ${fundusGrade}) diverged noticeably from the clinical metadata prediction (Grade ${metaPredictedGrade}) or cross-sectional OCT indicators. A trained human clinician must verify these findings prior to any clinical intervention.`)}
           </p>
         </div>
       )}
@@ -181,24 +184,20 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
               #{result.patientId}
             </span>
             <span className="text-xs font-medium text-[#6E5C5F] bg-[#FAF8F6] border border-[#EFE4DC] px-2 py-0.5 rounded-md">
-              Session: {result.sessionId}
+              {t('sessionPrefix', 'Session')}: {result.sessionId}
             </span>
             <span className="text-xs font-medium bg-[#FDF2F8] border border-[#FBCFE8] text-[#BE185D] px-2 py-0.5 rounded-md">
-              {result.oct.present ? 'Tri-Modal (Fundus + OCT + Metadata)' : 'Dual-Stream (Fundus + Metadata)'}
+              {result.oct.present ? t('triModalBadge', 'Tri-Modal (Fundus + OCT + Metadata)') : t('dualStreamBadge', 'Dual-Stream (Fundus + Metadata)')}
             </span>
             <span className="text-xs text-[#9C8E91] ml-1">
-              {new Date(result.timestamp).toLocaleDateString('en-US', {
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric',
-              })}
+              {new Date(result.timestamp).toLocaleDateString()}
             </span>
           </div>
           <h1 className="text-xl sm:text-2xl font-serif font-bold text-[#2E2628]">
-            AI-Assisted Screening Assessment
+            {t('aiAssistedScreeningAssessmentTitle', 'AI-Assisted Screening Assessment')}
           </h1>
           <p className="text-xs text-[#6E5C5F] mt-0.5">
-            Decision-support review for diabetic retinopathy risk stratification and care coordination.
+            {t('decisionSupportReviewDesc', 'Decision-support review for diabetic retinopathy risk stratification and care coordination.')}
           </p>
         </div>
 
@@ -210,7 +209,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             className="bg-gradient-to-r from-[#EA580C] to-[#DB2777] hover:from-[#C2410C] hover:to-[#BE185D] text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all shadow-xs flex items-center gap-1.5"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>Download PDF</span>
+            <span>{t('downloadPdfBtn', 'Download PDF')}</span>
           </button>
 
           <button
@@ -219,7 +218,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             className="bg-white hover:bg-[#FAF8F6] text-[#2E2628] border border-[#EFE4DC] text-xs font-semibold px-3 py-2 rounded-xl transition-colors flex items-center gap-1.5"
           >
             <Printer className="w-3.5 h-3.5 text-[#6E5C5F]" />
-            <span className="hidden sm:inline">Print</span>
+            <span className="hidden sm:inline">{t('printBtn', 'Print')}</span>
           </button>
 
           <button
@@ -227,7 +226,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             className="bg-white hover:bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] text-xs font-semibold px-3 py-2 rounded-xl transition-colors flex items-center gap-1.5"
           >
             <Bot className="w-3.5 h-3.5 text-[#EA580C]" />
-            <span>Ask Assistant</span>
+            <span>{t('askAssistantBtn', 'Ask Assistant')}</span>
           </button>
 
           <button
@@ -236,7 +235,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             className="bg-white hover:bg-[#FAF8F6] text-[#2E2628] border border-[#EFE4DC] text-xs font-semibold px-3 py-2 rounded-xl transition-colors flex items-center gap-1.5"
           >
             <Share2 className="w-3.5 h-3.5 text-[#EA580C]" />
-            <span>Share</span>
+            <span>{t('shareBtn', 'Share')}</span>
           </button>
 
           <button
@@ -245,7 +244,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             className="bg-[#FAF8F6] hover:bg-[#F5EBE1] text-[#6E5C5F] border border-[#EFE4DC] text-xs font-semibold px-3 py-2 rounded-xl transition-colors flex items-center gap-1.5"
           >
             <RefreshCw className="w-3.5 h-3.5" />
-            <span>New Scan</span>
+            <span>{t('newScanBtn', 'New Scan')}</span>
           </button>
         </div>
       </div>
@@ -262,7 +261,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             }`}
           >
             <Stethoscope className="w-3.5 h-3.5" />
-            <span>Clinical view</span>
+            <span>{t('clinicalViewTab', 'Clinical view')}</span>
           </button>
 
           <button
@@ -274,7 +273,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             }`}
           >
             <HelpCircle className="w-3.5 h-3.5" />
-            <span>Simple explanation</span>
+            <span>{t('simpleExplanationTab', 'Simple explanation')}</span>
           </button>
 
           <button
@@ -286,7 +285,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
-            <span>Technical details</span>
+            <span>{t('technicalDetailsTab', 'Technical details')}</span>
           </button>
         </div>
       </div>
@@ -313,14 +312,14 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: gradeInfo.color }} />
             <span className="text-xs font-bold uppercase tracking-wider text-[#2E2628]">
-              Consensus Triage Classification
+              {t('consensusTriageClassificationTitle', 'Consensus Triage Classification')}
             </span>
           </div>
 
           <div className="flex items-center gap-2">
             <ResponsibleAiUncertaintyIndicator result={result} variant="chip" />
             <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-white/80 border border-[#EFE4DC] text-[#6E5C5F] font-mono">
-              Late Fusion Protocol
+              {t('lateFusionProtocolBadge', 'Late Fusion Protocol')}
             </span>
           </div>
         </div>
@@ -344,10 +343,10 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
               <div className="p-3 bg-white/90 rounded-xl border border-[#EA580C] text-xs text-[#C2410C] space-y-0.5">
                 <p className="font-bold flex items-center gap-1.5">
                   <AlertOctagon className="w-4 h-4 text-[#EA580C]" />
-                  <span>DME Escalation Rule Enforced</span>
+                  <span>{t('dmeEscalationRuleEnforced', 'DME Escalation Rule Enforced')}</span>
                 </p>
                 <p className="text-[11px] text-[#6E5C5F]">
-                  Diabetic Macular Edema on OCT warrants at least Grade 2 (Moderate DR / CSME) to guard against sight-threatening progression.
+                  {t('dmeEscalationRuleDesc', 'Diabetic Macular Edema on OCT warrants at least Grade 2 (Moderate DR / CSME) to guard against sight-threatening progression.')}
                 </p>
               </div>
             )}
@@ -360,19 +359,19 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
           >
             <div>
               <span className="text-xs font-bold text-[#C2410C] uppercase tracking-wider block mb-1">
-                Screening Recommendation & Follow-up
+                {t('screeningRecommendationFollowupTitle', 'Screening Recommendation & Follow-up')}
               </span>
               <p className="text-sm sm:text-base font-semibold text-[#2E2628] leading-relaxed">
                 {result.recommendation}
               </p>
               <p className="text-[11px] text-[#6E5C5F] mt-1 italic">
-                Further specialist evaluation may be appropriate. Clinical confirmation is required.
+                {t('furtherSpecialistRequiredNotice', 'Further specialist evaluation may be appropriate. Clinical confirmation is required.')}
               </p>
             </div>
 
             {/* Contributing factors plain language list */}
             <div className="space-y-1.5 pt-2 border-t border-[#EFE4DC]">
-              <span className="text-xs font-bold text-[#6E5C5F]">Primary Observation Drivers:</span>
+              <span className="text-xs font-bold text-[#6E5C5F]">{t('primaryObservationDriversLabel', 'Primary Observation Drivers:')}</span>
               <ul className="space-y-1 text-xs text-[#2E2628]">
                 {result.contributingFactors.map((factor, idx) => (
                   <li key={idx} className="flex items-start gap-2">
@@ -392,10 +391,10 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
           <HelpCircle className="w-5 h-5 text-[#EA580C]" />
           <div>
             <h3 className="text-base sm:text-lg font-serif font-bold text-[#2E2628]">
-              Why was this screening flagged?
+              {t('whyScreeningFlaggedTitle', 'Why was this screening flagged?')}
             </h3>
             <p className="text-xs text-[#6E5C5F]">
-              Specific optical biomarkers and clinical indicators identified during multimodal assessment.
+              {t('whyScreeningFlaggedSub', 'Specific optical biomarkers and clinical indicators identified during multimodal assessment.')}
             </p>
           </div>
         </div>
@@ -405,17 +404,17 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
           <div className="bg-[#FAF8F6] p-4 rounded-xl border border-[#EFE4DC] space-y-2">
             <div className="font-bold text-[#C2410C] flex items-center gap-1.5 uppercase text-[11px] tracking-wider">
               <Eye className="w-4 h-4 text-[#EA580C]" />
-              <span>Fundus Image Features</span>
+              <span>{t('fundusImageFeaturesLabel', 'Fundus Image Features')}</span>
             </div>
             <p className="text-[#2E2628] font-semibold">
-              Grade {result.fundus.grade}: {DR_GRADES[result.fundus.grade].shortName}
+              {t('gradePrefix', 'Grade')} {result.fundus.grade}: {DR_GRADES[result.fundus.grade].shortName}
             </p>
             <ul className="space-y-1 text-[#6E5C5F]">
               {result.fundus.camHotspots.map((h, i) => (
                 <li key={i} className="flex items-start gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#EA580C] mt-1.5 shrink-0" />
                   <span>
-                    <strong>{h.label}</strong> (Attention: {Math.round(h.intensity * 100)}%)
+                    <strong>{h.label}</strong> ({t('attentionLabel', 'Attention')}: {Math.round(h.intensity * 100)}%)
                   </span>
                 </li>
               ))}
@@ -426,12 +425,12 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
           <div className="bg-[#FAF8F6] p-4 rounded-xl border border-[#EFE4DC] space-y-2">
             <div className="font-bold text-[#BE185D] flex items-center gap-1.5 uppercase text-[11px] tracking-wider">
               <Layers className="w-4 h-4 text-[#DB2777]" />
-              <span>OCT Cross-Sectional Scan</span>
+              <span>{t('octCrossSectionalScanLabel', 'OCT Cross-Sectional Scan')}</span>
             </div>
             {result.oct.present ? (
               <>
                 <p className="text-[#2E2628] font-semibold">
-                  {result.oct.dmeDetected ? 'Cystoid Fluid Detected' : 'No Subretinal Fluid'}
+                  {result.oct.dmeDetected ? t('cystoidFluidDetected', 'Cystoid Fluid Detected') : t('noSubretinalFluid', 'No Subretinal Fluid')}
                 </p>
                 <ul className="space-y-1 text-[#6E5C5F]">
                   {result.oct.retinalLayerFindings.map((f, i) => (
@@ -444,7 +443,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
               </>
             ) : (
               <p className="text-[#9C8E91] italic pt-1">
-                OCT scan not submitted. Dual-stream evaluation performed.
+                {t('octScanNotSubmittedDualStream', 'OCT scan not submitted. Dual-stream evaluation performed.')}
               </p>
             )}
           </div>
@@ -453,12 +452,12 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
           <div className="bg-[#FAF8F6] p-4 rounded-xl border border-[#EFE4DC] space-y-2">
             <div className="font-bold text-[#2E2628] flex items-center gap-1.5 uppercase text-[11px] tracking-wider">
               <Activity className="w-4 h-4 text-[#EA580C]" />
-              <span>Clinical Profile Correlates</span>
+              <span>{t('clinicalProfileCorrelatesLabel', 'Clinical Profile Correlates')}</span>
             </div>
             {result.metadata.provided ? (
               <>
                 <p className="text-[#2E2628] font-semibold">
-                  Risk Tier: {result.metadata.riskScore >= 0.6 ? 'Elevated' : 'Standard'}
+                  {t('riskTierLabel', 'Risk Tier')}: {result.metadata.riskScore >= 0.6 ? t('elevatedStatus', 'Elevated') : t('standardStatus', 'Standard')}
                 </p>
                 <ul className="space-y-1 text-[#6E5C5F]">
                   {result.metadata.top3RiskDrivers.map((d, i) => (
@@ -471,7 +470,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
               </>
             ) : (
               <p className="text-[#9C8E91] italic pt-1">
-                Clinical history not provided. Image-only classification executed.
+                {t('clinicalHistoryNotProvidedImageOnly', 'Clinical history not provided. Image-only classification executed.')}
               </p>
             )}
           </div>
@@ -485,10 +484,10 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             <Sparkles className="w-5 h-5 text-[#EA580C]" />
             <div>
               <h3 className="text-base sm:text-lg font-serif font-bold text-[#2E2628]">
-                Multimodal agreement
+                {t('multimodalAgreementTitle', 'Multimodal agreement')}
               </h3>
               <p className="text-xs text-[#6E5C5F]">
-                Concordance and cross-validation between fundus photography, OCT, and systemic clinical metadata.
+                {t('multimodalAgreementSub', 'Concordance and cross-validation between fundus photography, OCT, and systemic clinical metadata.')}
               </p>
             </div>
           </div>
@@ -498,12 +497,12 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             {hasModalityDisagreement ? (
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FEF2F2] text-[#B91C1C] border border-[#FCA5A5] text-xs font-bold shadow-2xs">
                 <AlertTriangle className="w-3.5 h-3.5" />
-                <span>Low agreement — human review recommended.</span>
+                <span>{t('lowAgreementHumanReviewMsg', 'Low agreement — human review recommended.')}</span>
               </span>
             ) : (
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#ECFDF5] text-[#047857] border border-[#A7F3D0] text-xs font-bold shadow-2xs">
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Modality Consensus: {agreementStatus} Agreement</span>
+                <span>{t('modalityConsensusAgreement', `Modality Consensus: ${agreementStatus} Agreement`)}</span>
               </span>
             )}
           </div>
@@ -513,54 +512,54 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-1">
           <div className="p-4 rounded-xl border border-[#FED7AA] bg-[#FFF7ED]/40 space-y-1.5">
             <span className="text-[10px] font-bold text-[#C2410C] uppercase tracking-wider">
-              1. Fundus Image Stream
+              {t('fundusStreamNumberLabel', '1. Fundus Image Stream')}
             </span>
             <div className="text-sm font-bold text-[#2E2628]">
-              Grade {result.fundus.grade} ({DR_GRADES[result.fundus.grade].shortName})
+              {t('gradePrefix', 'Grade')} {result.fundus.grade} ({DR_GRADES[result.fundus.grade].shortName})
             </div>
             <p className="text-[11px] text-[#6E5C5F]">
-              Primary retinal lesion detection (EfficientNet-B4).
+              {t('fundusStreamDesc', 'Primary retinal lesion detection (EfficientNet-B4).')}
             </p>
           </div>
 
           <div className="p-4 rounded-xl border border-[#FBCFE8] bg-[#FDF2F8]/50 space-y-1.5">
             <span className="text-[10px] font-bold text-[#BE185D] uppercase tracking-wider">
-              2. OCT B-Scan Stream
+              {t('octStreamNumberLabel', '2. OCT B-Scan Stream')}
             </span>
             <div className="text-sm font-bold text-[#2E2628]">
               {result.oct.present
                 ? result.oct.dmeDetected
-                  ? 'DME Detected (+)'
-                  : 'DME Negative (-)'
-                : 'Not Provided (Dual Stream)'}
+                  ? t('dmeDetectedShort', 'DME Detected (+)')
+                  : t('dmeNegativeShort', 'DME Negative (-)')
+                : t('notProvidedDualStream', 'Not Provided (Dual Stream)')}
             </div>
             <p className="text-[11px] text-[#6E5C5F]">
               {result.oct.present
-                ? 'Cross-sectional subretinal fluid assessment.'
-                : 'Macular thickness not verified on OCT.'}
+                ? t('crossSectionalFluidAssessment', 'Cross-sectional subretinal fluid assessment.')
+                : t('macularThicknessNotVerified', 'Macular thickness not verified on OCT.')}
             </p>
           </div>
 
           <div className="p-4 rounded-xl border border-[#EFE4DC] bg-[#FAF8F6] space-y-1.5">
             <span className="text-[10px] font-bold text-[#6E5C5F] uppercase tracking-wider">
-              3. Clinical History Stream
+              {t('clinicalStreamNumberLabel', '3. Clinical History Stream')}
             </span>
             <div className="text-sm font-bold text-[#2E2628]">
               {result.metadata.provided
-                ? `Grade ${result.metadata.predictedGrade} Projection`
-                : 'Not Provided'}
+                ? `${t('gradePrefix', 'Grade')} ${result.metadata.predictedGrade} ${t('projectionWord', 'Projection')}`
+                : t('notProvidedWord', 'Not Provided')}
             </div>
             <p className="text-[11px] text-[#6E5C5F]">
               {result.metadata.provided
-                ? 'Systemic physiological risk correlation.'
-                : 'Risk evaluation driven purely by imaging.'}
+                ? t('systemicPhysiologicalRiskCorrelation', 'Systemic physiological risk correlation.')
+                : t('riskDrivenByImaging', 'Risk evaluation driven purely by imaging.')}
             </p>
           </div>
         </div>
 
         {hasModalityDisagreement && (
           <div className="p-3 bg-[#FFFBEB] rounded-xl border border-[#FED7AA] text-xs text-[#92400E]">
-            <strong>Clinical Notice:</strong> Because individual streams produced diverging risk tiers, automated outputs must be treated with caution. <strong>Further specialist evaluation may be appropriate.</strong>
+            <strong>{t('clinicalNoticeLabel', 'Clinical Notice:')}</strong> {t('divergingRiskTiersCaution', 'Because individual streams produced diverging risk tiers, automated outputs must be treated with caution. Further specialist evaluation may be appropriate.')}
           </div>
         )}
       </section>
@@ -571,10 +570,10 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
           <Calendar className="w-5 h-5 text-[#EA580C]" />
           <div>
             <h3 className="text-base sm:text-lg font-serif font-bold text-[#2E2628]">
-              What happens next?
+              {t('whatHappensNextTitle', 'What happens next?')}
             </h3>
             <p className="text-xs text-[#6E5C5F]">
-              Recommended care coordination steps based on this screening encounter.
+              {t('whatHappensNextSub', 'Recommended care coordination steps based on this screening encounter.')}
             </p>
           </div>
         </div>
@@ -584,9 +583,9 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             <div className="w-7 h-7 rounded-full bg-[#FFF7ED] text-[#EA580C] font-bold text-xs flex items-center justify-center border border-[#FED7AA]">
               1
             </div>
-            <div className="font-bold text-xs text-[#2E2628]">Clinical Confirmation</div>
+            <div className="font-bold text-xs text-[#2E2628]">{t('clinicalConfirmationStepTitle', 'Clinical Confirmation')}</div>
             <p className="text-xs text-[#6E5C5F] leading-relaxed">
-              Clinical confirmation is required. Schedule an in-person dilated ophthalmic biomicroscopy with a qualified eye care professional.
+              {t('clinicalConfirmationStepDesc', 'Clinical confirmation is required. Schedule an in-person dilated ophthalmic biomicroscopy with a qualified eye care professional.')}
             </p>
           </div>
 
@@ -594,11 +593,11 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             <div className="w-7 h-7 rounded-full bg-[#FDF2F8] text-[#DB2777] font-bold text-xs flex items-center justify-center border border-[#FBCFE8]">
               2
             </div>
-            <div className="font-bold text-xs text-[#2E2628]">Specialist Referral</div>
+            <div className="font-bold text-xs text-[#2E2628]">{t('specialistReferralStepTitle', 'Specialist Referral')}</div>
             <p className="text-xs text-[#6E5C5F] leading-relaxed">
               {result.finalGrade >= 2
-                ? 'Further specialist evaluation may be appropriate. Connect with a vitreoretinal clinic for comprehensive diagnostic testing.'
-                : 'Routine periodic follow-up. Maintain optimal blood glucose and annual eye screening.'}
+                ? t('specialistReferralHighRiskDesc', 'Further specialist evaluation may be appropriate. Connect with a vitreoretinal clinic for comprehensive diagnostic testing.')
+                : t('specialistReferralLowRiskDesc', 'Routine periodic follow-up. Maintain optimal blood glucose and annual eye screening.')}
             </p>
           </div>
 
@@ -606,9 +605,9 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             <div className="w-7 h-7 rounded-full bg-[#FAF8F6] text-[#2E2628] font-bold text-xs flex items-center justify-center border border-[#EFE4DC]">
               3
             </div>
-            <div className="font-bold text-xs text-[#2E2628]">Tracked Care Token</div>
+            <div className="font-bold text-xs text-[#2E2628]">{t('trackedCareTokenStepTitle', 'Tracked Care Token')}</div>
             <p className="text-xs text-[#6E5C5F] leading-relaxed">
-              Generate a digital referral ticket in the referral registry (/referrals) to ensure follow-up compliance and closed-loop care.
+              {t('trackedCareTokenStepDesc', 'Generate a digital referral ticket in the referral registry (/referrals) to ensure follow-up compliance and closed-loop care.')}
             </p>
           </div>
         </div>
@@ -619,10 +618,10 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             <Stethoscope className="w-5 h-5 text-[#EA580C] shrink-0" />
             <div>
               <div className="text-xs font-bold text-[#2E2628]">
-                Initiate Tracked Referral Packet
+                {t('initiateTrackedReferralPacketTitle', 'Initiate Tracked Referral Packet')}
               </div>
               <div className="text-[11px] text-[#6E5C5F]">
-                Dispatch this screening encounter to your partner hospital registry (/referrals).
+                {t('initiateTrackedReferralPacketSub', 'Dispatch this screening encounter to your partner hospital registry (/referrals).')}
               </div>
             </div>
           </div>
@@ -630,7 +629,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
           {referralToken ? (
             <div className="px-3 py-1.5 rounded-lg bg-[#ECFDF5] border border-[#A7F3D0] text-xs font-bold text-[#059669] flex items-center gap-1.5 shrink-0">
               <CheckCircle2 className="w-3.5 h-3.5" />
-              <span>Token: {referralToken}</span>
+              <span>{t('tokenPrefix', 'Token')}: {referralToken}</span>
             </div>
           ) : (
             <button
@@ -639,7 +638,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
               className="bg-gradient-to-r from-[#EA580C] to-[#DB2777] text-white text-xs font-bold px-4 py-2 rounded-xl hover:opacity-90 transition-opacity shrink-0 flex items-center gap-1.5 shadow-xs"
             >
               <Stethoscope className="w-3.5 h-3.5" />
-              <span>{referralLoading ? 'Dispatching...' : 'Create Referral in /referrals'}</span>
+              <span>{referralLoading ? t('dispatchingBtn', 'Dispatching...') : t('createReferralBtn', 'Create Referral in /referrals')}</span>
             </button>
           )}
         </div>
@@ -653,34 +652,34 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
           <div className="border-b border-[#FED7AA] pb-3">
             <h3 className="text-lg font-serif font-bold text-[#2E2628] flex items-center gap-2">
               <HelpCircle className="w-5 h-5 text-[#EA580C]" />
-              <span>Simple explanation for Patients and Families</span>
+              <span>{t('simpleExplanationForPatientsTitle', 'Simple explanation for Patients and Families')}</span>
             </h3>
             <p className="text-xs text-[#6E5C5F]">
-              A non-technical, easy-to-understand overview of today's screening results.
+              {t('simpleExplanationSub', "A non-technical, easy-to-understand overview of today's screening results.")}
             </p>
           </div>
 
           <div className="space-y-4 text-xs sm:text-sm text-[#2E2628] leading-relaxed">
             <div className="bg-[#FFFDFB] p-4 rounded-xl border border-[#EFE4DC] space-y-2">
-              <h4 className="font-bold text-sm text-[#C2410C]">What was checked today?</h4>
+              <h4 className="font-bold text-sm text-[#C2410C]">{t('whatWasCheckedTodayTitle', 'What was checked today?')}</h4>
               <p className="text-xs text-[#6E5C5F] leading-relaxed">
-                We captured photographs of the retina (the light-sensitive lining at the back of your eye). High-resolution digital imaging evaluated the tiny blood vessels that nourish your vision to detect early changes caused by blood sugar levels.
+                {t('whatWasCheckedTodayDesc', 'We captured photographs of the retina (the light-sensitive lining at the back of your eye). High-resolution digital imaging evaluated the tiny blood vessels that nourish your vision to detect early changes caused by blood sugar levels.')}
               </p>
             </div>
 
             <div className="bg-[#FFFDFB] p-4 rounded-xl border border-[#EFE4DC] space-y-2">
-              <h4 className="font-bold text-sm text-[#C2410C]">What did the screening show?</h4>
+              <h4 className="font-bold text-sm text-[#C2410C]">{t('whatDidScreeningShowTitle', 'What did the screening show?')}</h4>
               <p className="text-xs text-[#6E5C5F] leading-relaxed">
-                The image analysis categorized your encounter as <strong>{gradeInfo.name}</strong>. {gradeInfo.description}
+                {t('whatDidScreeningShowDesc', `The image analysis categorized your encounter as ${gradeInfo.name}. ${gradeInfo.description}`)}
               </p>
             </div>
 
             <div className="bg-[#FFFDFB] p-4 rounded-xl border border-[#EFE4DC] space-y-2">
-              <h4 className="font-bold text-sm text-[#C2410C]">What should you do now?</h4>
+              <h4 className="font-bold text-sm text-[#C2410C]">{t('whatShouldYouDoNowTitle', 'What should you do now?')}</h4>
               <ul className="space-y-1.5 text-xs text-[#6E5C5F] list-disc pl-5">
-                <li>Clinical confirmation is required. Please show this summary report to your optometrist, eye doctor, or diabetic specialist.</li>
-                <li>Further specialist evaluation may be appropriate if you notice changes in your vision, blurriness, or floating dark spots.</li>
-                <li>Keep your blood glucose, blood pressure, and cholesterol within the targets recommended by your doctor.</li>
+                <li>{t('whatShouldYouDoPoint1', 'Clinical confirmation is required. Please show this summary report to your optometrist, eye doctor, or diabetic specialist.')}</li>
+                <li>{t('whatShouldYouDoPoint2', 'Further specialist evaluation may be appropriate if you notice changes in your vision, blurriness, or floating dark spots.')}</li>
+                <li>{t('whatShouldYouDoPoint3', 'Keep your blood glucose, blood pressure, and cholesterol within the targets recommended by your doctor.')}</li>
               </ul>
             </div>
           </div>
@@ -694,17 +693,17 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             <div>
               <h2 className="text-lg font-serif font-bold text-[#2E2628] flex items-center gap-2">
                 <Eye className="w-5 h-5 text-[#EA580C]" />
-                <span>Grad-CAM Visual Explanations (Alpha = {camOpacity.toFixed(2)})</span>
+                <span>{t('gradCamVisualExplanationsTitle', 'Grad-CAM Visual Explanations')} (Alpha = {camOpacity.toFixed(2)})</span>
               </h2>
               <p className="text-xs text-[#6E5C5F] mt-0.5">
-                Thermal activation maps highlighting retinal regions that influenced the model's feature weights.
+                {t('gradCamVisualExplanationsSub', "Thermal activation maps highlighting retinal regions that influenced the model's feature weights.")}
               </p>
             </div>
 
             {/* Heatmap Opacity Controls */}
             <div className="flex items-center gap-3 bg-[#FAF8F6] px-3 py-1.5 rounded-xl border border-[#EFE4DC]">
               <Sliders className="w-3.5 h-3.5 text-[#6E5C5F]" />
-              <span className="text-xs text-[#6E5C5F] font-medium">CAM Alpha:</span>
+              <span className="text-xs text-[#6E5C5F] font-medium">{t('camAlphaLabel', 'CAM Alpha:')}</span>
               <input
                 type="range"
                 min="0.2"
@@ -726,7 +725,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
               <div className="p-3 sm:px-4 border-t-4 border-[#EA580C] border-b border-[#EFE4DC] flex items-center justify-between bg-white">
                 <div className="flex items-center gap-2">
                   <span className="text-xs uppercase tracking-wider font-bold text-[#C2410C]">
-                    Fundus Stream (512×512)
+                    {t('fundusStream512Label', 'Fundus Stream (512×512)')}
                   </span>
                   <span className="text-[10px] bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] px-2 py-0.5 rounded font-mono font-medium">
                     EfficientNet-B4
@@ -744,7 +743,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
                         : 'text-[#6E5C5F]'
                     }`}
                   >
-                    Raw RGB
+                    {t('rawRgbBtn', 'Raw RGB')}
                   </button>
                   <button
                     type="button"
@@ -789,7 +788,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
                 />
 
                 <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-xs text-white text-[10px] font-mono px-2 py-1 rounded border border-white/20">
-                  Overlay Alpha: {camOpacity.toFixed(2)}
+                  {t('overlayAlphaLabel', 'Overlay Alpha:')} {camOpacity.toFixed(2)}
                 </div>
 
                 <div className="absolute top-3 right-3">
@@ -799,13 +798,13 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
 
               {/* Hotspots & Features Callout */}
               <div className="p-4 bg-[#FAF8F6] border-t border-[#EFE4DC] space-y-1.5 text-xs">
-                <p className="font-bold text-[#C2410C]">Visual Attention Clusters:</p>
+                <p className="font-bold text-[#C2410C]">{t('visualAttentionClustersLabel', 'Visual Attention Clusters:')}</p>
                 <ul className="space-y-1 text-[#2E2628]">
                   {result.fundus.camHotspots.map((spot, i) => (
                     <li key={i} className="flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 rounded-full bg-[#EA580C]" />
                       <span>
-                        <strong>{spot.label}</strong> (Attention Peak: {(spot.intensity * 100).toFixed(0)}%)
+                        <strong>{spot.label}</strong> ({t('attentionPeakLabel', 'Attention Peak:')} {(spot.intensity * 100).toFixed(0)}%)
                       </span>
                     </li>
                   ))}
@@ -818,7 +817,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
               <div className="p-3 sm:px-4 border-t-4 border-[#DB2777] border-b border-[#EFE4DC] flex items-center justify-between bg-white">
                 <div className="flex items-center gap-2">
                   <span className="text-xs uppercase tracking-wider font-bold text-[#BE185D]">
-                    OCT Stream (B-Scan)
+                    {t('octStreamBScanLabel', 'OCT Stream (B-Scan)')}
                   </span>
                   <span className="text-[10px] bg-[#FDF2F8] text-[#BE185D] border border-[#FBCFE8] px-2 py-0.5 rounded font-mono font-medium">
                     DenseNet-121
@@ -872,16 +871,16 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
                           : 'text-[#10B981] border-[#10B981]/50'
                       }`}
                     >
-                      {result.oct.dmeDetected ? 'DME DETECTED' : 'DME NEGATIVE'}
+                      {result.oct.dmeDetected ? t('dmeDetectedUppercase', 'DME DETECTED') : t('dmeNegativeUppercase', 'DME NEGATIVE')}
                     </div>
 
                     <div className="absolute bottom-3 left-3 bg-[#FDF2F8] text-[#BE185D] text-xs font-semibold px-2.5 py-1 rounded-lg border border-[#FBCFE8]">
-                      {result.oct.predictedClass} · {result.oct.dmeDetected ? 'Fluid Escalation Active' : 'Normal Layer Profile'}
+                      {result.oct.predictedClass} · {result.oct.dmeDetected ? t('fluidEscalationActive', 'Fluid Escalation Active') : t('normalLayerProfile', 'Normal Layer Profile')}
                     </div>
                   </div>
 
                   <div className="p-4 bg-[#FAF8F6] border-t border-[#EFE4DC] space-y-1.5 text-xs">
-                    <p className="font-bold text-[#BE185D]">OCT Cross-Sectional Indicators:</p>
+                    <p className="font-bold text-[#BE185D]">{t('octCrossSectionalIndicatorsLabel', 'OCT Cross-Sectional Indicators:')}</p>
                     <ul className="space-y-1 text-[#2E2628]">
                       {result.oct.retinalLayerFindings.map((finding, idx) => (
                         <li key={idx} className="flex items-center gap-1.5">
@@ -895,9 +894,9 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
               ) : (
                 <div className="aspect-square rounded-b-2xl bg-[#FAF8F6] flex flex-col items-center justify-center p-6 text-center space-y-2">
                   <Layers className="w-8 h-8 text-[#9C8E91]" />
-                  <p className="text-xs font-bold text-[#2E2628]">OCT Modality Not Provided</p>
+                  <p className="text-xs font-bold text-[#2E2628]">{t('octModalityNotProvidedTitle', 'OCT Modality Not Provided')}</p>
                   <p className="text-[11px] text-[#6E5C5F] max-w-xs">
-                    Model ran in dual-stream mode. Capturing an OCT scan enables cross-sectional cystoid fluid detection and triggers the DME escalation rule.
+                    {t('octModalityNotProvidedDesc', 'Model ran in dual-stream mode. Capturing an OCT scan enables cross-sectional cystoid fluid detection and triggers the DME escalation rule.')}
                   </p>
                 </div>
               )}
@@ -917,20 +916,20 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
                   <div className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full bg-[#EA580C]" />
                     <h2 className="text-lg font-serif font-bold text-[#2E2628]">
-                      SHAP Waterfall Feature Attributions (XGBoost)
+                      {t('shapWaterfallTitle', 'SHAP Waterfall Feature Attributions (XGBoost)')}
                     </h2>
                   </div>
                   <p className="text-xs text-[#6E5C5F] mt-0.5">
-                    TreeExplainer feature impacts showing which physiological variables pushed the retinopathy risk higher (orange) or lower (pink).
+                    {t('shapWaterfallDesc', 'TreeExplainer feature impacts showing which physiological variables pushed the retinopathy risk higher (orange) or lower (pink).')}
                   </p>
                 </div>
 
                 <div className="flex items-center gap-3 text-xs">
                   <span className="flex items-center gap-1 text-[#C2410C] font-semibold">
-                    <span className="w-2.5 h-2.5 rounded-xs bg-[#EA580C]" /> Increases Risk (+)
+                    <span className="w-2.5 h-2.5 rounded-xs bg-[#EA580C]" /> {t('increasesRiskLabel', 'Increases Risk (+)')}
                   </span>
                   <span className="flex items-center gap-1 text-[#BE185D] font-semibold">
-                    <span className="w-2.5 h-2.5 rounded-xs bg-[#DB2777]" /> Decreases Risk (-)
+                    <span className="w-2.5 h-2.5 rounded-xs bg-[#DB2777]" /> {t('decreasesRiskLabel', 'Decreases Risk (-)')}
                   </span>
                 </div>
               </div>
@@ -938,7 +937,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
               {/* SHAP Waterfall Chart */}
               <div className="space-y-4">
                 <div className="text-[11px] font-bold uppercase tracking-wider text-[#C2410C]">
-                  SHAP Feature Impact
+                  {t('shapFeatureImpactLabel', 'SHAP Feature Impact')}
                 </div>
                 <div className="space-y-3 pt-1">
                   {result.metadata.shapValues.map((shap) => {
@@ -973,7 +972,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
                         </div>
 
                         <p className="text-[11px] text-[#6E5C5F] italic">
-                          Clinical Context: {shap.clinicalContext}
+                          {t('clinicalContextLabel', 'Clinical Context:')} {shap.clinicalContext}
                         </p>
                       </div>
                     );
@@ -988,10 +987,10 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-base sm:text-lg font-serif font-bold text-[#2E2628]">
-                  Modality outputs & Late Fusion Logic
+                  {t('modalityOutputsFusionLogicTitle', 'Modality outputs & Late Fusion Logic')}
                 </h3>
                 <p className="text-xs text-[#6E5C5F]">
-                  Independent classification streams fused through weighted decision-support rules.
+                  {t('modalityOutputsFusionLogicSub', 'Independent classification streams fused through weighted decision-support rules.')}
                 </p>
               </div>
             </div>
@@ -1000,19 +999,19 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
               {/* Card 1: Fundus Stream */}
               <div className="p-4 rounded-2xl border border-[#FED7AA] border-t-4 border-t-[#EA580C] bg-[#FFF7ED]/50 space-y-3 shadow-xs">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase text-[#C2410C]">1. Fundus Stream</span>
+                  <span className="text-xs font-bold uppercase text-[#C2410C]">{t('fundusStreamNumberLabel', '1. Fundus Stream')}</span>
                   <span className="text-[10px] font-mono text-[#EA580C]">{result.fundus.inferenceMs}ms</span>
                 </div>
 
                 <div>
                   <p className="text-lg font-bold text-[#C2410C]">
-                    Grade {result.fundus.grade}: {DR_GRADES[result.fundus.grade].shortName}
+                    {t('gradePrefix', 'Grade')} {result.fundus.grade}: {DR_GRADES[result.fundus.grade].shortName}
                   </p>
                   <p className="text-[11px] text-[#6E5C5F]">EfficientNet-B4 · Ordinal Cross-Entropy</p>
                 </div>
 
                 <div className="space-y-1 pt-1">
-                  <span className="text-[10px] font-semibold text-[#6E5C5F]">5-Class Output Vector:</span>
+                  <span className="text-[10px] font-semibold text-[#6E5C5F]">{t('fiveClassOutputVectorLabel', '5-Class Output Vector:')}</span>
                   {result.fundus.probabilities.map((prob, g) => (
                     <div key={g} className="flex items-center justify-between text-[10px] font-mono">
                       <span className="text-[#6E5C5F]">G{g}</span>
@@ -1033,7 +1032,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
               {/* Card 2: OCT Stream */}
               <div className="p-4 rounded-2xl border border-[#FBCFE8] border-t-4 border-t-[#DB2777] bg-[#FDF2F8]/60 space-y-3 shadow-xs">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase text-[#BE185D]">2. OCT Stream</span>
+                  <span className="text-xs font-bold uppercase text-[#BE185D]">{t('octStreamNumberLabel', '2. OCT Stream')}</span>
                   <span className="text-[10px] font-mono text-[#DB2777]">
                     {result.oct.inferenceMs}ms
                   </span>
@@ -1041,7 +1040,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
 
                 <div>
                   <p className="text-lg font-bold text-[#BE185D]">
-                    {result.oct.present ? result.oct.predictedClass : 'Omitted'}
+                    {result.oct.present ? result.oct.predictedClass : t('omittedWord', 'Omitted')}
                   </p>
                   <p className="text-[11px] text-[#6E5C5F]">DenseNet-121 · Kermany B-scans</p>
                 </div>
@@ -1049,36 +1048,36 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
                 {result.oct.present ? (
                   <div className="space-y-2 pt-1">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-[#6E5C5F]">DME Fluid Status:</span>
+                      <span className="text-[#6E5C5F]">{t('dmeFluidStatusLabel', 'DME Fluid Status:')}</span>
                       <span
                         className={`font-bold ${
                           result.oct.dmeDetected ? 'text-[#EA580C]' : 'text-[#10B981]'
                         }`}
                       >
-                        {result.oct.dmeDetected ? 'Detected (+)' : 'Absent (-)'}
+                        {result.oct.dmeDetected ? t('detectedPlus', 'Detected (+)') : t('absentMinus', 'Absent (-)')}
                       </span>
                     </div>
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-[#6E5C5F]">Biomarker Signal:</span>
+                      <span className="text-[#6E5C5F]">{t('biomarkerSignalLabel', 'Biomarker Signal:')}</span>
                       <span className="font-bold text-[#BE185D]">
-                        {result.oct.dmeDetected ? 'Macular Edema Fluid' : 'Intact Retinal Contours'}
+                        {result.oct.dmeDetected ? t('macularEdemaFluidText', 'Macular Edema Fluid') : t('intactRetinalContoursText', 'Intact Retinal Contours')}
                       </span>
                     </div>
                     <div className="p-2 rounded-lg bg-[#FAF8F6] border border-[#EFE4DC] text-[11px] text-[#6E5C5F] leading-tight">
                       {result.oct.dmeDetected
-                        ? 'Fluid cyst pockets identified in cross-section; escalated to specialist review.'
-                        : 'No fluid accumulation detected in foveal or parafoveal regions.'}
+                        ? t('fluidCystPocketsDesc', 'Fluid cyst pockets identified in cross-section; escalated to specialist review.')
+                        : t('noFluidAccumulationDesc', 'No fluid accumulation detected in foveal or parafoveal regions.')}
                     </div>
                   </div>
                 ) : (
-                  <p className="text-xs text-[#9C8E91] italic">OCT modality bypassed in screening.</p>
+                  <p className="text-xs text-[#9C8E91] italic">{t('octModalityBypassedDesc', 'OCT modality bypassed in screening.')}</p>
                 )}
               </div>
 
               {/* Card 3: Clinical Metadata */}
               <div className="p-4 rounded-2xl border border-[#FED7AA] border-t-4 border-t-[#EA580C]/70 bg-[#FFF7ED]/30 space-y-3 shadow-xs">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase text-[#2E2628]">3. Clinical Model</span>
+                  <span className="text-xs font-bold uppercase text-[#2E2628]">{t('clinicalModelNumberLabel', '3. Clinical Model')}</span>
                   <span className="text-[10px] font-mono text-[#6E5C5F]">
                     {result.metadata.inferenceMs}ms
                   </span>
@@ -1086,13 +1085,13 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
 
                 <div>
                   <p className="text-lg font-bold text-[#2E2628]">
-                    Risk Score: {(result.metadata.riskScore * 100).toFixed(0)}%
+                    {t('riskScoreLabel', 'Risk Score')}: {(result.metadata.riskScore * 100).toFixed(0)}%
                   </p>
                   <p className="text-[11px] text-[#6E5C5F]">XGBoost · UKPDS Distributions</p>
                 </div>
 
                 <div className="space-y-1 pt-1 text-xs">
-                  <span className="text-[10px] font-semibold text-[#6E5C5F] block">Top Correlates:</span>
+                  <span className="text-[10px] font-semibold text-[#6E5C5F] block">{t('topCorrelatesLabel', 'Top Correlates:')}</span>
                   {result.metadata.top3RiskDrivers.map((driver, i) => (
                     <p key={i} className="text-[11px] text-[#2E2628] truncate">
                       • {driver}
@@ -1104,25 +1103,25 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
               {/* Card 4: Multimodal Fusion Junction */}
               <div className="p-4 rounded-2xl border border-[#FDBA74] border-t-4 border-t-[#DB2777] bg-gradient-to-br from-[#FFF7ED] to-[#FDF2F8] space-y-3 shadow-xs">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase text-[#9D174D]">4. Late Fusion</span>
+                  <span className="text-xs font-bold uppercase text-[#9D174D]">{t('lateFusionNumberLabel', '4. Late Fusion')}</span>
                   <span className="text-[10px] font-mono font-bold text-[#9D174D]">
-                    {result.confidence} CONSENSUS
+                    {result.confidence} {t('consensusWord', 'CONSENSUS')}
                   </span>
                 </div>
 
                 <div>
                   <p className="text-lg font-bold text-[#9D174D]">
-                    Grade {result.finalGrade} ({DR_GRADES[result.finalGrade].shortName})
+                    {t('gradePrefix', 'Grade')} {result.finalGrade} ({DR_GRADES[result.finalGrade].shortName})
                   </p>
-                  <p className="text-[11px] text-[#6E5C5F]">Weighted Late Fusion Model</p>
+                  <p className="text-[11px] text-[#6E5C5F]">{t('weightedLateFusionModelLabel', 'Weighted Late Fusion Model')}</p>
                 </div>
 
                 <div className="p-2 bg-white rounded-lg border border-[#FDBA74] text-[10px] font-mono text-[#2E2628] space-y-0.5">
-                  <p>0.55 · Fundus ({result.fundus.grade})</p>
-                  <p>+ 0.30 · Meta ({result.metadata.predictedGrade})</p>
+                  <p>0.55 · {t('fundusStreamLabelShort', 'Fundus')} ({result.fundus.grade})</p>
+                  <p>+ 0.30 · {t('metaStreamLabelShort', 'Meta')} ({result.metadata.predictedGrade})</p>
                   <p>+ 0.15 · OCT ({result.oct.dmeDetected ? '2' : '0'})</p>
                   <p className="font-bold text-[#9D174D] pt-0.5 border-t border-[#EFE4DC]">
-                    = Raw {result.rawFusionScore} → Final {result.finalGrade}
+                    = {t('rawScoreWord', 'Raw')} {result.rawFusionScore} → {t('finalScoreWord', 'Final')} {result.finalGrade}
                   </p>
                 </div>
               </div>
@@ -1135,11 +1134,11 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
               <div className="flex items-center gap-2">
                 <Layers className="w-4 h-4 text-[#EA580C]" />
                 <span className="text-xs font-bold text-[#2E2628] uppercase tracking-wider">
-                  Scientific Ablation Benchmarks
+                  {t('scientificAblationBenchmarksTitle', 'Scientific Ablation Benchmarks')}
                 </span>
               </div>
               <p className="text-xs sm:text-sm text-[#6E5C5F]">
-                Our 6-experiment ablation matrix demonstrates that multimodal fusion yields a statistically validated <strong>+0.068 AUC gain</strong> over fundus-alone classification.
+                {t('scientificAblationBenchmarksDesc', 'Our 6-experiment ablation matrix demonstrates that multimodal fusion yields a statistically validated +0.068 AUC gain over fundus-alone classification.')}
               </p>
             </div>
 
@@ -1147,7 +1146,7 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
               onClick={onAblationClick}
               className="bg-white hover:bg-[#FFF7ED] text-[#2E2628] hover:text-[#EA580C] border border-[#EFE4DC] hover:border-[#FDBA74] px-4 py-2 rounded-xl text-xs font-semibold shrink-0 transition-colors flex items-center gap-1.5 shadow-xs"
             >
-              <span>View 6-Experiment Matrix</span>
+              <span>{t('view6ExperimentMatrixBtn', 'View 6-Experiment Matrix')}</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </section>

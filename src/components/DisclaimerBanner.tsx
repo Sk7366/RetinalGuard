@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { AlertTriangle, ChevronDown, ChevronUp, ShieldCheck } from 'lucide-react';
+import { useTranslation } from '../i18n/I18nContext';
 
 export const DisclaimerBanner: React.FC = () => {
+  const { t } = useTranslation();
   // Start in compact mode to be unobtrusive and not cover content
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -25,7 +27,7 @@ export const DisclaimerBanner: React.FC = () => {
               <AlertTriangle className="w-3 h-3" />
             </div>
             <span className="text-[10px] sm:text-[11px] font-semibold text-stone-800 uppercase tracking-wider">
-              Investigational Support
+              {t("investigationalSupport", "Investigational Support")}
             </span>
           </button>
 
@@ -47,14 +49,14 @@ export const DisclaimerBanner: React.FC = () => {
         {isExpanded && (
           <div className="mt-2 pt-2 border-t border-stone-100 space-y-1.5 text-[10px] text-stone-600 leading-relaxed animate-in fade-in duration-150">
             <p className="font-medium text-stone-800">
-              Research &amp; Triage Demo Only · Not FDA / CDSCO cleared as a diagnostic device.
+              {t("disclaimerNotice", "Research & Triage Demo Only · Not FDA / CDSCO cleared as a diagnostic device.")}
             </p>
             <p className="text-stone-500">
-              All predictions, Grad-CAM overlays, and biomarker detections require confirmatory examination by a licensed ophthalmologist.
+              {t("disclaimerSubtext", "All predictions, Grad-CAM overlays, and biomarker detections require confirmatory examination by a licensed ophthalmologist.")}
             </p>
             <div className="flex items-center gap-1.5 text-[9px] text-stone-400 pt-0.5">
               <ShieldCheck className="w-3 h-3 text-emerald-600 shrink-0" />
-              <span>Calibrated on UKPDS / DCCT feature distributions</span>
+              <span>{t("disclaimerCalibrated", "Calibrated on UKPDS / DCCT feature distributions")}</span>
             </div>
           </div>
         )}

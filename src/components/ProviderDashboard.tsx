@@ -28,6 +28,7 @@ import { PRESET_CASES } from '../data/sampleCases';
 import { SIMULATED_TODAY_METRICS } from '../mock/mockData';
 import { MultimodalTriageResult, UserRole } from '../types';
 import { RiskChip } from './RiskChip';
+import { useTranslation } from '../i18n/I18nContext';
 
 interface ProviderDashboardProps {
   history: MultimodalTriageResult[];
@@ -48,6 +49,7 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
   onOpenBatch,
   userRole,
 }) => {
+  const { t } = useTranslation();
   const [baseMetrics, setBaseMetrics] = useState(SIMULATED_TODAY_METRICS);
 
   useEffect(() => {
@@ -90,22 +92,22 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
             <div className="flex items-center gap-2 flex-wrap text-xs">
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-stone-100 text-stone-800 border border-stone-200/80">
                 <Stethoscope className="w-3.5 h-3.5 text-[#EA580C]" />
-                <span>Provider Clinical Cockpit</span>
+                <span>{t("providerCockpitTag", "Provider Clinical Cockpit")}</span>
               </span>
               <span className="text-[11px] font-medium px-2 py-0.5 rounded-md bg-amber-50/80 text-amber-900 border border-amber-200/70">
-                SIMULATED DATA · Daily Field Cohort
+                {t("simulatedDataCohort", "SIMULATED DATA · Daily Field Cohort")}
               </span>
               <span className="text-[11px] text-stone-500 bg-stone-50 px-2 py-0.5 rounded-md border border-stone-200/70">
-                Site: Bengaluru Community Outreach
+                {t("siteOutreachLocation", "Site: Bengaluru Community Outreach")}
               </span>
             </div>
 
             {/* Heading & Supporting Description */}
             <h1 className="text-xl sm:text-2xl lg:text-3xl font-serif font-bold text-stone-900 tracking-tight">
-              Diabetic Retinopathy Screening Center
+              {t("providerHeroTitle", "Diabetic Retinopathy Screening Center")}
             </h1>
             <p className="text-xs sm:text-sm text-stone-600 leading-relaxed max-w-2xl">
-              Multimodal screening with automated 2D fundus grading, OCT-DME safety verification, and closed-loop ophthalmology referral tracking.
+              {t("providerHeroDesc", "Multimodal screening with automated 2D fundus grading, OCT-DME safety verification, and closed-loop ophthalmology referral tracking.")}
             </p>
           </div>
 
@@ -118,7 +120,7 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs sm:text-sm font-semibold shadow-xs transition-colors focus:ring-2 focus:ring-[#EA580C]/30 focus:outline-none"
             >
               <Sparkles className="w-4 h-4 text-orange-100" />
-              <span>Start Screening</span>
+              <span>{t("startScreeningBtn", "Start Screening")}</span>
             </button>
 
             <button
@@ -128,7 +130,7 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-stone-50 text-stone-800 border border-stone-200/90 text-xs sm:text-sm font-semibold transition-colors focus:ring-2 focus:ring-stone-200 focus:outline-none"
             >
               <Tent className="w-4 h-4 text-[#EA580C]" />
-              <span>Screening Camp Mode</span>
+              <span>{t("campModeBtn", "Screening Camp Mode")}</span>
             </button>
           </div>
         </div>
@@ -140,10 +142,10 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
       <section className="space-y-2.5" aria-label="Clinical Triage Metrics">
         <div className="flex items-center justify-between text-xs px-0.5">
           <span className="font-semibold uppercase tracking-wider text-stone-700 text-[11px]">
-            Today's Clinical Triage Overview
+            {t("todayTriageOverviewTitle", "Today's Clinical Triage Overview")}
           </span>
           <span className="text-[10px] font-medium text-stone-500 bg-stone-100 px-2 py-0.5 rounded border border-stone-200/60">
-            Simulated Field Data
+            {t("simulatedFieldDataTag", "Simulated Field Data")}
           </span>
         </div>
 
@@ -151,7 +153,7 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
           {/* 1. Today's screenings */}
           <div className="bg-white p-4 rounded-xl border border-stone-200/80 shadow-2xs flex flex-col justify-between">
             <div className="flex items-center justify-between text-xs text-stone-500 mb-2">
-              <span className="font-medium text-stone-700">Today's Screenings</span>
+              <span className="font-medium text-stone-700">{t("todayScreeningsMetric", "Today's Screenings")}</span>
               <Activity className="w-3.5 h-3.5 text-stone-400" />
             </div>
             <div>
@@ -160,7 +162,7 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
               </div>
               <div className="flex items-center gap-1 text-[11px] text-stone-500 mt-1">
                 <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                <span>100% Ingested &amp; Audited</span>
+                <span>{t("ingestedAuditedNote", "100% Ingested & Audited")}</span>
               </div>
             </div>
           </div>
@@ -168,10 +170,10 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
           {/* 2. Low concern (subtle green indicator) */}
           <div className="bg-white p-4 rounded-xl border border-stone-200/80 shadow-2xs flex flex-col justify-between">
             <div className="flex items-center justify-between text-xs mb-2">
-              <span className="font-medium text-stone-700">Low Concern</span>
+              <span className="font-medium text-stone-700">{t("lowConcernMetric", "Low Concern")}</span>
               <span className="inline-flex items-center gap-1 text-[10px] font-medium text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200/60">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                Normal / Mild
+                {t("normalMildTag", "Normal / Mild")}
               </span>
             </div>
             <div>
@@ -179,7 +181,7 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
                 {lowConcern}
               </div>
               <div className="text-[11px] text-stone-500 mt-1">
-                Grade 0 (None) &amp; Grade 1 (Mild)
+                {t("grade0And1Desc", "Grade 0 (None) & Grade 1 (Mild)")}
               </div>
             </div>
           </div>
@@ -187,10 +189,10 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
           {/* 3. Review recommended (subtle amber indicator) */}
           <div className="bg-white p-4 rounded-xl border border-stone-200/80 shadow-2xs flex flex-col justify-between">
             <div className="flex items-center justify-between text-xs mb-2">
-              <span className="font-medium text-stone-700">Review Recommended</span>
+              <span className="font-medium text-stone-700">{t("reviewRecommendedMetric", "Review Recommended")}</span>
               <span className="inline-flex items-center gap-1 text-[10px] font-medium text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200/60">
                 <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                Moderate
+                {t("moderateTag", "Moderate")}
               </span>
             </div>
             <div>
@@ -198,7 +200,7 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
                 {reviewRecommended}
               </div>
               <div className="text-[11px] text-stone-500 mt-1">
-                Grade 2 Moderate NPDR
+                {t("grade2ModerateNpdr", "Grade 2 Moderate NPDR")}
               </div>
             </div>
           </div>
@@ -206,10 +208,10 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
           {/* 4. Priority referral (subtle red indicator) */}
           <div className="bg-white p-4 rounded-xl border border-stone-200/80 shadow-2xs flex flex-col justify-between">
             <div className="flex items-center justify-between text-xs mb-2">
-              <span className="font-medium text-stone-700">Priority Referral</span>
+              <span className="font-medium text-stone-700">{t("priorityReferralMetric", "Priority Referral")}</span>
               <span className="inline-flex items-center gap-1 text-[10px] font-medium text-red-700 bg-red-50 px-1.5 py-0.5 rounded border border-red-200/60">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
-                Urgent
+                {t("urgentTag", "Urgent")}
               </span>
             </div>
             <div>
@@ -217,7 +219,7 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
                 {priorityReferral}
               </div>
               <div className="text-[11px] text-stone-500 mt-1">
-                Grade 3, 4, or Active DME
+                {t("grade34OrDme", "Grade 3, 4, or Active DME")}
               </div>
             </div>
           </div>
@@ -225,10 +227,10 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
           {/* 5. Ungradable (neutral/warning indicator) */}
           <div className="bg-white p-4 rounded-xl border border-stone-200/80 shadow-2xs flex flex-col justify-between col-span-2 sm:col-span-1">
             <div className="flex items-center justify-between text-xs mb-2">
-              <span className="font-medium text-stone-700">Ungradable</span>
+              <span className="font-medium text-stone-700">{t("ungradableMetric", "Ungradable")}</span>
               <span className="inline-flex items-center gap-1 text-[10px] font-medium text-stone-600 bg-stone-100 px-1.5 py-0.5 rounded border border-stone-200">
                 <span className="w-1.5 h-1.5 rounded-full bg-stone-400" />
-                Retake
+                {t("retakeTag", "Retake")}
               </span>
             </div>
             <div>
@@ -236,7 +238,7 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
                 {ungradable}
               </div>
               <div className="text-[11px] text-stone-500 mt-1">
-                Recapture Required (QC Gate)
+                {t("recaptureRequiredQc", "Recapture Required (QC Gate)")}
               </div>
             </div>
           </div>
@@ -248,7 +250,7 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
           ========================================================================= */}
       <section className="space-y-2.5" aria-label="Quick Action Modules">
         <div className="text-xs px-0.5 font-semibold uppercase tracking-wider text-stone-700 text-[11px]">
-          Clinical Workflow Modules
+          {t("clinicalWorkflowModulesTitle", "Clinical Workflow Modules")}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
@@ -264,18 +266,18 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
                   <Eye className="w-4 h-4" />
                 </div>
                 <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-orange-50 text-[#EA580C] border border-orange-200/60">
-                  Primary Flow
+                  {t("primaryFlowBadge", "Primary Flow")}
                 </span>
               </div>
               <h3 className="font-semibold text-sm text-stone-900 group-hover:text-[#EA580C] transition-colors">
-                Start Screening
+                {t("startScreeningTitle", "Start Screening")}
               </h3>
               <p className="text-xs text-stone-500 mt-1 leading-relaxed">
-                Step-by-step examination with 2D fundus, optional OCT, quality gate, and triage report.
+                {t("startScreeningWorkflowDesc", "Step-by-step examination with 2D fundus, optional OCT, quality gate, and triage report.")}
               </p>
             </div>
             <div className="flex items-center gap-1.5 text-xs font-semibold text-[#EA580C] mt-4 pt-2 border-t border-stone-100">
-              <span>Launch Encounter</span>
+              <span>{t("launchEncounterBtn", "Launch Encounter")}</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </div>
           </button>
@@ -292,18 +294,18 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
                   <UserCheck className="w-4 h-4" />
                 </div>
                 <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-red-50 text-red-700 border border-red-200/60">
-                  {priorityReferral} Priority
+                  {priorityReferral} {t("priorityBadge", "Priority")}
                 </span>
               </div>
               <h3 className="font-semibold text-sm text-stone-900 group-hover:text-blue-600 transition-colors">
-                Review Queue
+                {t("reviewQueueTitle", "Review Queue")}
               </h3>
               <p className="text-xs text-stone-500 mt-1 leading-relaxed">
-                Supervising clinician queue for case validation, Grad-CAM review, and grade confirmation.
+                {t("reviewQueueDesc", "Supervising clinician queue for case validation, Grad-CAM review, and grade confirmation.")}
               </p>
             </div>
             <div className="flex items-center gap-1.5 text-xs font-semibold text-blue-600 mt-4 pt-2 border-t border-stone-100">
-              <span>Open Queue</span>
+              <span>{t("openQueueBtn", "Open Queue")}</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </div>
           </button>
@@ -320,18 +322,18 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
                   <Tent className="w-4 h-4" />
                 </div>
                 <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200/60">
-                  Field / Tablet
+                  {t("fieldTabletBadge", "Field / Tablet")}
                 </span>
               </div>
               <h3 className="font-semibold text-sm text-stone-900 group-hover:text-emerald-700 transition-colors">
-                Screening Camp Mode
+                {t("screeningCampModeTitle", "Screening Camp Mode")}
               </h3>
               <p className="text-xs text-stone-500 mt-1 leading-relaxed">
-                Streamlined field interface with high-throughput capture and offline sync capability.
+                {t("screeningCampModeDesc", "Streamlined field interface with high-throughput capture and offline sync capability.")}
               </p>
             </div>
             <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-700 mt-4 pt-2 border-t border-stone-100">
-              <span>Enter Camp Mode</span>
+              <span>{t("enterCampModeBtn", "Enter Camp Mode")}</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </div>
           </button>
@@ -348,18 +350,18 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
                   <Layers className="w-4 h-4" />
                 </div>
                 <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200/60">
-                  Multi-Patient
+                  {t("multiPatientBadge", "Multi-Patient")}
                 </span>
               </div>
               <h3 className="font-semibold text-sm text-stone-900 group-hover:text-purple-700 transition-colors">
-                Batch Screening
+                {t("batchScreeningTitle", "Batch Screening")}
               </h3>
               <p className="text-xs text-stone-500 mt-1 leading-relaxed">
-                Ingest multiple imaging sets via CSV manifests with automated batch risk triaging.
+                {t("batchScreeningDesc", "Ingest multiple imaging sets via CSV manifests with automated batch risk triaging.")}
               </p>
             </div>
             <div className="flex items-center gap-1.5 text-xs font-semibold text-purple-700 mt-4 pt-2 border-t border-stone-100">
-              <span>Batch Engine</span>
+              <span>{t("batchEngineBtn", "Batch Engine")}</span>
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </div>
           </button>
@@ -373,11 +375,11 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
             <div className="flex items-center gap-2">
               <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
               <h2 className="text-sm sm:text-base font-semibold text-stone-900">
-                Priority Referrals Requiring Ophthalmology Action
+                {t("priorityReferralsTitle", "Priority Referrals Requiring Ophthalmology Action")}
               </h2>
             </div>
             <p className="text-xs text-stone-500 mt-0.5">
-              Cases classified as Grade 3 (Severe NPDR), Grade 4 (PDR), or active OCT macular edema.
+              {t("priorityReferralsDesc", "Cases classified as Grade 3 (Severe NPDR), Grade 4 (PDR), or active OCT macular edema.")}
             </p>
           </div>
 
@@ -386,7 +388,7 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
             onClick={() => onNavigate('review-queue')}
             className="text-xs font-semibold text-[#EA580C] hover:text-[#C2410C] inline-flex items-center gap-1 transition-colors"
           >
-            <span>View All in Review Queue</span>
+            <span>{t("viewAllInReviewQueueBtn", "View All in Review Queue")}</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -403,12 +405,12 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
                   <RiskChip grade={c.expectedTriage.finalGrade} size="sm" />
                 </div>
                 <div className="text-xs text-stone-600 truncate">
-                  {c.name} · {c.expectedTriage.clinicalInput.age}y · HbA1c {c.expectedTriage.clinicalInput.hba1c}%
+                  {c.name} · {c.expectedTriage.clinicalInput.age}{t("yShort", "y")} · HbA1c {c.expectedTriage.clinicalInput.hba1c}%
                 </div>
                 <div className="text-[11px] font-medium text-red-700">
                   {c.expectedTriage.oct.dmeDetected
-                    ? '⚠️ Active Cystoid Macular Edema'
-                    : 'Severe Retinopathy Lesions'}
+                    ? t("activeCystoidMacularEdema", "⚠️ Active Cystoid Macular Edema")
+                    : t("severeRetinopathyLesions", "Severe Retinopathy Lesions")}
                 </div>
               </div>
 
@@ -417,7 +419,7 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
                 onClick={() => onSelectResult(c.expectedTriage)}
                 className="px-3 py-1.5 rounded-lg bg-white border border-stone-200 text-stone-800 hover:text-[#EA580C] hover:border-[#EA580C]/40 text-xs font-semibold transition-colors shadow-2xs shrink-0"
               >
-                Inspect Case
+                {t("inspectCaseBtn", "Inspect Case")}
               </button>
             </div>
           ))}

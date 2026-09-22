@@ -13,6 +13,7 @@ import {
   X,
 } from 'lucide-react';
 import { UserRole } from '../types';
+import { useTranslation } from '../i18n/I18nContext';
 
 interface RoleModalProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ interface RoleModalProps {
 }
 
 export const RoleModal: React.FC<RoleModalProps> = ({ isOpen, onClose, onSelectRole, currentRole }) => {
+  const { t } = useTranslation();
   if (!isOpen) return null;
 
   const roles: Array<{
@@ -35,46 +37,46 @@ export const RoleModal: React.FC<RoleModalProps> = ({ isOpen, onClose, onSelectR
   }> = [
     {
       id: 'public',
-      title: 'Public User',
-      badge: 'Public & Patient',
+      title: t('rolePublicTitle', 'Public User'),
+      badge: t('rolePublicBadge', 'Public & Patient'),
       badgeColor: 'bg-[#FFF7ED] text-[#C2410C] border-[#FED7AA]',
-      description: 'Explore how AI screens diabetic retinopathy, find accredited screening centers across India, learn warning signs, and run interactive demonstrations.',
+      description: t('rolePublicDesc', 'Explore how AI screens diabetic retinopathy, find accredited screening centers across India, learn warning signs, and run interactive demonstrations.'),
       icon: <HeartHandshake className="w-5 h-5 text-[#EA580C]" />,
       highlightBorder: 'hover:border-[#EA580C]',
     },
     {
       id: 'technician',
-      title: 'Screening Technician',
-      badge: 'Field & Camp Ops',
+      title: t('roleTechnicianTitle', 'Screening Technician'),
+      badge: t('roleTechnicianBadge', 'Field & Camp Ops'),
       badgeColor: 'bg-[#FFF7ED] text-[#EA580C] border-[#FED7AA]',
-      description: 'Designed for rural outreach camps: Rapid field queue entry, batch image triage, capture quality verification, and automatic ungradable detection.',
+      description: t('roleTechnicianDesc', 'Designed for rural outreach camps: Rapid field queue entry, batch image triage, capture quality verification, and automatic ungradable detection.'),
       icon: <Camera className="w-5 h-5 text-[#EA580C]" />,
       highlightBorder: 'hover:border-[#EA580C]',
     },
     {
       id: 'provider',
-      title: 'Healthcare Provider',
-      badge: 'Clinical Practice',
+      title: t('roleProviderTitle', 'Healthcare Provider'),
+      badge: t('roleProviderBadge', 'Clinical Practice'),
       badgeColor: 'bg-[#FDF2F8] text-[#BE185D] border-[#FBCFE8]',
-      description: 'For optometrists, clinic physicians, and ophthalmologists: Multimodal DR grading, OCT-DME safety overrides, closed-loop referrals, and clinical PDF exports.',
+      description: t('roleProviderDesc', 'For optometrists, clinic physicians, and ophthalmologists: Multimodal DR grading, OCT-DME safety overrides, closed-loop referrals, and clinical PDF exports.'),
       icon: <Stethoscope className="w-5 h-5 text-[#DB2777]" />,
       highlightBorder: 'hover:border-[#DB2777]',
     },
     {
       id: 'admin',
-      title: 'Administrator',
-      badge: 'Governance & Ops',
+      title: t('roleAdminTitle', 'Administrator'),
+      badge: t('roleAdminBadge', 'Governance & Ops'),
       badgeColor: 'bg-[#FFF7ED] text-[#9A3412] border-[#FED7AA]',
-      description: 'Facility oversight, screening throughput analytics, referral adherence auditing, device integration, and clinic settings.',
+      description: t('roleAdminDesc', 'Facility oversight, screening throughput analytics, referral adherence auditing, device integration, and clinic settings.'),
       icon: <ShieldCheck className="w-5 h-5 text-[#C2410C]" />,
       highlightBorder: 'hover:border-[#C2410C]',
     },
     {
       id: 'researcher',
-      title: 'Researcher',
-      badge: 'Academic & AI Evaluation',
+      title: t('roleResearcherTitle', 'Researcher'),
+      badge: t('roleResearcherBadge', 'Academic & AI Evaluation'),
       badgeColor: 'bg-[#FAF8F6] text-[#6E5C5F] border-[#EFE4DC]',
-      description: 'In-depth 6-condition ablation matrix, ROC/PR analysis, SHAP feature attributions, ONNX runtime latency benchmarks, and SaMD validation documents.',
+      description: t('roleResearcherDesc', 'In-depth 6-condition ablation matrix, ROC/PR analysis, SHAP feature attributions, ONNX runtime latency benchmarks, and SaMD validation documents.'),
       icon: <Microscope className="w-5 h-5 text-[#6E5C5F]" />,
       highlightBorder: 'hover:border-[#EA580C]',
     },
@@ -91,20 +93,20 @@ export const RoleModal: React.FC<RoleModalProps> = ({ isOpen, onClose, onSelectR
                 <Eye className="w-4 h-4" />
               </div>
               <span className="text-xs font-semibold uppercase tracking-wider text-[#C2410C]">
-                RetinaGuard Persona Architecture
+                {t('personaArchitectureBadge', 'RetinaGuard Persona Architecture')}
               </span>
             </div>
             <h2 className="text-xl font-serif font-bold text-[#2E2628]">
-              Select Your Role & Workspace
+              {t('selectYourRoleAndWorkspace', 'Select Your Role & Workspace')}
             </h2>
             <p className="text-xs text-[#6E5C5F] mt-1">
-              Switch between Public Patient mode and Provider/Technician/Research cockpits anytime.
+              {t('selectYourRoleSub', 'Switch between Public Patient mode and Provider/Technician/Research cockpits anytime.')}
             </p>
           </div>
           <button
             onClick={onClose}
             className="p-1.5 rounded-lg text-[#6E5C5F] hover:text-[#2E2628] hover:bg-white/80 transition-colors"
-            aria-label="Close modal"
+            aria-label={t('closeModal', 'Close modal')}
           >
             <X className="w-5 h-5" />
           </button>
@@ -143,7 +145,7 @@ export const RoleModal: React.FC<RoleModalProps> = ({ isOpen, onClose, onSelectR
                       </span>
                       {isSelected && (
                         <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#EA580C] text-white font-semibold">
-                          Active
+                          {t('activeRoleLabel', 'Active')}
                         </span>
                       )}
                     </div>
@@ -160,12 +162,12 @@ export const RoleModal: React.FC<RoleModalProps> = ({ isOpen, onClose, onSelectR
 
         {/* Footer info */}
         <div className="p-3.5 px-6 border-t border-[#EFE4DC] bg-[#FAF8F6] flex items-center justify-between text-xs text-[#6E5C5F]">
-          <span>You can switch roles anytime from the header pill.</span>
+          <span>{t('switchRolesNotice', 'You can switch roles anytime from the header pill.')}</span>
           <button
             onClick={onClose}
             className="text-xs font-semibold text-[#EA580C] hover:underline"
           >
-            Done
+            {t('doneButton', 'Done')}
           </button>
         </div>
       </div>

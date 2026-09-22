@@ -74,6 +74,7 @@ interface NavbarProps {
   userEmail: string | null;
   onOpenAuth: () => void;
   onLogout?: () => void;
+  onOpenAccessibilityModal?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -94,6 +95,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   currentLanguage,
   onLanguageChange,
   onLogout,
+  onOpenAccessibilityModal,
 }) => {
   const { t } = useTranslation();
 
@@ -226,7 +228,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  Why Screening
+                  {t('navWhyScreening', 'Why Screening')}
                 </button>
 
                 <button
@@ -239,7 +241,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  How It Works
+                  {t('navHowItWorks', 'How It Works')}
                 </button>
 
                 <button
@@ -252,7 +254,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  Find Screening
+                  {t('navFindScreening', 'Find Screening')}
                 </button>
 
                 <button
@@ -265,7 +267,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  Learn
+                  {t('navLearn', 'Learn')}
                 </button>
 
                 <button
@@ -274,7 +276,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={onOpenHelpModal}
                   className="px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors whitespace-nowrap"
                 >
-                  Help
+                  {t('navHelp', 'Help')}
                 </button>
               </>
             )}
@@ -296,7 +298,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  Dashboard
+                  {t('navDashboard', 'Dashboard')}
                 </button>
 
                 <button
@@ -309,7 +311,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  Start Screening
+                  {t('navStartScreening', 'Start Screening')}
                 </button>
 
                 <button
@@ -322,7 +324,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  Review Queue
+                  {t('navReviewQueue', 'Review Queue')}
                 </button>
 
                 {/* Visible on Desktop (>= 1280px), Collapsed into 'More' on Tablet (1024-1279px) */}
@@ -336,7 +338,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  Appointments
+                  {t('navAppointments', 'Appointments')}
                 </button>
 
                 <button
@@ -349,7 +351,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  Referrals
+                  {t('navReferrals', 'Referrals')}
                 </button>
 
                 {/* MORE DROPDOWN FOR HELPER */}
@@ -360,7 +362,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onClick={() => setMoreMenuOpen(!moreMenuOpen)}
                     className="px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors flex items-center gap-1 whitespace-nowrap"
                   >
-                    <span>More</span>
+                    <span>{t('navMore', 'More')}</span>
                     <ChevronDown
                       className={`w-3.5 h-3.5 transition-transform ${
                         moreMenuOpen ? 'rotate-180' : ''
@@ -381,7 +383,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                           className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                         >
                           <Calendar className="w-3.5 h-3.5 text-[#EA580C]" />
-                          <span>Appointments</span>
+                          <span>{t('navAppointments', 'Appointments')}</span>
                         </button>
                         <button
                           type="button"
@@ -389,7 +391,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                           className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                         >
                           <Users className="w-3.5 h-3.5 text-[#EA580C]" />
-                          <span>Referrals</span>
+                          <span>{t('navReferrals', 'Referrals')}</span>
                         </button>
                       </div>
 
@@ -399,7 +401,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                       >
                         <Activity className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                        <span>Camp Offline Mode</span>
+                        <span>{t('navCampOfflineMode', 'Camp Offline Mode')}</span>
                       </button>
 
                       <button
@@ -408,7 +410,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                       >
                         <FileSpreadsheet className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                        <span>Batch Screening</span>
+                        <span>{t('navBatchScreening', 'Batch Screening')}</span>
                       </button>
 
                       <button
@@ -417,7 +419,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                       >
                         <FileText className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                        <span>Cases & History</span>
+                        <span>{t('navCasesHistory', 'Cases & History')}</span>
                       </button>
 
                       <button
@@ -426,7 +428,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                       >
                         <BarChart3 className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                        <span>Analytics</span>
+                        <span>{t('navAnalytics', 'Analytics')}</span>
                       </button>
 
                       <button
@@ -435,7 +437,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                       >
                         <Cpu className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                        <span>Technology & Architecture</span>
+                        <span>{t('navTechnologySaMD', 'Technology & Architecture')}</span>
                       </button>
 
                       <button
@@ -444,7 +446,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                       >
                         <Settings className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                        <span>Settings</span>
+                        <span>{t('navSettings', 'Settings')}</span>
                       </button>
 
                       <button
@@ -456,7 +458,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2 border-t border-[#EFE4DC] mt-1 pt-1.5"
                       >
                         <HelpCircle className="w-3.5 h-3.5 text-[#EA580C]" />
-                        <span>Screening SOP & Help</span>
+                        <span>{t('navScreeningSOPHelp', 'Screening SOP & Help')}</span>
                       </button>
                     </div>
                   )}
@@ -481,7 +483,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  Research
+                  {t('navResearch', 'Research')}
                 </button>
 
                 <button
@@ -494,7 +496,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  Models
+                  {t('navModels', 'Models')}
                 </button>
 
                 <button
@@ -507,7 +509,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  Datasets
+                  {t('navDatasets', 'Datasets')}
                 </button>
 
                 <button
@@ -520,7 +522,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  Experiments
+                  {t('navExperiments', 'Experiments')}
                 </button>
 
                 {/* Visible on Desktop (>= 1280px), Collapsed into 'More' on Tablet (1024-1279px) */}
@@ -534,7 +536,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  Evaluation
+                  {t('navEvaluation', 'Evaluation')}
                 </button>
 
                 <button
@@ -547,7 +549,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  Explainability
+                  {t('navExplainability', 'Explainability')}
                 </button>
 
                 {/* MORE DROPDOWN FOR RESEARCHER */}
@@ -558,7 +560,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     onClick={() => setMoreMenuOpen(!moreMenuOpen)}
                     className="px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors flex items-center gap-1 whitespace-nowrap"
                   >
-                    <span>More</span>
+                    <span>{t('navMore', 'More')}</span>
                     <ChevronDown
                       className={`w-3.5 h-3.5 transition-transform ${
                         moreMenuOpen ? 'rotate-180' : ''
@@ -579,7 +581,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                           className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                         >
                           <BarChart3 className="w-3.5 h-3.5 text-[#EA580C]" />
-                          <span>Evaluation & Ablation Matrix</span>
+                          <span>{t('navEvaluation', 'Evaluation & Ablation Matrix')}</span>
                         </button>
                         <button
                           type="button"
@@ -587,7 +589,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                           className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                         >
                           <ShieldAlert className="w-3.5 h-3.5 text-[#EA580C]" />
-                          <span>Explainability & Fairness</span>
+                          <span>{t('navExplainability', 'Explainability & Fairness')}</span>
                         </button>
                       </div>
 
@@ -597,7 +599,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                       >
                         <Cpu className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                        <span>Architecture & SaMD Validation</span>
+                        <span>{t('navArchitectureValidation', 'Architecture & SaMD Validation')}</span>
                       </button>
 
                       <button
@@ -606,7 +608,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                       >
                         <Settings className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                        <span>Research Settings</span>
+                        <span>{t('navSettings', 'Research Settings')}</span>
                       </button>
 
                       <button
@@ -618,7 +620,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2 border-t border-[#EFE4DC] mt-1 pt-1.5"
                       >
                         <HelpCircle className="w-3.5 h-3.5 text-[#EA580C]" />
-                        <span>Research Documentation & SOP</span>
+                        <span>{t('navResearchDocumentation', 'Research Documentation & SOP')}</span>
                       </button>
                     </div>
                   )}
@@ -650,8 +652,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 title="View active examination triage"
               >
                 <Activity className="w-3.5 h-3.5 text-[#EA580C] animate-pulse" />
-                <span className="hidden md:inline">Results • 1 active</span>
-                <span className="md:hidden">1 Active</span>
+                <span className="hidden md:inline">{t('navResultsActive', 'Results • 1 active')}</span>
+                <span className="md:hidden">{t('navActiveShort', '1 Active')}</span>
               </button>
             )}
 
@@ -667,8 +669,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs uppercase tracking-wider shadow-sm hover:shadow-md transition-all whitespace-nowrap ring-2 ring-[#EA580C]/20 shrink-0"
               >
                 <MapPin className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">FIND A SCREENING</span>
-                <span className="sm:hidden text-[11px]">FIND SCREENING</span>
+                <span className="hidden sm:inline">{t('navFindScreeningCta', 'FIND A SCREENING')}</span>
+                <span className="sm:hidden text-[11px]">{t('navFindScreeningCtaShort', 'FIND SCREENING')}</span>
               </button>
             )}
 
@@ -704,7 +706,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-[#EFE4DC] py-1.5 z-50 animate-in fade-in"
                 >
                   <div className="px-3 py-1 text-[10px] font-bold text-[#9E8D91] uppercase tracking-wider border-b border-[#EFE4DC]">
-                    Select Language
+                    {t('navSelectLanguage', 'Select Language')}
                   </div>
                   {SUPPORTED_LANGUAGES.map((lang) => (
                     <button
@@ -735,6 +737,9 @@ export const Navbar: React.FC<NavbarProps> = ({
               <AccessibilityMenu
                 settings={accessibilitySettings}
                 onUpdateSettings={onUpdateAccessibilitySettings}
+                currentLanguage={currentLanguage}
+                onLanguageChange={onLanguageChange}
+                onOpenFullSettings={onOpenAccessibilityModal}
               />
             </div>
 
@@ -784,7 +789,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="w-full text-left px-3 py-2 text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] rounded-lg flex items-center gap-2"
                       >
                         <FileText className="w-3.5 h-3.5 text-[#EA580C]" />
-                        <span>My Reports</span>
+                        <span>{t('navMyReports', 'My Reports')}</span>
                       </button>
 
                       <button
@@ -796,7 +801,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="w-full text-left px-3 py-2 text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] rounded-lg flex items-center gap-2"
                       >
                         <Activity className="w-3.5 h-3.5 text-[#EA580C]" />
-                        <span>My Screening Journey</span>
+                        <span>{t('navMyScreening', 'My Screening Journey')}</span>
                       </button>
 
                       <button
@@ -808,7 +813,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         className="w-full text-left px-3 py-2 text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] rounded-lg flex items-center gap-2"
                       >
                         <UserIcon className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                        <span>Account Profile</span>
+                        <span>{t('navPatientProfile', 'Account Profile')}</span>
                       </button>
 
                       <div className="border-t border-[#EFE4DC] my-1 pt-1">
@@ -820,7 +825,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                           }}
                           className="w-full text-left px-3 py-1.5 text-xs text-[#6E5C5F] hover:bg-[#F9F5F1] rounded-lg flex items-center justify-between"
                         >
-                          <span>Switch Workspace</span>
+                          <span>{t('navSwitchWorkspace', 'Switch Workspace')}</span>
                           <RotateCcw className="w-3 h-3 text-[#9E8D91]" />
                         </button>
 
@@ -832,7 +837,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                           }}
                           className="w-full text-left px-3 py-1.5 text-xs text-[#DC2626] hover:bg-red-50 rounded-lg flex items-center justify-between mt-0.5"
                         >
-                          <span>Sign Out</span>
+                          <span>{t('navSignOut', 'Sign Out')}</span>
                           <LogOut className="w-3 h-3 text-[#DC2626]" />
                         </button>
                       </div>
@@ -848,7 +853,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="px-2.5 sm:px-3 py-1.5 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] bg-white hover:bg-[#FFF7ED] text-xs font-semibold text-[#2E2628] hover:text-[#EA580C] flex items-center gap-1.5 transition-colors whitespace-nowrap shadow-2xs"
                 >
                   <LogIn className="w-3.5 h-3.5 text-[#EA580C]" />
-                  <span className="hidden sm:inline">Sign In</span>
+                  <span className="hidden sm:inline">{t('navSignIn', 'Sign In')}</span>
                 </button>
               )
             ) : (
@@ -897,7 +902,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       <div className="mt-2 flex items-center gap-1.5">
                         <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0] flex items-center gap-1">
                           <ShieldCheck className="w-3 h-3" />
-                          <span>DEMO VERIFIED</span>
+                          <span>{t('navDemoVerified', 'DEMO VERIFIED')}</span>
                         </span>
                       </div>
                     </div>
@@ -910,7 +915,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       }}
                       className="w-full text-left px-2.5 py-1.5 text-xs text-[#2E2628] hover:bg-[#F9F5F1] rounded-lg flex items-center justify-between transition-colors"
                     >
-                      <span className="font-medium">Switch Workspace</span>
+                      <span className="font-medium">{t('navSwitchWorkspace', 'Switch Workspace')}</span>
                       <RotateCcw className="w-3.5 h-3.5 text-[#9E8D91]" />
                     </button>
 
@@ -922,7 +927,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       }}
                       className="w-full text-left px-2.5 py-1.5 text-xs text-[#DC2626] hover:bg-red-50 rounded-lg flex items-center justify-between transition-colors mt-1"
                     >
-                      <span className="font-medium">Sign Out</span>
+                      <span className="font-medium">{t('navSignOut', 'Sign Out')}</span>
                       <LogOut className="w-3.5 h-3.5 text-[#DC2626]" />
                     </button>
                   </div>
@@ -967,7 +972,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 className="w-full py-3 px-4 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs uppercase tracking-wider shadow-sm flex items-center justify-center gap-2"
               >
                 <MapPin className="w-4 h-4" />
-                <span>FIND A SCREENING CENTER</span>
+                <span>{t('navFindScreeningCenterCta', 'FIND A SCREENING CENTER')}</span>
               </button>
 
               <div className="space-y-1">
@@ -980,7 +985,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  Why Screening
+                  {t('navWhyScreening', 'Why Screening')}
                 </button>
 
                 <button
@@ -992,7 +997,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  How It Works
+                  {t('navHowItWorks', 'How It Works')}
                 </button>
 
                 <button
@@ -1004,7 +1009,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  Find Screening
+                  {t('navFindScreening', 'Find Screening')}
                 </button>
 
                 <button
@@ -1016,7 +1021,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                       : 'text-[#2E2628] hover:bg-[#F9F5F1]'
                   }`}
                 >
-                  Learn
+                  {t('navLearn', 'Learn')}
                 </button>
 
                 <button
@@ -1027,7 +1032,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   }}
                   className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium text-[#2E2628] hover:bg-[#F9F5F1]"
                 >
-                  Help & FAQs
+                  {t('navHelpFaqs', 'Help & FAQs')}
                 </button>
               </div>
 
@@ -1035,7 +1040,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               {currentUser?.role === 'patient' && currentUser.id !== 'guest-public' && (
                 <div className="pt-3 border-t border-[#EFE4DC]">
                   <div className="px-3.5 text-[10px] font-bold text-[#9E8D91] uppercase tracking-wider mb-1">
-                    My Care & Reports
+                    {t('navMyCareReports', 'My Care & Reports')}
                   </div>
                   <div className="space-y-1">
                     <button
@@ -1047,7 +1052,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                           : 'text-[#2E2628] hover:bg-[#F9F5F1]'
                       }`}
                     >
-                      <span>My Reports</span>
+                      <span>{t('navMyReports', 'My Reports')}</span>
                       <ChevronRight className="w-4 h-4 text-[#9E8D91]" />
                     </button>
 
@@ -1060,7 +1065,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                           : 'text-[#2E2628] hover:bg-[#F9F5F1]'
                       }`}
                     >
-                      <span>My Screening Journey</span>
+                      <span>{t('navMyScreening', 'My Screening Journey')}</span>
                       <ChevronRight className="w-4 h-4 text-[#9E8D91]" />
                     </button>
 
@@ -1073,7 +1078,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                           : 'text-[#2E2628] hover:bg-[#F9F5F1]'
                       }`}
                     >
-                      <span>Patient Profile</span>
+                      <span>{t('navPatientProfile', 'Patient Profile')}</span>
                       <ChevronRight className="w-4 h-4 text-[#9E8D91]" />
                     </button>
                   </div>
@@ -1086,7 +1091,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {isHelper && (
             <div className="space-y-1">
               <div className="px-3.5 text-[10px] font-bold text-[#9E8D91] uppercase tracking-wider mb-1">
-                Clinical Workflow
+                {t('navClinicalWorkflow', 'Clinical Workflow')}
               </div>
               <button
                 type="button"
@@ -1098,7 +1103,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               >
                 <LayoutDashboard className="w-4 h-4" />
-                <span>Dashboard</span>
+                <span>{t('navDashboard', 'Dashboard')}</span>
               </button>
 
               <button
@@ -1111,7 +1116,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               >
                 <Camera className="w-4 h-4 text-[#EA580C]" />
-                <span>Start Screening</span>
+                <span>{t('navStartScreening', 'Start Screening')}</span>
               </button>
 
               <button
@@ -1124,7 +1129,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               >
                 <ShieldCheck className="w-4 h-4" />
-                <span>Review Queue</span>
+                <span>{t('navReviewQueue', 'Review Queue')}</span>
               </button>
 
               <button
@@ -1137,7 +1142,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               >
                 <Calendar className="w-4 h-4" />
-                <span>Appointments</span>
+                <span>{t('navAppointments', 'Appointments')}</span>
               </button>
 
               <button
@@ -1150,12 +1155,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               >
                 <Users className="w-4 h-4" />
-                <span>Referrals</span>
+                <span>{t('navReferrals', 'Referrals')}</span>
               </button>
 
               <div className="pt-2 border-t border-[#EFE4DC]">
                 <div className="px-3.5 text-[10px] font-bold text-[#9E8D91] uppercase tracking-wider mb-1">
-                  Tools & Configuration
+                  {t('navToolsConfiguration', 'Tools & Configuration')}
                 </div>
 
                 <button
@@ -1164,7 +1169,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                 >
                   <Activity className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                  <span>Camp Offline Mode</span>
+                  <span>{t('navCampOfflineMode', 'Camp Offline Mode')}</span>
                 </button>
 
                 <button
@@ -1173,7 +1178,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                 >
                   <FileSpreadsheet className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                  <span>Batch Screening</span>
+                  <span>{t('navBatchScreening', 'Batch Screening')}</span>
                 </button>
 
                 <button
@@ -1182,7 +1187,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                 >
                   <FileText className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                  <span>Cases & History</span>
+                  <span>{t('navCasesHistory', 'Cases & History')}</span>
                 </button>
 
                 <button
@@ -1191,7 +1196,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                 >
                   <BarChart3 className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                  <span>Analytics</span>
+                  <span>{t('navAnalytics', 'Analytics')}</span>
                 </button>
 
                 <button
@@ -1200,7 +1205,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
                 >
                   <Settings className="w-3.5 h-3.5 text-[#6E5C5F]" />
-                  <span>Settings</span>
+                  <span>{t('navSettings', 'Settings')}</span>
                 </button>
               </div>
             </div>
@@ -1210,7 +1215,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {isResearcher && (
             <div className="space-y-1">
               <div className="px-3.5 text-[10px] font-bold text-[#9E8D91] uppercase tracking-wider mb-1">
-                Research Workspace
+                {t('navResearchWorkspace', 'Research Workspace')}
               </div>
               <button
                 type="button"
@@ -1222,7 +1227,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               >
                 <Layers className="w-4 h-4" />
-                <span>Research</span>
+                <span>{t('navResearch', 'Research')}</span>
               </button>
 
               <button
@@ -1235,7 +1240,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               >
                 <GitBranch className="w-4 h-4" />
-                <span>Models</span>
+                <span>{t('navModels', 'Models')}</span>
               </button>
 
               <button
@@ -1248,7 +1253,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               >
                 <Database className="w-4 h-4" />
-                <span>Datasets</span>
+                <span>{t('navDatasets', 'Datasets')}</span>
               </button>
 
               <button
@@ -1261,7 +1266,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               >
                 <Sparkles className="w-4 h-4" />
-                <span>Experiments</span>
+                <span>{t('navExperiments', 'Experiments')}</span>
               </button>
 
               <button
@@ -1274,7 +1279,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               >
                 <BarChart3 className="w-4 h-4" />
-                <span>Evaluation</span>
+                <span>{t('navEvaluation', 'Evaluation')}</span>
               </button>
 
               <button
@@ -1287,7 +1292,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               >
                 <ShieldAlert className="w-4 h-4" />
-                <span>Explainability</span>
+                <span>{t('navExplainability', 'Explainability')}</span>
               </button>
 
               <button
@@ -1300,7 +1305,27 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`}
               >
                 <Cpu className="w-4 h-4" />
-                <span>Architecture & SaMD</span>
+                <span>{t('navArchitectureValidation', 'Architecture & SaMD')}</span>
+              </button>
+            </div>
+          )}
+
+          {/* Accessibility button in Drawer */}
+          {onOpenAccessibilityModal && (
+            <div className="pt-2 border-t border-[#EFE4DC]">
+              <button
+                type="button"
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  onOpenAccessibilityModal();
+                }}
+                className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center justify-between text-[#2E2628] hover:bg-[#F9F5F1]"
+              >
+                <div className="flex items-center gap-2.5">
+                  <Eye className="w-4 h-4 text-[#EA580C]" />
+                  <span>{t('accessibilitySettingsTitle', 'Accessibility & Display')}</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-[#9E8D91]" />
               </button>
             </div>
           )}
@@ -1311,7 +1336,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               currentUser?.role === 'patient' && currentUser.id !== 'guest-public' ? (
                 <div className="flex items-center justify-between">
                   <div className="text-xs">
-                    <span className="text-[#6E5C5F] block">Signed in as</span>
+                    <span className="text-[#6E5C5F] block">{t('navSignedInAs', 'Signed in as')}</span>
                     <span className="font-bold text-[#2E2628]">{currentUser.name}</span>
                   </div>
                   <button
@@ -1322,7 +1347,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     }}
                     className="px-3 py-1.5 rounded-xl text-xs font-semibold text-red-600 hover:bg-red-50"
                   >
-                    Sign Out
+                    {t('navSignOut', 'Sign Out')}
                   </button>
                 </div>
               ) : (
@@ -1335,7 +1360,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="w-full py-2.5 rounded-xl border border-[#EFE4DC] text-xs font-semibold text-[#2E2628] hover:bg-[#F9F5F1] flex items-center justify-center gap-2"
                 >
                   <LogIn className="w-4 h-4 text-[#EA580C]" />
-                  <span>Sign In / Select Role</span>
+                  <span>{t('navSignInSelectRole', 'Sign In / Select Role')}</span>
                 </button>
               )
             ) : (
@@ -1349,7 +1374,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="w-full py-2.5 rounded-xl border border-[#EFE4DC] text-xs font-semibold text-[#2E2628] hover:bg-[#F9F5F1] flex items-center justify-center gap-2"
                 >
                   <RotateCcw className="w-4 h-4 text-[#EA580C]" />
-                  <span>Switch Workspace</span>
+                  <span>{t('navSwitchWorkspace', 'Switch Workspace')}</span>
                 </button>
 
                 <button
@@ -1361,7 +1386,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   className="w-full py-2.5 rounded-xl bg-red-50 text-xs font-semibold text-red-600 hover:bg-red-100 flex items-center justify-center gap-2"
                 >
                   <LogOut className="w-4 h-4" />
-                  <span>Sign Out</span>
+                  <span>{t('navSignOut', 'Sign Out')}</span>
                 </button>
               </div>
             )}

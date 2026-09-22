@@ -11,6 +11,7 @@ import {
   XCircle,
 } from 'lucide-react';
 import { generateFundusSvg } from '../data/sampleCases';
+import { useTranslation } from '../i18n/I18nContext';
 
 interface ImageCaptureGuideModalProps {
   isOpen: boolean;
@@ -21,6 +22,7 @@ export const ImageCaptureGuideModal: React.FC<ImageCaptureGuideModalProps> = ({
   isOpen,
   onClose,
 }) => {
+  const { t } = useTranslation();
   if (!isOpen) return null;
 
   return (
@@ -34,10 +36,10 @@ export const ImageCaptureGuideModal: React.FC<ImageCaptureGuideModalProps> = ({
             </div>
             <div>
               <h3 className="font-serif font-bold text-base text-[#2E2628]">
-                How to Capture an Analysable Fundus Image
+                {t('captureGuideModalTitle', 'How to Capture an Analysable Fundus Image')}
               </h3>
               <p className="text-xs text-[#6E5C5F]">
-                Technician & Community Worker Best Practices for Quality Screening
+                {t('captureGuideModalSubtitle', 'Technician & Community Worker Best Practices for Quality Screening')}
               </p>
             </div>
           </div>
@@ -54,7 +56,7 @@ export const ImageCaptureGuideModal: React.FC<ImageCaptureGuideModalProps> = ({
           {/* Side-by-side Visual Comparison */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#C2410C] mb-3">
-              Visual Comparison: Good vs Inadequate Image Quality
+              {t('visualComparisonHeader', 'Visual Comparison: Good vs Inadequate Image Quality')}
             </h4>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -63,7 +65,7 @@ export const ImageCaptureGuideModal: React.FC<ImageCaptureGuideModalProps> = ({
                 <div>
                   <div className="flex items-center gap-2 text-[#059669] font-bold text-xs mb-2">
                     <CheckCircle2 className="w-4 h-4" />
-                    <span>GOOD: Suitable for AI Screening</span>
+                    <span>{t('goodImageTag', 'GOOD: Suitable for AI Screening')}</span>
                   </div>
 
                   <div className="aspect-square max-w-[200px] mx-auto rounded-xl overflow-hidden border border-[#A7F3D0] bg-black shadow-xs mb-3">
@@ -75,10 +77,10 @@ export const ImageCaptureGuideModal: React.FC<ImageCaptureGuideModalProps> = ({
                   </div>
 
                   <ul className="space-y-1 text-[11px] text-[#047857]">
-                    <li>• Sharp, visible vessel bifurcations & optic disc</li>
-                    <li>• Even, balanced illumination across macula</li>
-                    <li>• No corneal reflex obscuring temporal arcades</li>
-                    <li>• Centered on fovea (45°–50° field)</li>
+                    <li>• {t('goodBullet1', 'Sharp, visible vessel bifurcations & optic disc')}</li>
+                    <li>• {t('goodBullet2', 'Even, balanced illumination across macula')}</li>
+                    <li>• {t('goodBullet3', 'No corneal reflex obscuring temporal arcades')}</li>
+                    <li>• {t('goodBullet4', 'Centered on fovea (45°–50° field)')}</li>
                   </ul>
                 </div>
               </div>
@@ -88,7 +90,7 @@ export const ImageCaptureGuideModal: React.FC<ImageCaptureGuideModalProps> = ({
                 <div>
                   <div className="flex items-center gap-2 text-[#E11D48] font-bold text-xs mb-2">
                     <XCircle className="w-4 h-4" />
-                    <span>BAD: Blurry, Glare, or Underexposed</span>
+                    <span>{t('badImageTag', 'BAD: Blurry, Glare, or Underexposed')}</span>
                   </div>
 
                   <div className="aspect-square max-w-[200px] mx-auto rounded-xl overflow-hidden border border-[#FECDD3] bg-black/90 shadow-xs mb-3 relative flex items-center justify-center">
@@ -102,10 +104,10 @@ export const ImageCaptureGuideModal: React.FC<ImageCaptureGuideModalProps> = ({
                   </div>
 
                   <ul className="space-y-1 text-[11px] text-[#BE123C]">
-                    <li>• Motion blur softens microaneurysms</li>
-                    <li>• Glare / corneal reflection masks pathology</li>
-                    <li>• Dark periphery prevents quadrant grading</li>
-                    <li>• Inadequate pupil coverage / ungradable</li>
+                    <li>• {t('badBullet1', 'Motion blur softens microaneurysms')}</li>
+                    <li>• {t('badBullet2', 'Glare / corneal reflection masks pathology')}</li>
+                    <li>• {t('badBullet3', 'Dark periphery prevents quadrant grading')}</li>
+                    <li>• {t('badBullet4', 'Inadequate pupil coverage / ungradable')}</li>
                   </ul>
                 </div>
               </div>
@@ -116,28 +118,28 @@ export const ImageCaptureGuideModal: React.FC<ImageCaptureGuideModalProps> = ({
           <div className="p-4 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC]">
             <h4 className="font-serif font-bold text-sm text-[#2E2628] mb-2 flex items-center gap-2">
               <Lightbulb className="w-4 h-4 text-[#EA580C]" />
-              Capture Protocols for Non-Mydriatic Cameras
+              {t('captureProtocolsTitle', 'Capture Protocols for Non-Mydriatic Cameras')}
             </h4>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3 text-xs">
               <div className="p-3 bg-white rounded-lg border border-[#EFE4DC]">
-                <strong className="text-[#EA580C] block mb-1">1. Ambient Lighting</strong>
-                Dim the examination room lights or pull curtains. Darkness allows natural physiological pupil dilation without drops.
+                <strong className="text-[#EA580C] block mb-1">1. {t('ambientLightingTitle', 'Ambient Lighting')}</strong>
+                {t('ambientLightingDesc', 'Dim the examination room lights or pull curtains. Darkness allows natural physiological pupil dilation without drops.')}
               </div>
 
               <div className="p-3 bg-white rounded-lg border border-[#EFE4DC]">
-                <strong className="text-[#EA580C] block mb-1">2. Patient Instructions</strong>
-                "Please look directly at the green target star inside the lens. Keep both eyes open wide. Don't blink until the flash."
+                <strong className="text-[#EA580C] block mb-1">2. {t('patientInstructionsTitle', 'Patient Instructions')}</strong>
+                {t('patientInstructionsDesc', '"Please look directly at the green target star inside the lens. Keep both eyes open wide. Don\'t blink until the flash."')}
               </div>
 
               <div className="p-3 bg-white rounded-lg border border-[#EFE4DC]">
-                <strong className="text-[#EA580C] block mb-1">3. Working Distance</strong>
-                Maintain the camera’s alignment donuts/crosshairs centered in the pupil aperture before pressing capture.
+                <strong className="text-[#EA580C] block mb-1">3. {t('workingDistanceTitle', 'Working Distance')}</strong>
+                {t('workingDistanceDesc', 'Maintain the camera’s alignment donuts/crosshairs centered in the pupil aperture before pressing capture.')}
               </div>
 
               <div className="p-3 bg-white rounded-lg border border-[#EFE4DC]">
-                <strong className="text-[#EA580C] block mb-1">4. Retake Threshold</strong>
-                If the immediate preview shows motion streak or glare over the macula, retake immediately before dismissing the patient.
+                <strong className="text-[#EA580C] block mb-1">4. {t('retakeThresholdTitle', 'Retake Threshold')}</strong>
+                {t('retakeThresholdDesc', 'If the immediate preview shows motion streak or glare over the macula, retake immediately before dismissing the patient.')}
               </div>
             </div>
           </div>
@@ -149,7 +151,7 @@ export const ImageCaptureGuideModal: React.FC<ImageCaptureGuideModalProps> = ({
             onClick={onClose}
             className="px-4 py-2 rounded-lg text-xs font-semibold bg-gradient-to-r from-[#EA580C] to-[#DB2777] text-white hover:opacity-95"
           >
-            Understood, Close Guide
+            {t('understoodCloseGuide', 'Understood, Close Guide')}
           </button>
         </div>
       </div>

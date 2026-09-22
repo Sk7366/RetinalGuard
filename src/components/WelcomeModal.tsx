@@ -275,24 +275,24 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
                   <div className="p-3.5 rounded-2xl bg-[#FFFDF9] dark:bg-[#2A2226] border border-[#EFE4DC] dark:border-[#382E33] space-y-2">
                     <div className="flex items-center gap-2 text-xs font-bold text-[#2B2024] dark:text-[#FFF7F2]">
                       <Heart className="w-4 h-4 text-[#F05A28]" />
-                      <span>For People</span>
+                      <span>{t('welcomeForPeople', 'For People')}</span>
                     </div>
                     <ul className="text-xs text-[#6F6267] dark:text-[#D8C9CE] space-y-1.5 leading-relaxed">
                       <li className="flex items-start gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#087F6A] shrink-0 mt-0.5" />
-                        <span>Learn about retinal screening</span>
+                        <span>{t('welcomePeople1', 'Learn about retinal screening')}</span>
                       </li>
                       <li className="flex items-start gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#087F6A] shrink-0 mt-0.5" />
-                        <span>Find participating screening centers</span>
+                        <span>{t('welcomePeople2', 'Find participating screening centers')}</span>
                       </li>
                       <li className="flex items-start gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#087F6A] shrink-0 mt-0.5" />
-                        <span>Upload existing images for informational assessment</span>
+                        <span>{t('welcomePeople3', 'Upload existing images for informational assessment')}</span>
                       </li>
                       <li className="flex items-start gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#087F6A] shrink-0 mt-0.5" />
-                        <span>Receive clear reports & follow-up info</span>
+                        <span>{t('welcomePeople4', 'Receive clear reports & follow-up info')}</span>
                       </li>
                     </ul>
                   </div>
@@ -301,24 +301,24 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
                   <div className="p-3.5 rounded-2xl bg-[#FFFDF9] dark:bg-[#2A2226] border border-[#EFE4DC] dark:border-[#382E33] space-y-2">
                     <div className="flex items-center gap-2 text-xs font-bold text-[#2B2024] dark:text-[#FFF7F2]">
                       <Users className="w-4 h-4 text-[#F05A28]" />
-                      <span>For Screening Teams</span>
+                      <span>{t('welcomeForHelpers', 'For Screening Teams')}</span>
                     </div>
                     <ul className="text-xs text-[#6F6267] dark:text-[#D8C9CE] space-y-1.5 leading-relaxed">
                       <li className="flex items-start gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#087F6A] shrink-0 mt-0.5" />
-                        <span>Capture/upload retinal images</span>
+                        <span>{t('welcomeHelpers1', 'Capture/upload retinal images')}</span>
                       </li>
                       <li className="flex items-start gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#087F6A] shrink-0 mt-0.5" />
-                        <span>Real-time image quality feedback</span>
+                        <span>{t('welcomeHelpers2', 'Real-time image quality feedback')}</span>
                       </li>
                       <li className="flex items-start gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#087F6A] shrink-0 mt-0.5" />
-                        <span>Organize screening cases & queues</span>
+                        <span>{t('welcomeHelpers3', 'Organize screening cases & queues')}</span>
                       </li>
                       <li className="flex items-start gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#087F6A] shrink-0 mt-0.5" />
-                        <span>Assist with triage & referral workflows</span>
+                        <span>{t('welcomeHelpers4', 'Assist with triage & referral workflows')}</span>
                       </li>
                     </ul>
                   </div>
@@ -327,20 +327,20 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
                   <div className="p-3.5 rounded-2xl bg-[#FFFDF9] dark:bg-[#2A2226] border border-[#EFE4DC] dark:border-[#382E33] space-y-2">
                     <div className="flex items-center gap-2 text-xs font-bold text-[#2B2024] dark:text-[#FFF7F2]">
                       <FlaskConical className="w-4 h-4 text-[#F05A28]" />
-                      <span>For Researchers</span>
+                      <span>{t('welcomeForResearchers', 'For Researchers')}</span>
                     </div>
                     <ul className="text-xs text-[#6F6267] dark:text-[#D8C9CE] space-y-1.5 leading-relaxed">
                       <li className="flex items-start gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#087F6A] shrink-0 mt-0.5" />
-                        <span>Explore multimodal fusion models</span>
+                        <span>{t('welcomeResearchers1', 'Explore multimodal fusion models')}</span>
                       </li>
                       <li className="flex items-start gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#087F6A] shrink-0 mt-0.5" />
-                        <span>Inspect Grad-CAM heatmaps & SHAP</span>
+                        <span>{t('welcomeResearchers2', 'Inspect Grad-CAM heatmaps & SHAP')}</span>
                       </li>
                       <li className="flex items-start gap-1.5">
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#087F6A] shrink-0 mt-0.5" />
-                        <span>Evaluate ablation studies & datasets</span>
+                        <span>{t('welcomeResearchers3', 'Evaluate ablation studies & datasets')}</span>
                       </li>
                     </ul>
                   </div>
@@ -352,7 +352,7 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
                 <ShieldAlert className="w-5 h-5 text-[#F05A28] shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <span className="text-xs font-bold text-[#D84818] uppercase tracking-wider block">
-                    Important Safety Notice
+                    {t('welcomeSafetyNotice', 'Important Safety Notice')}
                   </span>
                   <p className="text-xs text-[#6F6267] dark:text-[#D8C9CE] leading-relaxed">
                     {t(
@@ -399,10 +399,10 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
             <div className="p-6 sm:p-8 overflow-y-auto space-y-5 flex-1 text-[#2B2024] dark:text-[#FFF7F2]">
               <div className="text-center max-w-md mx-auto space-y-1.5 pb-2">
                 <h2 className="text-2xl font-serif font-bold text-[#2B2024] dark:text-[#FFF7F2]">
-                  How will you use RetinaGuard?
+                  {t('welcomeHowUse', 'How will you use RetinaGuard?')}
                 </h2>
                 <p className="text-xs text-[#6F6267] dark:text-[#D8C9CE]">
-                  Select your primary purpose to configure the appropriate workspace.
+                  {t('welcomeHowUseDesc', 'Select your primary purpose to configure the appropriate workspace.')}
                 </p>
               </div>
 
@@ -415,11 +415,11 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
                         <User className="w-4 h-4" />
                       </div>
                       <div className="text-sm font-bold text-[#2B2024] dark:text-[#FFF7F2]">
-                        I'M LOOKING FOR SCREENING
+                        {t('welcomeRolePatientHeading', "I'M LOOKING FOR SCREENING")}
                       </div>
                     </div>
                     <p className="text-xs text-[#6F6267] dark:text-[#D8C9CE] pl-9">
-                      Patient / Common Person — Learn, find screening centers near you, and check existing screening images.
+                      {t('welcomeRolePatientDesc', 'Patient / Common Person — Learn, find screening centers near you, and check existing screening images.')}
                     </p>
                   </div>
                   <button
@@ -430,7 +430,7 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
                     }}
                     className="shrink-0 px-5 py-2.5 rounded-xl bg-[#F05A28] hover:bg-[#D84818] text-white text-xs font-semibold shadow-xs transition-colors"
                   >
-                    Continue as Patient
+                    {t('welcomeContinuePatientBtn', 'Continue as Patient')}
                   </button>
                 </div>
 
@@ -442,11 +442,11 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
                         <Stethoscope className="w-4 h-4" />
                       </div>
                       <div className="text-sm font-bold text-[#2B2024] dark:text-[#FFF7F2]">
-                        I HELP WITH SCREENING
+                        {t('welcomeRoleHelperHeading', 'I HELP WITH SCREENING')}
                       </div>
                     </div>
                     <p className="text-xs text-[#6F6267] dark:text-[#D8C9CE] pl-9">
-                      Screening Helper / Healthcare Worker — Assisted camp capture, real-time quality check, and referral triage.
+                      {t('welcomeRoleHelperDesc', 'Screening Helper / Healthcare Worker — Assisted camp capture, real-time quality check, and referral triage.')}
                     </p>
                   </div>
                   <button
@@ -457,7 +457,7 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
                     }}
                     className="shrink-0 px-5 py-2.5 rounded-xl bg-stone-800 hover:bg-black text-white text-xs font-semibold shadow-xs transition-colors"
                   >
-                    Sign In
+                    {t('signInBtn', 'Sign In')}
                   </button>
                 </div>
 
@@ -469,11 +469,11 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
                         <FlaskConical className="w-4 h-4" />
                       </div>
                       <div className="text-sm font-bold text-[#2B2024] dark:text-[#FFF7F2]">
-                        I'M A RESEARCHER
+                        {t('welcomeRoleResearcherHeading', "I'M A RESEARCHER")}
                       </div>
                     </div>
                     <p className="text-xs text-[#6F6267] dark:text-[#D8C9CE] pl-9">
-                      Research Workspace — Multimodal fusion laboratory, explainability metrics, and ablation analytics.
+                      {t('welcomeRoleResearcherDesc', 'Research Workspace — Multimodal fusion laboratory, explainability metrics, and ablation analytics.')}
                     </p>
                   </div>
                   <button
@@ -484,7 +484,7 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
                     }}
                     className="shrink-0 px-5 py-2.5 rounded-xl border border-stone-300 dark:border-stone-600 hover:bg-stone-100 dark:hover:bg-stone-800 text-[#2B2024] dark:text-[#FFF7F2] text-xs font-semibold transition-colors"
                   >
-                    Sign In
+                    {t('signInBtn', 'Sign In')}
                   </button>
                 </div>
               </div>
@@ -497,7 +497,7 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
                 onClick={() => setStep('welcome')}
                 className="text-xs font-semibold text-[#6F6267] hover:text-[#2B2024] dark:text-[#D8C9CE] dark:hover:text-white px-3 py-2 transition-colors"
               >
-                ← Back
+                {t('backBtn', '← Back')}
               </button>
             </div>
           </>

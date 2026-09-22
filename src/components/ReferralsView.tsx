@@ -35,6 +35,7 @@ import {
   ReferralStatus,
 } from '../types';
 import { RiskChip } from './RiskChip';
+import { useTranslation } from '../i18n/I18nContext';
 
 interface ReferralsViewProps {
   history: MultimodalTriageResult[];
@@ -97,6 +98,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
   onSelectResult,
   onNavigateStartScreening,
 }) => {
+  const { t } = useTranslation();
   const [referrals, setReferrals] = useState<ReferralRecord[]>(() => {
     const saved = localStorage.getItem('retinaguard_referral_queue_v2');
     if (saved) {
@@ -408,13 +410,13 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
         <Shield className="w-5 h-5 text-[#EA580C] shrink-0 mt-0.5" />
         <div className="space-y-1">
           <div className="flex items-center gap-2 font-bold uppercase tracking-wider text-[11px]">
-            <span>Simulated Referral Protocol · Demonstration Environment</span>
+            <span>{t("simulatedReferralProtocol", "Simulated Referral Protocol · Demonstration Environment")}</span>
             <span className="bg-[#FFEDD5] text-[#C2410C] px-2 py-0.5 rounded text-[10px] font-mono border border-[#FED7AA]">
-              MOCK CARE PIPELINE
+              {t("mockCarePipeline", "MOCK CARE PIPELINE")}
             </span>
           </div>
           <p className="text-[#9A3412] leading-relaxed">
-            This module models closed-loop clinical referral pathways, specialist triage escalations, and automated immutable audit logging for tele-ophthalmology screening camps. <strong>Do not imply integration with real hospitals, live EHRs, or active clinical appointment portals.</strong>
+            {t("referralDisclaimerNote", "This module models closed-loop clinical referral pathways, specialist triage escalations, and automated immutable audit logging for tele-ophthalmology screening camps. Do not imply integration with real hospitals, live EHRs, or active clinical appointment portals.")}
           </p>
         </div>
       </div>
@@ -424,16 +426,16 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
         <div>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#FDF2F8] text-[#DB2777] border border-[#FBCFE8] mb-2">
             <Send className="w-3.5 h-3.5" />
-            <span>Closed-Loop Care Coordination & Audit Trail</span>
+            <span>{t("careCoordinationTag", "Closed-Loop Care Coordination & Audit Trail")}</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#2E2628] tracking-tight flex items-center gap-3">
-            <span>Specialist Referral Registry</span>
+            <span>{t("referralRegistryTitle", "Specialist Referral Registry")}</span>
             <span className="text-xs font-mono font-normal bg-[#FAF8F6] text-[#6E5C5F] px-2.5 py-1 rounded-md border border-[#EFE4DC]">
               /referrals
             </span>
           </h1>
           <p className="text-xs sm:text-sm text-[#6E5C5F] mt-1">
-            Track patients through the 6-stage continuum: Screened → Flagged → Referred → Appointment → Specialist Review → Follow-up.
+            {t("referralContinuumDesc", "Track patients through the 6-stage continuum: Screened → Flagged → Referred → Appointment → Specialist Review → Follow-up.")}
           </p>
         </div>
 
@@ -443,7 +445,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
             className="bg-gradient-to-r from-[#EA580C] to-[#DB2777] hover:from-[#C2410C] hover:to-[#BE185D] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-xs flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
-            <span>Create Referral</span>
+            <span>{t("createReferralBtn", "Create Referral")}</span>
           </button>
 
           <button
@@ -451,7 +453,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
             className="bg-white hover:bg-[#FAF8F6] text-[#2E2628] text-xs font-semibold px-3.5 py-2.5 rounded-xl border border-[#EFE4DC] transition-colors flex items-center gap-1.5 shadow-2xs"
           >
             <Download className="w-3.5 h-3.5 text-[#6E5C5F]" />
-            <span>Export CSV</span>
+            <span>{t("exportCsvBtn", "Export CSV")}</span>
           </button>
 
           {onNavigateStartScreening && (
@@ -460,7 +462,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
               className="bg-[#FAF8F6] hover:bg-[#F5EBE1] text-[#6E5C5F] text-xs font-semibold px-3 py-2.5 rounded-xl border border-[#EFE4DC] transition-colors flex items-center gap-1.5"
             >
               <RefreshCw className="w-3.5 h-3.5" />
-              <span>Start Screening</span>
+              <span>{t("startScreeningBtn", "Start Screening")}</span>
             </button>
           )}
         </div>
@@ -477,7 +479,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                 : 'text-[#6E5C5F] hover:bg-[#FAF8F6] hover:text-[#2E2628]'
             }`}
           >
-            <span>All Referrals</span>
+            <span>{t("allReferralsTab", "All Referrals")}</span>
             <span className={`px-2 py-0.5 rounded-full text-[10px] ${
               selectedStatusFilter === 'All' ? 'bg-white/20 text-white' : 'bg-[#EFE4DC] text-[#2E2628]'
             }`}>
@@ -519,7 +521,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
             <Search className="w-4 h-4 text-[#9C8E91] absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search by Patient Code, Name, Clinic..."
+              placeholder={t("searchReferralsPlaceholder", "Search by Patient Code, Name, Clinic...")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-10 pr-4 py-2.5 bg-white border border-[#EFE4DC] rounded-xl text-xs sm:text-sm text-[#2E2628] focus:outline-hidden focus:ring-2 focus:ring-[#EA580C]/20 focus:border-[#EA580C]"
@@ -539,9 +541,9 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
             {filteredReferrals.length === 0 ? (
               <div className="bg-white rounded-2xl border border-dashed border-[#EFE4DC] p-8 text-center space-y-3">
                 <Send className="w-8 h-8 text-[#9C8E91] mx-auto opacity-50" />
-                <div className="text-xs font-bold text-[#2E2628]">No matching referrals</div>
+                <div className="text-xs font-bold text-[#2E2628]">{t("noMatchingReferrals", "No matching referrals")}</div>
                 <p className="text-[11px] text-[#6E5C5F]">
-                  Try changing your status filter or clearing your search term.
+                  {t("noMatchingReferralsSub", "Try changing your status filter or clearing your search term.")}
                 </p>
                 <button
                   onClick={() => {
@@ -550,7 +552,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                   }}
                   className="text-xs text-[#EA580C] font-semibold hover:underline"
                 >
-                  Reset Filters
+                  {t("resetFiltersBtn", "Reset Filters")}
                 </button>
               </div>
             ) : (
@@ -599,7 +601,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                     {/* MINI PROGRESS TRACKER */}
                     <div className="pt-1">
                       <div className="flex items-center justify-between text-[10px] text-[#9C8E91] mb-1 font-semibold uppercase tracking-wider">
-                        <span>Current Stage</span>
+                        <span>{t("currentStageLabel", "Current Stage")}</span>
                         <span className="text-[#EA580C] font-bold">{item.currentStage || 'Referred'}</span>
                       </div>
                       <div className="grid grid-cols-6 gap-1 h-1.5 bg-[#FAF8F6] rounded-full overflow-hidden p-0.5 border border-[#EFE4DC]">
@@ -646,17 +648,17 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                     </span>
                   </div>
                   <div className="text-xs text-[#6E5C5F] mt-1.5 flex items-center gap-3">
-                    <span>Age: <strong>{selectedReferral.patientAge} years</strong></span>
+                    <span>{t("ageLabel", "Age")}: <strong>{selectedReferral.patientAge} {t("yearsSuffix", "years")}</strong></span>
                     <span>•</span>
-                    <span>DME: <strong>{selectedReferral.dmePresent ? 'Positive (Active Cysts)' : 'Negative'}</strong></span>
+                    <span>DME: <strong>{selectedReferral.dmePresent ? t("dmePositiveActive", "Positive (Active Cysts)") : t("dmeNegative", "Negative")}</strong></span>
                     <span>•</span>
-                    <span>Timeline: <strong>{selectedReferral.followUpTimeline}</strong></span>
+                    <span>{t("timelineLabel", "Timeline")}: <strong>{selectedReferral.followUpTimeline}</strong></span>
                   </div>
                 </div>
 
                 {/* STATUS QUICK CHANGER */}
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-semibold text-[#6E5C5F] hidden sm:inline">Status:</span>
+                  <span className="text-xs font-semibold text-[#6E5C5F] hidden sm:inline">{t("statusQuickLabel", "Status:")}</span>
                   <select
                     value={selectedReferral.status}
                     onChange={(e) => handleUpdateStatus(selectedReferral.id, e.target.value as ReferralStatus)}
@@ -676,9 +678,9 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                 <div className="flex items-center justify-between">
                   <div className="text-xs font-bold text-[#2E2628] uppercase tracking-wider flex items-center gap-2">
                     <Sparkles className="w-3.5 h-3.5 text-[#EA580C]" />
-                    <span>Referral & Follow-Up Lifecycle Continuum</span>
+                    <span>{t("continuumTitle", "Referral & Follow-Up Lifecycle Continuum")}</span>
                   </div>
-                  <span className="text-[10px] text-[#6E5C5F]">Stage {getStageIndex(selectedReferral.currentStage) + 1} of 6</span>
+                  <span className="text-[10px] text-[#6E5C5F]">{t("stageLabel", "Stage")} {getStageIndex(selectedReferral.currentStage) + 1} {t("ofTotalStages", "of 6")}</span>
                 </div>
 
                 {/* VISUAL 6-STEP DIAGRAM */}
@@ -729,7 +731,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                 <div className="bg-white p-3.5 rounded-xl border border-[#EFE4DC] space-y-2">
                   <div className="text-[#9C8E91] font-semibold uppercase text-[10px] tracking-wider">
-                    Destination Eye Center
+                    {t("destinationEyeCenter", "Destination Eye Center")}
                   </div>
                   <div className="font-bold text-[#2E2628] flex items-center gap-1.5">
                     <MapPin className="w-3.5 h-3.5 text-[#EA580C]" />
@@ -737,20 +739,20 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                   </div>
                   <div className="text-[#6E5C5F] text-[11px] flex items-center gap-1.5">
                     <Stethoscope className="w-3.5 h-3.5 text-[#DB2777]" />
-                    <span>Specialist: {selectedReferral.specialistName || 'Pending Allocation'}</span>
+                    <span>{t("specialistLabel", "Specialist")}: {selectedReferral.specialistName || t("pendingAllocation", "Pending Allocation")}</span>
                   </div>
                 </div>
 
                 <div className="bg-white p-3.5 rounded-xl border border-[#EFE4DC] space-y-2">
                   <div className="text-[#9C8E91] font-semibold uppercase text-[10px] tracking-wider">
-                    Appointment & Priority
+                    {t("appointmentAndPriority", "Appointment & Priority")}
                   </div>
                   <div className="font-bold text-[#2E2628] flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5 text-[#EA580C]" />
-                    <span>{selectedReferral.appointmentDate || 'Awaiting Appointment Slot'}</span>
+                    <span>{selectedReferral.appointmentDate || t("awaitingAppointmentSlot", "Awaiting Appointment Slot")}</span>
                   </div>
                   <div className="text-[11px] font-medium text-[#C2410C]">
-                    Priority Tier: {selectedReferral.priority}
+                    {t("priorityTierLabel", "Priority Tier")}: {selectedReferral.priority}
                   </div>
                 </div>
               </div>
@@ -758,7 +760,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
               {/* CLINICAL INDICATION NOTES */}
               <div className="bg-[#FAF8F6] p-4 rounded-xl border border-[#EFE4DC] space-y-1.5">
                 <div className="text-[10px] font-bold text-[#9C8E91] uppercase tracking-wider">
-                  Primary Clinical Reason & Findings
+                  {t("primaryClinicalReason", "Primary Clinical Reason & Findings")}
                 </div>
                 <p className="text-xs text-[#2E2628] leading-relaxed">
                   {selectedReferral.clinicalNotes}
@@ -771,10 +773,10 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                   <div>
                     <h3 className="text-sm font-bold text-[#2E2628] uppercase tracking-wider flex items-center gap-2">
                       <Clock className="w-4 h-4 text-[#EA580C]" />
-                      <span>Immutable Clinical Audit Trail</span>
+                      <span>{t("immutableAuditTrail", "Immutable Clinical Audit Trail")}</span>
                     </h3>
                     <p className="text-[11px] text-[#6E5C5F]">
-                      Chronological log of intake, AI inference, physician review, and referral milestones.
+                      {t("auditTrailDesc", "Chronological log of intake, AI inference, physician review, and referral milestones.")}
                     </p>
                   </div>
 
@@ -783,7 +785,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                     className="text-xs font-semibold text-[#EA580C] hover:text-[#C2410C] bg-[#FFF7ED] hover:bg-[#FFEDD5] px-3 py-1.5 rounded-lg border border-[#FED7AA] transition-colors flex items-center gap-1"
                   >
                     <Plus className="w-3.5 h-3.5" />
-                    <span>Add Audit Note</span>
+                    <span>{t("addAuditNoteBtn", "Add Audit Note")}</span>
                   </button>
                 </div>
 
@@ -806,7 +808,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                           </div>
 
                           <div className="text-[11px] text-[#EA580C] font-semibold">
-                            Actor: {ev.actor}
+                            {t("actorLabel", "Actor")}: {ev.actor}
                           </div>
 
                           <p className="text-xs text-[#6E5C5F] leading-relaxed pt-0.5">
@@ -817,7 +819,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                     ))
                   ) : (
                     <div className="text-xs text-[#9C8E91] italic pl-2">
-                      No audit events recorded yet.
+                      {t("noAuditEventsRecorded", "No audit events recorded yet.")}
                     </div>
                   )}
                 </div>
@@ -826,9 +828,9 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
           ) : (
             <div className="bg-white rounded-2xl border border-dashed border-[#EFE4DC] p-12 text-center space-y-3">
               <Eye className="w-8 h-8 text-[#9C8E91] mx-auto opacity-50" />
-              <div className="text-sm font-bold text-[#2E2628]">No Referral Selected</div>
+              <div className="text-sm font-bold text-[#2E2628]">{t("noReferralSelected", "No Referral Selected")}</div>
               <p className="text-xs text-[#6E5C5F] max-w-sm mx-auto">
-                Select a referral from the list on the left to view the 6-stage continuum, verify clinical notes, and review the audit trail.
+                {t("noReferralSelectedSub", "Select a referral from the list on the left to view the 6-stage continuum, verify clinical notes, and review the audit trail.")}
               </p>
             </div>
           )}
@@ -841,8 +843,8 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
           <div className="bg-white rounded-2xl border border-[#EFE4DC] max-w-xl w-full p-6 space-y-5 shadow-xl my-8">
             <div className="flex items-center justify-between pb-3 border-b border-[#EFE4DC]">
               <div>
-                <h3 className="font-serif font-bold text-lg text-[#2E2628]">Create Specialist Referral</h3>
-                <p className="text-xs text-[#6E5C5F]">Initiate a closed-loop tele-ophthalmology referral package</p>
+                <h3 className="font-serif font-bold text-lg text-[#2E2628]">{t("createSpecialistReferralTitle", "Create Specialist Referral")}</h3>
+                <p className="text-xs text-[#6E5C5F]">{t("createSpecialistReferralSub", "Initiate a closed-loop tele-ophthalmology referral package")}</p>
               </div>
               <button
                 onClick={() => setIsCreateModalOpen(false)}
@@ -864,7 +866,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                       : 'text-[#6E5C5F]'
                   }`}
                 >
-                  From Screened Cohort
+                  {t("fromScreenedCohort", "From Screened Cohort")}
                 </button>
                 <button
                   type="button"
@@ -875,7 +877,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                       : 'text-[#6E5C5F]'
                   }`}
                 >
-                  Manual Patient Entry
+                  {t("manualPatientEntry", "Manual Patient Entry")}
                 </button>
               </div>
 
@@ -883,7 +885,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
               {newPatientSource === 'existing' ? (
                 <div>
                   <label className="block text-xs font-bold text-[#2E2628] mb-1">
-                    Select Screened Patient
+                    {t("selectScreenedPatient", "Select Screened Patient")}
                   </label>
                   <select
                     value={selectedScreeningId}
@@ -900,7 +902,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
               ) : (
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="block text-xs font-bold text-[#2E2628] mb-1">Patient ID / Code</label>
+                    <label className="block text-xs font-bold text-[#2E2628] mb-1">{t("patientIdCodeLabel", "Patient ID / Code")}</label>
                     <input
                       type="text"
                       value={manualPatientCode}
@@ -910,7 +912,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-[#2E2628] mb-1">Patient Name</label>
+                    <label className="block text-xs font-bold text-[#2E2628] mb-1">{t("patientNameLabel", "Patient Name")}</label>
                     <input
                       type="text"
                       placeholder="e.g. Ramesh S."
@@ -925,7 +927,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
               {/* SEVERITY & DME */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-[#2E2628] mb-1">Triaged DR Severity</label>
+                  <label className="block text-xs font-bold text-[#2E2628] mb-1">{t("triagedDrSeverity", "Triaged DR Severity")}</label>
                   <select
                     value={newGrade}
                     onChange={(e) => setNewGrade(Number(e.target.value) as DRGrade)}
@@ -940,14 +942,14 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#2E2628] mb-1">Macular Edema (DME)</label>
+                  <label className="block text-xs font-bold text-[#2E2628] mb-1">{t("macularEdemaDme", "Macular Edema (DME)")}</label>
                   <select
                     value={newDme ? 'yes' : 'no'}
                     onChange={(e) => setNewDme(e.target.value === 'yes')}
                     className="w-full bg-white border border-[#EFE4DC] rounded-xl px-3 py-2 text-xs font-semibold text-[#2E2628]"
                   >
-                    <option value="no">DME Negative</option>
-                    <option value="yes">DME Positive (Active Cysts)</option>
+                    <option value="no">{t("dmeNegative", "DME Negative")}</option>
+                    <option value="yes">{t("dmePositiveActive", "DME Positive (Active Cysts)")}</option>
                   </select>
                 </div>
               </div>
@@ -955,7 +957,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
               {/* PRIORITY & TIMELINE */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-[#2E2628] mb-1">Referral Priority</label>
+                  <label className="block text-xs font-bold text-[#2E2628] mb-1">{t("referralPriorityLabel", "Referral Priority")}</label>
                   <select
                     value={newPriority}
                     onChange={(e) => setNewPriority(e.target.value as ReferralRecord['priority'])}
@@ -969,7 +971,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-[#2E2628] mb-1">Follow-up Urgency</label>
+                  <label className="block text-xs font-bold text-[#2E2628] mb-1">{t("followUpUrgencyLabel", "Follow-up Urgency")}</label>
                   <select
                     value={newTimeline}
                     onChange={(e) => setNewTimeline(e.target.value)}
@@ -987,7 +989,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
               {/* DESTINATION FACILITY */}
               <div>
                 <label className="block text-xs font-bold text-[#2E2628] mb-1">
-                  Destination Eye Facility (Simulated)
+                  {t("destinationFacilityLabel", "Destination Eye Facility (Simulated)")}
                 </label>
                 <select
                   value={newAssignedClinic}
@@ -1005,14 +1007,14 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
               {/* CLINICAL INDICATION */}
               <div>
                 <label className="block text-xs font-bold text-[#2E2628] mb-1">
-                  Clinical Indication & Notes
+                  {t("clinicalIndicationNotesLabel", "Clinical Indication & Notes")}
                 </label>
                 <textarea
                   rows={2}
                   value={newNotes}
                   onChange={(e) => setNewNotes(e.target.value)}
                   className="w-full bg-white border border-[#EFE4DC] rounded-xl p-2.5 text-xs text-[#2E2628]"
-                  placeholder="Summarize reasons for referral..."
+                  placeholder={t("summarizeReasonsPlaceholder", "Summarize reasons for referral...")}
                   required
                 />
               </div>
@@ -1024,14 +1026,14 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                   onClick={() => setIsCreateModalOpen(false)}
                   className="px-4 py-2 text-xs font-semibold text-[#6E5C5F] hover:bg-[#FAF8F6] rounded-xl"
                 >
-                  Cancel
+                  {t("cancelBtn", "Cancel")}
                 </button>
                 <button
                   type="submit"
                   className="bg-gradient-to-r from-[#EA580C] to-[#DB2777] text-white px-5 py-2 rounded-xl text-xs font-bold hover:opacity-90 shadow-xs flex items-center gap-1.5"
                 >
                   <Send className="w-3.5 h-3.5" />
-                  <span>Submit Referral Ticket</span>
+                  <span>{t("submitReferralTicketBtn", "Submit Referral Ticket")}</span>
                 </button>
               </div>
             </form>
@@ -1044,7 +1046,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
         <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl border border-[#EFE4DC] max-w-md w-full p-6 space-y-4 shadow-xl">
             <div className="flex items-center justify-between pb-2 border-b border-[#EFE4DC]">
-              <h3 className="font-serif font-bold text-base text-[#2E2628]">Add Note to Audit Trail</h3>
+              <h3 className="font-serif font-bold text-base text-[#2E2628]">{t("addNoteAuditTrailTitle", "Add Note to Audit Trail")}</h3>
               <button
                 onClick={() => setIsAddNoteModalOpen(false)}
                 className="p-1 rounded-lg text-[#9C8E91] hover:text-[#2E2628]"
@@ -1055,7 +1057,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
 
             <form onSubmit={handleAddAuditNote} className="space-y-3">
               <div>
-                <label className="block text-xs font-bold text-[#2E2628] mb-1">Author / Actor</label>
+                <label className="block text-xs font-bold text-[#2E2628] mb-1">{t("authorActorLabel", "Author / Actor")}</label>
                 <input
                   type="text"
                   value={newNoteActor}
@@ -1066,13 +1068,13 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#2E2628] mb-1">Clinical / Coordinator Note</label>
+                <label className="block text-xs font-bold text-[#2E2628] mb-1">{t("clinicalCoordinatorNoteLabel", "Clinical / Coordinator Note")}</label>
                 <textarea
                   rows={3}
                   value={newNoteText}
                   onChange={(e) => setNewNoteText(e.target.value)}
                   className="w-full bg-white border border-[#EFE4DC] rounded-xl p-2.5 text-xs text-[#2E2628]"
-                  placeholder="e.g. Spoke with patient; appointment scheduled for next Tuesday..."
+                  placeholder={t("auditNotePlaceholder", "e.g. Spoke with patient; appointment scheduled for next Tuesday...")}
                   required
                 />
               </div>
@@ -1083,13 +1085,13 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                   onClick={() => setIsAddNoteModalOpen(false)}
                   className="px-3.5 py-1.5 text-xs font-semibold text-[#6E5C5F] hover:bg-[#FAF8F6] rounded-lg"
                 >
-                  Cancel
+                  {t("cancelBtn", "Cancel")}
                 </button>
                 <button
                   type="submit"
                   className="bg-[#EA580C] text-white px-4 py-1.5 rounded-lg text-xs font-bold hover:bg-[#C2410C]"
                 >
-                  Save Entry
+                  {t("saveEntryBtn", "Save Entry")}
                 </button>
               </div>
             </form>

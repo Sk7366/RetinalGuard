@@ -1,6 +1,7 @@
 import React from 'react';
 import { DRGrade } from '../types';
 import { DR_GRADES } from '../data/benchmarks';
+import { useTranslation } from '../i18n/I18nContext';
 
 interface RiskChipProps {
   grade: DRGrade;
@@ -15,6 +16,7 @@ export const RiskChip: React.FC<RiskChipProps> = ({
   showGradeNumber = true,
   className = '',
 }) => {
+  const { t } = useTranslation();
   const info = DR_GRADES[grade];
 
   const sizeClasses = {
@@ -42,7 +44,7 @@ export const RiskChip: React.FC<RiskChipProps> = ({
         }}
       />
       <span>
-        {showGradeNumber && <strong className="font-semibold mr-1">Grade {grade}:</strong>}
+        {showGradeNumber && <strong className="font-semibold mr-1">{t('gradePrefix', 'Grade')} {grade}:</strong>}
         {info.shortName}
       </span>
     </span>

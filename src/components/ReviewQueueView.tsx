@@ -38,6 +38,7 @@ import {
 import { RESPONSIBLE_AI_UNCERTAINTY_QUOTE } from '../utils/uncertaintyEngine';
 import { ResponsibleAiUncertaintyIndicator } from './ResponsibleAiUncertaintyIndicator';
 import { RiskChip } from './RiskChip';
+import { useTranslation } from '../i18n/I18nContext';
 
 export interface QueueItem {
   id: string;
@@ -69,6 +70,7 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
   onSelectCase,
   onNavigateStartScreening,
 }) => {
+  const { t } = useTranslation();
   // Use centralized mock data records combined with newly added history
   const initialQueueItems = MOCK_REVIEW_QUEUE_ITEMS;
 
@@ -189,17 +191,17 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
             <div className="flex items-center gap-2 mb-1.5 flex-wrap">
               <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#FFEDD5] text-[#EA580C]">
                 <Stethoscope className="w-3.5 h-3.5" />
-                <span>Ophthalmology Triage Worklist</span>
+                <span>{t("ophthalmologyWorklist", "Ophthalmology Triage Worklist")}</span>
               </span>
               <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
-                SIMULATED DATA · Daily Clinical Queue
+                {t("simulatedDataBadge", "SIMULATED DATA · Daily Clinical Queue")}
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#2E2628] tracking-tight">
-              Clinical Review Queue
+              {t("reviewQueueTitle", "Clinical Review Queue")}
             </h1>
             <p className="text-xs sm:text-sm text-[#6E5C5F] mt-1 max-w-2xl leading-relaxed">
-              High-throughput physician adjudication workspace for field screenings. Inspect AI Grad-CAM heatmaps, verify OCT fluid presence, approve recommendations, or adjust classifications.
+              {t("reviewQueueDesc", "High-throughput physician adjudication workspace for field screenings. Inspect AI Grad-CAM heatmaps, verify OCT fluid presence, approve recommendations, or adjust classifications.")}
             </p>
           </div>
 
@@ -209,7 +211,7 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
               className="bg-[#EA580C] hover:bg-[#C2410C] text-white px-4 py-2 rounded-xl text-xs font-bold transition-colors shadow-2xs flex items-center gap-2"
             >
               <Sparkles className="w-4 h-4" />
-              <span>Start New Exam</span>
+              <span>{t("startNewExam", "Start New Exam")}</span>
             </button>
           </div>
         </div>
@@ -225,18 +227,18 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#C2410C]">
-                  Responsible AI / Uncertainty Principle
+                  {t("responsibleAiTitle", "Responsible AI / Uncertainty Principle")}
                 </span>
                 <span className="w-1 h-1 rounded-full bg-[#EA580C]" />
                 <span className="text-[10px] text-[#059669] font-bold bg-[#ECFDF5] px-2 py-0.5 rounded-full border border-[#A7F3D0]">
-                  Zero Misleading %
+                  {t("zeroMisleadingPct", "Zero Misleading %")}
                 </span>
               </div>
               <p className="text-xs sm:text-sm font-serif font-semibold text-[#2E2628] mt-0.5 italic leading-relaxed">
                 "{RESPONSIBLE_AI_UNCERTAINTY_QUOTE}"
               </p>
               <p className="text-[11px] text-[#6E5C5F] mt-0.5">
-                RetinaGuard does not pretend to know by emitting pseudo-precise percentages. Encounters are sorted into transparent clinical uncertainty states to ensure safe human adjudication.
+                {t("responsibleAiDesc", "RetinaGuard does not pretend to know by emitting pseudo-precise percentages. Encounters are sorted into transparent clinical uncertainty states to ensure safe human adjudication.")}
               </p>
             </div>
           </div>
@@ -253,7 +255,7 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
               : 'bg-white text-[#6E5C5F] border-[#EFE4DC] hover:bg-[#FAF8F6]'
           }`}
         >
-          <span>All Encounters</span>
+          <span>{t("allEncounters", "All Encounters")}</span>
           <span className="px-2 py-0.5 rounded-full text-[10px] bg-white/20 font-mono">
             {totalCount}
           </span>
@@ -268,7 +270,7 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
           }`}
         >
           <AlertCircle className="w-3.5 h-3.5" />
-          <span>Priority Specialist Referrals</span>
+          <span>{t("priorityReferralsTab", "Priority Specialist Referrals")}</span>
           <span className="px-2 py-0.5 rounded-full text-[10px] bg-white/20 font-mono">
             {priorityCount}
           </span>
@@ -283,7 +285,7 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
           }`}
         >
           <AlertTriangle className="w-3.5 h-3.5" />
-          <span>Review Recommended</span>
+          <span>{t("reviewRecommendedTab", "Review Recommended")}</span>
           <span className="px-2 py-0.5 rounded-full text-[10px] bg-white/20 font-mono">
             {reviewCount}
           </span>
@@ -298,7 +300,7 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
           }`}
         >
           <CheckCircle2 className="w-3.5 h-3.5" />
-          <span>Low Concern / Routine</span>
+          <span>{t("lowConcernTab", "Low Concern / Routine")}</span>
           <span className="px-2 py-0.5 rounded-full text-[10px] bg-white/20 font-mono">
             {lowConcernCount}
           </span>
@@ -313,7 +315,7 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
           }`}
         >
           <RotateCcw className="w-3.5 h-3.5" />
-          <span>Ungradable (Retake)</span>
+          <span>{t("ungradableTab", "Ungradable (Retake)")}</span>
           <span className="px-2 py-0.5 rounded-full text-[10px] bg-white/20 font-mono">
             {ungradableCount}
           </span>
@@ -323,7 +325,7 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
       {/* Secondary Filter: Responsible AI Uncertainty State Pills */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
         <span className="text-[11px] font-bold text-[#6E5C5F] mr-1 uppercase tracking-wider shrink-0">
-          Uncertainty Filter:
+          {t("uncertaintyFilterLabel", "Uncertainty Filter:")}
         </span>
         <button
           onClick={() => setSelectedUncertaintyFilter('ALL')}
@@ -333,7 +335,7 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
               : 'bg-white text-[#6E5C5F] border-[#EFE4DC] hover:bg-[#FAF8F6]'
           }`}
         >
-          All States
+          {t("allStates", "All States")}
         </button>
         <button
           onClick={() =>
@@ -349,7 +351,7 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
               : 'bg-[#ECFDF5] text-[#065F46] border-[#A7F3D0] hover:bg-[#D1FAE5]'
           }`}
         >
-          Confident Enough
+          {t("confidentEnough", "Confident Enough")}
         </button>
         <button
           onClick={() =>
@@ -365,7 +367,7 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
               : 'bg-[#FFFBEB] text-[#92400E] border-[#FDE68A] hover:bg-[#FEF3C7]'
           }`}
         >
-          Human Review
+          {t("humanReview", "Human Review")}
         </button>
         <button
           onClick={() =>
@@ -379,7 +381,7 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
               : 'bg-[#FEF2F2] text-[#991B1B] border-[#FCA5A5] hover:bg-[#FEE2E2]'
           }`}
         >
-          Image Ungradable
+          {t("imageUngradable", "Image Ungradable")}
         </button>
         <button
           onClick={() =>
@@ -395,7 +397,7 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
               : 'bg-[#F5F3FF] text-[#5B21B6] border-[#DDD6FE] hover:bg-[#EDE9FE]'
           }`}
         >
-          Modality Disagreement
+          {t("modalityDisagreement", "Modality Disagreement")}
         </button>
       </div>
 
@@ -407,17 +409,17 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search patient code, name, facility..."
+            placeholder={t("searchPatientsPlaceholder", "Search patient code, name, facility...")}
             className="w-full pl-9 pr-4 py-2 rounded-xl border border-[#EFE4DC] text-xs text-[#2E2628] focus:outline-none focus:border-[#EA580C]"
           />
         </div>
 
         <div className="flex items-center gap-2 text-xs text-[#6E5C5F] w-full sm:w-auto justify-between sm:justify-end">
           <span>
-            Showing <strong className="text-[#2E2628]">{filteredQueue.length}</strong> patient records
+            {t("showingRecords", "Showing")} <strong className="text-[#2E2628]">{filteredQueue.length}</strong> {t("patientRecordsCount", "patient records")}
           </span>
           <span className="text-[11px] px-2 py-0.5 bg-[#FAF8F6] rounded-md border border-[#EFE4DC]">
-            Auto-refresh: 15s
+            {t("autoRefreshNotice", "Auto-refresh: 15s")}
           </span>
         </div>
       </div>
@@ -428,14 +430,14 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
           <table className="w-full text-left text-xs">
             <thead className="bg-[#FAF8F6] border-b border-[#EFE4DC] text-[11px] font-bold text-[#6E5C5F] uppercase tracking-wider">
               <tr>
-                <th className="py-3.5 px-4">Patient &amp; Code</th>
-                <th className="py-3.5 px-4">Encounter / Site</th>
-                <th className="py-3.5 px-4">Quality Gate</th>
-                <th className="py-3.5 px-4">AI Classification</th>
-                <th className="py-3.5 px-4">OCT DME Status</th>
-                <th className="py-3.5 px-4">Responsible AI State</th>
-                <th className="py-3.5 px-4">Review Status</th>
-                <th className="py-3.5 px-4 text-right">Actions</th>
+                <th className="py-3.5 px-4">{t("thPatientCode", "Patient & Code")}</th>
+                <th className="py-3.5 px-4">{t("thEncounterSite", "Encounter / Site")}</th>
+                <th className="py-3.5 px-4">{t("thQualityGate", "Quality Gate")}</th>
+                <th className="py-3.5 px-4">{t("thAiClassification", "AI Classification")}</th>
+                <th className="py-3.5 px-4">{t("thOctDmeStatus", "OCT DME Status")}</th>
+                <th className="py-3.5 px-4">{t("thResponsibleAiState", "Responsible AI State")}</th>
+                <th className="py-3.5 px-4">{t("thReviewStatus", "Review Status")}</th>
+                <th className="py-3.5 px-4 text-right">{t("thActions", "Actions")}</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#EFE4DC]">
@@ -508,11 +510,11 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
                         {item.dmeDetected ? (
                           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-bold bg-[#FEE2E2] text-[#DC2626]">
                             <AlertCircle className="w-3 h-3" />
-                            <span>DME Fluid Present</span>
+                            <span>{t("dmeFluidPresent", "DME Fluid Present")}</span>
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium bg-[#F5F1ED] text-[#6E5C5F]">
-                            <span>No Foveal Fluid</span>
+                            <span>{t("noFovealFluid", "No Foveal Fluid")}</span>
                           </span>
                         )}
                       </td>
@@ -556,9 +558,9 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
                           type="button"
                           onClick={() => onSelectCase(item.triageResult)}
                           className="px-2.5 py-1.5 rounded-xl bg-[#FAF8F6] text-[#2E2628] hover:bg-[#FFF7ED] hover:text-[#EA580C] hover:border-[#EA580C] border border-[#EFE4DC] text-xs font-semibold transition-colors"
-                          title="View Grad-CAM and complete multimodal triage"
+                          title={t("inspectScanTooltip", "View Grad-CAM and complete multimodal triage")}
                         >
-                          Inspect Scan
+                          {t("inspectScanBtn", "Inspect Scan")}
                         </button>
 
                         {/* Quick Approve button */}
@@ -567,9 +569,9 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
                             type="button"
                             onClick={() => handleApprove(item.id)}
                             className="px-2.5 py-1.5 rounded-xl bg-[#15803D] text-white hover:bg-[#166534] text-xs font-semibold transition-colors shadow-2xs"
-                            title="Approve AI triage assessment"
+                            title={t("approveTriageTooltip", "Approve AI triage assessment")}
                           >
-                            Approve
+                            {t("approveBtn", "Approve")}
                           </button>
                         )}
 
@@ -581,7 +583,7 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
                             setOverrideGrade(item.finalGrade);
                           }}
                           className="p-1.5 rounded-xl text-[#6E5C5F] hover:bg-[#FAF8F6] hover:text-[#2E2628] border border-transparent hover:border-[#EFE4DC]"
-                          title="Override Grade or Adjust Rationale"
+                          title={t("overrideGradeTooltip", "Override Grade or Adjust Rationale")}
                         >
                           <Edit3 className="w-3.5 h-3.5" />
                         </button>
@@ -593,7 +595,7 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
                             onClick={() => handleRequestRetake(item.id)}
                             className="px-2.5 py-1.5 rounded-xl bg-[#DC2626] text-white hover:bg-[#B91C1C] text-xs font-semibold transition-colors shadow-2xs"
                           >
-                            Flag Retake
+                            {t("flagRetakeBtn", "Flag Retake")}
                           </button>
                         )}
                       </td>
@@ -604,8 +606,8 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
                 <tr>
                   <td colSpan={7} className="py-12 text-center text-[#6E5C5F]">
                     <FileCheck className="w-8 h-8 text-[#6E5C5F]/50 mx-auto mb-2" />
-                    <div className="font-bold text-[#2E2628]">No cases matching current filter</div>
-                    <p className="text-xs mt-1">Try selecting a different tab or clearing search keywords.</p>
+                    <div className="font-bold text-[#2E2628]">{t("noMatchingCases", "No cases matching current filter")}</div>
+                    <p className="text-xs mt-1">{t("noMatchingCasesSub", "Try selecting a different tab or clearing search keywords.")}</p>
                   </td>
                 </tr>
               )}
@@ -622,7 +624,7 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
               <div className="flex items-center gap-2">
                 <Edit3 className="w-4 h-4 text-[#EA580C]" />
                 <h3 className="font-bold text-[#2E2628] text-sm">
-                  Clinical Grade Override · {selectedCaseForOverride.patientCode}
+                  {t("clinicalGradeOverrideTitle", "Clinical Grade Override")} · {selectedCaseForOverride.patientCode}
                 </h3>
               </div>
               <button
@@ -635,11 +637,11 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
             </div>
 
             <p className="text-xs text-[#6E5C5F] leading-relaxed">
-              As the supervising clinician, you may adjust the automated classification based on ophthalmoscopic judgment. This will be stamped into the clinical audit trail.
+              {t("overrideModalDesc", "As the supervising clinician, you may adjust the automated classification based on ophthalmoscopic judgment. This will be stamped into the clinical audit trail.")}
             </p>
 
             <div className="space-y-2">
-              <label className="text-xs font-bold text-[#2E2628] block">Select Adjusted ICDR Grade:</label>
+              <label className="text-xs font-bold text-[#2E2628] block">{t("selectAdjustedGrade", "Select Adjusted ICDR Grade:")}</label>
               <div className="grid grid-cols-1 gap-2">
                 {([0, 1, 2, 3, 4] as DRGrade[]).map((g) => (
                   <label
@@ -670,12 +672,12 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-[#2E2628] block">Clinical Justification / Audit Note:</label>
+              <label className="text-xs font-bold text-[#2E2628] block">{t("justificationAuditNote", "Clinical Justification / Audit Note:")}</label>
               <textarea
                 rows={2}
                 value={overrideNote}
                 onChange={(e) => setOverrideNote(e.target.value)}
-                placeholder="e.g. Slit-lamp biomicroscopy reveals subtle macular edema not captured on 2D photo..."
+                placeholder={t("overridePlaceholder", "e.g. Slit-lamp biomicroscopy reveals subtle macular edema not captured on 2D photo...")}
                 className="w-full px-3 py-2 text-xs rounded-xl border border-[#EFE4DC] focus:outline-none focus:border-[#EA580C]"
               />
             </div>
@@ -686,14 +688,14 @@ export const ReviewQueueView: React.FC<ReviewQueueViewProps> = ({
                 onClick={() => setSelectedCaseForOverride(null)}
                 className="px-4 py-2 rounded-xl text-xs font-semibold text-[#6E5C5F] hover:bg-[#FAF8F6]"
               >
-                Cancel
+                {t("cancelBtn", "Cancel")}
               </button>
               <button
                 type="button"
                 onClick={handleSaveOverride}
                 className="px-5 py-2 rounded-xl text-xs font-bold bg-[#EA580C] text-white hover:bg-[#C2410C] shadow-2xs"
               >
-                Save Override &amp; Audit
+                {t("saveOverrideBtn", "Save Override & Audit")}
               </button>
             </div>
           </div>

@@ -135,7 +135,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
         {/* Language selector chips */}
         <div className="flex items-center gap-1.5 flex-wrap">
           <span className="text-[11px] font-semibold uppercase tracking-wider text-stone-400 mr-1 hidden sm:inline">
-            Language:
+            {t("languageLabel", "Language:")}
           </span>
           {supportedLanguages.map((lang) => {
             const isSelected = lang.code === language;
@@ -163,7 +163,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
           <div className="flex items-center bg-stone-100 p-0.5 rounded-xl border border-stone-200/80">
             <button
               onClick={() => onSetTextSize && onSetTextSize("standard")}
-              title="Standard text"
+              title={t("standardText", "Standard text")}
               className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                 currentTextSize === "standard" ? "bg-white text-stone-900 shadow-2xs" : "text-stone-500 hover:text-stone-800"
               }`}
@@ -172,7 +172,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
             </button>
             <button
               onClick={() => onSetTextSize && onSetTextSize("large")}
-              title="Large text"
+              title={t("largeText", "Large text")}
               className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                 currentTextSize === "large" ? "bg-white text-stone-900 shadow-2xs" : "text-stone-500 hover:text-stone-800"
               }`}
@@ -181,7 +181,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
             </button>
             <button
               onClick={() => onSetTextSize && onSetTextSize("xl")}
-              title="Extra large text"
+              title={t("xlText", "Extra large text")}
               className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
                 currentTextSize === "xl" ? "bg-white text-stone-900 shadow-2xs" : "text-stone-500 hover:text-stone-800"
               }`}
@@ -280,15 +280,15 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
           <div className="pt-4 border-t border-stone-100 flex flex-wrap items-center gap-y-2 gap-x-6 text-xs sm:text-sm text-stone-500">
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>No direct eye touch or painful drops</span>
+              <span>{t("heroReassurance1", "No direct eye touch or painful drops")}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Results ready in minutes</span>
+              <span>{t("heroReassurance2", "Results ready in minutes")}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Over 90% of sight loss is preventable</span>
+              <span>{t("heroReassurance3", "Over 90% of sight loss is preventable")}</span>
             </div>
           </div>
         </div>
@@ -601,14 +601,14 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
               className="px-4 py-2.5 rounded-xl border border-stone-200 bg-white text-stone-700 hover:bg-stone-50 hover:text-stone-900 font-semibold text-xs sm:text-sm transition-colors flex items-center justify-center gap-2 shrink-0 min-h-[44px]"
             >
               <Navigation className="w-3.5 h-3.5 text-[#EA580C]" />
-              <span>{userLocationDetected ? "Bengaluru (Current Location)" : t("useLocationBtn", "Use My Location")}</span>
+              <span>{userLocationDetected ? t("currentLocationDetected", "Bengaluru (Current Location)") : t("useLocationBtn", "Use My Location")}</span>
             </button>
           </div>
 
           {/* Quick Filter Buttons (All, Camps, Clinics, Hospitals) */}
           <div className="flex flex-wrap items-center gap-1.5 pt-2 border-t border-stone-100">
             <span className="text-[11px] font-semibold uppercase tracking-wider text-stone-400 mr-1">
-              Filter:
+              {t("filterLabel", "Filter:")}
             </span>
             {[
               { id: "All", label: t("filterAll", "All Centers") },
@@ -736,7 +736,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                 }}
                 className="px-3.5 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 text-stone-800 font-semibold text-xs transition-colors"
               >
-                Reset All Filters
+                {t("resetAllFilters", "Reset All Filters")}
               </button>
             </div>
           )}
@@ -748,13 +748,13 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
         <div className="space-y-1.5 max-w-xl">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-semibold bg-white text-stone-700 border border-stone-200">
             <Eye className="w-3 h-3 text-stone-500" />
-            <span>Curious how it works?</span>
+            <span>{t("curiousHowItWorks", "Curious how it works?")}</span>
           </div>
           <h3 className="text-xl font-serif font-semibold text-stone-900">
-            See a Sample Retinal Check
+            {t("sampleEyeCheckTitle", "See a Sample Retinal Check")}
           </h3>
           <p className="text-sm text-stone-600 leading-relaxed">
-            Take a look at what an eye photograph looks like, how early changes are noticed, and what friendly advice is given to patients.
+            {t("sampleEyeCheckSubtitle", "Take a look at what an eye photograph looks like, how early changes are noticed, and what friendly advice is given to patients.")}
           </p>
         </div>
 
@@ -775,7 +775,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
               className="w-full sm:w-auto px-4 py-3 rounded-xl border border-stone-200 bg-white hover:bg-stone-50 text-stone-700 font-semibold text-xs flex items-center justify-center gap-1.5 min-h-[44px] transition-colors"
             >
               <Building className="w-3.5 h-3.5 text-stone-400" />
-              <span>Healthcare Staff Portal →</span>
+              <span>{t("healthcareStaffPortal", "Healthcare Staff Portal →")}</span>
             </button>
           )}
         </div>
@@ -794,7 +794,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                 <div>
                   <div className="flex items-center justify-between">
                     <span className="text-[11px] font-semibold uppercase tracking-wider text-[#EA580C]">
-                      Free Screening Booking
+                      {t("freeScreeningBooking", "Free Screening Booking")}
                     </span>
                     <button
                       onClick={() => setBookingCenter(null)}
@@ -847,16 +847,16 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                       onChange={(e) => setPreferredDate(e.target.value)}
                       className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 bg-stone-50/50 focus:bg-white focus:outline-none focus:border-stone-400 min-h-[42px] transition-all"
                     >
-                      <option>Tomorrow Morning (9:00 AM - 12:00 PM)</option>
-                      <option>Tomorrow Afternoon (2:00 PM - 5:00 PM)</option>
-                      <option>This Saturday Morning (9:00 AM - 1:00 PM)</option>
-                      <option>Next Week (Center will call to confirm slot)</option>
+                      <option>{t("slotTomorrowMorning", "Tomorrow Morning (9:00 AM - 12:00 PM)")}</option>
+                      <option>{t("slotTomorrowAfternoon", "Tomorrow Afternoon (2:00 PM - 5:00 PM)")}</option>
+                      <option>{t("slotSaturdayMorning", "This Saturday Morning (9:00 AM - 1:00 PM)")}</option>
+                      <option>{t("slotNextWeek", "Next Week (Center will call to confirm slot)")}</option>
                     </select>
                   </div>
                 </div>
 
                 <div className="p-3 bg-stone-50 rounded-xl border border-stone-200/80 text-xs text-stone-600">
-                  Zero fee required. Retinal checks at community centers are 100% free of charge.
+                  {t("zeroFeeNotice", "Zero fee required. Retinal checks at community centers are 100% free of charge.")}
                 </div>
 
                 <div className="flex items-center gap-2.5 pt-2">
@@ -864,7 +864,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                     onClick={() => setBookingCenter(null)}
                     className="flex-1 py-2.5 rounded-xl border border-stone-200 text-stone-600 font-semibold text-xs sm:text-sm min-h-[42px] hover:bg-stone-50 transition-colors"
                   >
-                    Cancel
+                    {t("cancelBtn", "Cancel")}
                   </button>
                   <button
                     onClick={() => setBookingConfirmed(true)}
@@ -889,9 +889,9 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                   )}
                 </p>
                 <div className="bg-stone-50 p-3.5 rounded-xl border border-stone-200/80 text-xs text-left space-y-1 text-stone-700">
-                  <div><strong>Center:</strong> {bookingCenter.name}</div>
-                  <div><strong>Slot:</strong> {preferredDate}</div>
-                  <div><strong>Patient:</strong> {patientName || "Patient"}</div>
+                  <div><strong>{t("centerLabel", "Center:")}</strong> {bookingCenter.name}</div>
+                  <div><strong>{t("slotLabel", "Slot:")}</strong> {preferredDate}</div>
+                  <div><strong>{t("patientLabel", "Patient:")}</strong> {patientName || t("patientDefault", "Patient")}</div>
                 </div>
                 <button
                   onClick={() => setBookingCenter(null)}

@@ -12,6 +12,7 @@ import {
   X,
   Zap,
 } from 'lucide-react';
+import { useTranslation } from '../i18n/I18nContext';
 
 export interface ImageUploaderProps {
   label: string;
@@ -60,6 +61,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   helperHint,
   idPrefix = 'uploader',
 }) => {
+  const { t } = useTranslation();
   const [isDragging, setIsDragging] = useState(false);
   const [showRetakeGuide, setShowRetakeGuide] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -67,7 +69,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
   // Process selected file
   const handleFile = (file: File) => {
     if (!file.type.startsWith('image/')) {
-      alert('Please upload an image file (PNG, JPG, TIFF).');
+      alert(t('alertUploadImageFile', 'Please upload an image file (PNG, JPG, TIFF).'));
       return;
     }
     const reader = new FileReader();
@@ -143,11 +145,11 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
             <h3 className="text-sm font-bold text-[#2E2628]">{label}</h3>
             {required ? (
               <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-[#FEE2E2] text-[#DC2626]">
-                Required
+                {t('requiredModality', 'Required')}
               </span>
             ) : (
               <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-[#F5F1ED] text-[#6E5C5F]">
-                Optional
+                {t('optionalModality', 'Optional')}
               </span>
             )}
           </div>
@@ -157,7 +159,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
         {/* Quick Sample Presets (if available) */}
         {presets.length > 0 && (
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className="text-[11px] font-medium text-[#6E5C5F] mr-1">Sample Scans:</span>
+            <span className="text-[11px] font-medium text-[#6E5C5F] mr-1">{t('sampleScansLabel', 'Sample Scans:')}</span>
             {presets.map((preset) => {
               const isSelected = selectedPresetId === preset.id;
               return (
@@ -196,7 +198,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
             <div className="flex items-center gap-2 truncate pr-2">
               <FileImage className="w-4 h-4 text-[#EA580C] shrink-0" />
               <span className="font-mono text-[11px] truncate text-[#EFE4DC]" title={currentImageName}>
-                {currentImageName || 'Retinal Scan Upload'}
+                {currentImageName || t('retinalScanUpload', 'Retinal Scan Upload')}
               </span>
             </div>
 
@@ -213,7 +215,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
                 }`}
               >
                 <Zap className="w-3 h-3" />
-                <span>{showingClahe ? 'CLAHE Enhanced' : 'Standard View'}</span>
+                <span>{showingClahe ? t('claheEnhanced', 'CLAHE Enhanced') : t('standardView', 'Standard View')}</span>
               </button>
             )}
           </div>
@@ -236,7 +238,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
           <div className="p-3 bg-[#FAF8F6] border-t border-[#EFE4DC] flex flex-wrap items-center justify-between gap-2">
             <div className="text-[11px] text-[#6E5C5F] flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-[#15803D]" />
-              <span>Image loaded and ready</span>
+              <span>{t('imageLoadedAndReady', 'Image loaded and ready')}</span>
             </div>
 
             <div className="flex items-center gap-2">
@@ -249,7 +251,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
                 title="Initiate retake flow with camera positioning guidance"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
-                <span>Retake</span>
+                <span>{t('btnRetake', 'Retake')}</span>
               </button>
 
               {/* Replace Button */}
@@ -261,7 +263,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
                 title="Select a different file from disk"
               >
                 <RefreshCw className="w-3.5 h-3.5" />
-                <span>Replace</span>
+                <span>{t('btnReplace', 'Replace')}</span>
               </button>
 
               {/* Remove Button */}
@@ -273,7 +275,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
                 title="Remove image"
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                <span>Remove</span>
+                <span>{t('btnRemove', 'Remove')}</span>
               </button>
             </div>
           </div>
@@ -298,11 +300,11 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
 
           <div className="space-y-1">
             <div className="text-sm font-bold text-[#2E2628]">
-              Drag & drop retinal image here, or{' '}
-              <span className="text-[#EA580C] underline decoration-[#EA580C]/40">browse file</span>
+              {t('dragDropRetinalImageHere', 'Drag & drop retinal image here, or')}{' '}
+              <span className="text-[#EA580C] underline decoration-[#EA580C]/40">{t('browseFile', 'browse file')}</span>
             </div>
             <p className="text-xs text-[#6E5C5F]">
-              Supports standard fundus / OCT formats (PNG, JPG, DICOM-exported JPEG, TIFF up to 25MB)
+              {t('supportsStandardFormats', 'Supports standard fundus / OCT formats (PNG, JPG, DICOM-exported JPEG, TIFF up to 25MB)')}
             </p>
           </div>
 
@@ -321,7 +323,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-xs font-bold text-[#EA580C] uppercase tracking-wider">
               <Camera className="w-4 h-4" />
-              <span>Camera Operator Retake Checklist</span>
+              <span>{t('cameraOperatorRetakeChecklist', 'Camera Operator Retake Checklist')}</span>
             </div>
             <button
               type="button"
@@ -333,7 +335,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
           </div>
 
           <p className="text-xs text-[#2E2628] leading-relaxed">
-            Follow these optical alignment steps to capture a high-clarity image before re-triggering exposure:
+            {t('cameraAlignmentStepsNotice', 'Follow these optical alignment steps to capture a high-clarity image before re-triggering exposure:')}
           </p>
 
           <ul className="space-y-1.5 text-xs text-[#6E5C5F]">
@@ -361,7 +363,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({
               onClick={() => fileInputRef.current?.click()}
               className="px-3 py-1.5 rounded-xl bg-[#EA580C] text-white text-xs font-bold hover:bg-[#C2410C] transition-colors shadow-2xs"
             >
-              Capture / Select New Photo
+              {t('captureSelectNewPhoto', 'Capture / Select New Photo')}
             </button>
           </div>
         </div>

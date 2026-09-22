@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Play, Pause, Square, Volume2, X, Gauge } from 'lucide-react';
 import { voiceService, VoicePlaybackState } from '../services/voiceService';
 import { SUPPORTED_LANGUAGES } from '../i18n/translations';
+import { useTranslation } from '../i18n/I18nContext';
 
 export const VoiceReaderBar: React.FC = () => {
+  const { t } = useTranslation();
   const [state, setState] = useState<VoicePlaybackState>(voiceService.getState());
 
   useEffect(() => {
@@ -20,7 +22,7 @@ export const VoiceReaderBar: React.FC = () => {
   return (
     <div
       role="region"
-      aria-label="Voice reading controls"
+      aria-label={t("voiceReadingControls", "Voice reading controls")}
       className="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:max-w-md z-50 bg-stone-900/95 backdrop-blur-xl text-white rounded-2xl p-4 shadow-2xl border border-stone-800 animate-in slide-in-from-bottom-5 duration-200"
     >
       <div className="flex items-start justify-between gap-3 mb-2.5">
@@ -31,7 +33,7 @@ export const VoiceReaderBar: React.FC = () => {
           <div className="min-w-0">
             <div className="flex items-center gap-2">
               <span className="text-[10px] font-semibold uppercase tracking-wider text-stone-400 truncate">
-                Voice Reader
+                {t("voiceReaderTitle", "Voice Reader")}
               </span>
               <span className="text-[10px] bg-stone-800 border border-stone-700/60 px-1.5 py-0.5 rounded font-medium text-stone-300">
                 {currentLangObj?.nativeLabel || state.currentLanguage}
@@ -46,7 +48,7 @@ export const VoiceReaderBar: React.FC = () => {
         <button
           onClick={() => voiceService.stop()}
           className="text-stone-400 hover:text-white p-1 rounded-lg hover:bg-stone-800 transition-colors"
-          aria-label="Close voice reader"
+          aria-label={t("closeVoiceReader", "Close voice reader")}
         >
           <X className="w-4 h-4" />
         </button>
@@ -64,29 +66,29 @@ export const VoiceReaderBar: React.FC = () => {
             <button
               onClick={() => voiceService.pause()}
               className="px-3 py-1.5 rounded-xl bg-white text-stone-900 hover:bg-stone-200 font-semibold text-xs flex items-center gap-1.5 transition-all shadow-xs"
-              aria-label="Pause voice reading"
+              aria-label={t("pauseVoiceReading", "Pause voice reading")}
             >
               <Pause className="w-3.5 h-3.5 fill-current" />
-              <span>Pause</span>
+              <span>{t("voicePause", "Pause")}</span>
             </button>
           ) : (
             <button
               onClick={() => voiceService.resume()}
               className="px-3 py-1.5 rounded-xl bg-[#EA580C] text-white hover:bg-[#C2410C] font-semibold text-xs flex items-center gap-1.5 transition-all shadow-xs"
-              aria-label="Resume voice reading"
+              aria-label={t("resumeVoiceReading", "Resume voice reading")}
             >
               <Play className="w-3.5 h-3.5 fill-current" />
-              <span>Resume</span>
+              <span>{t("voiceResume", "Resume")}</span>
             </button>
           )}
 
           <button
             onClick={() => voiceService.stop()}
             className="px-2.5 py-1.5 rounded-xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white font-medium text-xs flex items-center gap-1.5 transition-colors"
-            aria-label="Stop reading"
+            aria-label={t("stopReading", "Stop reading")}
           >
             <Square className="w-3 h-3 fill-current" />
-            <span>Stop</span>
+            <span>{t("voiceStop", "Stop")}</span>
           </button>
         </div>
 

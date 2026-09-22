@@ -54,13 +54,13 @@ export const PatientProfileView: React.FC<PatientProfileViewProps> = ({
         <div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] mb-2">
             <UserIcon className="w-3.5 h-3.5 text-[#EA580C]" />
-            <span>PATIENT ACCOUNT</span>
+            <span>{t("patientAccountBadge", "PATIENT ACCOUNT")}</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#2E2628]">
-            Patient Profile
+            {t("patientProfileTitle", "Patient Profile")}
           </h2>
           <p className="text-xs sm:text-sm text-[#6E5C5F] mt-1">
-            Personal details, verified contact information, and screening preferences.
+            {t("patientProfileDesc", "Personal details, verified contact information, and screening preferences.")}
           </p>
         </div>
 
@@ -71,7 +71,7 @@ export const PatientProfileView: React.FC<PatientProfileViewProps> = ({
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-semibold shadow-xs transition-colors self-start sm:self-auto"
         >
           <Eye className="w-4 h-4" />
-          <span>Get Screened</span>
+          <span>{t("getScreenedCta", "Get Screened")}</span>
         </button>
       </div>
 
@@ -83,18 +83,18 @@ export const PatientProfileView: React.FC<PatientProfileViewProps> = ({
           </div>
           <div>
             <h3 className="text-lg sm:text-xl font-serif font-bold text-[#2E2628]">
-              {currentUser.name || 'Patient'}
+              {currentUser.name || t("patientFallbackName", "Patient")}
             </h3>
             <div className="flex items-center gap-2 mt-1">
               <span className="text-xs font-mono text-[#9E8D91]">
-                ID: {currentUser.id}
+                {t("idLabel", "ID")}: {currentUser.id}
               </span>
               <button
                 type="button"
                 onClick={handleCopyId}
                 className="text-[11px] text-[#EA580C] hover:underline"
               >
-                {copiedId ? 'Copied!' : 'Copy'}
+                {copiedId ? t("copiedSuccess", "Copied!") : t("copyAction", "Copy")}
               </button>
             </div>
           </div>
@@ -107,16 +107,16 @@ export const PatientProfileView: React.FC<PatientProfileViewProps> = ({
             <div className="flex items-center justify-between text-[#9E8D91]">
               <span className="flex items-center gap-1.5 font-semibold">
                 <Mail className="w-3.5 h-3.5 text-[#EA580C]" />
-                Email Address
+                {t("emailAddressLabel", "Email Address")}
               </span>
               {currentUser.emailVerified ? (
                 <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
                   <CheckCircle2 className="w-3 h-3" />
-                  Verified ✓
+                  {t("verifiedBadge", "Verified ✓")}
                 </span>
               ) : (
                 <span className="text-[10px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">
-                  Unverified
+                  {t("unverifiedBadgeShort", "Unverified")}
                 </span>
               )}
             </div>
@@ -130,16 +130,16 @@ export const PatientProfileView: React.FC<PatientProfileViewProps> = ({
             <div className="flex items-center justify-between text-[#9E8D91]">
               <span className="flex items-center gap-1.5 font-semibold">
                 <Phone className="w-3.5 h-3.5 text-[#EA580C]" />
-                Mobile Phone
+                {t("mobilePhoneLabel", "Mobile Phone")}
               </span>
               {currentUser.phoneVerified ? (
                 <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200 flex items-center gap-1">
                   <CheckCircle2 className="w-3 h-3" />
-                  Verified ✓
+                  {t("verifiedBadge", "Verified ✓")}
                 </span>
               ) : (
                 <span className="text-[10px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-full">
-                  Unverified
+                  {t("unverifiedBadgeShort", "Unverified")}
                 </span>
               )}
             </div>
@@ -152,7 +152,7 @@ export const PatientProfileView: React.FC<PatientProfileViewProps> = ({
           <div className="p-3.5 rounded-2xl bg-[#FFFDFB] border border-[#EFE4DC] space-y-1">
             <div className="flex items-center gap-1.5 font-semibold text-[#9E8D91]">
               <Globe className="w-3.5 h-3.5 text-[#EA580C]" />
-              Preferred Language
+              {t("preferredLanguageLabel", "Preferred Language")}
             </div>
             <div className="flex items-center justify-between">
               <span className="font-semibold text-sm text-[#2E2628]">
@@ -175,7 +175,7 @@ export const PatientProfileView: React.FC<PatientProfileViewProps> = ({
           <div className="p-3.5 rounded-2xl bg-[#FFFDFB] border border-[#EFE4DC] space-y-1">
             <div className="flex items-center gap-1.5 font-semibold text-[#9E8D91]">
               <Calendar className="w-3.5 h-3.5 text-[#EA580C]" />
-              Registered Member
+              {t("registeredMemberLabel", "Registered Member")}
             </div>
             <div className="font-semibold text-sm text-[#2E2628]">
               {currentUser.registeredAt
@@ -194,10 +194,10 @@ export const PatientProfileView: React.FC<PatientProfileViewProps> = ({
           >
             <div className="flex items-center justify-between">
               <FileText className="w-4 h-4 text-[#EA580C]" />
-              <span className="text-[10px] font-bold text-[#EA580C] group-hover:underline">View →</span>
+              <span className="text-[10px] font-bold text-[#EA580C] group-hover:underline">{t("viewArrowAction", "View →")}</span>
             </div>
-            <div className="text-xs font-bold text-[#2E2628]">My Reports</div>
-            <div className="text-[11px] text-[#6E5C5F]">View and download past screening letters</div>
+            <div className="text-xs font-bold text-[#2E2628]">{t("myReportsNav", "My Reports")}</div>
+            <div className="text-[11px] text-[#6E5C5F]">{t("myReportsDescCard", "View and download past screening letters")}</div>
           </button>
 
           <button
@@ -207,10 +207,10 @@ export const PatientProfileView: React.FC<PatientProfileViewProps> = ({
           >
             <div className="flex items-center justify-between">
               <Clock className="w-4 h-4 text-[#EA580C]" />
-              <span className="text-[10px] font-bold text-[#EA580C] group-hover:underline">Track →</span>
+              <span className="text-[10px] font-bold text-[#EA580C] group-hover:underline">{t("trackArrowAction", "Track →")}</span>
             </div>
-            <div className="text-xs font-bold text-[#2E2628]">Screening Journey</div>
-            <div className="text-[11px] text-[#6E5C5F]">Check care continuum and clinic steps</div>
+            <div className="text-xs font-bold text-[#2E2628]">{t("screeningJourneyNav", "Screening Journey")}</div>
+            <div className="text-[11px] text-[#6E5C5F]">{t("screeningJourneyDescCard", "Check care continuum and clinic steps")}</div>
           </button>
 
           <button
@@ -220,10 +220,10 @@ export const PatientProfileView: React.FC<PatientProfileViewProps> = ({
           >
             <div className="flex items-center justify-between">
               <Sliders className="w-4 h-4 text-[#EA580C]" />
-              <span className="text-[10px] font-bold text-[#EA580C] group-hover:underline">Adjust →</span>
+              <span className="text-[10px] font-bold text-[#EA580C] group-hover:underline">{t("adjustArrowAction", "Adjust →")}</span>
             </div>
-            <div className="text-xs font-bold text-[#2E2628]">Accessibility</div>
-            <div className="text-[11px] text-[#6E5C5F]">Change text size, contrast, or color vision</div>
+            <div className="text-xs font-bold text-[#2E2628]">{t("accessibilityNav", "Accessibility")}</div>
+            <div className="text-[11px] text-[#6E5C5F]">{t("accessibilityDescCard", "Change text size, contrast, or color vision")}</div>
           </button>
         </div>
 
@@ -236,7 +236,7 @@ export const PatientProfileView: React.FC<PatientProfileViewProps> = ({
               className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-semibold text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] border border-[#EFE4DC] transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5 text-[#EA580C]" />
-              <span>Switch Workspace</span>
+              <span>{t("switchWorkspaceBtn", "Switch Workspace")}</span>
             </button>
           )}
 
@@ -246,7 +246,7 @@ export const PatientProfileView: React.FC<PatientProfileViewProps> = ({
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold text-red-600 hover:bg-red-50 transition-colors self-end sm:self-auto"
           >
             <LogOut className="w-3.5 h-3.5" />
-            <span>Sign Out of Patient Account</span>
+            <span>{t("signOutPatientAccountBtn", "Sign Out of Patient Account")}</span>
           </button>
         </div>
       </div>

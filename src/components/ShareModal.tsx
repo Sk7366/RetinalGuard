@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Copy, Check, Share2, Shield, Lock } from 'lucide-react';
 import { MultimodalTriageResult } from '../types';
+import { useTranslation } from '../i18n/I18nContext';
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -9,6 +10,7 @@ interface ShareModalProps {
 }
 
 export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, result }) => {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
 
   if (!isOpen) return null;
@@ -31,7 +33,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, result 
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-[#6E5C5F] hover:text-[#2E2628] p-1.5 rounded-lg hover:bg-[#FFF7ED] transition-colors"
-          aria-label="Close modal"
+          aria-label={t('closeModalAria', 'Close modal')}
         >
           <X className="w-5 h-5" />
         </button>
@@ -40,13 +42,13 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, result 
         <div className="space-y-1.5 mb-5">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA]">
             <Share2 className="w-3.5 h-3.5 text-[#EA580C]" />
-            <span>Secure Clinical Case Sharing</span>
+            <span>{t('secureClinicalSharingBadge', 'Secure Clinical Case Sharing')}</span>
           </div>
           <h2 className="text-xl font-serif font-bold text-[#2E2628]">
-            Share Anonymized Triage
+            {t('shareAnonymizedTriageTitle', 'Share Anonymized Triage')}
           </h2>
           <p className="text-xs text-[#6E5C5F] leading-relaxed">
-            Generate a secure, anonymized link to collaborate with retina specialists or peer researchers.
+            {t('shareAnonymizedTriageSub', 'Generate a secure, anonymized link to collaborate with retina specialists or peer researchers.')}
           </p>
         </div>
 
@@ -54,17 +56,17 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, result 
         <div className="p-3 bg-[#FFFDFB] rounded-xl border border-[#FED7AA] mb-4 space-y-1.5 text-xs text-[#6E5C5F]">
           <div className="flex items-center gap-1.5 font-semibold text-[#C2410C]">
             <Lock className="w-3.5 h-3.5 text-[#EA580C]" />
-            <span>De-Identification Guarantee</span>
+            <span>{t('deIdentificationGuaranteeTitle', 'De-Identification Guarantee')}</span>
           </div>
           <p className="text-[11px] text-[#2E2628]">
-            No protected health information (PHI) or raw personal identifiers are included. Only model attention maps, risk grades, and synthetic metadata drivers are shared.
+            {t('deIdentificationGuaranteeDesc', 'No protected health information (PHI) or raw personal identifiers are included. Only model attention maps, risk grades, and synthetic metadata drivers are shared.')}
           </p>
         </div>
 
         {/* Share Link Input Box */}
         <div className="space-y-2 mb-5">
           <label className="block text-xs font-semibold text-[#2E2628]">
-            Anonymized Share Link
+            {t('anonymizedShareLinkLabel', 'Anonymized Share Link')}
           </label>
           <div className="flex items-center gap-2">
             <input
@@ -84,12 +86,12 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, result 
               {copied ? (
                 <>
                   <Check className="w-3.5 h-3.5" />
-                  <span>Copied</span>
+                  <span>{t('copiedStatus', 'Copied')}</span>
                 </>
               ) : (
                 <>
                   <Copy className="w-3.5 h-3.5" />
-                  <span>Copy Link</span>
+                  <span>{t('copyLinkBtn', 'Copy Link')}</span>
                 </>
               )}
             </button>
@@ -99,13 +101,13 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, result 
         {/* Case Summary Preview */}
         <div className="p-3 bg-[#FAF8F6] rounded-xl border border-[#EFE4DC] text-xs text-[#6E5C5F] flex items-center justify-between">
           <div>
-            <span className="font-mono font-bold text-[#2E2628] block">Session {result.sessionId}</span>
+            <span className="font-mono font-bold text-[#2E2628] block">{t('sessionPrefix', 'Session')} {result.sessionId}</span>
             <span className="text-[11px] text-[#9E8D91]">
-              Grade {result.finalGrade} ({result.gradeLabel}) · {result.confidence} Confidence
+              {t('gradePrefix', 'Grade')} {result.finalGrade} ({result.gradeLabel}) · {result.confidence} {t('confidenceWord', 'Confidence')}
             </span>
           </div>
           <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA]">
-            Read-only
+            {t('readOnlyBadge', 'Read-only')}
           </span>
         </div>
       </div>

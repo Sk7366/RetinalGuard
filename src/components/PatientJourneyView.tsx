@@ -31,50 +31,50 @@ export const PatientJourneyView: React.FC<PatientJourneyViewProps> = ({
   const journeySteps = [
     {
       step: 1,
-      title: 'Registration & Contact Verification',
+      title: t("journeyStep1Title", "Registration & Contact Verification"),
       status: 'completed',
-      date: currentUser.registeredAt ? new Date(currentUser.registeredAt).toLocaleDateString() : 'Active',
-      desc: 'Your profile, email, and phone number are verified for confidential delivery of results and clinic alerts.',
+      date: currentUser.registeredAt ? new Date(currentUser.registeredAt).toLocaleDateString() : t("activeStatus", "Active"),
+      desc: t("journeyStep1Desc", "Your profile, email, and phone number are verified for confidential delivery of results and clinic alerts."),
       icon: UserCheck,
     },
     {
       step: 2,
-      title: 'Retinal Image Capture at Camp or Clinic',
+      title: t("journeyStep2Title", "Retinal Image Capture at Camp or Clinic"),
       status: 'completed',
-      date: 'Completed at Victoria Hospital Camp',
-      desc: 'A trained screening worker captured non-mydriatic fundus images using a gentle, painless eye camera (no eye-drops or needles).',
+      date: t("journeyStep2Date", "Completed at Victoria Hospital Camp"),
+      desc: t("journeyStep2Desc", "A trained screening worker captured non-mydriatic fundus images using a gentle, painless eye camera (no eye-drops or needles)."),
       icon: Eye,
     },
     {
       step: 3,
-      title: 'AI-Assisted Quality & Risk Triage',
+      title: t("journeyStep3Title", "AI-Assisted Quality & Risk Triage"),
       status: 'completed',
-      date: 'Completed in < 12 seconds',
-      desc: 'RetinaGuard verified image focus and assisted the healthcare team by identifying any signs that may need further clinical review.',
+      date: t("journeyStep3Date", "Completed in < 12 seconds"),
+      desc: t("journeyStep3Desc", "RetinaGuard verified image focus and assisted the healthcare team by identifying any signs that may need further clinical review."),
       icon: CheckCircle2,
     },
     {
       step: 4,
-      title: 'Optometrist / Physician Clinical Review',
+      title: t("journeyStep4Title", "Optometrist / Physician Clinical Review"),
       status: 'completed',
-      date: 'Reviewed by Dr. Ananya Sharma',
-      desc: 'A certified eye-care professional verified the automated findings and approved the clinical referral recommendation.',
+      date: t("journeyStep4Date", "Reviewed by Dr. Ananya Sharma"),
+      desc: t("journeyStep4Desc", "A certified eye-care professional verified the automated findings and approved the clinical referral recommendation."),
       icon: HeartHandshake,
     },
     {
       step: 5,
-      title: 'Digital Screening Report Generated',
+      title: t("journeyStep5Title", "Digital Screening Report Generated"),
       status: 'completed',
-      date: 'Available in My Reports',
-      desc: 'Your comprehensive, easy-to-read report was generated and is ready for download or email.',
+      date: t("journeyStep5Date", "Available in My Reports"),
+      desc: t("journeyStep5Desc", "Your comprehensive, easy-to-read report was generated and is ready for download or email."),
       icon: FileText,
     },
     {
       step: 6,
-      title: 'Follow-Up Care & Annual Reminder',
+      title: t("journeyStep6Title", "Follow-Up Care & Annual Reminder"),
       status: 'current',
-      date: 'Next checkup due: Sept 2027',
-      desc: 'RetinaGuard will send you an SMS/email reminder before your next routine retinal evaluation.',
+      date: t("journeyStep6Date", "Next checkup due: Sept 2027"),
+      desc: t("journeyStep6Desc", "RetinaGuard will send you an SMS/email reminder before your next routine retinal evaluation."),
       icon: Clock,
     },
   ];
@@ -85,13 +85,13 @@ export const PatientJourneyView: React.FC<PatientJourneyViewProps> = ({
       <div className="pb-4 border-b border-[#EFE4DC]">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] mb-2">
           <Clock className="w-3.5 h-3.5 text-[#EA580C]" />
-          <span>CARE CONTINUUM TIMELINE</span>
+          <span>{t("careTimelineBadge", "CARE CONTINUUM TIMELINE")}</span>
         </div>
         <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#2E2628]">
-          My Screening Journey
+          {t("myScreeningJourneyTitle", "My Screening Journey")}
         </h2>
         <p className="text-xs sm:text-sm text-[#6E5C5F] mt-1">
-          Track each step of your eye health journey from initial registration through follow-up reminders.
+          {t("myScreeningJourneyDesc", "Track each step of your eye health journey from initial registration through follow-up reminders.")}
         </p>
       </div>
 
@@ -103,37 +103,37 @@ export const PatientJourneyView: React.FC<PatientJourneyViewProps> = ({
           </div>
           <div>
             <h3 className="text-sm font-bold text-[#2E2628]">
-              You don't need to operate the AI system yourself
+              {t("patientAiSupportHeading", "You don't need to operate the AI system yourself")}
             </h3>
             <span className="text-xs text-[#9E8D91]">
-              How RetinaGuard supports you and your community healthcare team
+              {t("patientAiSupportSubheading", "How RetinaGuard supports you and your community healthcare team")}
             </span>
           </div>
         </div>
 
         <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed">
-          At a participating screening center, a <strong>trained community health worker</strong> captures the required retinal images using a specialized digital camera. RetinaGuard then assists the screening team with instant image quality checking and referral decision support. A certified doctor reviews the findings so you receive clear, understandable care recommendations.
+          {t("patientAiSupportBody", "At a participating screening center, a trained community health worker captures the required retinal images using a specialized digital camera. RetinaGuard then assists the screening team with instant image quality checking and referral decision support. A certified doctor reviews the findings so you receive clear, understandable care recommendations.")}
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
           <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC]">
-            <div className="font-bold text-[#2E2628] mb-1">For You (Patient)</div>
+            <div className="font-bold text-[#2E2628] mb-1">{t("forYouPatientTitle", "For You (Patient)")}</div>
             <p className="text-[#6E5C5F] text-[11px] leading-relaxed">
-              Fast access, painless checks, understandable reports, and timely care reminders.
+              {t("forYouPatientDesc", "Fast access, painless checks, understandable reports, and timely care reminders.")}
             </p>
           </div>
 
           <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC]">
-            <div className="font-bold text-[#2E2628] mb-1">For Screening Helper</div>
+            <div className="font-bold text-[#2E2628] mb-1">{t("forScreeningHelperTitle", "For Screening Helper")}</div>
             <p className="text-[#6E5C5F] text-[11px] leading-relaxed">
-              Real-time image quality feedback, assisted risk triage, and referral workflow tools.
+              {t("forScreeningHelperDesc", "Real-time image quality feedback, assisted risk triage, and referral workflow tools.")}
             </p>
           </div>
 
           <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC]">
-            <div className="font-bold text-[#2E2628] mb-1">For Eye Doctor</div>
+            <div className="font-bold text-[#2E2628] mb-1">{t("forEyeDoctorTitle", "For Eye Doctor")}</div>
             <p className="text-[#6E5C5F] text-[11px] leading-relaxed">
-              Standardized image views, multimodal clinical metadata, and organized review queues.
+              {t("forEyeDoctorDesc", "Standardized image views, multimodal clinical metadata, and organized review queues.")}
             </p>
           </div>
         </div>
@@ -142,7 +142,7 @@ export const PatientJourneyView: React.FC<PatientJourneyViewProps> = ({
       {/* TIMELINE STEPS */}
       <div className="space-y-4">
         <h3 className="text-xs font-bold uppercase tracking-wider text-[#EA580C]">
-          Care Continuum Progress
+          {t("careContinuumProgressHeading", "Care Continuum Progress")}
         </h3>
 
         <div className="relative border-l-2 border-[#FED7AA] ml-4 sm:ml-6 space-y-6 pb-2">
@@ -188,7 +188,7 @@ export const PatientJourneyView: React.FC<PatientJourneyViewProps> = ({
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FFF7ED] hover:bg-[#FFEDD5] border border-[#FED7AA] text-[#C2410C] text-xs font-semibold transition-colors"
                       >
                         <FileText className="w-3.5 h-3.5" />
-                        <span>View My Screening Reports →</span>
+                        <span>{t("viewMyReportsArrow", "View My Screening Reports →")}</span>
                       </button>
                     </div>
                   )}
@@ -203,10 +203,10 @@ export const PatientJourneyView: React.FC<PatientJourneyViewProps> = ({
       <div className="p-6 rounded-3xl bg-[#FFFDFB] border border-[#EFE4DC] flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <h4 className="font-serif font-bold text-base sm:text-lg text-[#2E2628]">
-            Need another screening or advice?
+            {t("needAnotherScreeningQuestion", "Need another screening or advice?")}
           </h4>
           <p className="text-xs text-[#6E5C5F] mt-0.5">
-            Locate nearby certified screening centers and eye camps across Karnataka, Maharashtra, and Delhi NCR.
+            {t("locateNearbyCentersDesc", "Locate nearby certified screening centers and eye camps across Karnataka, Maharashtra, and Delhi NCR.")}
           </p>
         </div>
 
@@ -216,7 +216,7 @@ export const PatientJourneyView: React.FC<PatientJourneyViewProps> = ({
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-semibold shadow-xs transition-colors shrink-0"
         >
           <Building className="w-4 h-4" />
-          <span>Find a Screening Center</span>
+          <span>{t("findScreeningCenterBtn", "Find a Screening Center")}</span>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>
