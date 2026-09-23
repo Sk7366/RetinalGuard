@@ -133,8 +133,8 @@ export const AccessibilitySettingsModal: React.FC<AccessibilitySettingsModalProp
             <div className="grid grid-cols-3 gap-2.5 pt-1">
               {[
                 { id: 'standard', label: 'Default', scale: '1.0x', display: 'A' },
-                { id: 'large', label: 'Large', scale: '1.15x', display: 'A+' },
-                { id: 'xl', label: 'Extra Large', scale: '1.30x', display: 'A++' },
+                { id: 'large', label: 'Large', scale: '1.25x', display: 'A+' },
+                { id: 'xl', label: 'Extra Large', scale: '1.50x', display: 'A++' },
               ].map((opt) => {
                 const isSelected = config.textSize === opt.id;
                 return (

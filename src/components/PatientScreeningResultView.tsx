@@ -234,7 +234,7 @@ export const PatientScreeningResultView: React.FC<PatientScreeningResultViewProp
               </p>
             </div>
 
-            {/* Visual Status Indicator Pill (Icon + Text + High Contrast Color) */}
+            {/* Visual Status Indicator Pill (Icon + Text + Color) */}
             <div
               className={`px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center gap-2 shrink-0 ${
                 isRoutine
@@ -247,17 +247,17 @@ export const PatientScreeningResultView: React.FC<PatientScreeningResultViewProp
               {isRoutine ? (
                 <>
                   <CheckCircle2 className="w-4 h-4" />
-                  <span>Routine Category</span>
+                  <span>✓ Completed • Routine</span>
                 </>
               ) : isMild ? (
                 <>
                   <AlertCircle className="w-4 h-4" />
-                  <span>Review Category</span>
+                  <span>⚠ Needs Review</span>
                 </>
               ) : (
                 <>
                   <ShieldAlert className="w-4 h-4" />
-                  <span>Priority Review</span>
+                  <span>! Further Evaluation Recommended</span>
                 </>
               )}
             </div>

@@ -100,80 +100,229 @@
 }
 
 /* =========================================================================
-   ACCESSIBILITY: TEXT SIZE SCALING TOKEN SYSTEM
+   ACCESSIBILITY: GLOBAL CENTRALIZED TOKEN SYSTEM
+   Centralized CSS token system scaling text, contrast, color vision, theme,
+   and motion across the entire application without manual component edits.
    ========================================================================= */
 
+/* --- 1. TEXT SIZE SCALING TOKEN SYSTEM (Default, Large, Extra Large) --- */
+:root {
+  --font-scale: 1;
+  --font-scale-factor: 1;
+}
+
+html[data-text-size="standard"],
 html.font-scale-default {
   --font-scale: 1;
-  font-size: 16px;
+  font-size: 16px !important;
 }
 
+html[data-text-size="large"],
 html.font-scale-large {
-  --font-scale: 1.15;
-  font-size: 18.4px;
+  --font-scale: 1.25;
+  font-size: 20px !important; /* 25% increase - visually obvious */
 }
 
+html[data-text-size="xl"],
 html.font-scale-xl {
-  --font-scale: 1.30;
-  font-size: 20.8px;
+  --font-scale: 1.50;
+  font-size: 24px !important; /* 50% increase - high-legibility */
 }
 
-/* Proportional Heading Scale */
-html.font-scale-large h1 { font-size: calc(1.875rem * 1.08) !important; line-height: 1.25 !important; }
-html.font-scale-large h2 { font-size: calc(1.5rem * 1.08) !important; line-height: 1.3 !important; }
-html.font-scale-large h3 { font-size: calc(1.25rem * 1.08) !important; line-height: 1.35 !important; }
-html.font-scale-large h4 { font-size: calc(1.125rem * 1.08) !important; line-height: 1.4 !important; }
+/* Global utility scaling for Tailwind text classes in Large mode */
+html[data-text-size="large"] .text-xs,
+html.font-scale-large .text-xs {
+  font-size: calc(0.75rem * 1.25) !important;
+  line-height: 1.4 !important;
+}
+html[data-text-size="large"] .text-sm,
+html.font-scale-large .text-sm {
+  font-size: calc(0.875rem * 1.25) !important;
+  line-height: 1.45 !important;
+}
+html[data-text-size="large"] .text-base,
+html.font-scale-large .text-base {
+  font-size: calc(1rem * 1.25) !important;
+  line-height: 1.5 !important;
+}
+html[data-text-size="large"] .text-lg,
+html.font-scale-large .text-lg {
+  font-size: calc(1.125rem * 1.25) !important;
+  line-height: 1.45 !important;
+}
+html[data-text-size="large"] .text-xl,
+html.font-scale-large .text-xl {
+  font-size: calc(1.25rem * 1.25) !important;
+  line-height: 1.35 !important;
+}
+html[data-text-size="large"] .text-2xl,
+html.font-scale-large .text-2xl {
+  font-size: calc(1.5rem * 1.22) !important;
+  line-height: 1.3 !important;
+}
+html[data-text-size="large"] .text-3xl,
+html.font-scale-large .text-3xl {
+  font-size: calc(1.875rem * 1.2) !important;
+  line-height: 1.25 !important;
+}
+html[data-text-size="large"] .text-4xl,
+html.font-scale-large .text-4xl {
+  font-size: calc(2.25rem * 1.18) !important;
+  line-height: 1.2 !important;
+}
 
-html.font-scale-xl h1 { font-size: calc(1.875rem * 1.18) !important; line-height: 1.25 !important; }
-html.font-scale-xl h2 { font-size: calc(1.5rem * 1.18) !important; line-height: 1.3 !important; }
-html.font-scale-xl h3 { font-size: calc(1.25rem * 1.18) !important; line-height: 1.35 !important; }
-html.font-scale-xl h4 { font-size: calc(1.125rem * 1.18) !important; line-height: 1.4 !important; }
+/* Global utility scaling for Tailwind text classes in Extra Large mode */
+html[data-text-size="xl"] .text-xs,
+html.font-scale-xl .text-xs {
+  font-size: calc(0.75rem * 1.50) !important;
+  line-height: 1.45 !important;
+}
+html[data-text-size="xl"] .text-sm,
+html.font-scale-xl .text-sm {
+  font-size: calc(0.875rem * 1.50) !important;
+  line-height: 1.45 !important;
+}
+html[data-text-size="xl"] .text-base,
+html.font-scale-xl .text-base {
+  font-size: calc(1rem * 1.50) !important;
+  line-height: 1.5 !important;
+}
+html[data-text-size="xl"] .text-lg,
+html.font-scale-xl .text-lg {
+  font-size: calc(1.125rem * 1.50) !important;
+  line-height: 1.45 !important;
+}
+html[data-text-size="xl"] .text-xl,
+html.font-scale-xl .text-xl {
+  font-size: calc(1.25rem * 1.50) !important;
+  line-height: 1.35 !important;
+}
+html[data-text-size="xl"] .text-2xl,
+html.font-scale-xl .text-2xl {
+  font-size: calc(1.5rem * 1.45) !important;
+  line-height: 1.3 !important;
+}
+html[data-text-size="xl"] .text-3xl,
+html.font-scale-xl .text-3xl {
+  font-size: calc(1.875rem * 1.4) !important;
+  line-height: 1.25 !important;
+}
+html[data-text-size="xl"] .text-4xl,
+html.font-scale-xl .text-4xl {
+  font-size: calc(2.25rem * 1.35) !important;
+  line-height: 1.2 !important;
+}
 
-/* Microcopy & Utility Text Scaling */
-html.font-scale-large .text-\[9px\],
-html.font-scale-large .text-\[10px\] { font-size: calc(10px * 1.15) !important; line-height: 1.4 !important; }
-html.font-scale-large .text-\[11px\] { font-size: calc(11px * 1.15) !important; line-height: 1.4 !important; }
-html.font-scale-large .text-\[12px\] { font-size: calc(12px * 1.15) !important; line-height: 1.4 !important; }
-html.font-scale-large .text-\[13px\] { font-size: calc(13px * 1.15) !important; line-height: 1.4 !important; }
-html.font-scale-large .text-\[14px\] { font-size: calc(14px * 1.15) !important; line-height: 1.4 !important; }
-html.font-scale-large .text-\[15px\] { font-size: calc(15px * 1.15) !important; line-height: 1.45 !important; }
+/* Arbitrary pixel font utility scaling */
+html[data-text-size="large"] [class*="text-\["],
+html.font-scale-large [class*="text-\["] {
+  font-size: calc(1em * 1.25) !important;
+}
+html[data-text-size="xl"] [class*="text-\["],
+html.font-scale-xl [class*="text-\["] {
+  font-size: calc(1em * 1.50) !important;
+}
 
-html.font-scale-xl .text-\[9px\],
-html.font-scale-xl .text-\[10px\] { font-size: calc(10px * 1.30) !important; line-height: 1.45 !important; }
-html.font-scale-xl .text-\[11px\] { font-size: calc(11px * 1.30) !important; line-height: 1.45 !important; }
-html.font-scale-xl .text-\[12px\] { font-size: calc(12px * 1.30) !important; line-height: 1.45 !important; }
-html.font-scale-xl .text-\[13px\] { font-size: calc(13px * 1.30) !important; line-height: 1.45 !important; }
-html.font-scale-xl .text-\[14px\] { font-size: calc(14px * 1.30) !important; line-height: 1.45 !important; }
-html.font-scale-xl .text-\[15px\] { font-size: calc(15px * 1.30) !important; line-height: 1.45 !important; }
+/* Headings Scaling */
+html[data-text-size="large"] h1, html.font-scale-large h1 { font-size: calc(2.25rem * 1.20) !important; line-height: 1.25 !important; }
+html[data-text-size="large"] h2, html.font-scale-large h2 { font-size: calc(1.75rem * 1.20) !important; line-height: 1.3 !important; }
+html[data-text-size="large"] h3, html.font-scale-large h3 { font-size: calc(1.35rem * 1.20) !important; line-height: 1.35 !important; }
+html[data-text-size="large"] h4, html.font-scale-large h4 { font-size: calc(1.15rem * 1.20) !important; line-height: 1.4 !important; }
 
-/* Buttons & Touch Target Scaling */
+html[data-text-size="xl"] h1, html.font-scale-xl h1 { font-size: calc(2.25rem * 1.45) !important; line-height: 1.25 !important; }
+html[data-text-size="xl"] h2, html.font-scale-xl h2 { font-size: calc(1.75rem * 1.45) !important; line-height: 1.3 !important; }
+html[data-text-size="xl"] h3, html.font-scale-xl h3 { font-size: calc(1.35rem * 1.45) !important; line-height: 1.35 !important; }
+html[data-text-size="xl"] h4, html.font-scale-xl h4 { font-size: calc(1.15rem * 1.45) !important; line-height: 1.4 !important; }
+
+/* Buttons, CTAs & Touch Targets Scaling */
+html[data-text-size="large"] button,
+html[data-text-size="large"] .btn-primary-action,
+html[data-text-size="large"] .btn-secondary-accent,
+html[data-text-size="large"] .btn-natural-secondary,
 html.font-scale-large button,
 html.font-scale-large .btn-primary-action,
+html.font-scale-large .btn-secondary-accent,
 html.font-scale-large .btn-natural-secondary {
-  min-height: 2.6rem;
-  padding-top: 0.45rem;
-  padding-bottom: 0.45rem;
-}
-
-html.font-scale-xl button,
-html.font-scale-xl .btn-primary-action,
-html.font-scale-xl .btn-natural-secondary {
-  min-height: 2.9rem;
+  min-height: 2.85rem;
   padding-top: 0.55rem;
   padding-bottom: 0.55rem;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  font-size: calc(0.875rem * 1.2) !important;
 }
 
-/* Forms Scaling */
+html[data-text-size="xl"] button,
+html[data-text-size="xl"] .btn-primary-action,
+html[data-text-size="xl"] .btn-secondary-accent,
+html[data-text-size="xl"] .btn-natural-secondary,
+html.font-scale-xl button,
+html.font-scale-xl .btn-primary-action,
+html.font-scale-xl .btn-secondary-accent,
+html.font-scale-xl .btn-natural-secondary {
+  min-height: 3.3rem;
+  padding-top: 0.7rem;
+  padding-bottom: 0.7rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  font-size: calc(0.875rem * 1.45) !important;
+}
+
+/* Forms, Inputs, Selects & Textareas Scaling */
+html[data-text-size="large"] input,
+html[data-text-size="large"] select,
+html[data-text-size="large"] textarea,
 html.font-scale-large input,
 html.font-scale-large select,
 html.font-scale-large textarea {
-  min-height: 2.6rem;
+  min-height: 2.85rem;
+  font-size: calc(0.875rem * 1.2) !important;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
+html[data-text-size="xl"] input,
+html[data-text-size="xl"] select,
+html[data-text-size="xl"] textarea,
 html.font-scale-xl input,
 html.font-scale-xl select,
 html.font-scale-xl textarea {
-  min-height: 2.9rem;
+  min-height: 3.3rem;
+  font-size: calc(0.875rem * 1.45) !important;
+  padding-top: 0.65rem;
+  padding-bottom: 0.65rem;
+}
+
+/* Navigation & Header Scaling */
+html[data-text-size="large"] nav,
+html[data-text-size="large"] header,
+html.font-scale-large nav,
+html.font-scale-large header {
+  font-size: 1.15rem;
+}
+html[data-text-size="xl"] nav,
+html[data-text-size="xl"] header,
+html.font-scale-xl nav,
+html.font-scale-xl header {
+  font-size: 1.35rem;
+}
+
+/* Cards, Dialogs, Screening Workflow, Results, Profile, Appointments & Reports Scaling */
+html[data-text-size="large"] .card-natural,
+html[data-text-size="large"] [role="dialog"],
+html[data-text-size="large"] [aria-modal="true"],
+html.font-scale-large .card-natural,
+html.font-scale-large [role="dialog"],
+html.font-scale-large [aria-modal="true"] {
+  line-height: 1.55;
+}
+
+html[data-text-size="xl"] .card-natural,
+html[data-text-size="xl"] [role="dialog"],
+html[data-text-size="xl"] [aria-modal="true"],
+html.font-scale-xl .card-natural,
+html.font-scale-xl [role="dialog"],
+html.font-scale-xl [aria-modal="true"] {
+  line-height: 1.6;
 }
 
 /* =========================================================================
@@ -425,81 +574,329 @@ html, body {
 }
 
 /* =========================================================================
-   ACCESSIBILITY: DELIBERATE HIGH CONTRAST & DARK THEMES
+   ACCESSIBILITY: DELIBERATE HIGH CONTRAST, COLOR VISION & DARK THEMES
    ========================================================================= */
 
-/* Dark Theme */
-html.dark {
-  background-color: #121012 !important;
-  color: #FAF5F7 !important;
-  color-scheme: dark;
+/* --- 2. HIGH CONTRAST MODE (WCAG AAA > 12:1) --- */
+html.high-contrast,
+html[data-contrast="high"] {
+  --color-border-subtle: #000000;
 }
 
-html.dark body {
-  background-color: #121012 !important;
-  color: #FAF5F7 !important;
-}
-
-html.dark .bg-white,
-html.dark .bg-\[\#FFFDF9\],
-html.dark .bg-\[\#FFFDF9\],
-html.dark .card-natural {
-  background-color: #1B161A !important;
-  color: #FAF5F7 !important;
-  border-color: #33292F !important;
-}
-
-html.dark .text-\[\#2B2024\],
-html.dark .text-\[\#2B2024\] {
-  color: #FAF5F7 !important;
-}
-
-html.dark .text-\[\#6F6267\],
-html.dark .text-\[\#6F6267\] {
-  color: #C4B6BC !important;
-}
-
-html.dark .border-\[\#EFE4DC\] {
-  border-color: #33292F !important;
-}
-
-/* High Contrast Mode */
-html.high-contrast body {
+html.high-contrast body,
+html[data-contrast="high"] body {
   background-color: #FFFFFF !important;
   color: #000000 !important;
 }
 
 html.high-contrast .card-natural,
 html.high-contrast .bg-white,
-html.high-contrast .bg-\[\#FFFDF9\] {
+html.high-contrast .bg-\[\#FFFDF9\],
+html[data-contrast="high"] .card-natural,
+html[data-contrast="high"] .bg-white,
+html[data-contrast="high"] .bg-\[\#FFFDF9\] {
   background-color: #FFFFFF !important;
+  color: #000000 !important;
   border: 2px solid #000000 !important;
   box-shadow: none !important;
 }
 
 html.high-contrast .text-\[\#2B2024\],
-html.high-contrast .text-\[\#2B2024\],
 html.high-contrast .text-\[\#6F6267\],
-html.high-contrast .text-\[\#6F6267\] {
+html.high-contrast .text-stone-600,
+html.high-contrast .text-stone-500,
+html[data-contrast="high"] .text-\[\#2B2024\],
+html[data-contrast="high"] .text-\[\#6F6267\],
+html[data-contrast="high"] .text-stone-600,
+html[data-contrast="high"] .text-stone-500 {
   color: #000000 !important;
   font-weight: 600 !important;
 }
 
-html.high-contrast button {
+html.high-contrast button,
+html.high-contrast input,
+html.high-contrast select,
+html.high-contrast textarea,
+html[data-contrast="high"] button,
+html[data-contrast="high"] input,
+html[data-contrast="high"] select,
+html[data-contrast="high"] textarea {
   border: 2px solid #000000 !important;
   box-shadow: none !important;
   font-weight: 700 !important;
 }
 
-html.high-contrast *:focus-visible {
+html.high-contrast .btn-primary-action,
+html[data-contrast="high"] .btn-primary-action {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #000000 !important;
+}
+
+html.high-contrast *:focus-visible,
+html[data-contrast="high"] *:focus-visible {
   outline: 3px solid #000000 !important;
   outline-offset: 3px !important;
 }
 
-/* Reduce Motion */
+/* High Contrast within Dark Mode */
+html.dark.high-contrast,
+html.dark[data-contrast="high"] {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+html.dark.high-contrast body,
+html.dark[data-contrast="high"] body {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+html.dark.high-contrast .card-natural,
+html.dark.high-contrast .bg-white,
+html.dark.high-contrast .bg-\[\#FFFDF9\],
+html.dark[data-contrast="high"] .card-natural,
+html.dark[data-contrast="high"] .bg-white,
+html.dark[data-contrast="high"] .bg-\[\#FFFDF9\] {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+html.dark.high-contrast .text-\[\#2B2024\],
+html.dark.high-contrast .text-\[\#6F6267\],
+html.dark[data-contrast="high"] .text-\[\#2B2024\],
+html.dark[data-contrast="high"] .text-\[\#6F6267\] {
+  color: #FFFFFF !important;
+  font-weight: 600 !important;
+}
+
+html.dark.high-contrast button,
+html.dark.high-contrast input,
+html.dark.high-contrast select,
+html.dark.high-contrast textarea,
+html.dark[data-contrast="high"] button,
+html.dark[data-contrast="high"] input,
+html.dark[data-contrast="high"] select,
+html.dark[data-contrast="high"] textarea {
+  border: 2px solid #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+html.dark.high-contrast *:focus-visible,
+html.dark[data-contrast="high"] *:focus-visible {
+  outline: 3px solid #FFFFFF !important;
+  outline-offset: 3px !important;
+}
+
+/* --- 3. COLOR VISION ACCESSIBILITY --- */
+
+/* Standard (Default) */
+html[data-color-vision="default"],
+html.color-vision-default {
+  /* Default clinical healthcare palette */
+}
+
+/* Red-Green Friendly (Protanopia & Deuteranopia: Replaces Red/Green with Cyan & Vivid Magenta) */
+html[data-color-vision="redGreen"],
+html.color-vision-redgreen,
+html.color-vision-protan {
+  --color-success-teal: #0284C7;
+  --color-error-red: #D946EF;
+}
+
+html[data-color-vision="redGreen"] .text-\[\#087F6A\],
+html[data-color-vision="redGreen"] .text-success-teal,
+html.color-vision-redgreen .text-\[\#087F6A\],
+html.color-vision-redgreen .text-success-teal {
+  color: #0284C7 !important;
+}
+
+html[data-color-vision="redGreen"] .bg-\[\#087F6A\],
+html[data-color-vision="redGreen"] .bg-success-teal,
+html.color-vision-redgreen .bg-\[\#087F6A\],
+html.color-vision-redgreen .bg-success-teal {
+  background-color: #0284C7 !important;
+}
+
+html[data-color-vision="redGreen"] .bg-\[\#E6F5F2\],
+html.color-vision-redgreen .bg-\[\#E6F5F2\] {
+  background-color: #E0F2FE !important;
+}
+
+html[data-color-vision="redGreen"] .border-\[\#CCEBE5\],
+html.color-vision-redgreen .border-\[\#CCEBE5\] {
+  border-color: #BAE6FD !important;
+}
+
+html[data-color-vision="redGreen"] .text-\[\#B42318\],
+html[data-color-vision="redGreen"] .text-error-red,
+html.color-vision-redgreen .text-\[\#B42318\],
+html.color-vision-redgreen .text-error-red {
+  color: #C026D3 !important;
+}
+
+html[data-color-vision="redGreen"] .bg-\[\#B42318\],
+html[data-color-vision="redGreen"] .bg-error-red,
+html.color-vision-redgreen .bg-\[\#B42318\],
+html.color-vision-redgreen .bg-error-red {
+  background-color: #C026D3 !important;
+}
+
+html[data-color-vision="redGreen"] .bg-\[\#FDF2F2\],
+html.color-vision-redgreen .bg-\[\#FDF2F2\] {
+  background-color: #FDF4FF !important;
+}
+
+html[data-color-vision="redGreen"] .border-\[\#FDE8E8\],
+html.color-vision-redgreen .border-\[\#FDE8E8\] {
+  border-color: #F5D0FE !important;
+}
+
+/* Blue-Yellow Friendly (Tritanopia: Replaces Blue/Yellow with Mint & Vivid Violet) */
+html[data-color-vision="blueYellow"],
+html.color-vision-blueyellow,
+html.color-vision-tritan {
+  --color-success-teal: #059669;
+  --color-warning-amber: #9333EA;
+}
+
+html[data-color-vision="blueYellow"] .text-\[\#B86B00\],
+html[data-color-vision="blueYellow"] .text-warning-amber,
+html.color-vision-blueyellow .text-\[\#B86B00\],
+html.color-vision-blueyellow .text-warning-amber {
+  color: #9333EA !important;
+}
+
+html[data-color-vision="blueYellow"] .bg-\[\#B86B00\],
+html[data-color-vision="blueYellow"] .bg-warning-amber,
+html.color-vision-blueyellow .bg-\[\#B86B00\],
+html.color-vision-blueyellow .bg-warning-amber {
+  background-color: #9333EA !important;
+}
+
+html[data-color-vision="blueYellow"] .bg-\[\#FFF8E6\],
+html.color-vision-blueyellow .bg-\[\#FFF8E6\] {
+  background-color: #FAF5FF !important;
+}
+
+html[data-color-vision="blueYellow"] .border-\[\#FFF1CC\],
+html.color-vision-blueyellow .border-\[\#FFF1CC\] {
+  border-color: #E9D5FF !important;
+}
+
+/* Monochrome (Achromatopsia: Grayscale with high contrast separation) */
+html[data-color-vision="monochrome"],
+html.color-vision-mono {
+  filter: grayscale(100%) contrast(110%);
+}
+
+/* Prevent retinal scans & fundus photos from distorted contrast in Monochrome */
+html[data-color-vision="monochrome"] img.retinal-scan,
+html[data-color-vision="monochrome"] canvas.retinal-canvas,
+html.color-vision-mono img.retinal-scan,
+html.color-vision-mono canvas.retinal-canvas {
+  filter: grayscale(0%) contrast(100%) !important;
+}
+
+/* --- NON-COLOR-ONLY COMMUNICATION UTILITIES (Icon + Text + Color) --- */
+.status-badge-completed {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background-color: #E6F5F2;
+  color: #087F6A;
+  border: 1px solid #CCEBE5;
+}
+
+.status-badge-review {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background-color: #FFF8E6;
+  color: #B86B00;
+  border: 1px solid #FFF1CC;
+}
+
+.status-badge-evaluation {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background-color: #FDF2F2;
+  color: #B42318;
+  border: 1px solid #FDE8E8;
+}
+
+/* --- 4. DARK MODE (Light, Dark, System) --- */
+html.dark,
+html[data-theme="dark"] {
+  background-color: #121012 !important;
+  color: #FAF5F7 !important;
+  color-scheme: dark;
+}
+
+html.dark body,
+html[data-theme="dark"] body {
+  background-color: #121012 !important;
+  color: #FAF5F7 !important;
+}
+
+html.dark .bg-white,
+html.dark .bg-\[\#FFFDF9\],
+html.dark .card-natural,
+html[data-theme="dark"] .bg-white,
+html[data-theme="dark"] .bg-\[\#FFFDF9\],
+html[data-theme="dark"] .card-natural {
+  background-color: #1B161A !important;
+  color: #FAF5F7 !important;
+  border-color: #33292F !important;
+}
+
+html.dark .text-\[\#2B2024\],
+html[data-theme="dark"] .text-\[\#2B2024\] {
+  color: #FAF5F7 !important;
+}
+
+html.dark .text-\[\#6F6267\],
+html[data-theme="dark"] .text-\[\#6F6267\] {
+  color: #C4B6BC !important;
+}
+
+html.dark .border-\[\#EFE4DC\],
+html[data-theme="dark"] .border-\[\#EFE4DC\] {
+  border-color: #33292F !important;
+}
+
+html.dark input,
+html.dark select,
+html.dark textarea,
+html[data-theme="dark"] input,
+html[data-theme="dark"] select,
+html[data-theme="dark"] textarea {
+  background-color: #241E22 !important;
+  color: #FAF5F7 !important;
+  border-color: #382E32 !important;
+}
+
+/* --- 5. REDUCE MOTION (Standard, Reduced Motion) --- */
 html.reduce-motion *,
+html[data-reduce-motion="true"] *,
 html.reduce-motion *::before,
-html.reduce-motion *::after {
+html[data-reduce-motion="true"] *::before,
+html.reduce-motion *::after,
+html[data-reduce-motion="true"] *::after {
   animation-duration: 0.001ms !important;
   animation-iteration-count: 1 !important;
   transition-duration: 0.001ms !important;
