@@ -87,7 +87,14 @@ function AppContent() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
-  const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(false);
+  // First-time visitor onboarding modal (persisted in localStorage)
+  const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem('retinaguard_onboarding_completed') !== 'true';
+    } catch {
+      return false;
+    }
+  });
   const [isPatientAuthModalOpen, setIsPatientAuthModalOpen] = useState<boolean>(false);
   const [patientAuthInitialTab, setPatientAuthInitialTab] = useState<'login' | 'register'>('register');
   const [isAccessibilityModalOpen, setIsAccessibilityModalOpen] = useState<boolean>(false);
@@ -903,27 +910,21 @@ function AppContent() {
         />
       )}
 
-      {/* Patient Welcome & Voice-Guided Onboarding Modal */}
+      {/* First-Time Patient Welcome & Voice-Guided Onboarding Modal */}
       <WelcomeModal
         isOpen={isWelcomeModalOpen}
         onClose={() => {
           setIsWelcomeModalOpen(false);
-          localStorage.setItem('retinaguard_welcomed_v2', 'true');
+          try {
+            localStorage.setItem('retinaguard_onboarding_completed', 'true');
+          } catch {}
         }}
-        onContinueAsPatient={() => {
+        onContinue={() => {
           setIsWelcomeModalOpen(false);
-          localStorage.setItem('retinaguard_welcomed_v2', 'true');
-          navigatePublic('overview');
-        }}
-        onContinueAsHelper={() => {
-          setIsWelcomeModalOpen(false);
-          localStorage.setItem('retinaguard_welcomed_v2', 'true');
+          try {
+            localStorage.setItem('retinaguard_onboarding_completed', 'true');
+          } catch {}
           setIsRoleModalOpen(true);
-        }}
-        onContinueAsResearcher={() => {
-          setIsWelcomeModalOpen(false);
-          localStorage.setItem('retinaguard_welcomed_v2', 'true');
-          switchToResearcher();
         }}
       />
 
