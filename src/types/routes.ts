@@ -38,6 +38,7 @@ export type ProviderRoute =
   | 'experiments'
   | 'evaluation'
   | 'explainability'
+  | 'model-versions'
   | 'technology'
   | 'settings'
   | 'help';
@@ -46,9 +47,11 @@ export type HelperRoute = ProviderRoute;
 
 export type ResearcherRoute =
   | 'research'
-  | 'experiments'
-  | 'datasets'
   | 'models'
+  | 'datasets'
+  | 'experiments'
+  | 'evaluation'
   | 'explainability'
+  | 'model-versions'
   | 'architecture'
   | 'help';

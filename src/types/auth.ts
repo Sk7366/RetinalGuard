@@ -15,12 +15,19 @@ export type HelperRoleTitle =
   | 'Community Health Worker'
   | 'Screening Technician'
   | 'Nurse'
-  | 'Primary Care Provider'
-  | 'Ophthalmic Assistant'
   | 'Healthcare Provider'
+  | 'Ophthalmic Assistant'
   | 'Program Coordinator';
 
-export type VerificationStatus = 'verified' | 'pending' | 'rejected' | 'suspended';
+export type VerificationStatus =
+  | 'Pending Verification'
+  | 'Verified'
+  | 'Rejected'
+  | 'Suspended'
+  | 'verified'
+  | 'pending'
+  | 'rejected'
+  | 'suspended';
 
 export type UserExperience = 'patient' | 'helper' | 'researcher';
 

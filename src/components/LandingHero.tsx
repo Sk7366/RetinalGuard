@@ -70,7 +70,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
         <div
           className="h-2.5 w-full"
           style={{
-            background: 'linear-gradient(135deg, #EA580C 0%, #DB2777 100%)',
+            background: 'linear-gradient(135deg, #F05A28 0%, #DB2777 100%)',
           }}
         />
 
@@ -79,22 +79,22 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
             {/* Hero Left Content */}
             <div className="lg:col-span-7 space-y-6">
               {/* Research Badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA]">
-                <span className="w-2 h-2 rounded-full bg-[#EA580C] animate-pulse" />
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFE5D8] text-[#D84818] border border-[#FED7AA]">
+                <span className="w-2 h-2 rounded-full bg-[#F05A28] animate-pulse" />
                 <span>RESEARCH DEMONSTRATION • NOT A DIAGNOSTIC DEVICE</span>
               </div>
 
               {/* Headlines */}
               <div className="space-y-2">
-                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold tracking-tight text-[#2E2628] leading-[1.12]">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold tracking-tight text-[#2B2024] leading-[1.12]">
                   See beyond the image.
                 </h1>
-                <p className="text-xl sm:text-2xl font-sans font-medium bg-gradient-to-r from-[#EA580C] to-[#DB2777] bg-clip-text text-transparent">
+                <p className="text-xl sm:text-2xl font-sans font-medium bg-gradient-to-r from-[#F05A28] to-[#DB2777] bg-clip-text text-transparent">
                   Multimodal AI for explainable diabetic retinopathy screening.
                 </p>
               </div>
 
-              <p className="text-[#6E5C5F] text-base sm:text-lg leading-relaxed max-w-2xl">
+              <p className="text-[#6F6267] text-base sm:text-lg leading-relaxed max-w-2xl">
                 RetinaGuard combines <strong>fundus photography</strong>,{' '}
                 <strong>OCT depth imaging</strong>, and <strong>clinical metadata</strong> into an interpretable, calibrated DR severity assessment with visual Grad-CAM heatmaps and local SHAP feature attributions.
               </p>
@@ -104,7 +104,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                 <button
                   id="hero-start-screening-btn"
                   onClick={onStartScreening}
-                  className="bg-gradient-to-r from-[#EA580C] to-[#DB2777] hover:from-[#C2410C] hover:to-[#BE185D] text-white px-6 py-3 rounded-xl text-sm font-semibold shadow-xs transition-all flex items-center gap-2 hover:gap-2.5"
+                  className="bg-gradient-to-r from-[#F05A28] to-[#DB2777] hover:from-[#D84818] hover:to-[#D94A78] text-white px-6 py-3 rounded-xl text-sm font-semibold shadow-xs transition-all flex items-center gap-2 hover:gap-2.5"
                 >
                   <Sparkles className="w-4 h-4" />
                   <span>Try RetinaGuard →</span>
@@ -113,9 +113,9 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                 {onStartCampMode && (
                   <button
                     onClick={onStartCampMode}
-                    className="bg-white hover:bg-[#FFF7ED] text-[#EA580C] border border-[#FED7AA] px-4 py-3 rounded-xl text-sm font-semibold transition-colors flex items-center gap-2 shadow-xs"
+                    className="bg-white hover:bg-[#FFE5D8] text-[#F05A28] border border-[#FED7AA] px-4 py-3 rounded-xl text-sm font-semibold transition-colors flex items-center gap-2 shadow-xs"
                   >
-                    <Tent className="w-4 h-4 text-[#EA580C]" />
+                    <Tent className="w-4 h-4 text-[#F05A28]" />
                     <span>Camp Mode</span>
                   </button>
                 )}
@@ -123,15 +123,15 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                 <button
                   id="hero-view-ablation-btn"
                   onClick={onViewAblation}
-                  className="bg-white hover:bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] px-5 py-3 rounded-xl text-sm font-semibold transition-colors flex items-center gap-2 shadow-xs"
+                  className="bg-white hover:bg-[#FFE5D8] text-[#D84818] border border-[#FED7AA] px-5 py-3 rounded-xl text-sm font-semibold transition-colors flex items-center gap-2 shadow-xs"
                 >
-                  <Layers className="w-4 h-4 text-[#EA580C]" />
+                  <Layers className="w-4 h-4 text-[#F05A28]" />
                   <span>Explore the Research</span>
                 </button>
 
                 <button
                   onClick={() => onSelectPreset('case-3')}
-                  className="bg-[#FAF8F6] hover:bg-[#F3EDE8] text-[#2E2628] border border-[#EFE4DC] px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center gap-1.5"
+                  className="bg-[#FAF8F6] hover:bg-[#F3EDE8] text-[#2B2024] border border-[#EFE4DC] px-4 py-3 rounded-xl text-sm font-medium transition-colors flex items-center gap-1.5"
                 >
                   <Eye className="w-4 h-4 text-[#DB2777]" />
                   <span>Explore Demo Result</span>
@@ -163,27 +163,27 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
       {/* 2. KEY STATS (Immediately Below Hero) */}
       <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white rounded-2xl border border-[#FED7AA] p-5 shadow-xs">
-          <p className="text-3xl sm:text-4xl font-serif font-bold text-[#EA580C]">77M+</p>
-          <p className="text-xs font-semibold text-[#2E2628] mt-1">Diabetic Patients in India</p>
-          <p className="text-[11px] text-[#6E5C5F] mt-0.5">Second largest diabetic population globally; 1 in 3 has retinopathy.</p>
+          <p className="text-3xl sm:text-4xl font-serif font-bold text-[#F05A28]">77M+</p>
+          <p className="text-xs font-semibold text-[#2B2024] mt-1">Diabetic Patients in India</p>
+          <p className="text-[11px] text-[#6F6267] mt-0.5">Second largest diabetic population globally; 1 in 3 has retinopathy.</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-[#FBCFE8] p-5 shadow-xs">
           <p className="text-3xl sm:text-4xl font-serif font-bold text-[#DB2777]">5</p>
-          <p className="text-xs font-semibold text-[#2E2628] mt-1">DR Severity Grades</p>
-          <p className="text-[11px] text-[#6E5C5F] mt-0.5">International ICDR scale: No DR, Mild, Moderate, Severe, and PDR.</p>
+          <p className="text-xs font-semibold text-[#2B2024] mt-1">DR Severity Grades</p>
+          <p className="text-[11px] text-[#6F6267] mt-0.5">International ICDR scale: No DR, Mild, Moderate, Severe, and PDR.</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-[#FED7AA] p-5 shadow-xs">
-          <p className="text-3xl sm:text-4xl font-serif font-bold text-[#C2410C]">3</p>
-          <p className="text-xs font-semibold text-[#2E2628] mt-1">Input Modalities</p>
-          <p className="text-[11px] text-[#6E5C5F] mt-0.5">2D Fundus photographs, OCT B-scan depth slices, and clinical metadata.</p>
+          <p className="text-3xl sm:text-4xl font-serif font-bold text-[#D84818]">3</p>
+          <p className="text-xs font-semibold text-[#2B2024] mt-1">Input Modalities</p>
+          <p className="text-[11px] text-[#6F6267] mt-0.5">2D Fundus photographs, OCT B-scan depth slices, and clinical metadata.</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-[#EFE4DC] p-5 shadow-xs">
-          <p className="text-3xl sm:text-4xl font-serif font-bold text-[#2E2628]">0–4</p>
-          <p className="text-xs font-semibold text-[#2E2628] mt-1">International Severity Scale</p>
-          <p className="text-[11px] text-[#6E5C5F] mt-0.5">Standardized clinical scale with dedicated DME fluid escalation logic.</p>
+          <p className="text-3xl sm:text-4xl font-serif font-bold text-[#2B2024]">0–4</p>
+          <p className="text-xs font-semibold text-[#2B2024] mt-1">International Severity Scale</p>
+          <p className="text-[11px] text-[#6F6267] mt-0.5">Standardized clinical scale with dedicated DME fluid escalation logic.</p>
         </div>
       </section>
 
@@ -200,21 +200,21 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
       <section className="bg-white rounded-2xl border border-[#EFE4DC] p-6 sm:p-10 shadow-xs space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EFE4DC] pb-5">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] mb-2">
-              <BarChart3 className="w-3.5 h-3.5 text-[#EA580C]" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFE5D8] text-[#D84818] border border-[#FED7AA] mb-2">
+              <BarChart3 className="w-3.5 h-3.5 text-[#F05A28]" />
               <span>Scientific Benchmarking Protocol</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#2E2628] tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#2B2024] tracking-tight">
               Beyond accuracy. Measure what actually helps.
             </h2>
-            <p className="text-xs sm:text-sm text-[#6E5C5F] mt-1 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#6F6267] mt-1 max-w-2xl leading-relaxed">
               Comparing landmark peer-reviewed ophthalmic screening benchmarks against RetinaGuard's research protocol targets.
             </p>
           </div>
 
           <button
             onClick={onViewAblation}
-            className="shrink-0 px-4 py-2 rounded-lg text-xs font-semibold text-[#EA580C] bg-[#FFF7ED] hover:bg-[#FED7AA]/40 border border-[#FED7AA] flex items-center gap-1.5 transition-colors"
+            className="shrink-0 px-4 py-2 rounded-lg text-xs font-semibold text-[#F05A28] bg-[#FFE5D8] hover:bg-[#FED7AA]/40 border border-[#FED7AA] flex items-center gap-1.5 transition-colors"
           >
             <span>View Full Ablation Protocol</span>
             <ChevronRight className="w-3.5 h-3.5" />
@@ -225,7 +225,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
         <div className="overflow-x-auto rounded-xl border border-[#EFE4DC]">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="bg-[#FAF8F6] border-b border-[#EFE4DC] text-[#6E5C5F] font-semibold">
+              <tr className="bg-[#FAF8F6] border-b border-[#EFE4DC] text-[#6F6267] font-semibold">
                 <th className="py-3 px-4">Model / Research Benchmark</th>
                 <th className="py-3 px-4">Reference & Cohort</th>
                 <th className="py-3 px-4 text-right">AUC-ROC</th>
@@ -239,39 +239,39 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                   key={idx}
                   className={
                     b.isPlaceholder
-                      ? 'bg-gradient-to-r from-[#FFF7ED]/70 to-[#FDF2F8]/70 font-semibold'
+                      ? 'bg-gradient-to-r from-[#FFE5D8]/70 to-[#FBE4EC]/70 font-semibold'
                       : 'hover:bg-[#FAF8F6]'
                   }
                 >
                   <td className="py-3.5 px-4">
                     <div className="flex items-center gap-2">
                       {b.isPlaceholder && (
-                        <span className="w-2 h-2 rounded-full bg-[#EA580C]" />
+                        <span className="w-2 h-2 rounded-full bg-[#F05A28]" />
                       )}
-                      <span className={b.isPlaceholder ? 'text-[#EA580C] font-bold' : 'text-[#2E2628]'}>
+                      <span className={b.isPlaceholder ? 'text-[#F05A28] font-bold' : 'text-[#2B2024]'}>
                         {b.modelName}
                       </span>
                     </div>
                   </td>
-                  <td className="py-3.5 px-4 text-[#6E5C5F]">{b.reference}</td>
+                  <td className="py-3.5 px-4 text-[#6F6267]">{b.reference}</td>
                   <td className="py-3.5 px-4 text-right font-mono font-bold">
                     {b.aucDisplay || b.auc.toFixed(3)}
                   </td>
                   <td className="py-3.5 px-4 text-right font-mono font-bold">
                     {b.qwkDisplay || b.qwk.toFixed(3)}
                   </td>
-                  <td className="py-3.5 px-4 text-[#6E5C5F] max-w-xs">{b.notes}</td>
+                  <td className="py-3.5 px-4 text-[#6F6267] max-w-xs">{b.notes}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
 
-        <div className="p-3 bg-[#FAF8F6] rounded-xl border border-[#EFE4DC] text-xs text-[#6E5C5F] flex items-center justify-between">
+        <div className="p-3 bg-[#FAF8F6] rounded-xl border border-[#EFE4DC] text-xs text-[#6F6267] flex items-center justify-between">
           <span>
             <strong>Note on benchmarking:</strong> Landmark models (Gulshan et al. 2016 JAMA) benchmark binary referable DR on 128k images. RetinaGuard targets 5-class ordinal grading with explicit DME detection.
           </span>
-          <span className="font-mono text-[11px] text-[#EA580C] shrink-0 ml-4 font-bold">
+          <span className="font-mono text-[11px] text-[#F05A28] shrink-0 ml-4 font-bold">
             Measured result — update after evaluation
           </span>
         </div>
@@ -281,37 +281,37 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
       <section className="bg-white rounded-2xl border border-[#EFE4DC] p-6 sm:p-10 shadow-xs space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EFE4DC] pb-5">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] mb-2">
-              <Layers className="w-3.5 h-3.5 text-[#EA580C]" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFE5D8] text-[#D84818] border border-[#FED7AA] mb-2">
+              <Layers className="w-3.5 h-3.5 text-[#F05A28]" />
               <span>Ablation Experiments</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#2E2628] tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#2B2024] tracking-tight">
               Does multimodal fusion actually help?
             </h2>
-            <p className="text-xs sm:text-sm text-[#6E5C5F] mt-1 leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#6F6267] mt-1 leading-relaxed">
               "The experiment that turns a model into a research contribution."
             </p>
           </div>
 
-          <div className="p-3 bg-gradient-to-r from-[#FFF7ED] to-[#FDF2F8] rounded-xl border border-[#FDBA74] text-xs">
+          <div className="p-3 bg-gradient-to-r from-[#FFE5D8] to-[#FBE4EC] rounded-xl border border-[#FDBA74] text-xs">
             <span className="text-[#9E8D91] block text-[10px]">Expected Conceptual Progression:</span>
-            <span className="font-bold text-[#BE185D]">
+            <span className="font-bold text-[#D94A78]">
               Full Fusion &gt; Fundus Only &gt; Metadata Only
             </span>
           </div>
         </div>
 
         {/* Headline Result Highlight Banner */}
-        <div className="p-4 rounded-xl bg-gradient-to-r from-[#FFF7ED] to-[#FDF2F8] border border-[#FDBA74] text-xs text-[#2E2628] flex items-center justify-between gap-4">
+        <div className="p-4 rounded-xl bg-gradient-to-r from-[#FFE5D8] to-[#FBE4EC] border border-[#FDBA74] text-xs text-[#2B2024] flex items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
-            <Sparkles className="w-5 h-5 text-[#EA580C] shrink-0" />
+            <Sparkles className="w-5 h-5 text-[#F05A28] shrink-0" />
             <span className="font-semibold">
               The improvement from <strong>Fundus Only → Full Fusion</strong> is the project's headline scientific result.
             </span>
           </div>
           <button
             onClick={onViewAblation}
-            className="text-xs font-bold text-[#EA580C] hover:underline shrink-0 flex items-center gap-1"
+            className="text-xs font-bold text-[#F05A28] hover:underline shrink-0 flex items-center gap-1"
           >
             <span>View 6 Experiments</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -325,18 +325,18 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
               key={exp.id}
               className={`p-4 rounded-xl border transition-all ${
                 exp.id === 6
-                  ? 'border-2 border-[#FED7AA] bg-gradient-to-br from-[#FFFDFB] to-[#FFF7ED]/40 shadow-xs'
-                  : 'border-[#EFE4DC] bg-[#FFFDFB] hover:border-[#FED7AA]'
+                  ? 'border-2 border-[#FED7AA] bg-gradient-to-br from-[#FFFDF9] to-[#FFE5D8]/40 shadow-xs'
+                  : 'border-[#EFE4DC] bg-[#FFFDF9] hover:border-[#FED7AA]'
               }`}
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-[#2E2628]">{exp.name}</span>
-                <span className="font-mono text-[11px] font-bold text-[#EA580C]">
+                <span className="text-xs font-bold text-[#2B2024]">{exp.name}</span>
+                <span className="font-mono text-[11px] font-bold text-[#F05A28]">
                   {exp.aucDisplay || `AUC ${exp.auc}`}
                 </span>
               </div>
-              <p className="text-[11px] font-mono text-[#6E5C5F] mb-2">{exp.modalities}</p>
-              <p className="text-xs text-[#6E5C5F] leading-relaxed">{exp.description}</p>
+              <p className="text-[11px] font-mono text-[#6F6267] mb-2">{exp.modalities}</p>
+              <p className="text-xs text-[#6F6267] leading-relaxed">{exp.description}</p>
             </div>
           ))}
         </div>
@@ -352,14 +352,14 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
       <section className="bg-white rounded-2xl border border-[#EFE4DC] p-6 sm:p-10 shadow-xs space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EFE4DC] pb-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] mb-2">
-              <FileCheck className="w-3.5 h-3.5 text-[#EA580C]" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFE5D8] text-[#D84818] border border-[#FED7AA] mb-2">
+              <FileCheck className="w-3.5 h-3.5 text-[#F05A28]" />
               <span>Recruiter & Judge Test Bench</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#2E2628] tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#2B2024] tracking-tight">
               Pre-Configured Benchmark Cases
             </h2>
-            <p className="text-xs sm:text-sm text-[#6E5C5F] mt-0.5">
+            <p className="text-xs sm:text-sm text-[#6F6267] mt-0.5">
               Instantly inspect tri-modal fusion outputs across diverse clinical phenotypes without uploading files:
             </p>
           </div>
@@ -370,22 +370,22 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
             <button
               key={c.id}
               onClick={() => onSelectPreset(c.id)}
-              className="p-4 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] hover:bg-[#FFF7ED]/30 transition-all text-left flex flex-col justify-between space-y-3 group"
+              className="p-4 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] hover:bg-[#FFE5D8]/30 transition-all text-left flex flex-col justify-between space-y-3 group"
             >
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-[#EA580C]">
+                  <span className="text-xs font-mono font-bold text-[#F05A28]">
                     {c.patientCode}
                   </span>
                   <RiskChip grade={c.expectedTriage.finalGrade} size="sm" />
                 </div>
-                <p className="text-xs font-semibold text-[#2E2628] mt-1.5">{c.name}</p>
-                <p className="text-[11px] text-[#6E5C5F] mt-1 line-clamp-2">
+                <p className="text-xs font-semibold text-[#2B2024] mt-1.5">{c.name}</p>
+                <p className="text-[11px] text-[#6F6267] mt-1 line-clamp-2">
                   HbA1c: <strong>{c.clinicalMetadata.hba1c}%</strong> · OCT: {c.octType}
                 </p>
               </div>
 
-              <div className="text-[11px] font-semibold text-[#EA580C] flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
+              <div className="text-[11px] font-semibold text-[#F05A28] flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
                 <span>View Triage & CAM</span>
                 <ChevronRight className="w-3 h-3" />
               </div>
@@ -398,14 +398,14 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
       <section className="bg-white rounded-2xl border border-[#EFE4DC] p-6 sm:p-10 shadow-xs space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#EFE4DC] pb-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] mb-2">
-              <Tent className="w-3.5 h-3.5 text-[#EA580C]" />
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFE5D8] text-[#D84818] border border-[#FED7AA] mb-2">
+              <Tent className="w-3.5 h-3.5 text-[#F05A28]" />
               <span>Field Screening & Clinical Tool Suite</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#2E2628] tracking-tight">
+            <h2 className="text-xl sm:text-2xl font-serif font-bold text-[#2B2024] tracking-tight">
               Built for Community Camps, Technicians & Researchers
             </h2>
-            <p className="text-xs sm:text-sm text-[#6E5C5F] mt-0.5">
+            <p className="text-xs sm:text-sm text-[#6F6267] mt-0.5">
               Specialized tools designed for real-world deployments in low-resource settings:
             </p>
           </div>
@@ -413,22 +413,22 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {/* Tool 1: Camp Mode */}
-          <div className="p-5 rounded-xl border border-[#FED7AA] bg-[#FFFDFB] flex flex-col justify-between space-y-3">
+          <div className="p-5 rounded-xl border border-[#FED7AA] bg-[#FFFDF9] flex flex-col justify-between space-y-3">
             <div>
-              <div className="w-9 h-9 rounded-lg bg-[#FFF7ED] text-[#EA580C] flex items-center justify-center mb-3">
+              <div className="w-9 h-9 rounded-lg bg-[#FFE5D8] text-[#F05A28] flex items-center justify-center mb-3">
                 <Tent className="w-5 h-5" />
               </div>
-              <h3 className="text-sm font-serif font-bold text-[#2E2628]">
+              <h3 className="text-sm font-serif font-bold text-[#2B2024]">
                 Screening Camp Flow
               </h3>
-              <p className="text-xs text-[#6E5C5F] mt-1 leading-relaxed">
+              <p className="text-xs text-[#6F6267] mt-1 leading-relaxed">
                 Streamlined queue workflow optimized for high-throughput field screenings with auto-save.
               </p>
             </div>
             {onStartCampMode && (
               <button
                 onClick={onStartCampMode}
-                className="w-full py-2 px-3 rounded-lg text-xs font-semibold bg-[#FFF7ED] text-[#C2410C] hover:bg-[#FED7AA]/40 border border-[#FED7AA] flex items-center justify-center gap-1.5 transition-colors"
+                className="w-full py-2 px-3 rounded-lg text-xs font-semibold bg-[#FFE5D8] text-[#D84818] hover:bg-[#FED7AA]/40 border border-[#FED7AA] flex items-center justify-center gap-1.5 transition-colors"
               >
                 <span>Launch Camp Mode</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -437,22 +437,22 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
           </div>
 
           {/* Tool 2: Batch Analysis */}
-          <div className="p-5 rounded-xl border border-[#FBCFE8] bg-[#FFFDFB] flex flex-col justify-between space-y-3">
+          <div className="p-5 rounded-xl border border-[#FBCFE8] bg-[#FFFDF9] flex flex-col justify-between space-y-3">
             <div>
-              <div className="w-9 h-9 rounded-lg bg-[#FDF2F8] text-[#DB2777] flex items-center justify-center mb-3">
+              <div className="w-9 h-9 rounded-lg bg-[#FBE4EC] text-[#DB2777] flex items-center justify-center mb-3">
                 <FileSpreadsheet className="w-5 h-5" />
               </div>
-              <h3 className="text-sm font-serif font-bold text-[#2E2628]">
+              <h3 className="text-sm font-serif font-bold text-[#2B2024]">
                 Batch Image Screening
               </h3>
-              <p className="text-xs text-[#6E5C5F] mt-1 leading-relaxed">
+              <p className="text-xs text-[#6F6267] mt-1 leading-relaxed">
                 Analyze dozens of fundus images in bulk. Flags ungradables and generates priority queues.
               </p>
             </div>
             {onOpenBatchScreening && (
               <button
                 onClick={onOpenBatchScreening}
-                className="w-full py-2 px-3 rounded-lg text-xs font-semibold bg-[#FDF2F8] text-[#BE185D] hover:bg-[#FBCFE8]/40 border border-[#FBCFE8] flex items-center justify-center gap-1.5 transition-colors"
+                className="w-full py-2 px-3 rounded-lg text-xs font-semibold bg-[#FBE4EC] text-[#D94A78] hover:bg-[#FBCFE8]/40 border border-[#FBCFE8] flex items-center justify-center gap-1.5 transition-colors"
               >
                 <span>Open Batch Tool</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -461,22 +461,22 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
           </div>
 
           {/* Tool 3: Image Capture Guide */}
-          <div className="p-5 rounded-xl border border-[#EFE4DC] bg-[#FFFDFB] flex flex-col justify-between space-y-3">
+          <div className="p-5 rounded-xl border border-[#EFE4DC] bg-[#FFFDF9] flex flex-col justify-between space-y-3">
             <div>
-              <div className="w-9 h-9 rounded-lg bg-[#FAF8F6] text-[#6E5C5F] flex items-center justify-center mb-3">
-                <Camera className="w-5 h-5 text-[#EA580C]" />
+              <div className="w-9 h-9 rounded-lg bg-[#FAF8F6] text-[#6F6267] flex items-center justify-center mb-3">
+                <Camera className="w-5 h-5 text-[#F05A28]" />
               </div>
-              <h3 className="text-sm font-serif font-bold text-[#2E2628]">
+              <h3 className="text-sm font-serif font-bold text-[#2B2024]">
                 Capture Quality Guide
               </h3>
-              <p className="text-xs text-[#6E5C5F] mt-1 leading-relaxed">
+              <p className="text-xs text-[#6F6267] mt-1 leading-relaxed">
                 Technician guidance on illumination, pupil centering, and avoiding blur or flare artifacts.
               </p>
             </div>
             {onOpenGuideModal && (
               <button
                 onClick={onOpenGuideModal}
-                className="w-full py-2 px-3 rounded-lg text-xs font-semibold bg-white text-[#2E2628] hover:bg-[#FAF8F6] border border-[#EFE4DC] flex items-center justify-center gap-1.5 transition-colors"
+                className="w-full py-2 px-3 rounded-lg text-xs font-semibold bg-white text-[#2B2024] hover:bg-[#FAF8F6] border border-[#EFE4DC] flex items-center justify-center gap-1.5 transition-colors"
               >
                 <span>View Guidelines</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -485,22 +485,22 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
           </div>
 
           {/* Tool 4: Engineering FAQ */}
-          <div className="p-5 rounded-xl border border-[#EFE4DC] bg-[#FFFDFB] flex flex-col justify-between space-y-3">
+          <div className="p-5 rounded-xl border border-[#EFE4DC] bg-[#FFFDF9] flex flex-col justify-between space-y-3">
             <div>
-              <div className="w-9 h-9 rounded-lg bg-[#FAF8F6] text-[#6E5C5F] flex items-center justify-center mb-3">
+              <div className="w-9 h-9 rounded-lg bg-[#FAF8F6] text-[#6F6267] flex items-center justify-center mb-3">
                 <BookOpen className="w-5 h-5 text-[#DB2777]" />
               </div>
-              <h3 className="text-sm font-serif font-bold text-[#2E2628]">
+              <h3 className="text-sm font-serif font-bold text-[#2B2024]">
                 Technical Architecture FAQ
               </h3>
-              <p className="text-xs text-[#6E5C5F] mt-1 leading-relaxed">
+              <p className="text-xs text-[#6F6267] mt-1 leading-relaxed">
                 10 in-depth architectural questions covering late fusion, calibration, ethics, and MLflow.
               </p>
             </div>
             {onOpenTechFaqModal && (
               <button
                 onClick={onOpenTechFaqModal}
-                className="w-full py-2 px-3 rounded-lg text-xs font-semibold bg-white text-[#2E2628] hover:bg-[#FAF8F6] border border-[#EFE4DC] flex items-center justify-center gap-1.5 transition-colors"
+                className="w-full py-2 px-3 rounded-lg text-xs font-semibold bg-white text-[#2B2024] hover:bg-[#FAF8F6] border border-[#EFE4DC] flex items-center justify-center gap-1.5 transition-colors"
               >
                 <span>Read 10 FAQs</span>
                 <ArrowRight className="w-3.5 h-3.5" />

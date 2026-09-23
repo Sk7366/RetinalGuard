@@ -20,11 +20,11 @@ export const Footer: React.FC<FooterProps> = ({ experience = 'patient', onNaviga
           {/* Col 1: Brand & Mission */}
           <div className="md:col-span-2 space-y-4">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white bg-gradient-to-br from-[#EA580C] to-[#DB2777]">
+              <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white bg-gradient-to-br from-[#F05A28] to-[#DB2777]">
                 <Eye className="w-4 h-4" />
               </div>
               <span className="font-serif font-semibold text-xl text-white tracking-tight">
-                RetinaGuard<span className="text-[#EA580C] text-xs font-sans ml-1">AI</span>
+                RetinaGuard<span className="text-[#F05A28] text-xs font-sans ml-1">AI</span>
               </span>
             </div>
 

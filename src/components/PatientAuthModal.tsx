@@ -132,21 +132,21 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
       aria-labelledby="patient-auth-title"
       className="fixed inset-0 z-50 overflow-y-auto bg-stone-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4"
     >
-      <div className="bg-white rounded-3xl border border-[#EFE4DC] shadow-2xl max-w-md w-full overflow-hidden animate-in fade-in zoom-in-95 duration-150 text-[#2E2628]">
+      <div className="bg-white rounded-3xl border border-[#EFE4DC] shadow-2xl max-w-md w-full overflow-hidden animate-in fade-in zoom-in-95 duration-150 text-[#2B2024]">
         {/* HEADER */}
-        <div className="bg-[#FFFDFB] border-b border-[#EFE4DC] px-6 py-4 flex items-center justify-between">
+        <div className="bg-[#FFFDF9] border-b border-[#EFE4DC] px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-xl bg-[#EA580C] text-white flex items-center justify-center shadow-2xs">
+            <div className="w-7 h-7 rounded-xl bg-[#F05A28] text-white flex items-center justify-center shadow-2xs">
               <Eye className="w-3.5 h-3.5" />
             </div>
-            <span className="font-serif font-bold text-base text-[#2E2628]">
-              RetinaGuard<span className="text-[#EA580C] text-xs font-sans ml-1">{t('patientPortalBadge', 'Patient Portal')}</span>
+            <span className="font-serif font-bold text-base text-[#2B2024]">
+              RetinaGuard<span className="text-[#F05A28] text-xs font-sans ml-1">{t('patientPortalBadge', 'Patient Portal')}</span>
             </span>
           </div>
 
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-[#9E8D91] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors"
+            className="p-1 rounded-lg text-[#9E8D91] hover:text-[#2B2024] hover:bg-[#FFFDF9] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -154,15 +154,15 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
 
         {/* PROGRESS INDICATOR */}
         <div className="bg-[#FAF8F6] px-6 py-2.5 border-b border-[#EFE4DC] flex items-center justify-between text-[11px] font-semibold">
-          <span className={`flex items-center gap-1 ${step === 'form' ? 'text-[#EA580C]' : 'text-[#059669]'}`}>
+          <span className={`flex items-center gap-1 ${step === 'form' ? 'text-[#F05A28]' : 'text-[#059669]'}`}>
             {t('authStepDetails', '1. Details')} {emailVerified && '✓'}
           </span>
           <span className="text-[#D6D3D1]">→</span>
-          <span className={`flex items-center gap-1 ${step === 'verify-email' ? 'text-[#EA580C]' : emailVerified ? 'text-[#059669]' : 'text-[#9E8D91]'}`}>
+          <span className={`flex items-center gap-1 ${step === 'verify-email' ? 'text-[#F05A28]' : emailVerified ? 'text-[#059669]' : 'text-[#9E8D91]'}`}>
             {t('authStepEmail', '2. Email')} {emailVerified && '✓'}
           </span>
           <span className="text-[#D6D3D1]">→</span>
-          <span className={`flex items-center gap-1 ${step === 'verify-phone' ? 'text-[#EA580C]' : phoneVerified ? 'text-[#059669]' : 'text-[#9E8D91]'}`}>
+          <span className={`flex items-center gap-1 ${step === 'verify-phone' ? 'text-[#F05A28]' : phoneVerified ? 'text-[#059669]' : 'text-[#9E8D91]'}`}>
             {t('authStepPhone', '3. Phone OTP')} {phoneVerified && '✓'}
           </span>
         </div>
@@ -179,17 +179,17 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
           {step === 'form' && (
             <form onSubmit={handleStartVerification} className="space-y-4">
               <div>
-                <h3 id="patient-auth-title" className="text-xl font-serif font-bold text-[#2E2628]">
+                <h3 id="patient-auth-title" className="text-xl font-serif font-bold text-[#2B2024]">
                   {mode === 'register' ? t('patientAuthHeading', 'Patient Sign In & Follow-Up Registration') : t('patientSignIn', 'Patient Sign In')}
                 </h3>
-                <p className="text-xs text-[#6E5C5F] mt-1 leading-relaxed">
+                <p className="text-xs text-[#6F6267] mt-1 leading-relaxed">
                   {t('patientAuthSubheading', 'Verify your email and mobile number so your screening results and referral letters can be securely delivered to you.')}
                 </p>
               </div>
 
               <div className="space-y-3">
                 <div>
-                  <label className="block text-xs font-semibold text-[#2E2628] mb-1">
+                  <label className="block text-xs font-semibold text-[#2B2024] mb-1">
                     {t('fullNameRequired', 'Full Name *')}
                   </label>
                   <div className="relative">
@@ -200,13 +200,13 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
                       placeholder={t('namePlaceholder', 'e.g. Suresh Kumar')}
                       value={fullName}
                       onChange={(e) => setFullName(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-[#EFE4DC] focus:outline-none focus:ring-2 focus:ring-[#EA580C]"
+                      className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-[#EFE4DC] focus:outline-none focus:ring-2 focus:ring-[#F05A28]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#2E2628] mb-1">
+                  <label className="block text-xs font-semibold text-[#2B2024] mb-1">
                     {t('emailReportsRequired', 'Email Address * (For receiving screening reports)')}
                   </label>
                   <div className="relative">
@@ -217,13 +217,13 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
                       placeholder={t('emailPlaceholder', 'name@example.com')}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-[#EFE4DC] focus:outline-none focus:ring-2 focus:ring-[#EA580C]"
+                      className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-[#EFE4DC] focus:outline-none focus:ring-2 focus:ring-[#F05A28]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#2E2628] mb-1">
+                  <label className="block text-xs font-semibold text-[#2B2024] mb-1">
                     {t('phoneAlertsRequired', 'Mobile Phone Number * (For SMS reminders & clinic alerts)')}
                   </label>
                   <div className="relative">
@@ -234,13 +234,13 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
                       placeholder={t('phonePlaceholder', '+91 98450 12345')}
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-[#EFE4DC] focus:outline-none focus:ring-2 focus:ring-[#EA580C]"
+                      className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-[#EFE4DC] focus:outline-none focus:ring-2 focus:ring-[#F05A28]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-[#2E2628] mb-1">
+                  <label className="block text-xs font-semibold text-[#2B2024] mb-1">
                     {t('dobOptional', 'Date of Birth (Optional)')}
                   </label>
                   <div className="relative">
@@ -249,7 +249,7 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
                       type="date"
                       value={dob}
                       onChange={(e) => setDob(e.target.value)}
-                      className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-[#EFE4DC] focus:outline-none focus:ring-2 focus:ring-[#EA580C]"
+                      className="w-full pl-9 pr-3 py-2 text-xs rounded-xl border border-[#EFE4DC] focus:outline-none focus:ring-2 focus:ring-[#F05A28]"
                     />
                   </div>
                 </div>
@@ -258,7 +258,7 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
               <div className="pt-2">
                 <button
                   type="submit"
-                  className="w-full py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-semibold shadow-xs transition-colors flex items-center justify-center gap-2"
+                  className="w-full py-2.5 rounded-xl bg-[#F05A28] hover:bg-[#D84818] text-white text-xs font-semibold shadow-xs transition-colors flex items-center justify-center gap-2"
                 >
                   <span>{t('continueToVerification', 'Continue to Verification')}</span>
                   <ArrowRight className="w-4 h-4" />
@@ -270,9 +270,9 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
                 <button
                   type="button"
                   onClick={handleQuickDemoPatient}
-                  className="w-full py-2 rounded-xl bg-[#FFF7ED] hover:bg-[#FFEDD5] border border-[#FED7AA] text-[#C2410C] text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
+                  className="w-full py-2 rounded-xl bg-[#FFE5D8] hover:bg-[#FFEDD5] border border-[#FED7AA] text-[#D84818] text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-[#EA580C]" />
+                  <Sparkles className="w-3.5 h-3.5 text-[#F05A28]" />
                   <span>{t('oneClickDemoPatient', '1-Click Demo Patient (Suresh Kumar, Verified)')}</span>
                 </button>
               </div>
@@ -283,21 +283,21 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
           {step === 'verify-email' && (
             <form onSubmit={handleVerifyEmail} className="space-y-4">
               <div>
-                <span className="text-xs font-bold text-[#EA580C] uppercase tracking-wider block mb-1">
+                <span className="text-xs font-bold text-[#F05A28] uppercase tracking-wider block mb-1">
                   {t('step2EmailConfirm', 'Step 2 of 3 • Email Confirmation')}
                 </span>
-                <h3 className="text-xl font-serif font-bold text-[#2E2628]">
+                <h3 className="text-xl font-serif font-bold text-[#2B2024]">
                   {t('verifyYourEmailTitle', 'Verify Your Email')}
                 </h3>
-                <p className="text-xs text-[#6E5C5F] mt-1 leading-relaxed">
-                  {t('emailSentCodeDesc', 'We sent a 6-digit confirmation code to')} <span className="font-semibold text-[#2E2628]">{email}</span>.
+                <p className="text-xs text-[#6F6267] mt-1 leading-relaxed">
+                  {t('emailSentCodeDesc', 'We sent a 6-digit confirmation code to')} <span className="font-semibold text-[#2B2024]">{email}</span>.
                 </p>
               </div>
 
-              <div className="p-3 bg-[#FFFDFB] rounded-xl border border-[#EFE4DC] text-xs space-y-1">
+              <div className="p-3 bg-[#FFFDF9] rounded-xl border border-[#EFE4DC] text-xs space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-[#2E2628]">{t('demoTestCodeLabel', 'Demo Test Code:')}</span>
-                  <span className="font-mono font-bold bg-[#FFF7ED] text-[#EA580C] px-2 py-0.5 rounded border border-[#FED7AA]">
+                  <span className="font-semibold text-[#2B2024]">{t('demoTestCodeLabel', 'Demo Test Code:')}</span>
+                  <span className="font-mono font-bold bg-[#FFE5D8] text-[#F05A28] px-2 py-0.5 rounded border border-[#FED7AA]">
                     123456
                   </span>
                 </div>
@@ -307,7 +307,7 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#2E2628] mb-1">
+                <label className="block text-xs font-semibold text-[#2B2024] mb-1">
                   {t('enterEmailCodeLabel', 'Enter 6-Digit Email Code')}
                 </label>
                 <input
@@ -316,7 +316,7 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
                   placeholder="123456"
                   value={emailCode}
                   onChange={(e) => setEmailCode(e.target.value)}
-                  className="w-full px-3 py-2.5 text-center tracking-widest font-mono text-base rounded-xl border border-[#EFE4DC] focus:outline-none focus:ring-2 focus:ring-[#EA580C]"
+                  className="w-full px-3 py-2.5 text-center tracking-widest font-mono text-base rounded-xl border border-[#EFE4DC] focus:outline-none focus:ring-2 focus:ring-[#F05A28]"
                 />
               </div>
 
@@ -324,14 +324,14 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setEmailCode('123456')}
-                  className="text-[#EA580C] font-semibold hover:underline"
+                  className="text-[#F05A28] font-semibold hover:underline"
                 >
                   {t('fillDemoCodeBtn', 'Fill Demo Code (123456)')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setStep('form')}
-                  className="text-[#6E5C5F] hover:underline"
+                  className="text-[#6F6267] hover:underline"
                 >
                   {t('changeEmailBtn', 'Change Email')}
                 </button>
@@ -339,7 +339,7 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-semibold shadow-xs transition-colors"
+                className="w-full py-2.5 rounded-xl bg-[#F05A28] hover:bg-[#D84818] text-white text-xs font-semibold shadow-xs transition-colors"
               >
                 {t('verifyEmailContinueBtn', 'Verify Email & Continue')}
               </button>
@@ -350,21 +350,21 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
           {step === 'verify-phone' && (
             <form onSubmit={handleVerifyPhone} className="space-y-4">
               <div>
-                <span className="text-xs font-bold text-[#EA580C] uppercase tracking-wider block mb-1">
+                <span className="text-xs font-bold text-[#F05A28] uppercase tracking-wider block mb-1">
                   {t('step3PhoneOtp', 'Step 3 of 3 • Mobile OTP')}
                 </span>
-                <h3 className="text-xl font-serif font-bold text-[#2E2628]">
+                <h3 className="text-xl font-serif font-bold text-[#2B2024]">
                   {t('verifyYourPhoneTitle', 'Verify Your Phone Number')}
                 </h3>
-                <p className="text-xs text-[#6E5C5F] mt-1 leading-relaxed">
-                  {t('smsOtpSentDesc', 'We sent an SMS OTP to')} <span className="font-semibold text-[#2E2628]">{phone}</span> {t('forClinicNotifications', 'for clinic notifications.')}
+                <p className="text-xs text-[#6F6267] mt-1 leading-relaxed">
+                  {t('smsOtpSentDesc', 'We sent an SMS OTP to')} <span className="font-semibold text-[#2B2024]">{phone}</span> {t('forClinicNotifications', 'for clinic notifications.')}
                 </p>
               </div>
 
-              <div className="p-3 bg-[#FFFDFB] rounded-xl border border-[#EFE4DC] text-xs space-y-1">
+              <div className="p-3 bg-[#FFFDF9] rounded-xl border border-[#EFE4DC] text-xs space-y-1">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-[#2E2628]">{t('demoSmsOtpLabel', 'Demo SMS OTP:')}</span>
-                  <span className="font-mono font-bold bg-[#FFF7ED] text-[#EA580C] px-2 py-0.5 rounded border border-[#FED7AA]">
+                  <span className="font-semibold text-[#2B2024]">{t('demoSmsOtpLabel', 'Demo SMS OTP:')}</span>
+                  <span className="font-mono font-bold bg-[#FFE5D8] text-[#F05A28] px-2 py-0.5 rounded border border-[#FED7AA]">
                     789012
                   </span>
                 </div>
@@ -374,7 +374,7 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#2E2628] mb-1">
+                <label className="block text-xs font-semibold text-[#2B2024] mb-1">
                   {t('enterSmsOtpLabel', 'Enter 6-Digit SMS OTP')}
                 </label>
                 <input
@@ -383,7 +383,7 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
                   placeholder="789012"
                   value={phoneOtp}
                   onChange={(e) => setPhoneOtp(e.target.value)}
-                  className="w-full px-3 py-2.5 text-center tracking-widest font-mono text-base rounded-xl border border-[#EFE4DC] focus:outline-none focus:ring-2 focus:ring-[#EA580C]"
+                  className="w-full px-3 py-2.5 text-center tracking-widest font-mono text-base rounded-xl border border-[#EFE4DC] focus:outline-none focus:ring-2 focus:ring-[#F05A28]"
                 />
               </div>
 
@@ -391,14 +391,14 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
                 <button
                   type="button"
                   onClick={() => setPhoneOtp('789012')}
-                  className="text-[#EA580C] font-semibold hover:underline"
+                  className="text-[#F05A28] font-semibold hover:underline"
                 >
                   {t('fillDemoOtpBtn', 'Fill Demo OTP (789012)')}
                 </button>
                 <button
                   type="button"
                   onClick={() => setStep('verify-email')}
-                  className="text-[#6E5C5F] hover:underline"
+                  className="text-[#6F6267] hover:underline"
                 >
                   {t('backBtn', 'Back')}
                 </button>
@@ -420,15 +420,15 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
                 <CheckCircle2 className="w-7 h-7" />
               </div>
               <div>
-                <h3 className="text-lg font-serif font-bold text-[#2E2628]">
+                <h3 className="text-lg font-serif font-bold text-[#2B2024]">
                   {t('accountVerifiedSuccess', 'Account Verified Successfully!')}
                 </h3>
-                <p className="text-xs text-[#6E5C5F] mt-1">
+                <p className="text-xs text-[#6F6267] mt-1">
                   {t('welcomeToRetinaGuard', 'Welcome to RetinaGuard')}, {fullName || t('patientRole', 'Patient')}.
                 </p>
               </div>
 
-              <div className="p-4 bg-[#FFFDFB] rounded-2xl border border-[#EFE4DC] text-left text-xs space-y-2 max-w-xs mx-auto">
+              <div className="p-4 bg-[#FFFDF9] rounded-2xl border border-[#EFE4DC] text-left text-xs space-y-2 max-w-xs mx-auto">
                 <div className="flex items-center gap-2 text-emerald-700 font-medium">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>{t('emailVerifiedBadge', 'Email verified ✓')} ({email})</span>
@@ -454,7 +454,7 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
               <button
                 type="button"
                 onClick={onSwitchToStaffLogin}
-                className="text-xs font-semibold text-[#EA580C] hover:underline ml-1"
+                className="text-xs font-semibold text-[#F05A28] hover:underline ml-1"
               >
                 {t('staffResearcherLoginBtn', 'Staff / Researcher Login')}
               </button>

@@ -80,17 +80,17 @@ export const PatientJourneyView: React.FC<PatientJourneyViewProps> = ({
   ];
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 text-[#2E2628]">
+    <div className="max-w-4xl mx-auto space-y-8 text-[#2B2024]">
       {/* HEADER */}
       <div className="pb-4 border-b border-[#EFE4DC]">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] mb-2">
-          <Clock className="w-3.5 h-3.5 text-[#EA580C]" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFE5D8] text-[#D84818] border border-[#FED7AA] mb-2">
+          <Clock className="w-3.5 h-3.5 text-[#F05A28]" />
           <span>{t("careTimelineBadge", "CARE CONTINUUM TIMELINE")}</span>
         </div>
-        <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#2E2628]">
+        <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#2B2024]">
           {t("myScreeningJourneyTitle", "My Screening Journey")}
         </h2>
-        <p className="text-xs sm:text-sm text-[#6E5C5F] mt-1">
+        <p className="text-xs sm:text-sm text-[#6F6267] mt-1">
           {t("myScreeningJourneyDesc", "Track each step of your eye health journey from initial registration through follow-up reminders.")}
         </p>
       </div>
@@ -98,11 +98,11 @@ export const PatientJourneyView: React.FC<PatientJourneyViewProps> = ({
       {/* CORE PRODUCT PRINCIPLE BANNER: YOU DON'T NEED TO OPERATE THE AI YOURSELF */}
       <div className="p-5 rounded-2xl bg-white border border-[#EFE4DC] shadow-2xs space-y-3">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-[#FFF7ED] text-[#EA580C] flex items-center justify-center font-bold text-sm">
+          <div className="w-8 h-8 rounded-xl bg-[#FFE5D8] text-[#F05A28] flex items-center justify-center font-bold text-sm">
             💡
           </div>
           <div>
-            <h3 className="text-sm font-bold text-[#2E2628]">
+            <h3 className="text-sm font-bold text-[#2B2024]">
               {t("patientAiSupportHeading", "You don't need to operate the AI system yourself")}
             </h3>
             <span className="text-xs text-[#9E8D91]">
@@ -117,22 +117,22 @@ export const PatientJourneyView: React.FC<PatientJourneyViewProps> = ({
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
           <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC]">
-            <div className="font-bold text-[#2E2628] mb-1">{t("forYouPatientTitle", "For You (Patient)")}</div>
-            <p className="text-[#6E5C5F] text-[11px] leading-relaxed">
+            <div className="font-bold text-[#2B2024] mb-1">{t("forYouPatientTitle", "For You (Patient)")}</div>
+            <p className="text-[#6F6267] text-[11px] leading-relaxed">
               {t("forYouPatientDesc", "Fast access, painless checks, understandable reports, and timely care reminders.")}
             </p>
           </div>
 
           <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC]">
-            <div className="font-bold text-[#2E2628] mb-1">{t("forScreeningHelperTitle", "For Screening Helper")}</div>
-            <p className="text-[#6E5C5F] text-[11px] leading-relaxed">
+            <div className="font-bold text-[#2B2024] mb-1">{t("forScreeningHelperTitle", "For Screening Helper")}</div>
+            <p className="text-[#6F6267] text-[11px] leading-relaxed">
               {t("forScreeningHelperDesc", "Real-time image quality feedback, assisted risk triage, and referral workflow tools.")}
             </p>
           </div>
 
           <div className="p-3 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC]">
-            <div className="font-bold text-[#2E2628] mb-1">{t("forEyeDoctorTitle", "For Eye Doctor")}</div>
-            <p className="text-[#6E5C5F] text-[11px] leading-relaxed">
+            <div className="font-bold text-[#2B2024] mb-1">{t("forEyeDoctorTitle", "For Eye Doctor")}</div>
+            <p className="text-[#6F6267] text-[11px] leading-relaxed">
               {t("forEyeDoctorDesc", "Standardized image views, multimodal clinical metadata, and organized review queues.")}
             </p>
           </div>
@@ -141,7 +141,7 @@ export const PatientJourneyView: React.FC<PatientJourneyViewProps> = ({
 
       {/* TIMELINE STEPS */}
       <div className="space-y-4">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-[#EA580C]">
+        <h3 className="text-xs font-bold uppercase tracking-wider text-[#F05A28]">
           {t("careContinuumProgressHeading", "Care Continuum Progress")}
         </h3>
 
@@ -159,7 +159,7 @@ export const PatientJourneyView: React.FC<PatientJourneyViewProps> = ({
                     isCompleted
                       ? 'bg-[#059669] border-white text-white'
                       : isCurrent
-                      ? 'bg-[#EA580C] border-white text-white animate-pulse'
+                      ? 'bg-[#F05A28] border-white text-white animate-pulse'
                       : 'bg-white border-[#D6D3D1] text-[#9E8D91]'
                   }`}
                 >
@@ -170,13 +170,13 @@ export const PatientJourneyView: React.FC<PatientJourneyViewProps> = ({
                 <div className="bg-white p-4 sm:p-5 rounded-2xl border border-[#EFE4DC] shadow-2xs space-y-2">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                     <div className="flex items-center gap-2">
-                      <Icon className="w-4 h-4 text-[#EA580C]" />
-                      <h4 className="text-sm font-bold text-[#2E2628]">{step.title}</h4>
+                      <Icon className="w-4 h-4 text-[#F05A28]" />
+                      <h4 className="text-sm font-bold text-[#2B2024]">{step.title}</h4>
                     </div>
                     <span className="text-[11px] font-semibold text-[#9E8D91]">{step.date}</span>
                   </div>
 
-                  <p className="text-xs text-[#6E5C5F] leading-relaxed">
+                  <p className="text-xs text-[#6F6267] leading-relaxed">
                     {step.desc}
                   </p>
 
@@ -185,7 +185,7 @@ export const PatientJourneyView: React.FC<PatientJourneyViewProps> = ({
                       <button
                         type="button"
                         onClick={onNavigateToReports}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FFF7ED] hover:bg-[#FFEDD5] border border-[#FED7AA] text-[#C2410C] text-xs font-semibold transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#FFE5D8] hover:bg-[#FFEDD5] border border-[#FED7AA] text-[#D84818] text-xs font-semibold transition-colors"
                       >
                         <FileText className="w-3.5 h-3.5" />
                         <span>{t("viewMyReportsArrow", "View My Screening Reports →")}</span>
@@ -200,12 +200,12 @@ export const PatientJourneyView: React.FC<PatientJourneyViewProps> = ({
       </div>
 
       {/* CALL TO ACTION */}
-      <div className="p-6 rounded-3xl bg-[#FFFDFB] border border-[#EFE4DC] flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="p-6 rounded-3xl bg-[#FFFDF9] border border-[#EFE4DC] flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
-          <h4 className="font-serif font-bold text-base sm:text-lg text-[#2E2628]">
+          <h4 className="font-serif font-bold text-base sm:text-lg text-[#2B2024]">
             {t("needAnotherScreeningQuestion", "Need another screening or advice?")}
           </h4>
-          <p className="text-xs text-[#6E5C5F] mt-0.5">
+          <p className="text-xs text-[#6F6267] mt-0.5">
             {t("locateNearbyCentersDesc", "Locate nearby certified screening centers and eye camps across Karnataka, Maharashtra, and Delhi NCR.")}
           </p>
         </div>
@@ -213,7 +213,7 @@ export const PatientJourneyView: React.FC<PatientJourneyViewProps> = ({
         <button
           type="button"
           onClick={onNavigateToFindScreening}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-semibold shadow-xs transition-colors shrink-0"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#F05A28] hover:bg-[#D84818] text-white text-xs font-semibold shadow-xs transition-colors shrink-0"
         >
           <Building className="w-4 h-4" />
           <span>{t("findScreeningCenterBtn", "Find a Screening Center")}</span>

@@ -167,14 +167,14 @@ export const PatientEducationSection: React.FC<PatientEducationSectionProps> = (
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div className="max-w-2xl">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF7ED] border border-[#FED7AA] text-[#C2410C] text-xs font-semibold mb-3">
-            <BookOpen className="w-3.5 h-3.5 text-[#EA580C]" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFE5D8] border border-[#FED7AA] text-[#D84818] text-xs font-semibold mb-3">
+            <BookOpen className="w-3.5 h-3.5 text-[#F05A28]" />
             <span>Community Patient Education</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#2E2628] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-serif font-bold text-[#2B2024] tracking-tight">
             Understanding Retinal Screening
           </h2>
-          <p className="text-sm text-[#6E5C5F] mt-2 leading-relaxed">
+          <p className="text-sm text-[#6F6267] mt-2 leading-relaxed">
             Essential knowledge for diabetic patients, family members, and community workers. Clear, non-technical answers to how screening protects vision.
           </p>
         </div>
@@ -185,8 +185,8 @@ export const PatientEducationSection: React.FC<PatientEducationSectionProps> = (
             onClick={() => setSimpleLanguage(true)}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               simpleLanguage
-                ? 'bg-gradient-to-r from-[#EA580C] to-[#DB2777] text-white shadow-xs'
-                : 'text-[#6E5C5F] hover:text-[#2E2628]'
+                ? 'bg-gradient-to-r from-[#F05A28] to-[#DB2777] text-white shadow-xs'
+                : 'text-[#6F6267] hover:text-[#2B2024]'
             }`}
           >
             Read in Simple Language
@@ -195,8 +195,8 @@ export const PatientEducationSection: React.FC<PatientEducationSectionProps> = (
             onClick={() => setSimpleLanguage(false)}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
               !simpleLanguage
-                ? 'bg-gradient-to-r from-[#EA580C] to-[#DB2777] text-white shadow-xs'
-                : 'text-[#6E5C5F] hover:text-[#2E2628]'
+                ? 'bg-gradient-to-r from-[#F05A28] to-[#DB2777] text-white shadow-xs'
+                : 'text-[#6F6267] hover:text-[#2B2024]'
             }`}
           >
             Clinical Detail
@@ -214,7 +214,7 @@ export const PatientEducationSection: React.FC<PatientEducationSectionProps> = (
             <div
               key={topic.id}
               className={`bg-white rounded-2xl border transition-all overflow-hidden ${
-                isOpen ? 'border-[#EA580C] shadow-xs' : 'border-[#EFE4DC] hover:border-[#FED7AA]'
+                isOpen ? 'border-[#F05A28] shadow-xs' : 'border-[#EFE4DC] hover:border-[#FED7AA]'
               }`}
             >
               {/* Question Header */}
@@ -226,13 +226,13 @@ export const PatientEducationSection: React.FC<PatientEducationSectionProps> = (
                   <div
                     className={`w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-xs font-bold transition-colors ${
                       isOpen
-                        ? 'bg-[#FFF7ED] text-[#EA580C] border border-[#FED7AA]'
-                        : 'bg-[#FAF8F6] text-[#6E5C5F]'
+                        ? 'bg-[#FFE5D8] text-[#F05A28] border border-[#FED7AA]'
+                        : 'bg-[#FAF8F6] text-[#6F6267]'
                     }`}
                   >
                     <HelpCircle className="w-4 h-4" />
                   </div>
-                  <h3 className="font-serif font-bold text-sm sm:text-base text-[#2E2628]">
+                  <h3 className="font-serif font-bold text-sm sm:text-base text-[#2B2024]">
                     {topic.question}
                   </h3>
                 </div>
@@ -245,8 +245,8 @@ export const PatientEducationSection: React.FC<PatientEducationSectionProps> = (
                     }}
                     className={`p-2 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ${
                       isAudioCurrent
-                        ? 'bg-[#EA580C] text-white'
-                        : 'border border-[#EFE4DC] text-[#6E5C5F] hover:text-[#EA580C] hover:bg-[#FFF7ED]'
+                        ? 'bg-[#F05A28] text-white'
+                        : 'border border-[#EFE4DC] text-[#6F6267] hover:text-[#F05A28] hover:bg-[#FFE5D8]'
                     }`}
                     title={isAudioCurrent ? 'Stop speaking' : 'Listen to this explanation'}
                     aria-label="Listen audio"
@@ -264,7 +264,7 @@ export const PatientEducationSection: React.FC<PatientEducationSectionProps> = (
                     )}
                   </button>
 
-                  <div className="p-1 rounded-md text-[#6E5C5F]">
+                  <div className="p-1 rounded-md text-[#6F6267]">
                     {isOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </div>
                 </div>
@@ -273,22 +273,22 @@ export const PatientEducationSection: React.FC<PatientEducationSectionProps> = (
               {/* Answer Content */}
               {isOpen && (
                 <div className="px-5 pb-5 pt-1 border-t border-[#FAF8F6] animate-in fade-in duration-150">
-                  <p className="text-xs sm:text-sm text-[#2E2628] leading-relaxed">
+                  <p className="text-xs sm:text-sm text-[#2B2024] leading-relaxed">
                     {simpleLanguage ? topic.simpleAnswer : topic.clinicalAnswer}
                   </p>
 
                   {/* Key Takeaways */}
                   <div className="mt-4 p-3.5 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC]">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#C2410C] block mb-2">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#D84818] block mb-2">
                       Key Takeaways
                     </span>
                     <ul className="space-y-1.5">
                       {topic.keyPoints.map((pt, i) => (
                         <li
                           key={i}
-                          className="text-xs text-[#6E5C5F] flex items-start gap-2 leading-relaxed"
+                          className="text-xs text-[#6F6267] flex items-start gap-2 leading-relaxed"
                         >
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#EA580C] shrink-0 mt-0.5" />
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#F05A28] shrink-0 mt-0.5" />
                           <span>{pt}</span>
                         </li>
                       ))}
@@ -302,8 +302,8 @@ export const PatientEducationSection: React.FC<PatientEducationSectionProps> = (
       </div>
 
       {/* Medical disclaimer note */}
-      <div className="mt-6 p-4 rounded-xl bg-[#FFF7ED]/50 border border-[#FED7AA]/60 text-xs text-[#6E5C5F] leading-relaxed flex items-start gap-2.5">
-        <Heart className="w-4 h-4 text-[#EA580C] shrink-0 mt-0.5" />
+      <div className="mt-6 p-4 rounded-xl bg-[#FFE5D8]/50 border border-[#FED7AA]/60 text-xs text-[#6F6267] leading-relaxed flex items-start gap-2.5">
+        <Heart className="w-4 h-4 text-[#F05A28] shrink-0 mt-0.5" />
         <div>
           <strong>Educational Notice:</strong> All information provided is general health education reviewed against international ophthalmology guidelines. It does not replace individualized clinical counseling by your personal physician or eye specialist.
         </div>

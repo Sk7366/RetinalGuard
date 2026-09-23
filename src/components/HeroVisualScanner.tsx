@@ -24,13 +24,13 @@ export const HeroVisualScanner: React.FC<{ onExploreDemo: () => void }> = ({ onE
       {/* Top Header Controls */}
       <div className="flex items-center justify-between pb-3 border-b border-[#EFE4DC] text-xs">
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#EA580C] animate-pulse" />
-          <span className="font-mono font-semibold text-[#2E2628] text-[11px]">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#F05A28] animate-pulse" />
+          <span className="font-mono font-semibold text-[#2B2024] text-[11px]">
             SYNTH_RETINA_9942 // TRI-MODAL SCAN
           </span>
         </div>
-        <div className="flex items-center gap-1.5 font-mono text-[10px] text-[#C2410C] bg-[#FFF7ED] px-2 py-0.5 rounded border border-[#FED7AA]">
-          <Zap className="w-3 h-3 text-[#EA580C]" />
+        <div className="flex items-center gap-1.5 font-mono text-[10px] text-[#D84818] bg-[#FFE5D8] px-2 py-0.5 rounded border border-[#FED7AA]">
+          <Zap className="w-3 h-3 text-[#F05A28]" />
           <span>ONNX RUNTIME</span>
         </div>
       </div>
@@ -92,14 +92,14 @@ export const HeroVisualScanner: React.FC<{ onExploreDemo: () => void }> = ({ onE
               : 'DenseNet-121 Depth Map'}
           </span>
           {activeLayer === 'gradcam' && (
-            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#BE185D]/80 text-white border border-[#FBCFE8]/30">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono bg-[#D94A78]/80 text-white border border-[#FBCFE8]/30">
               Hotspots: Blot Hemorrhages + IRMA
             </span>
           )}
         </div>
 
         <div className="absolute bottom-3 right-3 pointer-events-none">
-          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#EA580C] text-white shadow-md">
+          <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#F05A28] text-white shadow-md">
             Grade 3 · Severe NPDR
           </span>
         </div>
@@ -111,8 +111,8 @@ export const HeroVisualScanner: React.FC<{ onExploreDemo: () => void }> = ({ onE
           onClick={() => setActiveLayer('fundus')}
           className={`py-1.5 px-2 rounded-lg font-medium transition-all text-center text-[11px] ${
             activeLayer === 'fundus'
-              ? 'bg-white text-[#EA580C] shadow-xs font-bold border border-[#FED7AA]'
-              : 'text-[#6E5C5F] hover:text-[#2E2628]'
+              ? 'bg-white text-[#F05A28] shadow-xs font-bold border border-[#FED7AA]'
+              : 'text-[#6F6267] hover:text-[#2B2024]'
           }`}
         >
           Fundus 2D
@@ -121,8 +121,8 @@ export const HeroVisualScanner: React.FC<{ onExploreDemo: () => void }> = ({ onE
           onClick={() => setActiveLayer('gradcam')}
           className={`py-1.5 px-2 rounded-lg font-medium transition-all text-center text-[11px] ${
             activeLayer === 'gradcam'
-              ? 'bg-white text-[#EA580C] shadow-xs font-bold border border-[#FED7AA]'
-              : 'text-[#6E5C5F] hover:text-[#2E2628]'
+              ? 'bg-white text-[#F05A28] shadow-xs font-bold border border-[#FED7AA]'
+              : 'text-[#6F6267] hover:text-[#2B2024]'
           }`}
         >
           Grad-CAM Heatmap
@@ -132,7 +132,7 @@ export const HeroVisualScanner: React.FC<{ onExploreDemo: () => void }> = ({ onE
           className={`py-1.5 px-2 rounded-lg font-medium transition-all text-center text-[11px] ${
             activeLayer === 'oct'
               ? 'bg-white text-[#DB2777] shadow-xs font-bold border border-[#FBCFE8]'
-              : 'text-[#6E5C5F] hover:text-[#2E2628]'
+              : 'text-[#6F6267] hover:text-[#2B2024]'
           }`}
         >
           OCT B-Scan (DME)
@@ -142,24 +142,24 @@ export const HeroVisualScanner: React.FC<{ onExploreDemo: () => void }> = ({ onE
       {/* Tri-Modal Probability Indicators */}
       <div className="mt-3 pt-3 border-t border-[#EFE4DC] space-y-2">
         <div className="flex items-center justify-between text-[11px]">
-          <span className="text-[#6E5C5F] font-medium">Fundus Prediction</span>
-          <span className="font-bold text-[#EA580C]">Grade 3 (Severe)</span>
+          <span className="text-[#6F6267] font-medium">Fundus Prediction</span>
+          <span className="font-bold text-[#F05A28]">Grade 3 (Severe)</span>
         </div>
         <div className="flex items-center justify-between text-[11px]">
-          <span className="text-[#6E5C5F] font-medium">OCT Biomarker</span>
+          <span className="text-[#6F6267] font-medium">OCT Biomarker</span>
           <span className="font-bold text-[#DB2777]">DME Positive (p=0.91)</span>
         </div>
         <div className="flex items-center justify-between text-[11px]">
-          <span className="text-[#6E5C5F] font-medium">Metadata Prior</span>
-          <span className="font-bold text-[#2E2628]">HbA1c 9.4% (Top SHAP Driver)</span>
+          <span className="text-[#6F6267] font-medium">Metadata Prior</span>
+          <span className="font-bold text-[#2B2024]">HbA1c 9.4% (Top SHAP Driver)</span>
         </div>
 
         <button
           onClick={onExploreDemo}
-          className="w-full mt-2 py-2 px-3 rounded-lg text-xs font-semibold bg-[#FFF7ED] hover:bg-[#FED7AA]/40 text-[#C2410C] border border-[#FED7AA] flex items-center justify-center gap-1.5 transition-colors"
+          className="w-full mt-2 py-2 px-3 rounded-lg text-xs font-semibold bg-[#FFE5D8] hover:bg-[#FED7AA]/40 text-[#D84818] border border-[#FED7AA] flex items-center justify-center gap-1.5 transition-colors"
         >
           <span>Explore Live Triage Demo Result</span>
-          <ChevronRight className="w-3.5 h-3.5 text-[#EA580C]" />
+          <ChevronRight className="w-3.5 h-3.5 text-[#F05A28]" />
         </button>
       </div>
     </div>

@@ -175,28 +175,28 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="flex items-center gap-2 text-left focus:outline-none group"
               aria-label="RetinaGuard AI Home"
             >
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white bg-[#EA580C] group-hover:bg-[#C2410C] transition-colors shrink-0 shadow-xs">
+              <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white bg-[#F05A28] group-hover:bg-[#D84818] transition-colors shrink-0 shadow-xs">
                 <Eye className="w-4 h-4" />
               </div>
 
               <div className="flex flex-col justify-center">
                 <div className="flex items-center gap-1 leading-none">
-                  <span className="font-serif font-bold text-base sm:text-lg tracking-tight text-[#2E2628]">
+                  <span className="font-serif font-bold text-base sm:text-lg tracking-tight text-[#2B2024]">
                     RetinaGuard
                   </span>
-                  <span className="font-sans text-[10px] sm:text-[11px] font-bold text-[#EA580C]">
+                  <span className="font-sans text-[10px] sm:text-[11px] font-bold text-[#F05A28]">
                     AI
                   </span>
                 </div>
 
                 {/* Subtitle / Role Badge */}
                 {isHelper && (
-                  <span className="text-[9px] font-bold text-[#EA580C] tracking-wide uppercase mt-0.5">
+                  <span className="text-[9px] font-bold text-[#F05A28] tracking-wide uppercase mt-0.5">
                     HELPER
                   </span>
                 )}
                 {isResearcher && (
-                  <span className="text-[9px] font-bold text-[#2E2628] tracking-wide uppercase mt-0.5">
+                  <span className="text-[9px] font-bold text-[#2B2024] tracking-wide uppercase mt-0.5">
                     RESEARCH
                   </span>
                 )}
@@ -214,18 +214,32 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             {/* -------------------------------------------------------------
                 A. PATIENT NAVIGATION
-                Why Screening | How It Works | Find Screening | Learn | Help
+                Screening Now | Why Screening | How It Works | Find Screening | Learn | Help
                 ------------------------------------------------------------- */}
             {isPatient && (
               <>
+                <button
+                  type="button"
+                  id="nav-patient-screening-now"
+                  onClick={() => handlePublicNav('get-screened')}
+                  className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-bold transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                    publicRoute === 'get-screened'
+                      ? 'text-white bg-[#F05A28] shadow-2xs font-extrabold'
+                      : 'text-[#F05A28] hover:text-[#D84818] hover:bg-[#FFE5D8]'
+                  }`}
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                  <span>{t('navScreeningNow', 'Screening Now')}</span>
+                </button>
+
                 <button
                   type="button"
                   id="nav-patient-why-screening"
                   onClick={() => handlePublicNav('why-screening')}
                   className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     publicRoute === 'why-screening'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
+                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navWhyScreening', 'Why Screening')}
@@ -237,8 +251,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handlePublicNav('how-it-works')}
                   className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     publicRoute === 'how-it-works'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
+                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navHowItWorks', 'How It Works')}
@@ -250,8 +264,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handlePublicNav('find-screening')}
                   className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     publicRoute === 'find-screening'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
+                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navFindScreening', 'Find Screening')}
@@ -263,8 +277,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handlePublicNav('learn')}
                   className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     publicRoute === 'learn'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
+                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navLearn', 'Learn')}
@@ -274,7 +288,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   type="button"
                   id="nav-patient-help"
                   onClick={onOpenHelpModal}
-                  className="px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors whitespace-nowrap"
+                  className="px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9] transition-colors whitespace-nowrap"
                 >
                   {t('navHelp', 'Help')}
                 </button>
@@ -294,8 +308,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handleProviderNav('dashboard')}
                   className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     providerRoute === 'dashboard'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
+                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navDashboard', 'Dashboard')}
@@ -307,8 +321,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handleProviderNav('start-screening')}
                   className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     providerRoute === 'start-screening'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
+                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navStartScreening', 'Start Screening')}
@@ -320,8 +334,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handleProviderNav('review-queue')}
                   className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     providerRoute === 'review-queue'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
+                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navReviewQueue', 'Review Queue')}
@@ -334,8 +348,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handleProviderNav('appointments')}
                   className={`hidden xl:inline-block px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     providerRoute === 'appointments'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
+                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navAppointments', 'Appointments')}
@@ -347,8 +361,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handleProviderNav('referrals')}
                   className={`hidden xl:inline-block px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     providerRoute === 'referrals'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
+                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navReferrals', 'Referrals')}
@@ -360,7 +374,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     type="button"
                     id="nav-helper-more-btn"
                     onClick={() => setMoreMenuOpen(!moreMenuOpen)}
-                    className="px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors flex items-center gap-1 whitespace-nowrap"
+                    className="px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9] transition-colors flex items-center gap-1 whitespace-nowrap"
                   >
                     <span>{t('navMore', 'More')}</span>
                     <ChevronDown
@@ -380,17 +394,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                         <button
                           type="button"
                           onClick={() => handleProviderNav('appointments')}
-                          className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                          className="w-full text-left px-3.5 py-2 text-xs text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2"
                         >
-                          <Calendar className="w-3.5 h-3.5 text-[#EA580C]" />
+                          <Calendar className="w-3.5 h-3.5 text-[#F05A28]" />
                           <span>{t('navAppointments', 'Appointments')}</span>
                         </button>
                         <button
                           type="button"
                           onClick={() => handleProviderNav('referrals')}
-                          className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                          className="w-full text-left px-3.5 py-2 text-xs text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2"
                         >
-                          <Users className="w-3.5 h-3.5 text-[#EA580C]" />
+                          <Users className="w-3.5 h-3.5 text-[#F05A28]" />
                           <span>{t('navReferrals', 'Referrals')}</span>
                         </button>
                       </div>
@@ -398,54 +412,54 @@ export const Navbar: React.FC<NavbarProps> = ({
                       <button
                         type="button"
                         onClick={() => handleProviderNav('camp-mode')}
-                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                        className="w-full text-left px-3.5 py-2 text-xs text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2"
                       >
-                        <Activity className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                        <Activity className="w-3.5 h-3.5 text-[#6F6267]" />
                         <span>{t('navCampOfflineMode', 'Camp Offline Mode')}</span>
                       </button>
 
                       <button
                         type="button"
                         onClick={() => handleProviderNav('batch-screening')}
-                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                        className="w-full text-left px-3.5 py-2 text-xs text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2"
                       >
-                        <FileSpreadsheet className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                        <FileSpreadsheet className="w-3.5 h-3.5 text-[#6F6267]" />
                         <span>{t('navBatchScreening', 'Batch Screening')}</span>
                       </button>
 
                       <button
                         type="button"
                         onClick={() => handleProviderNav('cases')}
-                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                        className="w-full text-left px-3.5 py-2 text-xs text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2"
                       >
-                        <FileText className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                        <FileText className="w-3.5 h-3.5 text-[#6F6267]" />
                         <span>{t('navCasesHistory', 'Cases & History')}</span>
                       </button>
 
                       <button
                         type="button"
                         onClick={() => handleProviderNav('analytics')}
-                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                        className="w-full text-left px-3.5 py-2 text-xs text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2"
                       >
-                        <BarChart3 className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                        <BarChart3 className="w-3.5 h-3.5 text-[#6F6267]" />
                         <span>{t('navAnalytics', 'Analytics')}</span>
                       </button>
 
                       <button
                         type="button"
                         onClick={() => handleProviderNav('technology')}
-                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                        className="w-full text-left px-3.5 py-2 text-xs text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2"
                       >
-                        <Cpu className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                        <Cpu className="w-3.5 h-3.5 text-[#6F6267]" />
                         <span>{t('navTechnologySaMD', 'Technology & Architecture')}</span>
                       </button>
 
                       <button
                         type="button"
                         onClick={() => handleProviderNav('settings')}
-                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                        className="w-full text-left px-3.5 py-2 text-xs text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2"
                       >
-                        <Settings className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                        <Settings className="w-3.5 h-3.5 text-[#6F6267]" />
                         <span>{t('navSettings', 'Settings')}</span>
                       </button>
 
@@ -455,9 +469,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                           setMoreMenuOpen(false);
                           onOpenHelpModal();
                         }}
-                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2 border-t border-[#EFE4DC] mt-1 pt-1.5"
+                        className="w-full text-left px-3.5 py-2 text-xs text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2 border-t border-[#EFE4DC] mt-1 pt-1.5"
                       >
-                        <HelpCircle className="w-3.5 h-3.5 text-[#EA580C]" />
+                        <HelpCircle className="w-3.5 h-3.5 text-[#F05A28]" />
                         <span>{t('navScreeningSOPHelp', 'Screening SOP & Help')}</span>
                       </button>
                     </div>
@@ -468,8 +482,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* -------------------------------------------------------------
                 C. RESEARCHER NAVIGATION
-                Research | Models | Datasets | Experiments | Evaluation | Explainability | More
-                Tablet (1024-1279px): Collapses Evaluation & Explainability into More
+                Research Overview | Models | Datasets | Experiments | Evaluation | Explainability | Model Versions
                 ------------------------------------------------------------- */}
             {isResearcher && (
               <>
@@ -479,11 +492,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handleProviderNav('research')}
                   className={`px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     providerRoute === 'research'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
+                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
-                  {t('navResearch', 'Research')}
+                  {t('navResearchOverview', 'Research Overview')}
                 </button>
 
                 <button
@@ -492,8 +505,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handleProviderNav('models')}
                   className={`px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     providerRoute === 'models'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
+                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navModels', 'Models')}
@@ -505,8 +518,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handleProviderNav('datasets')}
                   className={`px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     providerRoute === 'datasets'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
+                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navDatasets', 'Datasets')}
@@ -518,22 +531,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handleProviderNav('experiments')}
                   className={`px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     providerRoute === 'experiments'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
+                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navExperiments', 'Experiments')}
                 </button>
 
-                {/* Visible on Desktop (>= 1280px), Collapsed into 'More' on Tablet (1024-1279px) */}
                 <button
                   type="button"
                   id="nav-researcher-evaluation-desktop"
                   onClick={() => handleProviderNav('evaluation')}
                   className={`hidden xl:inline-block px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     providerRoute === 'evaluation'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
+                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navEvaluation', 'Evaluation')}
@@ -545,11 +557,24 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handleProviderNav('explainability')}
                   className={`hidden xl:inline-block px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     providerRoute === 'explainability'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-semibold'
-                      : 'text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
+                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navExplainability', 'Explainability')}
+                </button>
+
+                <button
+                  type="button"
+                  id="nav-researcher-model-versions-desktop"
+                  onClick={() => handleProviderNav('model-versions')}
+                  className={`hidden xl:inline-block px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
+                    providerRoute === 'model-versions'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
+                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]'
+                  }`}
+                >
+                  {t('navModelVersions', 'Model Versions')}
                 </button>
 
                 {/* MORE DROPDOWN FOR RESEARCHER */}
@@ -558,7 +583,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     type="button"
                     id="nav-researcher-more-btn"
                     onClick={() => setMoreMenuOpen(!moreMenuOpen)}
-                    className="px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors flex items-center gap-1 whitespace-nowrap"
+                    className="px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9] transition-colors flex items-center gap-1 whitespace-nowrap"
                   >
                     <span>{t('navMore', 'More')}</span>
                     <ChevronDown
@@ -578,17 +603,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                         <button
                           type="button"
                           onClick={() => handleProviderNav('evaluation')}
-                          className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                          className="w-full text-left px-3.5 py-2 text-xs text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2"
                         >
-                          <BarChart3 className="w-3.5 h-3.5 text-[#EA580C]" />
+                          <BarChart3 className="w-3.5 h-3.5 text-[#F05A28]" />
                           <span>{t('navEvaluation', 'Evaluation & Ablation Matrix')}</span>
                         </button>
                         <button
                           type="button"
                           onClick={() => handleProviderNav('explainability')}
-                          className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                          className="w-full text-left px-3.5 py-2 text-xs text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2"
                         >
-                          <ShieldAlert className="w-3.5 h-3.5 text-[#EA580C]" />
+                          <ShieldAlert className="w-3.5 h-3.5 text-[#F05A28]" />
                           <span>{t('navExplainability', 'Explainability & Fairness')}</span>
                         </button>
                       </div>
@@ -596,18 +621,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                       <button
                         type="button"
                         onClick={() => handleProviderNav('technology')}
-                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                        className="w-full text-left px-3.5 py-2 text-xs text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2"
                       >
-                        <Cpu className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                        <Cpu className="w-3.5 h-3.5 text-[#6F6267]" />
                         <span>{t('navArchitectureValidation', 'Architecture & SaMD Validation')}</span>
                       </button>
 
                       <button
                         type="button"
                         onClick={() => handleProviderNav('settings')}
-                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                        className="w-full text-left px-3.5 py-2 text-xs text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2"
                       >
-                        <Settings className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                        <Settings className="w-3.5 h-3.5 text-[#6F6267]" />
                         <span>{t('navSettings', 'Research Settings')}</span>
                       </button>
 
@@ -617,9 +642,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                           setMoreMenuOpen(false);
                           onOpenHelpModal();
                         }}
-                        className="w-full text-left px-3.5 py-2 text-xs text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2 border-t border-[#EFE4DC] mt-1 pt-1.5"
+                        className="w-full text-left px-3.5 py-2 text-xs text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2 border-t border-[#EFE4DC] mt-1 pt-1.5"
                       >
-                        <HelpCircle className="w-3.5 h-3.5 text-[#EA580C]" />
+                        <HelpCircle className="w-3.5 h-3.5 text-[#F05A28]" />
                         <span>{t('navResearchDocumentation', 'Research Documentation & SOP')}</span>
                       </button>
                     </div>
@@ -648,30 +673,42 @@ export const Navbar: React.FC<NavbarProps> = ({
                 type="button"
                 id="navbar-helper-active-result-btn"
                 onClick={onViewResults}
-                className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#FFF7ED] border border-[#FED7AA] text-[#C2410C] hover:bg-[#FFEDD5] text-xs font-semibold transition-colors shadow-2xs whitespace-nowrap"
+                className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#FFE5D8] border border-[#FED7AA] text-[#D84818] hover:bg-[#FFEDD5] text-xs font-semibold transition-colors shadow-2xs whitespace-nowrap"
                 title="View active examination triage"
               >
-                <Activity className="w-3.5 h-3.5 text-[#EA580C] animate-pulse" />
+                <Activity className="w-3.5 h-3.5 text-[#F05A28] animate-pulse" />
                 <span className="hidden md:inline">{t('navResultsActive', 'Results • 1 active')}</span>
                 <span className="md:hidden">{t('navActiveShort', '1 Active')}</span>
               </button>
             )}
 
             {/* -------------------------------------------------------------
-                PRIMARY CTA FOR PATIENT: "FIND A SCREENING"
-                Visually Prominent, Bold High-Contrast Styling
+                ULTRA-PROMINENT PRIMARY CTA FOR PATIENT: "SCREENING NOW"
+                The purpose of the platform must be immediately obvious: SCREENING
                 ------------------------------------------------------------- */}
             {isPatient && (
-              <button
-                type="button"
-                id="navbar-primary-cta-find-screening"
-                onClick={() => handlePublicNav('find-screening')}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs uppercase tracking-wider shadow-sm hover:shadow-md transition-all whitespace-nowrap ring-2 ring-[#EA580C]/20 shrink-0"
-              >
-                <MapPin className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">{t('navFindScreeningCta', 'FIND A SCREENING')}</span>
-                <span className="sm:hidden text-[11px]">{t('navFindScreeningCtaShort', 'FIND SCREENING')}</span>
-              </button>
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <button
+                  type="button"
+                  id="navbar-primary-cta-screening-now"
+                  onClick={() => handlePublicNav('get-screened')}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-[#F05A28] to-[#E11D48] hover:from-[#D84818] hover:to-[#BE123C] text-white font-extrabold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all whitespace-nowrap ring-2 ring-[#F05A28]/30 shrink-0"
+                >
+                  <Eye className="w-3.5 h-3.5 text-white" />
+                  <span className="hidden sm:inline">{t('navScreeningNowCta', 'SCREENING NOW')}</span>
+                  <span className="sm:hidden text-[11px]">{t('navScreeningNowCtaShort', 'SCREEN NOW')}</span>
+                </button>
+
+                <button
+                  type="button"
+                  id="navbar-secondary-cta-find-screening"
+                  onClick={() => handlePublicNav('find-screening')}
+                  className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-[#FFE5D8] hover:bg-[#FFEDD5] text-[#D84818] border border-[#FED7AA] font-bold text-xs uppercase tracking-wider transition-all whitespace-nowrap shrink-0"
+                >
+                  <MapPin className="w-3.5 h-3.5 text-[#F05A28]" />
+                  <span>{t('navFindCenterShort', 'FIND CENTER')}</span>
+                </button>
+              </div>
             )}
 
             {/* -------------------------------------------------------------
@@ -682,11 +719,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 type="button"
                 id="navbar-language-btn"
                 onClick={() => setLangMenuOpen(!langMenuOpen)}
-                className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl border border-[#EFE4DC] bg-[#FFFDFB] hover:bg-white text-xs text-[#2E2628] flex items-center gap-1 sm:gap-1.5 transition-colors"
+                className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl border border-[#EFE4DC] bg-[#FFFDF9] hover:bg-white text-xs text-[#2B2024] flex items-center gap-1 sm:gap-1.5 transition-colors"
                 title="Change language"
                 aria-label="Language selection"
               >
-                <Globe className="w-3.5 h-3.5 text-[#EA580C]" />
+                <Globe className="w-3.5 h-3.5 text-[#F05A28]" />
                 <span className="font-semibold hidden xl:inline text-xs">
                   {currentLangObj.nativeLabel}
                 </span>
@@ -718,8 +755,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                       }}
                       className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between transition-colors ${
                         currentLanguage === lang.code
-                          ? 'bg-[#FFF7ED] text-[#EA580C] font-bold'
-                          : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                          ? 'bg-[#FFE5D8] text-[#F05A28] font-bold'
+                          : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                       }`}
                     >
                       <span className="font-medium">{lang.nativeLabel}</span>
@@ -754,15 +791,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                     type="button"
                     id="navbar-patient-profile-toggle"
                     onClick={() => setProfileMenuOpen(!profileMenuOpen)}
-                    className="flex items-center gap-1.5 p-1 sm:px-2.5 sm:py-1.5 rounded-xl border border-[#FED7AA] bg-[#FFF7ED] hover:bg-[#FFEDD5] text-xs font-semibold text-[#C2410C] transition-colors shadow-2xs"
+                    className="flex items-center gap-1.5 p-1 sm:px-2.5 sm:py-1.5 rounded-xl border border-[#FED7AA] bg-[#FFE5D8] hover:bg-[#FFEDD5] text-xs font-semibold text-[#D84818] transition-colors shadow-2xs"
                   >
-                    <div className="w-5 h-5 rounded-full bg-[#EA580C] text-white flex items-center justify-center text-[10px] font-bold">
+                    <div className="w-5 h-5 rounded-full bg-[#F05A28] text-white flex items-center justify-center text-[10px] font-bold">
                       {currentUser.name ? currentUser.name[0].toUpperCase() : 'P'}
                     </div>
                     <span className="hidden md:inline max-w-[85px] truncate">
                       {currentUser.name ? currentUser.name.split(' ')[0] : 'Profile'}
                     </span>
-                    <ChevronDown className="w-3 h-3 text-[#EA580C]" />
+                    <ChevronDown className="w-3 h-3 text-[#F05A28]" />
                   </button>
 
                   {profileMenuOpen && (
@@ -771,10 +808,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                       className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-[#EFE4DC] p-2 z-50 animate-in fade-in"
                     >
                       <div className="px-3 py-2 border-b border-[#EFE4DC] mb-1">
-                        <div className="text-xs font-bold text-[#2E2628] truncate">
+                        <div className="text-xs font-bold text-[#2B2024] truncate">
                           {currentUser.name}
                         </div>
-                        <div className="text-[10px] text-[#6E5C5F] truncate">
+                        <div className="text-[10px] text-[#6F6267] truncate">
                           {currentUser.email || 'Patient Account'}
                         </div>
                       </div>
@@ -786,9 +823,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                           setProfileMenuOpen(false);
                           handlePublicNav('my-reports');
                         }}
-                        className="w-full text-left px-3 py-2 text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] rounded-lg flex items-center gap-2"
+                        className="w-full text-left px-3 py-2 text-xs font-medium text-[#2B2024] hover:bg-[#FFFDF9] rounded-lg flex items-center gap-2"
                       >
-                        <FileText className="w-3.5 h-3.5 text-[#EA580C]" />
+                        <FileText className="w-3.5 h-3.5 text-[#F05A28]" />
                         <span>{t('navMyReports', 'My Reports')}</span>
                       </button>
 
@@ -798,9 +835,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                           setProfileMenuOpen(false);
                           handlePublicNav('my-screening');
                         }}
-                        className="w-full text-left px-3 py-2 text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] rounded-lg flex items-center gap-2"
+                        className="w-full text-left px-3 py-2 text-xs font-medium text-[#2B2024] hover:bg-[#FFFDF9] rounded-lg flex items-center gap-2"
                       >
-                        <Activity className="w-3.5 h-3.5 text-[#EA580C]" />
+                        <Activity className="w-3.5 h-3.5 text-[#F05A28]" />
                         <span>{t('navMyScreening', 'My Screening Journey')}</span>
                       </button>
 
@@ -810,9 +847,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                           setProfileMenuOpen(false);
                           handlePublicNav('profile');
                         }}
-                        className="w-full text-left px-3 py-2 text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] rounded-lg flex items-center gap-2"
+                        className="w-full text-left px-3 py-2 text-xs font-medium text-[#2B2024] hover:bg-[#FFFDF9] rounded-lg flex items-center gap-2"
                       >
-                        <UserIcon className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                        <UserIcon className="w-3.5 h-3.5 text-[#6F6267]" />
                         <span>{t('navPatientProfile', 'Account Profile')}</span>
                       </button>
 
@@ -823,7 +860,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                             setProfileMenuOpen(false);
                             onOpenRoleModal();
                           }}
-                          className="w-full text-left px-3 py-1.5 text-xs text-[#6E5C5F] hover:bg-[#F9F5F1] rounded-lg flex items-center justify-between"
+                          className="w-full text-left px-3 py-1.5 text-xs text-[#6F6267] hover:bg-[#FFFDF9] rounded-lg flex items-center justify-between"
                         >
                           <span>{t('navSwitchWorkspace', 'Switch Workspace')}</span>
                           <RotateCcw className="w-3 h-3 text-[#9E8D91]" />
@@ -850,9 +887,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                   type="button"
                   id="navbar-patient-signin-btn"
                   onClick={onOpenRoleModal}
-                  className="px-2.5 sm:px-3 py-1.5 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] bg-white hover:bg-[#FFF7ED] text-xs font-semibold text-[#2E2628] hover:text-[#EA580C] flex items-center gap-1.5 transition-colors whitespace-nowrap shadow-2xs"
+                  className="px-2.5 sm:px-3 py-1.5 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] bg-white hover:bg-[#FFE5D8] text-xs font-semibold text-[#2B2024] hover:text-[#F05A28] flex items-center gap-1.5 transition-colors whitespace-nowrap shadow-2xs"
                 >
-                  <LogIn className="w-3.5 h-3.5 text-[#EA580C]" />
+                  <LogIn className="w-3.5 h-3.5 text-[#F05A28]" />
                   <span className="hidden sm:inline">{t('navSignIn', 'Sign In')}</span>
                 </button>
               )
@@ -863,16 +900,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                   type="button"
                   id="navbar-staff-profile-btn"
                   onClick={() => setProfileMenuOpen(!profileMenuOpen)}
-                  className="flex items-center gap-1.5 p-1 sm:px-2 sm:py-1.5 rounded-xl border border-[#EFE4DC] bg-[#FFFDFB] hover:bg-white transition-colors"
+                  className="flex items-center gap-1.5 p-1 sm:px-2 sm:py-1.5 rounded-xl border border-[#EFE4DC] bg-[#FFFDF9] hover:bg-white transition-colors"
                 >
-                  <div className="w-6 h-6 rounded-full bg-[#EA580C] text-white flex items-center justify-center text-[10px] font-bold">
+                  <div className="w-6 h-6 rounded-full bg-[#F05A28] text-white flex items-center justify-center text-[10px] font-bold">
                     {currentUser?.name ? currentUser.name[0] : 'U'}
                   </div>
                   <div className="text-left hidden lg:block leading-tight">
-                    <span className="text-xs font-bold text-[#2E2628] block truncate max-w-[95px]">
+                    <span className="text-xs font-bold text-[#2B2024] block truncate max-w-[95px]">
                       {currentUser?.name || 'User'}
                     </span>
-                    <span className="text-[10px] text-[#EA580C] font-semibold block">
+                    <span className="text-[10px] text-[#F05A28] font-semibold block">
                       {currentUser?.helperRoleTitle || (isResearcher ? 'Researcher' : 'Helper')}
                     </span>
                   </div>
@@ -886,14 +923,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                   >
                     <div className="pb-3 border-b border-[#EFE4DC] mb-2">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-full bg-[#EA580C] text-white flex items-center justify-center font-bold text-xs">
+                        <div className="w-8 h-8 rounded-full bg-[#F05A28] text-white flex items-center justify-center font-bold text-xs">
                           {currentUser?.name ? currentUser.name[0] : 'U'}
                         </div>
                         <div className="min-w-0">
-                          <div className="text-xs font-bold text-[#2E2628] truncate">
+                          <div className="text-xs font-bold text-[#2B2024] truncate">
                             {currentUser?.name}
                           </div>
-                          <div className="text-[10px] text-[#6E5C5F] truncate">
+                          <div className="text-[10px] text-[#6F6267] truncate">
                             {currentUser?.email}
                           </div>
                         </div>
@@ -913,7 +950,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         setProfileMenuOpen(false);
                         onOpenRoleModal();
                       }}
-                      className="w-full text-left px-2.5 py-1.5 text-xs text-[#2E2628] hover:bg-[#F9F5F1] rounded-lg flex items-center justify-between transition-colors"
+                      className="w-full text-left px-2.5 py-1.5 text-xs text-[#2B2024] hover:bg-[#FFFDF9] rounded-lg flex items-center justify-between transition-colors"
                     >
                       <span className="font-medium">{t('navSwitchWorkspace', 'Switch Workspace')}</span>
                       <RotateCcw className="w-3.5 h-3.5 text-[#9E8D91]" />
@@ -942,7 +979,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               type="button"
               id="navbar-mobile-hamburger-btn"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl text-[#6E5C5F] hover:text-[#2E2628] hover:bg-[#F9F5F1] transition-colors"
+              className="lg:hidden p-2 rounded-xl text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9] transition-colors"
               aria-label={mobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
               aria-expanded={mobileMenuOpen}
             >
@@ -964,12 +1001,22 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* PATIENT MOBILE MENU */}
           {isPatient && (
             <div className="space-y-3">
-              {/* Prominent CTA in mobile drawer */}
+              {/* Ultra-Prominent CTA in mobile drawer */}
+              <button
+                type="button"
+                id="mobile-drawer-screening-now-cta"
+                onClick={() => handlePublicNav('get-screened')}
+                className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-[#F05A28] to-[#E11D48] text-white font-extrabold text-xs uppercase tracking-wider shadow-md flex items-center justify-center gap-2 ring-2 ring-[#F05A28]/30"
+              >
+                <Eye className="w-4 h-4 text-white" />
+                <span>{t('navScreeningNowCta', 'SCREENING NOW')}</span>
+              </button>
+
               <button
                 type="button"
                 id="mobile-drawer-primary-cta"
                 onClick={() => handlePublicNav('find-screening')}
-                className="w-full py-3 px-4 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs uppercase tracking-wider shadow-sm flex items-center justify-center gap-2"
+                className="w-full py-2.5 px-4 rounded-xl bg-[#FFE5D8] hover:bg-[#FFEDD5] text-[#D84818] border border-[#FED7AA] font-bold text-xs uppercase tracking-wider shadow-xs flex items-center justify-center gap-2"
               >
                 <MapPin className="w-4 h-4" />
                 <span>{t('navFindScreeningCenterCta', 'FIND A SCREENING CENTER')}</span>
@@ -981,8 +1028,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handlePublicNav('why-screening')}
                   className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                     publicRoute === 'why-screening'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                      : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                      : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navWhyScreening', 'Why Screening')}
@@ -993,8 +1040,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handlePublicNav('how-it-works')}
                   className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                     publicRoute === 'how-it-works'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                      : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                      : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navHowItWorks', 'How It Works')}
@@ -1005,8 +1052,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handlePublicNav('find-screening')}
                   className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                     publicRoute === 'find-screening'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                      : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                      : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navFindScreening', 'Find Screening')}
@@ -1017,8 +1064,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handlePublicNav('learn')}
                   className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                     publicRoute === 'learn'
-                      ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                      : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                      : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                   }`}
                 >
                   {t('navLearn', 'Learn')}
@@ -1030,7 +1077,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     setMobileMenuOpen(false);
                     onOpenHelpModal();
                   }}
-                  className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium text-[#2E2628] hover:bg-[#F9F5F1]"
+                  className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium text-[#2B2024] hover:bg-[#FFFDF9]"
                 >
                   {t('navHelpFaqs', 'Help & FAQs')}
                 </button>
@@ -1048,8 +1095,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                       onClick={() => handlePublicNav('my-reports')}
                       className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center justify-between ${
                         publicRoute === 'my-reports'
-                          ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                          : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                          ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                          : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                       }`}
                     >
                       <span>{t('navMyReports', 'My Reports')}</span>
@@ -1061,8 +1108,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                       onClick={() => handlePublicNav('my-screening')}
                       className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center justify-between ${
                         publicRoute === 'my-screening'
-                          ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                          : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                          ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                          : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                       }`}
                     >
                       <span>{t('navMyScreening', 'My Screening Journey')}</span>
@@ -1074,8 +1121,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                       onClick={() => handlePublicNav('profile')}
                       className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center justify-between ${
                         publicRoute === 'profile'
-                          ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                          : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                          ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                          : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                       }`}
                     >
                       <span>{t('navPatientProfile', 'Patient Profile')}</span>
@@ -1098,8 +1145,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => handleProviderNav('dashboard')}
                 className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
                   providerRoute === 'dashboard'
-                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                    ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                    : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                 }`}
               >
                 <LayoutDashboard className="w-4 h-4" />
@@ -1111,11 +1158,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => handleProviderNav('start-screening')}
                 className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
                   providerRoute === 'start-screening'
-                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                    ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                    : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                 }`}
               >
-                <Camera className="w-4 h-4 text-[#EA580C]" />
+                <Camera className="w-4 h-4 text-[#F05A28]" />
                 <span>{t('navStartScreening', 'Start Screening')}</span>
               </button>
 
@@ -1124,8 +1171,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => handleProviderNav('review-queue')}
                 className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
                   providerRoute === 'review-queue'
-                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                    ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                    : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                 }`}
               >
                 <ShieldCheck className="w-4 h-4" />
@@ -1137,8 +1184,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => handleProviderNav('appointments')}
                 className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
                   providerRoute === 'appointments'
-                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                    ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                    : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                 }`}
               >
                 <Calendar className="w-4 h-4" />
@@ -1150,8 +1197,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => handleProviderNav('referrals')}
                 className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
                   providerRoute === 'referrals'
-                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                    ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                    : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                 }`}
               >
                 <Users className="w-4 h-4" />
@@ -1166,45 +1213,45 @@ export const Navbar: React.FC<NavbarProps> = ({
                 <button
                   type="button"
                   onClick={() => handleProviderNav('camp-mode')}
-                  className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                  className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2"
                 >
-                  <Activity className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                  <Activity className="w-3.5 h-3.5 text-[#6F6267]" />
                   <span>{t('navCampOfflineMode', 'Camp Offline Mode')}</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => handleProviderNav('batch-screening')}
-                  className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                  className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2"
                 >
-                  <FileSpreadsheet className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                  <FileSpreadsheet className="w-3.5 h-3.5 text-[#6F6267]" />
                   <span>{t('navBatchScreening', 'Batch Screening')}</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => handleProviderNav('cases')}
-                  className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                  className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2"
                 >
-                  <FileText className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                  <FileText className="w-3.5 h-3.5 text-[#6F6267]" />
                   <span>{t('navCasesHistory', 'Cases & History')}</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => handleProviderNav('analytics')}
-                  className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                  className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2"
                 >
-                  <BarChart3 className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                  <BarChart3 className="w-3.5 h-3.5 text-[#6F6267]" />
                   <span>{t('navAnalytics', 'Analytics')}</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => handleProviderNav('settings')}
-                  className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2E2628] hover:bg-[#F9F5F1] flex items-center gap-2"
+                  className="w-full text-left px-3.5 py-2 rounded-xl text-xs font-medium text-[#2B2024] hover:bg-[#FFFDF9] flex items-center gap-2"
                 >
-                  <Settings className="w-3.5 h-3.5 text-[#6E5C5F]" />
+                  <Settings className="w-3.5 h-3.5 text-[#6F6267]" />
                   <span>{t('navSettings', 'Settings')}</span>
                 </button>
               </div>
@@ -1222,12 +1269,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => handleProviderNav('research')}
                 className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
                   providerRoute === 'research'
-                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                    ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                    : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                 }`}
               >
                 <Layers className="w-4 h-4" />
-                <span>{t('navResearch', 'Research')}</span>
+                <span>{t('navResearchOverview', 'Research Overview')}</span>
               </button>
 
               <button
@@ -1235,8 +1282,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => handleProviderNav('models')}
                 className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
                   providerRoute === 'models'
-                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                    ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                    : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                 }`}
               >
                 <GitBranch className="w-4 h-4" />
@@ -1248,8 +1295,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => handleProviderNav('datasets')}
                 className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
                   providerRoute === 'datasets'
-                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                    ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                    : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                 }`}
               >
                 <Database className="w-4 h-4" />
@@ -1261,8 +1308,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => handleProviderNav('experiments')}
                 className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
                   providerRoute === 'experiments'
-                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                    ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                    : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                 }`}
               >
                 <Sparkles className="w-4 h-4" />
@@ -1274,8 +1321,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => handleProviderNav('evaluation')}
                 className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
                   providerRoute === 'evaluation'
-                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                    ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                    : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                 }`}
               >
                 <BarChart3 className="w-4 h-4" />
@@ -1287,8 +1334,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => handleProviderNav('explainability')}
                 className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
                   providerRoute === 'explainability'
-                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                    ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                    : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                 }`}
               >
                 <ShieldAlert className="w-4 h-4" />
@@ -1297,11 +1344,24 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               <button
                 type="button"
+                onClick={() => handleProviderNav('model-versions')}
+                className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
+                  providerRoute === 'model-versions'
+                    ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                    : 'text-[#2B2024] hover:bg-[#FFFDF9]'
+                }`}
+              >
+                <GitBranch className="w-4 h-4" />
+                <span>{t('navModelVersions', 'Model Versions')}</span>
+              </button>
+
+              <button
+                type="button"
                 onClick={() => handleProviderNav('technology')}
                 className={`w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center gap-2.5 ${
                   providerRoute === 'technology'
-                    ? 'text-[#EA580C] bg-[#FFF7ED] font-bold'
-                    : 'text-[#2E2628] hover:bg-[#F9F5F1]'
+                    ? 'text-[#F05A28] bg-[#FFE5D8] font-bold'
+                    : 'text-[#2B2024] hover:bg-[#FFFDF9]'
                 }`}
               >
                 <Cpu className="w-4 h-4" />
@@ -1319,10 +1379,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                   setMobileMenuOpen(false);
                   onOpenAccessibilityModal();
                 }}
-                className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center justify-between text-[#2E2628] hover:bg-[#F9F5F1]"
+                className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center justify-between text-[#2B2024] hover:bg-[#FFFDF9]"
               >
                 <div className="flex items-center gap-2.5">
-                  <Eye className="w-4 h-4 text-[#EA580C]" />
+                  <Eye className="w-4 h-4 text-[#F05A28]" />
                   <span>{t('accessibilitySettingsTitle', 'Accessibility & Display')}</span>
                 </div>
                 <ChevronRight className="w-4 h-4 text-[#9E8D91]" />
@@ -1336,8 +1396,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               currentUser?.role === 'patient' && currentUser.id !== 'guest-public' ? (
                 <div className="flex items-center justify-between">
                   <div className="text-xs">
-                    <span className="text-[#6E5C5F] block">{t('navSignedInAs', 'Signed in as')}</span>
-                    <span className="font-bold text-[#2E2628]">{currentUser.name}</span>
+                    <span className="text-[#6F6267] block">{t('navSignedInAs', 'Signed in as')}</span>
+                    <span className="font-bold text-[#2B2024]">{currentUser.name}</span>
                   </div>
                   <button
                     type="button"
@@ -1357,9 +1417,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                     setMobileMenuOpen(false);
                     onOpenRoleModal();
                   }}
-                  className="w-full py-2.5 rounded-xl border border-[#EFE4DC] text-xs font-semibold text-[#2E2628] hover:bg-[#F9F5F1] flex items-center justify-center gap-2"
+                  className="w-full py-2.5 rounded-xl border border-[#EFE4DC] text-xs font-semibold text-[#2B2024] hover:bg-[#FFFDF9] flex items-center justify-center gap-2"
                 >
-                  <LogIn className="w-4 h-4 text-[#EA580C]" />
+                  <LogIn className="w-4 h-4 text-[#F05A28]" />
                   <span>{t('navSignInSelectRole', 'Sign In / Select Role')}</span>
                 </button>
               )
@@ -1371,9 +1431,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                     setMobileMenuOpen(false);
                     onOpenRoleModal();
                   }}
-                  className="w-full py-2.5 rounded-xl border border-[#EFE4DC] text-xs font-semibold text-[#2E2628] hover:bg-[#F9F5F1] flex items-center justify-center gap-2"
+                  className="w-full py-2.5 rounded-xl border border-[#EFE4DC] text-xs font-semibold text-[#2B2024] hover:bg-[#FFFDF9] flex items-center justify-center gap-2"
                 >
-                  <RotateCcw className="w-4 h-4 text-[#EA580C]" />
+                  <RotateCcw className="w-4 h-4 text-[#F05A28]" />
                   <span>{t('navSwitchWorkspace', 'Switch Workspace')}</span>
                 </button>
 

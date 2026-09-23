@@ -20,11 +20,15 @@ import { PublicHowItHelps } from './components/PublicHowItHelps';
 import { PublicLearn } from './components/PublicLearn';
 import { ReferralsView } from './components/ReferralsView';
 import { ResultsView } from './components/ResultsView';
+import { PatientScreeningResultView } from './components/PatientScreeningResultView';
+import { ScreeningBookingFlow } from './components/ScreeningBookingFlow';
+import { ProviderAppointmentsView } from './components/ProviderAppointmentsView';
 import { ReviewQueueView } from './components/ReviewQueueView';
 import { RoleSelectionModal } from './components/RoleSelectionModal';
 import { HelpSupportModal } from './components/HelpSupportModal';
 import { VoiceAssistant } from './components/VoiceAssistant';
 import { ResearchWorkspaceView } from './components/ResearchWorkspaceView';
+import { ResearcherSignIn } from './components/ResearcherSignIn';
 import { ScreeningCampFlow } from './components/ScreeningCampFlow';
 import { ScreeningFlow } from './components/ScreeningFlow';
 import { TechnicalFaqModal } from './components/TechnicalFaqModal';
@@ -38,6 +42,7 @@ import { AccessibilitySettingsModal } from './components/AccessibilitySettingsMo
 import { PatientReportsView } from './components/PatientReportsView';
 import { PatientJourneyView } from './components/PatientJourneyView';
 import { PatientProfileView } from './components/PatientProfileView';
+import { ScreeningHelperVerificationGate } from './components/ScreeningHelperVerificationGate';
 import { accessibilityService } from './services/accessibilityService';
 import { authService } from './auth/authService';
 import {
@@ -317,9 +322,11 @@ function AppContent() {
   const handleScreeningComplete = (result: MultimodalTriageResult) => {
     setActiveResult(result);
     setHistory((prev) => [result, ...prev]);
-    setIsViewingActiveResult(true);
-    window.location.hash = 'results';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (isProviderMode) {
+      setIsViewingActiveResult(true);
+      window.location.hash = 'results';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   // Handle successful login from RoleSelectionModal
@@ -351,7 +358,7 @@ function AppContent() {
 
   return (
     <div
-      className="min-h-screen flex flex-col bg-[#FFFDFB] dark:bg-[#151014] text-[#2E2628] dark:text-[#FAF5F7] antialiased overflow-x-clip"
+      className="min-h-screen flex flex-col bg-[#FFFDF9] dark:bg-[#151014] text-[#2B2024] dark:text-[#FAF5F7] antialiased overflow-x-clip"
     >
       {/* Primary Navigation Header */}
       <Navbar
@@ -409,8 +416,8 @@ function AppContent() {
         {isViewingActiveResult && activeResult ? (
           <div className="space-y-4">
             <div className="flex items-center justify-between bg-white px-4 py-2.5 rounded-xl border border-[#EFE4DC] text-xs shadow-xs">
-              <span className="font-semibold text-[#6E5C5F]">
-                Viewing Inspection Result: <span className="text-[#2E2628] font-bold">{activeResult.patientId}</span>
+              <span className="font-semibold text-[#6F6267]">
+                Viewing Inspection Result: <span className="text-[#2B2024] font-bold">{activeResult.patientId}</span>
               </span>
               <button
                 type="button"
@@ -422,48 +429,95 @@ function AppContent() {
                     navigatePublic(publicRoute);
                   }
                 }}
-                className="font-bold text-[#EA580C] hover:underline"
+                className="font-bold text-[#F05A28] hover:text-[#D84818] transition-colors"
               >
                 ← Return to {isProviderMode ? (experience === 'researcher' ? 'Research Lab' : 'Helper Dashboard') : 'Patient View'}
               </button>
             </div>
-            <ResultsView
-              result={activeResult}
-              onNewScreening={() => {
-                setActivePreset(null);
-                setIsViewingActiveResult(false);
-                if (isProviderMode) {
+            {isProviderMode ? (
+              <ResultsView
+                result={activeResult}
+                onNewScreening={() => {
+                  setActivePreset(null);
+                  setIsViewingActiveResult(false);
                   navigateProvider('start-screening');
-                } else {
+                }}
+                onAblationClick={() => {
+                  setIsViewingActiveResult(false);
+                  navigateProvider('research');
+                }}
+              />
+            ) : (
+              <PatientScreeningResultView
+                result={activeResult}
+                onFindClinic={() => {
+                  setIsViewingActiveResult(false);
+                  navigatePublic('find-screening');
+                }}
+                onBookScreening={() => {
+                  setIsViewingActiveResult(false);
+                  navigatePublic('find-screening');
+                }}
+                onViewReport={() => {
+                  setIsViewingActiveResult(false);
+                  navigatePublic('my-reports');
+                }}
+                onNewScreening={() => {
+                  setActivePreset(null);
+                  setIsViewingActiveResult(false);
                   navigatePublic('get-screened');
-                }
-              }}
-              onAblationClick={() => {
-                setIsViewingActiveResult(false);
-                navigateProvider('research');
-              }}
-            />
+                }}
+              />
+            )}
           </div>
         ) : experience === 'researcher' ? (
           /* =========================================================================
              RESEARCHER EXPERIENCE
+             Researcher Sign In ↓ Research Workspace
+             Keep Grad-CAM, SHAP, model evaluation, research metrics inside Researcher workspace.
              ========================================================================= */
-          <ResearchWorkspaceView
-            initialTab={
-              providerRoute === 'models'
-                ? 'models'
-                : providerRoute === 'datasets'
-                ? 'datasets'
-                : providerRoute === 'experiments'
-                ? 'experiments'
-                : providerRoute === 'explainability'
-                ? 'explainability'
-                : providerRoute === 'technology'
-                ? 'architecture'
-                : 'overview'
-            }
-            onSwitchWorkspace={() => setIsRoleModalOpen(true)}
-          />
+          currentUser.role !== 'researcher' ? (
+            <ResearcherSignIn
+              onAuthenticate={(user) => {
+                setCurrentUser(user);
+                setExperience('researcher');
+                setIsProviderMode(true);
+                setProviderRoute('research');
+                window.location.hash = 'researcher/overview';
+              }}
+              onCancel={() => {
+                setExperience('patient');
+                setIsProviderMode(false);
+                setPublicRoute('overview');
+                window.location.hash = 'public/overview';
+              }}
+            />
+          ) : (
+            <ResearchWorkspaceView
+              initialTab={
+                providerRoute === 'models'
+                  ? 'models'
+                  : providerRoute === 'datasets'
+                  ? 'datasets'
+                  : providerRoute === 'experiments'
+                  ? 'experiments'
+                  : providerRoute === 'evaluation'
+                  ? 'evaluation'
+                  : providerRoute === 'explainability'
+                  ? 'explainability'
+                  : providerRoute === 'model-versions'
+                  ? 'model-versions'
+                  : providerRoute === 'technology'
+                  ? 'models'
+                  : 'overview'
+              }
+              onNavigateTab={(tab) => {
+                navigateProvider(tab as ProviderRoute);
+              }}
+              onSwitchWorkspace={() => setIsRoleModalOpen(true)}
+              currentUser={currentUser}
+            />
+          )
         ) : !isProviderMode ? (
           /* =========================================================================
              PUBLIC PATIENT EXPERIENCE (DEFAULT)
@@ -546,13 +600,15 @@ function AppContent() {
               <PublicGetScreened
                 onComplete={handleScreeningComplete}
                 onFindClinic={() => navigatePublic('find-screening')}
+                onBookScreening={() => navigatePublic('find-screening')}
+                onViewReport={() => navigatePublic('my-reports')}
               />
             )}
 
-            {/* PUBLIC: Find Screening Near Me */}
+            {/* PUBLIC: Find Screening Near Me & Booking Workflow */}
             {publicRoute === 'find-screening' && (
-              <FindScreeningSection
-                onStartDemoScreening={() => navigatePublic('get-screened')}
+              <ScreeningBookingFlow
+                onNavigateToScreening={() => navigatePublic('get-screened')}
               />
             )}
 
@@ -572,12 +628,52 @@ function AppContent() {
               />
             )}
 
-            {/* PUBLIC: Research Link */}
-            {publicRoute === 'research' && <ResearchWorkspaceView />}
+            {/* PUBLIC: Research Link - Gated by Researcher Authentication */}
+            {publicRoute === 'research' && (
+              currentUser.role === 'researcher' ? (
+                <ResearchWorkspaceView
+                  initialTab="overview"
+                  onSwitchWorkspace={() => setIsRoleModalOpen(true)}
+                  currentUser={currentUser}
+                />
+              ) : (
+                <ResearcherSignIn
+                  onAuthenticate={(user) => {
+                    setCurrentUser(user);
+                    setExperience('researcher');
+                    setIsProviderMode(true);
+                    setProviderRoute('research');
+                    window.location.hash = 'researcher/overview';
+                  }}
+                  onCancel={() => {
+                    navigatePublic('overview');
+                  }}
+                />
+              )
+            )}
           </>
+        ) : currentUser.role === 'helper' &&
+          currentUser.verificationStatus !== 'Verified' &&
+          currentUser.verificationStatus !== 'verified' ? (
+          /* =========================================================================
+             SCREENING HELPER RESTRICTED VERIFICATION GATE
+             Only a VERIFIED Screening Helper can access the full helper workspace.
+             ========================================================================= */
+          <ScreeningHelperVerificationGate
+            user={currentUser}
+            onStatusUpdated={(updated) => {
+              setCurrentUser(updated);
+            }}
+            onSwitchToPatient={() => {
+              setExperience('patient');
+              setIsProviderMode(false);
+              setPublicRoute('overview');
+              window.location.hash = 'public/overview';
+            }}
+          />
         ) : (
           /* =========================================================================
-             SCREENING HELPER & CLINICAL WORKSPACE
+             SCREENING HELPER & CLINICAL WORKSPACE (VERIFIED ACCESS)
              ========================================================================= */
           <>
             {/* HELPER: Dashboard */}
@@ -599,11 +695,23 @@ function AppContent() {
                 }}
                 onOpenBatch={() => setIsBatchModalOpen(true)}
                 userRole={currentUser.role}
+                currentUser={currentUser}
+                onUserUpdated={(updated) => setCurrentUser(updated)}
               />
             )}
 
-            {/* HELPER: Screening Camp & Appointments */}
-            {(providerRoute === 'camp-mode' || providerRoute === 'appointments') && (
+            {/* HELPER: Screening Appointments & Slot Management */}
+            {providerRoute === 'appointments' && (
+              <ProviderAppointmentsView
+                onStartScreeningWithPatient={() => {
+                  navigateProvider('start-screening');
+                }}
+                userRole={currentUser.role}
+              />
+            )}
+
+            {/* HELPER: Screening Camp Outreach */}
+            {providerRoute === 'camp-mode' && (
               <ScreeningCampFlow
                 onComplete={handleScreeningComplete}
                 onExitCampMode={() => navigateProvider('dashboard')}
@@ -615,10 +723,10 @@ function AppContent() {
               <div className="space-y-6">
                 <div className="flex items-center justify-between bg-white p-4 sm:p-5 rounded-2xl border border-[#EFE4DC] shadow-xs flex-wrap gap-3">
                   <div>
-                    <h2 className="text-base font-serif font-bold text-[#2E2628]">
+                    <h2 className="text-base font-serif font-bold text-[#2B2024]">
                       {t("encounterTitle", "Screening Examination Encounter")}
                     </h2>
-                    <p className="text-xs text-[#6E5C5F] mt-0.5">
+                    <p className="text-xs text-[#6F6267] mt-0.5">
                       {t("encounterDesc", "Non-mydriatic fundus capture with automated clarity assessment and optional OCT depth scanning.")}
                     </p>
                   </div>
@@ -626,14 +734,14 @@ function AppContent() {
                     <button
                       type="button"
                       onClick={() => navigateProvider('camp-mode')}
-                      className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-[#FED7AA] bg-[#FFF7ED] text-[#C2410C] hover:bg-[#FFEDD5] transition-colors"
+                      className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-[#FED7AA] bg-[#FFE5D8] text-[#D84818] hover:bg-[#FFEDD5] transition-colors"
                     >
                       {t("campOfflineModeBtn", "Camp Offline Mode")}
                     </button>
                     <button
                       type="button"
                       onClick={() => setIsGuideOpen(true)}
-                      className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-[#EFE4DC] bg-[#FAF8F6] text-[#2E2628] hover:border-[#EA580C] hover:text-[#EA580C] transition-colors"
+                      className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-[#EFE4DC] bg-[#FAF8F6] text-[#2B2024] hover:border-[#F05A28] hover:text-[#F05A28] transition-colors"
                     >
                       {t("captureGuidelinesBtn", "Capture Guidelines")}
                     </button>
@@ -715,9 +823,27 @@ function AppContent() {
             {/* HELPER: Analytics */}
             {providerRoute === 'analytics' && <ProviderAnalytics history={history} />}
 
-            {/* HELPER: Research */}
+            {/* HELPER: Research (Gated by Researcher Authentication) */}
             {providerRoute === 'research' && (
-              <ResearchWorkspaceView onSwitchWorkspace={() => setIsRoleModalOpen(true)} />
+              currentUser.role === 'researcher' ? (
+                <ResearchWorkspaceView
+                  onSwitchWorkspace={() => setIsRoleModalOpen(true)}
+                  currentUser={currentUser}
+                />
+              ) : (
+                <ResearcherSignIn
+                  onAuthenticate={(user) => {
+                    setCurrentUser(user);
+                    setExperience('researcher');
+                    setIsProviderMode(true);
+                    setProviderRoute('research');
+                    window.location.hash = 'researcher/overview';
+                  }}
+                  onCancel={() => {
+                    navigateProvider('dashboard');
+                  }}
+                />
+              )
             )}
 
             {/* HELPER: Technology */}

@@ -15,6 +15,7 @@ import { screeningApi } from '../api';
 import { MOCK_SCREENING_CENTERS } from '../mock/mockData';
 import { ScreeningCenter } from '../types';
 import { useTranslation } from '../i18n/I18nContext';
+import { ScreeningBookingFlow } from './ScreeningBookingFlow';
 
 interface FindScreeningSectionProps {
   onStartDemoScreening?: () => void;
@@ -80,7 +81,7 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
       {/* Header */}
       <div className="max-w-3xl mb-8">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-stone-100 border border-stone-200/80 text-stone-700 text-xs font-semibold mb-3">
-          <MapPin className="w-3.5 h-3.5 text-[#EA580C]" />
+          <MapPin className="w-3.5 h-3.5 text-[#F05A28]" />
           <span>{t('commAccessDirectory', 'Community Access Directory')}</span>
         </div>
         <h2 className="text-2xl sm:text-3xl font-serif font-semibold text-stone-900 tracking-tight">
@@ -109,7 +110,7 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
             onClick={handleUseLocation}
             className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-stone-200 bg-stone-50 text-xs font-semibold text-stone-700 hover:bg-stone-100 transition-colors shrink-0"
           >
-            <Navigation className="w-3.5 h-3.5 text-[#EA580C]" />
+            <Navigation className="w-3.5 h-3.5 text-[#F05A28]" />
             <span>{userLocationDetected ? t('locationDetected', 'Location Detected (Bengaluru)') : t('useMyLocation', 'Use My Location')}</span>
           </button>
         </div>
@@ -159,7 +160,7 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
               </div>
 
               {/* Title & Address */}
-              <h3 className="font-serif font-semibold text-base text-stone-900 group-hover:text-[#EA580C] transition-colors leading-snug">
+              <h3 className="font-serif font-semibold text-base text-stone-900 group-hover:text-[#F05A28] transition-colors leading-snug">
                 {center.name}
               </h3>
 
@@ -212,7 +213,7 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
                   setBookingCenter(center);
                   setBookingConfirmed(false);
                 }}
-                className="flex-1 text-center py-2 px-3 rounded-xl text-xs font-semibold bg-[#EA580C] text-white hover:bg-[#C2410C] transition-colors shadow-2xs"
+                className="flex-1 text-center py-2 px-3 rounded-xl text-xs font-semibold bg-[#F05A28] text-white hover:bg-[#D84818] transition-colors shadow-2xs"
               >
                 {t('inquireBookSlot', 'Inquire / Book Slot')}
               </button>
@@ -243,109 +244,25 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
         </div>
       )}
 
-      {/* Booking / Inquiry Modal Dialog */}
+      {/* Booking / Inquiry Modal Dialog with scalable booking flow */}
       {bookingCenter && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-950/40 backdrop-blur-xs">
-          <div className="bg-white rounded-2xl max-w-md w-full border border-stone-200 shadow-xl p-6 sm:p-7 animate-in fade-in zoom-in-95 duration-150">
-            {!bookingConfirmed ? (
-              <div>
-                <div className="flex items-center gap-2 text-[#EA580C] mb-2">
-                  <Calendar className="w-4 h-4" />
-                  <span className="text-xs font-semibold uppercase tracking-wider">
-                    {t('communityScreeningInquiry', 'Community Screening Inquiry')}
-                  </span>
-                </div>
-                <h3 className="text-lg font-serif font-semibold text-stone-900">
-                  {bookingCenter.name}
-                </h3>
-                <p className="text-xs text-stone-600 mt-1">
-                  {t('bookingModalSub', 'Non-invasive retinal photograph takes less than 5 minutes. No eye drops required for non-mydriatic screening.')}
-                </p>
-
-                <div className="my-4 p-3.5 rounded-xl bg-stone-50 border border-stone-200/80 text-xs space-y-1.5 text-stone-800">
-                  <div>
-                    <span className="text-stone-500 font-medium">{t('operatingHoursLabel', 'Operating hours:')}</span> {bookingCenter.hours}
-                  </div>
-                  <div>
-                    <span className="text-stone-500 font-medium">{t('helplineLabel', 'Helpline:')}</span> {bookingCenter.phone}
-                  </div>
-                  <div>
-                    <span className="text-stone-500 font-medium">{t('addressLabel', 'Address:')}</span> {bookingCenter.address}
-                  </div>
-                </div>
-
-                <div className="space-y-3">
-                  <div>
-                    <label className="text-xs font-semibold text-stone-800 block mb-1">
-                      {t('patientNameInitialsLabel', 'Patient Name / Initials')}
-                    </label>
-                    <input
-                      type="text"
-                      defaultValue={t('diabeticScreeningParticipantDefault', 'Diabetic Screening Participant')}
-                      className="w-full px-3 py-2 rounded-xl border border-stone-200 text-xs text-stone-900 focus:outline-none focus:border-stone-400 focus:bg-white bg-stone-50/50"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-semibold text-stone-800 block mb-1">
-                      {t('contactPhoneLabel', 'Contact Phone (for SMS confirmation)')}
-                    </label>
-                    <input
-                      type="tel"
-                      placeholder="+91 98765 43210"
-                      className="w-full px-3 py-2 rounded-xl border border-stone-200 text-xs text-stone-900 focus:outline-none focus:border-stone-400 focus:bg-white bg-stone-50/50"
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-5 flex gap-2.5">
-                  <button
-                    onClick={() => setBookingCenter(null)}
-                    className="flex-1 py-2 px-3 rounded-xl text-xs font-semibold border border-stone-200 text-stone-600 hover:bg-stone-50 transition-colors"
-                  >
-                    {t('cancelBtn', 'Cancel')}
-                  </button>
-                  <button
-                    onClick={() => setBookingConfirmed(true)}
-                    className="flex-1 py-2 px-3 rounded-xl text-xs font-semibold bg-[#EA580C] text-white hover:bg-[#C2410C] transition-colors shadow-2xs"
-                  >
-                    {t('confirmDemoBooking', 'Confirm Demo Booking')}
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="text-center py-4">
-                <div className="w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 mx-auto mb-3">
-                  <CheckCircle2 className="w-6 h-6" />
-                </div>
-                <h3 className="text-base font-serif font-semibold text-stone-900">
-                  {t('slotRegisteredTitle', 'Screening Slot Request Registered')}
-                </h3>
-                <p className="text-xs text-stone-600 mt-2 leading-relaxed">
-                  {t('slotRegisteredDesc', `Your appointment request for ${bookingCenter.name} has been logged in simulated demonstration mode. In a production deployment, an SMS token with queue timing is dispatched to the participant.`)}
-                </p>
-
-                <div className="mt-5 flex gap-2 justify-center">
-                  <button
-                    onClick={() => setBookingCenter(null)}
-                    className="py-2 px-4 rounded-xl text-xs font-semibold bg-stone-100 border border-stone-200 text-stone-800 hover:bg-stone-200 transition-colors"
-                  >
-                    {t('closeBtn', 'Close')}
-                  </button>
-                  {onStartDemoScreening && (
-                    <button
-                      onClick={() => {
-                        setBookingCenter(null);
-                        onStartDemoScreening();
-                      }}
-                      className="py-2 px-4 rounded-xl text-xs font-semibold bg-[#EA580C] hover:bg-[#C2410C] text-white flex items-center gap-1.5 transition-colors shadow-2xs"
-                    >
-                      <Sparkles className="w-3.5 h-3.5" />
-                      <span>{t('tryDemoScreeningNow', 'Try Demo Screening Now →')}</span>
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-stone-950/60 backdrop-blur-xs overflow-y-auto">
+          <div className="bg-white dark:bg-[#1C1719] rounded-3xl max-w-4xl w-full border border-stone-200 dark:border-[#382E32] shadow-2xl p-6 sm:p-8 animate-in fade-in zoom-in-95 my-auto max-h-[90vh] overflow-y-auto relative">
+            <button
+              type="button"
+              onClick={() => setBookingCenter(null)}
+              className="absolute top-5 right-5 px-3 py-1.5 rounded-xl bg-stone-100 hover:bg-stone-200 dark:bg-stone-800 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-200 text-xs font-bold transition-colors z-10 cursor-pointer"
+            >
+              ✕ Close
+            </button>
+            <ScreeningBookingFlow
+              initialCenterId={bookingCenter.id}
+              onNavigateToScreening={() => {
+                setBookingCenter(null);
+                if (onStartDemoScreening) onStartDemoScreening();
+              }}
+              onClose={() => setBookingCenter(null)}
+            />
           </div>
         </div>
       )}

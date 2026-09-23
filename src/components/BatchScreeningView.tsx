@@ -231,7 +231,7 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#FFEDD5] text-[#EA580C]">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#FFEDD5] text-[#F05A28]">
                 <Layers className="w-3.5 h-3.5" />
                 <span>Automated Batch Pipeline</span>
               </span>
@@ -239,10 +239,10 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
                 SIMULATED DATA · Mock Ingestion Mode
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#2E2628] tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#2B2024] tracking-tight">
               Batch Screening Architecture
             </h1>
-            <p className="text-xs sm:text-sm text-[#6E5C5F] mt-1 max-w-2xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-[#6F6267] mt-1 max-w-2xl leading-relaxed">
               Process high-volume retinal photography cohorts from tele-ophthalmology outreach vans, rural clinics, or institutional archives. Upload folders of fundus images and linked CSV clinical manifests.
             </p>
           </div>
@@ -251,17 +251,17 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
             <button
               type="button"
               onClick={handleDownloadTemplate}
-              className="px-3.5 py-2 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] text-[#2E2628] hover:bg-[#FFF7ED] text-xs font-bold transition-colors flex items-center gap-2"
+              className="px-3.5 py-2 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] text-[#2B2024] hover:bg-[#FFE5D8] text-xs font-bold transition-colors flex items-center gap-2"
             >
-              <FileSpreadsheet className="w-4 h-4 text-[#EA580C]" />
+              <FileSpreadsheet className="w-4 h-4 text-[#F05A28]" />
               <span>Download CSV Template</span>
             </button>
             <button
               type="button"
               onClick={handleExportResultsCsv}
-              className="px-3.5 py-2 rounded-xl bg-white border border-[#EFE4DC] text-[#2E2628] hover:bg-[#FAF8F6] text-xs font-bold transition-colors flex items-center gap-2"
+              className="px-3.5 py-2 rounded-xl bg-white border border-[#EFE4DC] text-[#2B2024] hover:bg-[#FAF8F6] text-xs font-bold transition-colors flex items-center gap-2"
             >
-              <Download className="w-4 h-4 text-[#6E5C5F]" />
+              <Download className="w-4 h-4 text-[#6F6267]" />
               <span>Export Triage CSV</span>
             </button>
           </div>
@@ -274,8 +274,8 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
         <div className="p-6 rounded-3xl bg-white border border-[#EFE4DC] shadow-xs space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Upload className="w-4 h-4 text-[#EA580C]" />
-              <h3 className="font-bold text-sm text-[#2E2628]">1. Multi-Image Ingestion Dropzone</h3>
+              <Upload className="w-4 h-4 text-[#F05A28]" />
+              <h3 className="font-bold text-sm text-[#2B2024]">1. Multi-Image Ingestion Dropzone</h3>
             </div>
             {uploadedFiles.length > 0 && (
               <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#DCFCE7] text-[#15803D]">
@@ -283,16 +283,16 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
               </span>
             )}
           </div>
-          <p className="text-xs text-[#6E5C5F]">
+          <p className="text-xs text-[#6F6267]">
             Select multiple 2D color fundus photos (.png, .jpg, .dcm) captured during outreach camps.
           </p>
 
-          <label className="border-2 border-dashed border-[#EFE4DC] hover:border-[#EA580C] hover:bg-[#FFF7ED]/30 rounded-2xl p-6 text-center cursor-pointer block transition-all">
-            <Upload className="w-8 h-8 text-[#EA580C] mx-auto mb-2" />
-            <span className="text-xs font-bold text-[#2E2628] block">
+          <label className="border-2 border-dashed border-[#EFE4DC] hover:border-[#F05A28] hover:bg-[#FFE5D8]/30 rounded-2xl p-6 text-center cursor-pointer block transition-all">
+            <Upload className="w-8 h-8 text-[#F05A28] mx-auto mb-2" />
+            <span className="text-xs font-bold text-[#2B2024] block">
               Click to select multiple fundus images or drag &amp; drop
             </span>
-            <span className="text-[11px] text-[#6E5C5F] block mt-1">
+            <span className="text-[11px] text-[#6F6267] block mt-1">
               Supports 45° macula-centered or optic-disc centered fields
             </span>
             <input
@@ -309,8 +309,8 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
         <div className="p-6 rounded-3xl bg-white border border-[#EFE4DC] shadow-xs space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <FileSpreadsheet className="w-4 h-4 text-[#EA580C]" />
-              <h3 className="font-bold text-sm text-[#2E2628]">2. Clinical Cohort Manifest (CSV)</h3>
+              <FileSpreadsheet className="w-4 h-4 text-[#F05A28]" />
+              <h3 className="font-bold text-sm text-[#2B2024]">2. Clinical Cohort Manifest (CSV)</h3>
             </div>
             {csvFileName && (
               <span className="text-[11px] font-bold px-2 py-0.5 rounded-full bg-[#DCFCE7] text-[#15803D]">
@@ -318,16 +318,16 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
               </span>
             )}
           </div>
-          <p className="text-xs text-[#6E5C5F]">
+          <p className="text-xs text-[#6F6267]">
             Link patient identifiers, systemic biomarkers (HbA1c, Blood Pressure, Duration), and eye labels.
           </p>
 
-          <label className="border-2 border-dashed border-[#EFE4DC] hover:border-[#EA580C] hover:bg-[#FFF7ED]/30 rounded-2xl p-6 text-center cursor-pointer block transition-all">
+          <label className="border-2 border-dashed border-[#EFE4DC] hover:border-[#F05A28] hover:bg-[#FFE5D8]/30 rounded-2xl p-6 text-center cursor-pointer block transition-all">
             <FileSpreadsheet className="w-8 h-8 text-[#15803D] mx-auto mb-2" />
-            <span className="text-xs font-bold text-[#2E2628] block">
+            <span className="text-xs font-bold text-[#2B2024] block">
               {csvFileName ? `Loaded: ${csvFileName}` : 'Click to select patient_manifest.csv'}
             </span>
-            <span className="text-[11px] text-[#6E5C5F] block mt-1">
+            <span className="text-[11px] text-[#6F6267] block mt-1">
               Formatted according to standard tele-screening schemas
             </span>
             <input
@@ -344,15 +344,15 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
       <div className="bg-white p-5 rounded-3xl border border-[#EFE4DC] shadow-xs flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="space-y-1 w-full sm:w-auto">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-[#2E2628]">Batch Queue Status:</span>
-            <span className="text-xs font-mono font-bold text-[#EA580C]">
+            <span className="text-xs font-bold text-[#2B2024]">Batch Queue Status:</span>
+            <span className="text-xs font-mono font-bold text-[#F05A28]">
               {processedCount} of {total} evaluated
             </span>
           </div>
           {isProcessing && (
             <div className="w-full sm:w-64 bg-[#EFE4DC] rounded-full h-2 overflow-hidden">
               <div
-                className="bg-[#EA580C] h-full transition-all duration-150"
+                className="bg-[#F05A28] h-full transition-all duration-150"
                 style={{ width: `${processingProgress}%` }}
               />
             </div>
@@ -364,7 +364,7 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
             type="button"
             disabled={isProcessing}
             onClick={handleRunBatchInference}
-            className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-[#F05A28] hover:bg-[#D84818] text-white text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {isProcessing ? (
               <>
@@ -383,7 +383,7 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
 
       {/* 5 KPI Metric Cards - ALL CLEARLY LABELED SIMULATED DATA */}
       <div className="space-y-2">
-        <div className="flex items-center justify-between text-xs font-bold text-[#6E5C5F]">
+        <div className="flex items-center justify-between text-xs font-bold text-[#6F6267]">
           <span className="uppercase tracking-wider">Batch Cohort Triage Distribution:</span>
           <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200">
             SIMULATED DATA
@@ -393,8 +393,8 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
           {/* Total */}
           <div className="bg-white p-4 rounded-2xl border border-[#EFE4DC] shadow-xs">
-            <div className="text-[11px] text-[#6E5C5F] font-medium">Cohort Volume</div>
-            <div className="text-xl font-bold font-serif text-[#2E2628] mt-0.5">{total}</div>
+            <div className="text-[11px] text-[#6F6267] font-medium">Cohort Volume</div>
+            <div className="text-xl font-bold font-serif text-[#2B2024] mt-0.5">{total}</div>
             <div className="text-[10px] text-[#15803D] mt-1 font-semibold">100% Ingested</div>
           </div>
 
@@ -423,8 +423,8 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
 
           {/* Ungradable */}
           <div className="bg-white p-4 rounded-2xl border border-[#EFE4DC] shadow-xs">
-            <div className="text-[11px] text-[#6E5C5F] font-medium">Ungradable</div>
-            <div className="text-xl font-bold font-serif text-[#6E5C5F] mt-0.5">{ungradable}</div>
+            <div className="text-[11px] text-[#6F6267] font-medium">Ungradable</div>
+            <div className="text-xl font-bold font-serif text-[#6F6267] mt-0.5">{ungradable}</div>
             <div className="text-[10px] text-[#DC2626] mt-1 font-medium">Recapture Flagged</div>
           </div>
         </div>
@@ -446,8 +446,8 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
               onClick={() => setStatusFilter(tab.key as any)}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors whitespace-nowrap ${
                 statusFilter === tab.key
-                  ? 'bg-[#EA580C] text-white shadow-2xs'
-                  : 'bg-[#FAF8F6] text-[#6E5C5F] hover:bg-[#FFF7ED]'
+                  ? 'bg-[#F05A28] text-white shadow-2xs'
+                  : 'bg-[#FAF8F6] text-[#6F6267] hover:bg-[#FFE5D8]'
               }`}
             >
               {tab.label}
@@ -456,13 +456,13 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
         </div>
 
         <div className="relative w-full sm:w-64">
-          <Search className="w-3.5 h-3.5 text-[#6E5C5F] absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-3.5 h-3.5 text-[#6F6267] absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchFilter}
             onChange={(e) => setSearchFilter(e.target.value)}
             placeholder="Search patient or file..."
-            className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-[#EFE4DC] focus:outline-none focus:border-[#EA580C]"
+            className="w-full pl-8 pr-3 py-1.5 text-xs rounded-xl border border-[#EFE4DC] focus:outline-none focus:border-[#F05A28]"
           />
         </div>
       </div>
@@ -471,7 +471,7 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
       <div className="bg-white rounded-3xl border border-[#EFE4DC] overflow-hidden shadow-xs">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#FAF8F6] border-b border-[#EFE4DC] text-[11px] font-bold text-[#6E5C5F] uppercase tracking-wider">
+            <thead className="bg-[#FAF8F6] border-b border-[#EFE4DC] text-[11px] font-bold text-[#6F6267] uppercase tracking-wider">
               <tr>
                 <th className="py-3 px-4">Patient Code</th>
                 <th className="py-3 px-4">Source Filename</th>
@@ -487,19 +487,19 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
                 const isUngradable = item.qualityStatus === 'UNGRADABLE';
 
                 return (
-                  <tr key={item.id} className="hover:bg-[#FFFDFB] transition-colors">
+                  <tr key={item.id} className="hover:bg-[#FFFDF9] transition-colors">
                     {/* Patient Code */}
-                    <td className="py-3.5 px-4 font-mono font-bold text-[#2E2628]">
+                    <td className="py-3.5 px-4 font-mono font-bold text-[#2B2024]">
                       {item.patientCode}
                       {item.patientAge && (
-                        <span className="text-[11px] font-normal text-[#6E5C5F] ml-1.5">
+                        <span className="text-[11px] font-normal text-[#6F6267] ml-1.5">
                           ({item.patientAge}y)
                         </span>
                       )}
                     </td>
 
                     {/* Source Filename */}
-                    <td className="py-3.5 px-4 font-mono text-[11px] text-[#6E5C5F]">
+                    <td className="py-3.5 px-4 font-mono text-[11px] text-[#6F6267]">
                       {item.filename}
                     </td>
 
@@ -523,12 +523,12 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
                       {item.predictedGrade !== undefined ? (
                         <div className="flex items-center gap-2">
                           <RiskChip grade={item.predictedGrade} size="sm" />
-                          <span className="font-bold text-[#2E2628]">
+                          <span className="font-bold text-[#2B2024]">
                             Grade {item.predictedGrade}
                           </span>
                         </div>
                       ) : (
-                        <span className="text-[11px] text-[#6E5C5F]">Ungradable</span>
+                        <span className="text-[11px] text-[#6F6267]">Ungradable</span>
                       )}
                     </td>
 
@@ -540,7 +540,7 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
                           <span>DME Fluid</span>
                         </span>
                       ) : (
-                        <span className="text-[11px] text-[#6E5C5F]">No Edema</span>
+                        <span className="text-[11px] text-[#6F6267]">No Edema</span>
                       )}
                     </td>
 
@@ -553,7 +553,7 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
                             : item.priority === 'Review Recommended'
                             ? 'bg-[#FFFBEB] text-[#D97706]'
                             : item.priority === 'Ungradable'
-                            ? 'bg-[#FAF8F6] text-[#6E5C5F]'
+                            ? 'bg-[#FAF8F6] text-[#6F6267]'
                             : 'bg-[#F0FDF4] text-[#15803D]'
                         }`}
                       >
@@ -571,7 +571,7 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
                           ) || PRESET_CASES[0];
                           onSelectResult(preset.expectedTriage);
                         }}
-                        className="px-2.5 py-1 rounded-lg bg-[#FAF8F6] hover:bg-[#FFF7ED] text-[#2E2628] hover:text-[#EA580C] text-[11px] font-bold border border-[#EFE4DC] transition-colors"
+                        className="px-2.5 py-1 rounded-lg bg-[#FAF8F6] hover:bg-[#FFE5D8] text-[#2B2024] hover:text-[#F05A28] text-[11px] font-bold border border-[#EFE4DC] transition-colors"
                       >
                         Inspect
                       </button>

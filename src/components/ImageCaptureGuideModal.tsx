@@ -29,33 +29,33 @@ export const ImageCaptureGuideModal: React.FC<ImageCaptureGuideModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
       <div className="bg-white rounded-2xl max-w-3xl w-full border border-[#EFE4DC] shadow-xl overflow-hidden max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
         {/* Modal Header */}
-        <div className="p-5 border-b border-[#EFE4DC] flex items-center justify-between bg-gradient-to-r from-[#FFF7ED]/70 to-[#FDF2F8]/70 shrink-0">
+        <div className="p-5 border-b border-[#EFE4DC] flex items-center justify-between bg-gradient-to-r from-[#FFE5D8]/70 to-[#FBE4EC]/70 shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#EA580C] to-[#DB2777] flex items-center justify-center text-white">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#F05A28] to-[#DB2777] flex items-center justify-center text-white">
               <Camera className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="font-serif font-bold text-base text-[#2E2628]">
+              <h3 className="font-serif font-bold text-base text-[#2B2024]">
                 {t('captureGuideModalTitle', 'How to Capture an Analysable Fundus Image')}
               </h3>
-              <p className="text-xs text-[#6E5C5F]">
+              <p className="text-xs text-[#6F6267]">
                 {t('captureGuideModalSubtitle', 'Technician & Community Worker Best Practices for Quality Screening')}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-[#6E5C5F] hover:bg-white/80 transition-colors"
+            className="p-1.5 rounded-lg text-[#6F6267] hover:bg-white/80 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Scrollable Content */}
-        <div className="p-6 overflow-y-auto space-y-6 text-xs text-[#2E2628]">
+        <div className="p-6 overflow-y-auto space-y-6 text-xs text-[#2B2024]">
           {/* Side-by-side Visual Comparison */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#C2410C] mb-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-[#D84818] mb-3">
               {t('visualComparisonHeader', 'Visual Comparison: Good vs Inadequate Image Quality')}
             </h4>
 
@@ -116,29 +116,29 @@ export const ImageCaptureGuideModal: React.FC<ImageCaptureGuideModalProps> = ({
 
           {/* 4 Crucial Capture Steps */}
           <div className="p-4 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC]">
-            <h4 className="font-serif font-bold text-sm text-[#2E2628] mb-2 flex items-center gap-2">
-              <Lightbulb className="w-4 h-4 text-[#EA580C]" />
+            <h4 className="font-serif font-bold text-sm text-[#2B2024] mb-2 flex items-center gap-2">
+              <Lightbulb className="w-4 h-4 text-[#F05A28]" />
               {t('captureProtocolsTitle', 'Capture Protocols for Non-Mydriatic Cameras')}
             </h4>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3 text-xs">
               <div className="p-3 bg-white rounded-lg border border-[#EFE4DC]">
-                <strong className="text-[#EA580C] block mb-1">1. {t('ambientLightingTitle', 'Ambient Lighting')}</strong>
+                <strong className="text-[#F05A28] block mb-1">1. {t('ambientLightingTitle', 'Ambient Lighting')}</strong>
                 {t('ambientLightingDesc', 'Dim the examination room lights or pull curtains. Darkness allows natural physiological pupil dilation without drops.')}
               </div>
 
               <div className="p-3 bg-white rounded-lg border border-[#EFE4DC]">
-                <strong className="text-[#EA580C] block mb-1">2. {t('patientInstructionsTitle', 'Patient Instructions')}</strong>
+                <strong className="text-[#F05A28] block mb-1">2. {t('patientInstructionsTitle', 'Patient Instructions')}</strong>
                 {t('patientInstructionsDesc', '"Please look directly at the green target star inside the lens. Keep both eyes open wide. Don\'t blink until the flash."')}
               </div>
 
               <div className="p-3 bg-white rounded-lg border border-[#EFE4DC]">
-                <strong className="text-[#EA580C] block mb-1">3. {t('workingDistanceTitle', 'Working Distance')}</strong>
+                <strong className="text-[#F05A28] block mb-1">3. {t('workingDistanceTitle', 'Working Distance')}</strong>
                 {t('workingDistanceDesc', 'Maintain the camera’s alignment donuts/crosshairs centered in the pupil aperture before pressing capture.')}
               </div>
 
               <div className="p-3 bg-white rounded-lg border border-[#EFE4DC]">
-                <strong className="text-[#EA580C] block mb-1">4. {t('retakeThresholdTitle', 'Retake Threshold')}</strong>
+                <strong className="text-[#F05A28] block mb-1">4. {t('retakeThresholdTitle', 'Retake Threshold')}</strong>
                 {t('retakeThresholdDesc', 'If the immediate preview shows motion streak or glare over the macula, retake immediately before dismissing the patient.')}
               </div>
             </div>
@@ -149,7 +149,7 @@ export const ImageCaptureGuideModal: React.FC<ImageCaptureGuideModalProps> = ({
         <div className="p-4 border-t border-[#EFE4DC] bg-[#FAF8F6] flex justify-end shrink-0">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg text-xs font-semibold bg-gradient-to-r from-[#EA580C] to-[#DB2777] text-white hover:opacity-95"
+            className="px-4 py-2 rounded-lg text-xs font-semibold bg-gradient-to-r from-[#F05A28] to-[#DB2777] text-white hover:opacity-95"
           >
             {t('understoodCloseGuide', 'Understood, Close Guide')}
           </button>

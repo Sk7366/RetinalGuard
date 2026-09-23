@@ -65,7 +65,8 @@ export const authService = {
       helperRoleTitle: meta?.helperRoleTitle || (role === 'helper' ? 'Community Health Worker' : undefined),
       organization: meta?.organization || (role === 'researcher' ? 'AI Medical Imaging Collaborative' : 'Community Health Mission'),
       location: meta?.location || 'Bengaluru, India',
-      verificationStatus: meta?.verificationStatus || 'verified',
+      phone: meta?.phone || (role === 'helper' ? '+91 98450 67890' : undefined),
+      verificationStatus: meta?.verificationStatus || 'Verified',
       isDemoVerification: meta?.isDemoVerification ?? true,
       permissions: ROLE_PERMISSIONS[role] || ROLE_PERMISSIONS.helper,
       authorizedRoles: combinedRoles.length > 0 ? combinedRoles : [normalizedRole],
@@ -125,17 +126,91 @@ export const authService = {
   },
 
   /**
+   * Register a new Screening Helper
+   */
+  async registerHelper(data: {
+    name: string;
+    role: HelperRoleTitle;
+    organization: string;
+    email: string;
+    phone: string;
+    location: string;
+    verificationStatus?: VerificationStatus;
+    isDemoVerification?: boolean;
+  }): Promise<User> {
+    const isVerified = data.verificationStatus === 'Verified' || data.verificationStatus === 'verified';
+    const user: User = {
+      id: `hlp-${Math.random().toString(36).substring(2, 9)}`,
+      email: data.email,
+      name: data.name,
+      role: 'helper',
+      experience: 'helper',
+      helperRoleTitle: data.role,
+      organization: data.organization,
+      location: data.location,
+      phone: data.phone,
+      verificationStatus: data.verificationStatus || 'Pending Verification',
+      isDemoVerification: data.isDemoVerification ?? isVerified,
+      permissions: ROLE_PERMISSIONS.helper,
+      authorizedRoles: ['helper'],
+      clinicId: 'clinic-blr-01',
+      clinicName: data.organization,
+      token: `jwt_helper_${Date.now()}`,
+      voiceGuidanceEnabled: true,
+      registeredAt: new Date().toISOString(),
+    };
+
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    } catch {
+      // ignore
+    }
+
+    return user;
+  },
+
+  /**
    * Quick demo login for Screening Helper
    */
-  async loginDemoHelper(): Promise<User> {
-    return this.login('ananya.rao@healthmission.org', 'helper', {
-      name: 'Ananya Rao',
-      helperRoleTitle: 'Community Health Worker',
-      organization: 'Bengaluru District Eye Mission',
-      location: 'Bengaluru, Karnataka',
-      verificationStatus: 'verified',
-      isDemoVerification: true,
+  async loginDemoHelper(preset?: {
+    name?: string;
+    email?: string;
+    role?: HelperRoleTitle;
+    organization?: string;
+    phone?: string;
+    location?: string;
+    verificationStatus?: VerificationStatus;
+  }): Promise<User> {
+    const status = preset?.verificationStatus || 'Verified';
+    const isVerified = status === 'Verified' || status === 'verified';
+    return this.login(preset?.email || 'ananya.rao@healthmission.org', 'helper', {
+      name: preset?.name || 'Ananya Rao',
+      helperRoleTitle: preset?.role || 'Community Health Worker',
+      organization: preset?.organization || 'Bengaluru District Eye Mission',
+      location: preset?.location || 'Bengaluru, Karnataka',
+      phone: preset?.phone || '+91 98450 67890',
+      verificationStatus: status,
+      isDemoVerification: isVerified,
     });
+  },
+
+  /**
+   * Switch or simulate verification status for testing
+   */
+  setVerificationStatus(status: VerificationStatus): User {
+    const current = this.getCurrentUser();
+    const isVerified = status === 'Verified' || status === 'verified';
+    const updated: User = {
+      ...current,
+      verificationStatus: status,
+      isDemoVerification: isVerified,
+    };
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+    } catch {
+      // ignore
+    }
+    return updated;
   },
 
   /**

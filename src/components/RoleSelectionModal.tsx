@@ -28,10 +28,72 @@ const HELPER_ROLES: HelperRoleTitle[] = [
   'Community Health Worker',
   'Screening Technician',
   'Nurse',
-  'Primary Care Provider',
-  'Ophthalmic Assistant',
   'Healthcare Provider',
+  'Ophthalmic Assistant',
   'Program Coordinator',
+];
+
+const DEMO_HELPER_PROFILES = [
+  {
+    name: 'Ananya Rao',
+    role: 'Community Health Worker' as HelperRoleTitle,
+    org: 'Bengaluru District Eye Mission',
+    email: 'ananya.rao@healthmission.org',
+    phone: '+91 98450 67890',
+    location: 'Bengaluru, Karnataka',
+    status: 'Verified' as VerificationStatus,
+    badge: 'DEMO VERIFIED',
+  },
+  {
+    name: 'Rajesh Nair',
+    role: 'Screening Technician' as HelperRoleTitle,
+    org: 'South Zone Mobile Eye Van',
+    email: 'rajesh.nair@mobilevision.org',
+    phone: '+91 94460 12345',
+    location: 'Mysuru Rural Outreach',
+    status: 'Pending Verification' as VerificationStatus,
+    badge: 'Pending Review',
+  },
+  {
+    name: 'Sister Priya Mathew',
+    role: 'Nurse' as HelperRoleTitle,
+    org: 'St. John Community Ophthalmology',
+    email: 'priya.mathew@stjohn.health',
+    phone: '+91 98801 55678',
+    location: 'Kolar District Camp',
+    status: 'Verified' as VerificationStatus,
+    badge: 'DEMO VERIFIED',
+  },
+  {
+    name: 'Dr. Kavitha S.',
+    role: 'Healthcare Provider' as HelperRoleTitle,
+    org: 'District Civil Hospital NCD Wing',
+    email: 'kavitha.s@karnataka.gov.in',
+    phone: '+91 98451 98765',
+    location: 'Tumakuru General Hospital',
+    status: 'Verified' as VerificationStatus,
+    badge: 'DEMO VERIFIED',
+  },
+  {
+    name: 'Arun Kumar',
+    role: 'Ophthalmic Assistant' as HelperRoleTitle,
+    org: 'Rural Primary Vision Center',
+    email: 'arun.k@ruralvision.in',
+    phone: '+91 97312 34567',
+    location: 'Mandya Vision Center',
+    status: 'Rejected' as VerificationStatus,
+    badge: 'Rejected',
+  },
+  {
+    name: 'Deepa Sharma',
+    role: 'Program Coordinator' as HelperRoleTitle,
+    org: 'State Blindness Prevention Society',
+    email: 'deepa.sharma@npcbe.org',
+    phone: '+91 99123 45678',
+    location: 'State Directorate, Bengaluru',
+    status: 'Suspended' as VerificationStatus,
+    badge: 'Suspended',
+  },
 ];
 
 export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
@@ -42,21 +104,26 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
 }) => {
   const { t } = useTranslation();
   const [view, setView] = useState<'select' | 'helper-auth' | 'researcher-auth'>(initialMode);
+  const [helperAuthTab, setHelperAuthTab] = useState<'signin' | 'register'>('signin');
 
   // Synchronize view with initialMode when modal opens or initialMode changes
   React.useEffect(() => {
     if (isOpen) {
       setView(initialMode);
+      if (initialMode === 'helper-auth') {
+        setHelperAuthTab('signin');
+      }
     }
   }, [isOpen, initialMode]);
 
   // Helper form state
   const [helperName, setHelperName] = useState('Ananya Rao');
   const [helperEmail, setHelperEmail] = useState('ananya.rao@healthmission.org');
+  const [helperPhone, setHelperPhone] = useState('+91 98450 67890');
   const [helperRole, setHelperRole] = useState<HelperRoleTitle>('Community Health Worker');
   const [helperOrg, setHelperOrg] = useState('Bengaluru District Eye Mission');
   const [helperLocation, setHelperLocation] = useState('Bengaluru, Karnataka');
-  const [helperVerification, setHelperVerification] = useState<VerificationStatus>('verified');
+  const [helperVerification, setHelperVerification] = useState<VerificationStatus>('Verified');
 
   // Researcher form state
   const [researcherName, setResearcherName] = useState('Dr. Sai Krishnan');
@@ -74,13 +141,15 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
 
   const handleHelperSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const isVerified = helperVerification === 'Verified' || helperVerification === 'verified';
     const user = await authService.login(helperEmail, 'helper', {
       name: helperName,
       helperRoleTitle: helperRole,
       organization: helperOrg,
       location: helperLocation,
+      phone: helperPhone,
       verificationStatus: helperVerification,
-      isDemoVerification: true,
+      isDemoVerification: isVerified,
       voiceGuidanceEnabled: true,
     });
     onSuccessLogin(user);
@@ -258,127 +327,349 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
 
           {/* VIEW 2: SCREENING HELPER AUTH & VERIFICATION */}
           {view === 'helper-auth' && (
-            <form onSubmit={handleHelperSubmit} className="space-y-4">
-              {/* DEMO QUICK ACCESS BANNER */}
-              <div className="p-4 rounded-xl bg-[#FFF7ED] border border-[#FED7AA] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <div>
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-[#C2410C]">
-                    <Sparkles className="w-4 h-4 text-[#EA580C]" />
-                    <span>{t('roleQuickDemoHelper', 'Quick Demo Screening Helper Access')}</span>
+            <div className="space-y-4">
+              {/* AUTHENTICATION SUB-TABS */}
+              <div className="flex border-b border-[#EFE4DC] gap-4 text-xs font-semibold">
+                <button
+                  type="button"
+                  id="tab-helper-signin"
+                  onClick={() => setHelperAuthTab('signin')}
+                  className={`pb-2.5 transition-colors relative ${
+                    helperAuthTab === 'signin'
+                      ? 'text-[#EA580C] border-b-2 border-[#EA580C] font-bold'
+                      : 'text-[#6E5C5F] hover:text-[#2E2628]'
+                  }`}
+                >
+                  Sign In to Screening Helper
+                </button>
+                <button
+                  type="button"
+                  id="tab-helper-register"
+                  onClick={() => setHelperAuthTab('register')}
+                  className={`pb-2.5 transition-colors relative ${
+                    helperAuthTab === 'register'
+                      ? 'text-[#EA580C] border-b-2 border-[#EA580C] font-bold'
+                      : 'text-[#6E5C5F] hover:text-[#2E2628]'
+                  }`}
+                >
+                  Register as Screening Helper
+                </button>
+              </div>
+
+              {/* TAB A: SIGN IN */}
+              {helperAuthTab === 'signin' && (
+                <div className="space-y-4">
+                  {/* DEMO VERIFIED BADGE HEADER */}
+                  <div className="p-3.5 rounded-xl bg-[#ECFDF5] border border-[#A7F3D0] flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      <ShieldCheck className="w-5 h-5 text-[#059669] shrink-0" />
+                      <div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-xs font-black text-[#065F46] tracking-wide uppercase">
+                            DEMO VERIFIED
+                          </span>
+                          <span className="text-[10px] font-semibold text-[#047857] bg-white px-1.5 py-0.5 rounded border border-[#A7F3D0]">
+                            Evaluation Ready
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-[#047857] mt-0.5">
+                          Select a pre-configured screening helper profile or sign in with your credentials:
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-xs text-[#9A3412] mt-0.5">
-                    {t('rolePreloadedAnanya', 'Preloaded profile: Ananya Rao (Community Health Worker • Bengaluru Urban Eye Mission)')}
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={handleQuickDemoHelper}
-                  className="px-3 py-1.5 rounded-lg bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-semibold transition-colors whitespace-nowrap shadow-xs"
-                >
-                  {t('roleSignInDemoHelper', 'Sign In with Demo Helper')}
-                </button>
-              </div>
 
-              {/* CREDENTIALS FORM */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
-                <div>
-                  <label className="block text-xs font-medium text-[#2E2628] mb-1">
-                    {t('fullNameLabel', 'Full Name')}
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={helperName}
-                    onChange={(e) => setHelperName(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-[#EFE4DC] focus:border-[#EA580C] focus:ring-1 focus:ring-[#EA580C] text-xs text-[#2E2628]"
-                  />
-                </div>
+                  {/* PRELOADED HELPER PROFILES */}
+                  <div className="space-y-2">
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-[#6E5C5F]">
+                      Choose an Accredited Screening Helper Persona
+                    </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-[#2E2628] mb-1">
-                    {t('workEmailLabel', 'Work Email / ID')}
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={helperEmail}
-                    onChange={(e) => setHelperEmail(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-[#EFE4DC] focus:border-[#EA580C] focus:ring-1 focus:ring-[#EA580C] text-xs text-[#2E2628]"
-                  />
-                </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                      {DEMO_HELPER_PROFILES.map((profile) => {
+                        const isProfileVerified = profile.status === 'Verified';
+                        return (
+                          <button
+                            key={profile.email}
+                            type="button"
+                            onClick={async () => {
+                              const user = await authService.login(profile.email, 'helper', {
+                                name: profile.name,
+                                helperRoleTitle: profile.role,
+                                organization: profile.org,
+                                location: profile.location,
+                                phone: profile.phone,
+                                verificationStatus: profile.status,
+                                isDemoVerification: isProfileVerified,
+                                voiceGuidanceEnabled: true,
+                              });
+                              onSuccessLogin(user);
+                              onClose();
+                            }}
+                            className="text-left p-3 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] bg-white hover:bg-[#FFF7ED]/30 transition-all shadow-2xs group flex flex-col justify-between cursor-pointer"
+                          >
+                            <div>
+                              <div className="flex items-center justify-between gap-1 mb-1">
+                                <span className="font-bold text-xs text-[#2E2628] group-hover:text-[#EA580C]">
+                                  {profile.name}
+                                </span>
+                                <span
+                                  className={`text-[9px] font-black px-1.5 py-0.5 rounded uppercase tracking-wider ${
+                                    isProfileVerified
+                                      ? 'bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0]'
+                                      : profile.status === 'Pending Verification'
+                                      ? 'bg-[#FEF3C7] text-[#92400E] border border-[#FCD34D]'
+                                      : 'bg-[#FEE2E2] text-[#991B1B] border border-[#FCA5A5]'
+                                  }`}
+                                >
+                                  {profile.badge}
+                                </span>
+                              </div>
+                              <div className="text-[11px] font-semibold text-[#EA580C]">
+                                {profile.role}
+                              </div>
+                              <div className="text-[10px] text-[#6E5C5F] truncate mt-0.5">
+                                {profile.org} · {profile.location}
+                              </div>
+                            </div>
+                            <div className="mt-2 pt-1.5 border-t border-[#F5EFEB] flex items-center justify-between text-[10px] text-[#8E7E81]">
+                              <span className="font-mono">{profile.phone}</span>
+                              <span className="font-bold text-[#EA580C] group-hover:translate-x-0.5 transition-transform">
+                                Select →
+                              </span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-[#2E2628] mb-1">
-                    {t('healthcareRoleLabel', 'Specific Healthcare Role')}
-                  </label>
-                  <select
-                    value={helperRole}
-                    onChange={(e) => setHelperRole(e.target.value as HelperRoleTitle)}
-                    className="w-full px-3 py-2 rounded-lg border border-[#EFE4DC] focus:border-[#EA580C] focus:ring-1 focus:ring-[#EA580C] text-xs text-[#2E2628] bg-white"
-                  >
-                    {HELPER_ROLES.map((r) => (
-                      <option key={r} value={r}>
-                        {r}
-                      </option>
-                    ))}
-                  </select>
-                </div>
+                  {/* CUSTOM SIGN IN FORM */}
+                  <form onSubmit={handleHelperSubmit} className="space-y-3 pt-2 border-t border-[#EFE4DC]">
+                    <div className="text-[11px] font-bold uppercase tracking-wider text-[#6E5C5F]">
+                      Or Sign In with Work ID
+                    </div>
 
-                <div>
-                  <label className="block text-xs font-medium text-[#2E2628] mb-1">
-                    {t('affiliatedOrgLabel', 'Affiliated Organization')}
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={helperOrg}
-                    onChange={(e) => setHelperOrg(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-[#EFE4DC] focus:border-[#EA580C] focus:ring-1 focus:ring-[#EA580C] text-xs text-[#2E2628]"
-                  />
-                </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-medium text-[#2E2628] mb-1">
+                          Work Email / ID
+                        </label>
+                        <input
+                          type="email"
+                          required
+                          value={helperEmail}
+                          onChange={(e) => setHelperEmail(e.target.value)}
+                          className="w-full px-3 py-2 rounded-lg border border-[#EFE4DC] focus:border-[#EA580C] focus:ring-1 focus:ring-[#EA580C] text-xs text-[#2E2628]"
+                        />
+                      </div>
 
-                <div className="sm:col-span-2">
-                  <label className="block text-xs font-medium text-[#2E2628] mb-1">
-                    {t('districtLocationLabel', 'District / Camp Location')}
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={helperLocation}
-                    onChange={(e) => setHelperLocation(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg border border-[#EFE4DC] focus:border-[#EA580C] focus:ring-1 focus:ring-[#EA580C] text-xs text-[#2E2628]"
-                  />
-                </div>
-              </div>
+                      <div>
+                        <label className="block text-xs font-medium text-[#2E2628] mb-1">
+                          Role Title
+                        </label>
+                        <select
+                          value={helperRole}
+                          onChange={(e) => setHelperRole(e.target.value as HelperRoleTitle)}
+                          className="w-full px-3 py-2 rounded-lg border border-[#EFE4DC] focus:border-[#EA580C] focus:ring-1 focus:ring-[#EA580C] text-xs text-[#2E2628] bg-white"
+                        >
+                          {HELPER_ROLES.map((r) => (
+                            <option key={r} value={r}>
+                              {r}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
 
-              {/* DEMO VERIFICATION BADGE NOTICE */}
-              <div className="p-3.5 rounded-xl bg-stone-50 border border-stone-200 text-xs text-[#6E5C5F] flex items-start gap-2.5">
-                <ShieldCheck className="w-4 h-4 text-[#EA580C] flex-shrink-0 mt-0.5" />
-                <div>
-                  <span className="font-semibold text-[#2E2628]">{t('demoVerificationBadge', 'DEMO VERIFICATION APPLIED')}</span>
-                  <p className="text-[11px] mt-0.5 leading-relaxed">
-                    {t('demoVerificationNote', 'In production deployments, account credentials and clinical licenses are vetted by district health coordinators. For this evaluation, your account will be granted verified screening privileges instantly.')}
-                  </p>
+                    <div className="flex items-center justify-between pt-2">
+                      <button
+                        type="button"
+                        onClick={() => setView('select')}
+                        className="px-3 py-1.5 text-xs font-medium text-[#6E5C5F] hover:text-[#2E2628]"
+                      >
+                        ← Back to Selection
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-4 py-2 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-bold transition-colors shadow-xs"
+                      >
+                        Sign In & Enter Workspace
+                      </button>
+                    </div>
+                  </form>
                 </div>
-              </div>
+              )}
 
-              {/* BUTTONS */}
-              <div className="flex items-center justify-between pt-2 border-t border-[#EFE4DC]">
-                <button
-                  type="button"
-                  onClick={() => setView('select')}
-                  className="px-4 py-2 text-xs font-medium text-[#6E5C5F] hover:text-[#2E2628] transition-colors"
-                >
-                  {t('backToSelectionBtn', '← Back to Workspace Selection')}
-                </button>
-                <button
-                  type="submit"
-                  className="px-5 py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-semibold transition-colors shadow-xs"
-                >
-                  {t('enterHelperDashboardBtn', 'Enter Screening Helper Dashboard')}
-                </button>
-              </div>
-            </form>
+              {/* TAB B: REGISTER AS SCREENING HELPER */}
+              {helperAuthTab === 'register' && (
+                <form onSubmit={handleHelperSubmit} className="space-y-3.5">
+                  <div className="text-xs text-[#6E5C5F]">
+                    Registering requires verified healthcare worker or community outreach credentials. Please complete all fields below:
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {/* Full Name */}
+                    <div>
+                      <label className="block text-xs font-medium text-[#2E2628] mb-1">
+                        Full Name <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Ananya Rao"
+                        value={helperName}
+                        onChange={(e) => setHelperName(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-[#EFE4DC] focus:border-[#EA580C] focus:ring-1 focus:ring-[#EA580C] text-xs text-[#2E2628]"
+                      />
+                    </div>
+
+                    {/* Role */}
+                    <div>
+                      <label className="block text-xs font-medium text-[#2E2628] mb-1">
+                        Role <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        value={helperRole}
+                        onChange={(e) => setHelperRole(e.target.value as HelperRoleTitle)}
+                        className="w-full px-3 py-2 rounded-lg border border-[#EFE4DC] focus:border-[#EA580C] focus:ring-1 focus:ring-[#EA580C] text-xs text-[#2E2628] bg-white font-medium"
+                      >
+                        {HELPER_ROLES.map((r) => (
+                          <option key={r} value={r}>
+                            {r}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Organization */}
+                    <div>
+                      <label className="block text-xs font-medium text-[#2E2628] mb-1">
+                        Organization <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Bengaluru District Eye Mission"
+                        value={helperOrg}
+                        onChange={(e) => setHelperOrg(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-[#EFE4DC] focus:border-[#EA580C] focus:ring-1 focus:ring-[#EA580C] text-xs text-[#2E2628]"
+                      />
+                    </div>
+
+                    {/* Work Email */}
+                    <div>
+                      <label className="block text-xs font-medium text-[#2E2628] mb-1">
+                        Work Email <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="email"
+                        required
+                        placeholder="e.g. ananya.rao@healthmission.org"
+                        value={helperEmail}
+                        onChange={(e) => setHelperEmail(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-[#EFE4DC] focus:border-[#EA580C] focus:ring-1 focus:ring-[#EA580C] text-xs text-[#2E2628]"
+                      />
+                    </div>
+
+                    {/* Phone */}
+                    <div>
+                      <label className="block text-xs font-medium text-[#2E2628] mb-1">
+                        Phone <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="tel"
+                        required
+                        placeholder="e.g. +91 98450 67890"
+                        value={helperPhone}
+                        onChange={(e) => setHelperPhone(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-[#EFE4DC] focus:border-[#EA580C] focus:ring-1 focus:ring-[#EA580C] text-xs text-[#2E2628]"
+                      />
+                    </div>
+
+                    {/* Location */}
+                    <div>
+                      <label className="block text-xs font-medium text-[#2E2628] mb-1">
+                        Location <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Bengaluru, Karnataka"
+                        value={helperLocation}
+                        onChange={(e) => setHelperLocation(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-[#EFE4DC] focus:border-[#EA580C] focus:ring-1 focus:ring-[#EA580C] text-xs text-[#2E2628]"
+                      />
+                    </div>
+                  </div>
+
+                  {/* VERIFICATION STATE SELECTOR FOR EVALUATION */}
+                  <div className="p-3.5 rounded-xl bg-[#FFFDFB] border border-[#FED7AA] space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold text-[#2E2628]">
+                        Initial Verification State (Prototype Testing)
+                      </label>
+                      <span className="text-[10px] font-bold text-[#EA580C] uppercase tracking-wider">
+                        DEMO VERIFIED MODE
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {(
+                        [
+                          { value: 'Verified', label: 'Verified', desc: 'DEMO VERIFIED (Workspace Unlocked)' },
+                          { value: 'Pending Verification', label: 'Pending', desc: 'Pending Verification' },
+                          { value: 'Rejected', label: 'Rejected', desc: 'Accreditation Rejected' },
+                          { value: 'Suspended', label: 'Suspended', desc: 'Privileges Suspended' },
+                        ] as const
+                      ).map((item) => (
+                        <button
+                          key={item.value}
+                          type="button"
+                          onClick={() => setHelperVerification(item.value)}
+                          className={`p-2 rounded-lg text-left border text-xs transition-all cursor-pointer ${
+                            helperVerification === item.value
+                              ? 'bg-[#FFF7ED] border-[#EA580C] text-[#EA580C] font-bold shadow-2xs'
+                              : 'bg-white border-[#EFE4DC] text-[#6E5C5F] hover:bg-[#F9F5F1]'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span>{item.label}</span>
+                            {helperVerification === item.value && (
+                              <CheckCircle2 className="w-3 h-3 text-[#EA580C]" />
+                            )}
+                          </div>
+                          <span className="text-[9px] text-[#8E7E81] block mt-0.5 font-normal">
+                            {item.desc}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+
+                    <p className="text-[10px] text-[#8E7E81] leading-relaxed">
+                      Only a <strong>VERIFIED</strong> Screening Helper can access the clinical workspace. Selecting Pending, Rejected, or Suspended demonstrates the restricted access gate.
+                    </p>
+                  </div>
+
+                  {/* SUBMIT BUTTONS */}
+                  <div className="flex items-center justify-between pt-2 border-t border-[#EFE4DC]">
+                    <button
+                      type="button"
+                      onClick={() => setView('select')}
+                      className="px-4 py-2 text-xs font-medium text-[#6E5C5F] hover:text-[#2E2628] transition-colors"
+                    >
+                      ← Back to Workspace Selection
+                    </button>
+                    <button
+                      type="submit"
+                      className="px-5 py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-bold transition-colors shadow-xs cursor-pointer"
+                    >
+                      Register & Complete Onboarding
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
           )}
 
           {/* VIEW 3: RESEARCHER AUTH */}

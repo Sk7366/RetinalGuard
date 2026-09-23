@@ -1,18 +1,38 @@
 @import "tailwindcss";
 
-:root {
-  --color-brand-primary: #F05A28; /* Warm Coral Orange */
-  --color-brand-secondary: #D94A78; /* Deep Raspberry */
-  --color-accent-peach: #FFE5D8; /* Soft Peach */
-  --color-accent-pink: #FBE4EC; /* Blush Pink */
-  --color-bg-ivory: #FFFDF9; /* Warm Ivory */
-  --color-surface-white: #FFFFFF;
-  --color-text-plum: #2B2024; /* Deep Plum / Charcoal */
-  --color-text-muted: #6F6267; /* Muted Plum Gray */
-  --color-success-teal: #087F6A; /* Accessible Teal */
-  --color-warning-amber: #B86B00; /* Warm Amber */
-  --color-error-red: #B42318; /* Deep Red */
+/* =========================================================================
+   RETINAGUARD AI GLOBAL DESIGN SYSTEM
+   Palette centered around Primary Orange & Raspberry Pink for a premium,
+   trustworthy, modern, warm, accessible, medical, and human experience.
+   ========================================================================= */
 
+:root {
+  /* Core Brand Tokens */
+  --color-primary-orange: #F05A28; /* Primary CTAs & Screening Actions */
+  --color-primary-orange-hover: #D84818;
+  --color-raspberry-pink: #D94A78; /* Secondary Accents & Highlights */
+  --color-raspberry-pink-hover: #BF3663;
+  --color-soft-peach: #FFE5D8;     /* Soft Warm Neutral / Highlight */
+  --color-blush: #FBE4EC;          /* Delicate Pink Tint */
+  --color-warm-ivory: #FFFDF9;     /* Default Warm Ivory Surface */
+  --color-surface-white: #FFFFFF;  /* Crisp Card / Modal Surface */
+  --color-primary-text: #2B2024;   /* Deep Plum Charcoal Body / Headers */
+  --color-secondary-text: #6F6267; /* Muted Secondary Plum Gray */
+  --color-border-subtle: #EFE4DC;  /* Refined Warm Border */
+
+  /* Functional Status Tokens */
+  --color-success-teal: #087F6A;   /* Success / Verified */
+  --color-warning-amber: #B86B00;  /* Attention / Warning */
+  --color-error-red: #B42318;      /* Important Errors */
+
+  /* Backward Compatibility Aliases */
+  --color-brand-primary: #F05A28;
+  --color-brand-secondary: #D94A78;
+  --color-accent-peach: #FFE5D8;
+  --color-accent-pink: #FBE4EC;
+  --color-bg-ivory: #FFFDF9;
+  --color-text-plum: #2B2024;
+  --color-text-muted: #6F6267;
   --orange-primary: #F05A28;
   --orange-600: #F05A28;
   --orange-700: #D84818;
@@ -20,51 +40,68 @@
   --text-primary: #2B2024;
   --text-secondary: #6F6267;
   --border-subtle: #EFE4DC;
+
+  /* Typography Scale */
   --font-scale: 1;
+  --font-scale-factor: 1;
   --f-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --f-serif: 'Newsreader', Georgia, serif;
 }
 
 @theme {
-  --color-orange-primary: #F05A28;
+  --color-primary-orange: #F05A28;
+  --color-raspberry-pink: #D94A78;
+  --color-soft-peach: #FFE5D8;
+  --color-blush: #FBE4EC;
+  --color-warm-ivory: #FFFDF9;
+  --color-surface-white: #FFFFFF;
+  --color-primary-text: #2B2024;
+  --color-secondary-text: #6F6267;
+  --color-border-subtle: #EFE4DC;
+
+  --color-success-teal: #087F6A;
+  --color-warning-amber: #B86B00;
+  --color-error-red: #B42318;
+
+  /* Orange Scales for CTAs & Screening */
   --color-orange-50: #FFF7ED;
   --color-orange-100: #FFE5D8;
   --color-orange-200: #FED7AA;
-  --color-orange-300: #FDBA74;
-  --color-orange-400: #FB923C;
   --color-orange-500: #F05A28;
   --color-orange-600: #F05A28;
   --color-orange-700: #D84818;
 
-  --color-medical-green: #087F6A;
-  --color-medical-green-light: #ECFDF5;
-  --color-medical-green-border: #A7F3D0;
+  /* Raspberry Pink Scales for Accents & Highlights */
+  --color-pink-50: #FDF2F8;
+  --color-pink-100: #FBE4EC;
+  --color-pink-200: #FBCFE8;
+  --color-pink-500: #D94A78;
+  --color-pink-600: #D94A78;
+  --color-pink-700: #BF3663;
 
-  --color-medical-amber: #B86B00;
-  --color-medical-amber-light: #FFFBEB;
-  --color-medical-amber-border: #FDE68A;
+  /* Status Colors */
+  --color-teal-50: #E6F5F2;
+  --color-teal-100: #CCEBE5;
+  --color-teal-600: #087F6A;
+  --color-teal-700: #066655;
 
-  --color-medical-red: #B42318;
-  --color-medical-red-light: #FEF2F2;
-  --color-medical-red-border: #FECACA;
+  --color-amber-50: #FFF8E6;
+  --color-amber-100: #FFF1CC;
+  --color-amber-600: #B86B00;
+  --color-amber-700: #935600;
 
-  --color-clean-bg: #FFFDF9;
-  --color-clean-surface: #FFFFFF;
-  --color-clean-border: #EFE4DC;
-  --color-clean-text: #2B2024;
-  --color-clean-muted: #6F6267;
+  --color-red-50: #FDF2F2;
+  --color-red-100: #FDE8E8;
+  --color-red-600: #B42318;
+  --color-red-700: #911C13;
 
   --font-serif: 'Newsreader', Georgia, Cambria, 'Times New Roman', serif;
   --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Global Accessibility Scaling, High Contrast, Color Vision, & Dark Theme Tokens */
-
-/* 1. TEXT SIZE SCALING TOKEN SYSTEM */
-:root {
-  --font-scale: 1;
-  --font-scale-factor: 1;
-}
+/* =========================================================================
+   ACCESSIBILITY: TEXT SIZE SCALING TOKEN SYSTEM
+   ========================================================================= */
 
 html.font-scale-default {
   --font-scale: 1;
@@ -81,7 +118,7 @@ html.font-scale-xl {
   font-size: 20.8px;
 }
 
-/* Headings and body text proportional scaling */
+/* Proportional Heading Scale */
 html.font-scale-large h1 { font-size: calc(1.875rem * 1.08) !important; line-height: 1.25 !important; }
 html.font-scale-large h2 { font-size: calc(1.5rem * 1.08) !important; line-height: 1.3 !important; }
 html.font-scale-large h3 { font-size: calc(1.25rem * 1.08) !important; line-height: 1.35 !important; }
@@ -92,7 +129,7 @@ html.font-scale-xl h2 { font-size: calc(1.5rem * 1.18) !important; line-height: 
 html.font-scale-xl h3 { font-size: calc(1.25rem * 1.18) !important; line-height: 1.35 !important; }
 html.font-scale-xl h4 { font-size: calc(1.125rem * 1.18) !important; line-height: 1.4 !important; }
 
-/* Arbitrary pixel scaling across entire application (badges, labels, forms, microcopy) */
+/* Microcopy & Utility Text Scaling */
 html.font-scale-large .text-\[9px\],
 html.font-scale-large .text-\[10px\] { font-size: calc(10px * 1.15) !important; line-height: 1.4 !important; }
 html.font-scale-large .text-\[11px\] { font-size: calc(11px * 1.15) !important; line-height: 1.4 !important; }
@@ -109,57 +146,236 @@ html.font-scale-xl .text-\[13px\] { font-size: calc(13px * 1.30) !important; lin
 html.font-scale-xl .text-\[14px\] { font-size: calc(14px * 1.30) !important; line-height: 1.45 !important; }
 html.font-scale-xl .text-\[15px\] { font-size: calc(15px * 1.30) !important; line-height: 1.45 !important; }
 
-/* Buttons & Navigation reflow with text expansion */
+/* Buttons & Touch Target Scaling */
 html.font-scale-large button,
-html.font-scale-large .btn-natural-primary,
-html.font-scale-large .btn-natural-secondary,
-html.font-scale-large .btn-brand-accent {
-  min-height: 2.5rem;
+html.font-scale-large .btn-primary-action,
+html.font-scale-large .btn-natural-secondary {
+  min-height: 2.6rem;
   padding-top: 0.45rem;
   padding-bottom: 0.45rem;
 }
 
 html.font-scale-xl button,
-html.font-scale-xl .btn-natural-primary,
-html.font-scale-xl .btn-natural-secondary,
-html.font-scale-xl .btn-brand-accent {
-  min-height: 2.85rem;
+html.font-scale-xl .btn-primary-action,
+html.font-scale-xl .btn-natural-secondary {
+  min-height: 2.9rem;
   padding-top: 0.55rem;
   padding-bottom: 0.55rem;
 }
 
-/* Forms & Tables scaling */
+/* Forms Scaling */
 html.font-scale-large input,
 html.font-scale-large select,
 html.font-scale-large textarea {
-  min-height: 2.5rem;
+  min-height: 2.6rem;
 }
 
 html.font-scale-xl input,
 html.font-scale-xl select,
 html.font-scale-xl textarea {
-  min-height: 2.85rem;
+  min-height: 2.9rem;
 }
 
-html.font-scale-large table th,
-html.font-scale-large table td {
-  padding-top: 0.65rem !important;
-  padding-bottom: 0.65rem !important;
-}
+/* =========================================================================
+   GLOBAL BASE & BODY STYLING
+   Warm ivory default with deep charcoal plum typography
+   ========================================================================= */
 
-html.font-scale-xl table th,
-html.font-scale-xl table td {
-  padding-top: 0.8rem !important;
-  padding-bottom: 0.8rem !important;
-}
-
-/* Layout reflow without horizontal scrolling */
 html, body {
   max-width: 100vw;
   overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  background-color: #FFFDF9;
+  color: #2B2024;
+  font-family: var(--f-sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* 2. DELIBERATE PREMIUM DARK THEME */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Focus Visible Accessibility */
+*:focus-visible {
+  outline: 2.5px solid #F05A28 !important;
+  outline-offset: 2px !important;
+}
+
+/* =========================================================================
+   DESIGN SYSTEM UTILITIES: ACTIONS, ACCENTS & STATUS
+   Rules:
+   - Orange: primary CTAs and screening actions (#F05A28)
+   - Pink: secondary accents and highlights (#D94A78)
+   - Teal: success/verified (#087F6A)
+   - Amber: attention/warning (#B86B00)
+   - Red: important errors (#B42318)
+   - Backgrounds: Warm ivory (#FFFDF9) and White cards (#FFFFFF)
+   - Typography: Deep plum/charcoal (#2B2024) and Muted (#6F6267)
+   ========================================================================= */
+
+/* Primary CTA & Screening Action Button */
+.btn-primary-action {
+  background-color: #F05A28;
+  color: #FFFFFF;
+  border-radius: 0.75rem;
+  padding: 0.625rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.15s ease-out;
+  box-shadow: 0 1px 2px 0 rgba(240, 90, 40, 0.15);
+}
+
+.btn-primary-action:hover {
+  background-color: #D84818;
+  transform: translateY(-0.5px);
+  box-shadow: 0 3px 6px 0 rgba(240, 90, 40, 0.22);
+}
+
+.btn-brand-accent {
+  background-color: #F05A28;
+  color: #FFFFFF;
+  border-radius: 0.75rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: all 0.15s ease-out;
+}
+
+.btn-brand-accent:hover {
+  background-color: #D84818;
+}
+
+/* Secondary Action / Highlight Button */
+.btn-secondary-accent {
+  background-color: #FFFFFF;
+  color: #D94A78;
+  border: 1px solid #FBCFE8;
+  border-radius: 0.75rem;
+  padding: 0.625rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.15s ease-out;
+}
+
+.btn-secondary-accent:hover {
+  background-color: #FDF2F8;
+  border-color: #D94A78;
+}
+
+/* Neutral Clean Secondary Button */
+.btn-natural-secondary {
+  background-color: #FFFFFF;
+  color: #2B2024;
+  border: 1px solid #EFE4DC;
+  border-radius: 0.75rem;
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition: all 0.15s ease-out;
+}
+
+.btn-natural-secondary:hover {
+  background-color: #FFFDF9;
+  border-color: #D9CBC2;
+}
+
+/* Clean White Healthcare Card */
+.card-natural {
+  background-color: #FFFFFF;
+  border-radius: 1rem;
+  border: 1px solid #EFE4DC;
+  box-shadow: 0 1px 3px 0 rgba(43, 32, 36, 0.03);
+  transition: border-color 0.15s ease-out;
+}
+
+.card-natural:hover {
+  border-color: #D9CBC2;
+}
+
+/* Verified / Success Badge (Teal: #087F6A) */
+.badge-verified,
+.badge-success {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background-color: #E6F5F2;
+  color: #087F6A;
+  border: 1px solid #CCEBE5;
+}
+
+/* Attention / Warning Badge (Amber: #B86B00) */
+.badge-warning,
+.badge-amber {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background-color: #FFF8E6;
+  color: #B86B00;
+  border: 1px solid #FFF1CC;
+}
+
+/* Error / Critical Badge (Red: #B42318) */
+.badge-error {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.5rem;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  background-color: #FDF2F2;
+  color: #B42318;
+  border: 1px solid #FDE8E8;
+}
+
+/* Soft Peach Highlight Container */
+.highlight-soft-peach {
+  background-color: #FFE5D8;
+  border: 1px solid #FED7AA;
+  border-radius: 0.75rem;
+}
+
+/* Blush Highlight Container */
+.highlight-blush {
+  background-color: #FBE4EC;
+  border: 1px solid #FBCFE8;
+  border-radius: 0.75rem;
+}
+
+/* Brand Title & Typography */
+.font-brand {
+  font-family: var(--f-serif, 'Newsreader', Georgia, serif);
+}
+
+.brand-title {
+  font-family: var(--f-serif, 'Newsreader', Georgia, serif);
+  color: #2B2024;
+  letter-spacing: -0.02em;
+}
+
+/* =========================================================================
+   ACCESSIBILITY: DELIBERATE HIGH CONTRAST & DARK THEMES
+   ========================================================================= */
+
+/* Dark Theme */
 html.dark {
   background-color: #121012 !important;
   color: #FAF5F7 !important;
@@ -172,105 +388,29 @@ html.dark body {
 }
 
 html.dark .bg-white,
-html.dark .bg-\[\#FFFDFB\],
 html.dark .bg-\[\#FFFDF9\],
-html.dark .bg-\[\#FAF8F6\],
+html.dark .bg-\[\#FFFDFB\],
 html.dark .card-natural {
   background-color: #1B161A !important;
   color: #FAF5F7 !important;
   border-color: #33292F !important;
 }
 
-html.dark .bg-\[\#FFF7ED\],
-html.dark .bg-orange-50 {
-  background-color: #271C17 !important;
-  color: #FDBA74 !important;
-  border-color: #43281C !important;
-}
-
-html.dark .bg-stone-50,
-html.dark .bg-stone-100 {
-  background-color: #211B1F !important;
-  color: #FAF5F7 !important;
-  border-color: #382E34 !important;
-}
-
-html.dark .bg-\[\#FBE4EC\]\/30,
-html.dark .bg-\[\#FFE5D8\]\/40,
-html.dark .bg-\[\#FFE5D8\]\/20 {
-  background-color: #2C1E24 !important;
-  color: #FAF5F7 !important;
-}
-
-/* Dark theme typography */
-html.dark .text-\[\#2E2628\],
 html.dark .text-\[\#2B2024\],
-html.dark .text-stone-900,
-html.dark .text-stone-800,
-html.dark .text-stone-700 {
+html.dark .text-\[\#2E2628\] {
   color: #FAF5F7 !important;
 }
 
-html.dark .text-\[\#6E5C5F\],
 html.dark .text-\[\#6F6267\],
-html.dark .text-stone-600,
-html.dark .text-stone-500 {
+html.dark .text-\[\#6E5C5F\] {
   color: #C4B6BC !important;
 }
 
-html.dark .text-stone-400 {
-  color: #94868C !important;
-}
-
-/* Dark theme borders & dividers */
-html.dark .border-\[\#EFE4DC\],
-html.dark .border-stone-200,
-html.dark .border-stone-100,
-html.dark .border-stone-300 {
+html.dark .border-\[\#EFE4DC\] {
   border-color: #33292F !important;
 }
 
-/* Dark theme inputs & selects */
-html.dark input,
-html.dark select,
-html.dark textarea {
-  background-color: #1B161A !important;
-  color: #FAF5F7 !important;
-  border-color: #3B3037 !important;
-}
-
-html.dark input::placeholder,
-html.dark textarea::placeholder {
-  color: #8C7D84 !important;
-}
-
-/* Dark theme buttons */
-html.dark .btn-natural-secondary {
-  background-color: #211B1F !important;
-  color: #FAF5F7 !important;
-  border-color: #382E34 !important;
-}
-
-html.dark .btn-natural-secondary:hover {
-  background-color: #2A2328 !important;
-  border-color: #483C43 !important;
-}
-
-/* Dark theme dialogs & dropdowns */
-html.dark [role="dialog"],
-html.dark [aria-modal="true"],
-html.dark .shadow-xl,
-html.dark .shadow-2xl {
-  background-color: #1E181C !important;
-  color: #FAF5F7 !important;
-  border-color: #3B3037 !important;
-}
-
-/* 3. GLOBAL HIGH CONTRAST SYSTEM */
-html.high-contrast {
-  --border-subtle: #000000;
-}
-
+/* High Contrast Mode */
 html.high-contrast body {
   background-color: #FFFFFF !important;
   color: #000000 !important;
@@ -278,180 +418,32 @@ html.high-contrast body {
 
 html.high-contrast .card-natural,
 html.high-contrast .bg-white,
-html.high-contrast .bg-\[\#FFFDFB\],
-html.high-contrast .bg-\[\#FFFDF9\],
-html.high-contrast [role="dialog"],
-html.high-contrast nav,
-html.high-contrast header {
+html.high-contrast .bg-\[\#FFFDF9\] {
   background-color: #FFFFFF !important;
   border: 2px solid #000000 !important;
   box-shadow: none !important;
 }
 
-html.high-contrast .text-\[\#2E2628\],
 html.high-contrast .text-\[\#2B2024\],
-html.high-contrast .text-\[\#6E5C5F\],
+html.high-contrast .text-\[\#2E2628\],
 html.high-contrast .text-\[\#6F6267\],
-html.high-contrast .text-stone-900,
-html.high-contrast .text-stone-800,
-html.high-contrast .text-stone-700,
-html.high-contrast .text-stone-600,
-html.high-contrast .text-stone-500,
-html.high-contrast p,
-html.high-contrast span,
-html.high-contrast h1,
-html.high-contrast h2,
-html.high-contrast h3,
-html.high-contrast h4,
-html.high-contrast label {
+html.high-contrast .text-\[\#6E5C5F\] {
   color: #000000 !important;
   font-weight: 600 !important;
 }
 
-html.high-contrast button,
-html.high-contrast .btn-natural-primary,
-html.high-contrast .btn-natural-secondary,
-html.high-contrast .btn-brand-accent {
+html.high-contrast button {
   border: 2px solid #000000 !important;
   box-shadow: none !important;
   font-weight: 700 !important;
 }
 
-html.high-contrast input,
-html.high-contrast select,
-html.high-contrast textarea {
-  border: 2px solid #000000 !important;
-  background-color: #FFFFFF !important;
-  color: #000000 !important;
-  font-weight: 600 !important;
-}
-
-html.high-contrast input::placeholder {
-  color: #333333 !important;
-}
-
-/* High Contrast Focus Indicators (WCAG AAA compliant) */
-html.high-contrast *:focus-visible,
-*:focus-visible {
-  outline: 3px solid #F05A28 !important;
+html.high-contrast *:focus-visible {
+  outline: 3px solid #000000 !important;
   outline-offset: 3px !important;
 }
 
-/* High Contrast combined with Dark Mode */
-html.dark.high-contrast body {
-  background-color: #000000 !important;
-  color: #FFFFFF !important;
-}
-
-html.dark.high-contrast .card-natural,
-html.dark.high-contrast .bg-white,
-html.dark.high-contrast .bg-\[\#FFFDFB\],
-html.dark.high-contrast .bg-\[\#FFFDF9\],
-html.dark.high-contrast [role="dialog"],
-html.dark.high-contrast nav,
-html.dark.high-contrast header {
-  background-color: #050505 !important;
-  border: 2px solid #FFFFFF !important;
-}
-
-html.dark.high-contrast p,
-html.dark.high-contrast span,
-html.dark.high-contrast h1,
-html.dark.high-contrast h2,
-html.dark.high-contrast h3,
-html.dark.high-contrast h4,
-html.dark.high-contrast label,
-html.dark.high-contrast .text-\[\#2E2628\],
-html.dark.high-contrast .text-\[\#2B2024\],
-html.dark.high-contrast .text-\[\#6E5C5F\],
-html.dark.high-contrast .text-\[\#6F6267\],
-html.dark.high-contrast .text-stone-900,
-html.dark.high-contrast .text-stone-800,
-html.dark.high-contrast .text-stone-700,
-html.dark.high-contrast .text-stone-600 {
-  color: #FFFFFF !important;
-  font-weight: 600 !important;
-}
-
-html.dark.high-contrast button,
-html.dark.high-contrast input,
-html.dark.high-contrast select,
-html.dark.high-contrast textarea {
-  border: 2px solid #FFFFFF !important;
-  background-color: #050505 !important;
-  color: #FFFFFF !important;
-}
-
-html.dark.high-contrast *:focus-visible {
-  outline: 3px solid #FDBA74 !important;
-  outline-offset: 3px !important;
-}
-
-/* 4. COLOR VISION ACCESSIBILITY MODES */
-/* Red-Green Friendly (Protan / Deutan) */
-html.color-vision-protan,
-html.color-vision-redgreen {
-  --color-medical-red: #9333EA;
-  --color-medical-green: #0284C7;
-  --color-medical-amber: #D97706;
-}
-
-html.color-vision-protan .text-emerald-700,
-html.color-vision-protan .text-emerald-800,
-html.color-vision-protan .text-green-700,
-html.color-vision-protan .text-green-800 {
-  color: #0284C7 !important;
-}
-
-html.color-vision-protan .text-red-600,
-html.color-vision-protan .text-red-700,
-html.color-vision-protan .text-rose-600,
-html.color-vision-protan .text-rose-700 {
-  color: #9333EA !important;
-}
-
-html.color-vision-protan .bg-emerald-50,
-html.color-vision-protan .bg-green-50 {
-  background-color: #F0F9FF !important;
-  border-color: #BAE6FD !important;
-}
-
-html.color-vision-protan .bg-red-50,
-html.color-vision-protan .bg-rose-50 {
-  background-color: #FAF5FF !important;
-  border-color: #E9D5FF !important;
-}
-
-/* Blue-Yellow Friendly (Tritan) */
-html.color-vision-tritan,
-html.color-vision-blueyellow {
-  --color-medical-amber: #DC2626;
-  --color-brand-primary: #DB2777;
-}
-
-html.color-vision-tritan .text-amber-600,
-html.color-vision-tritan .text-amber-700,
-html.color-vision-tritan .text-yellow-700 {
-  color: #DB2777 !important;
-}
-
-html.color-vision-tritan .text-blue-600,
-html.color-vision-tritan .text-blue-700 {
-  color: #0D9488 !important;
-}
-
-/* Monochrome High Distinction */
-html.color-vision-mono {
-  filter: grayscale(100%) contrast(120%);
-}
-
-html.color-vision-mono .card-natural,
-html.color-vision-mono button,
-html.color-vision-mono [class*="border-"] {
-  border-width: 1.5px !important;
-}
-
-/* 5. REDUCE MOTION SYSTEM */
+/* Reduce Motion */
 html.reduce-motion *,
 html.reduce-motion *::before,
 html.reduce-motion *::after {
@@ -462,151 +454,12 @@ html.reduce-motion *::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-}
-
-/* Loading animation reduction */
-html.reduce-motion .animate-spin,
-html.reduce-motion .animate-pulse,
-html.reduce-motion .animate-ping,
-html.reduce-motion .animate-bounce {
-  animation: none !important;
-  opacity: 0.85 !important;
-}
-
-
-html, body {
-  max-width: 100vw;
-  overflow-x: hidden;
-  margin: 0;
-  padding: 0;
-  background-color: #FAFAF9;
-  color: #1C1917;
-  font-family: var(--f-sans, 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Prevent layout breaking on any viewport */
-*, *::before, *::after {
-  box-sizing: border-box;
-}
-
-/* Strategic RetinaGuard brand styling */
-.font-brand {
-  font-family: var(--f-serif, 'Newsreader', Georgia, serif);
-}
-
-.brand-title {
-  font-family: var(--f-serif, 'Newsreader', Georgia, serif);
-  background: linear-gradient(135deg, #EA580C 0%, #DB2777 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  letter-spacing: -0.02em;
-}
-
-.patient-tag {
-  background: #FAFAF9;
-  padding: 3px 10px;
-  border-radius: 9999px;
-  font-size: 11px;
-  font-weight: 600;
-  border: 1px solid #E7E5E4;
-  color: #44403C;
-}
-
-.patient-tag-brand {
-  background: #FFF7ED;
-  padding: 3px 10px;
-  border-radius: 9999px;
-  font-size: 11px;
-  font-weight: 600;
-  border: 1px solid #FFEDD5;
-  color: #C2410C;
-}
-
-.card-natural {
-  background: #FFFFFF;
-  border-radius: 16px;
-  border: 1px solid #E7E5E4;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
-}
-
-.card-natural:hover {
-  border-color: #D6D3D1;
-}
-
-.btn-natural-primary {
-  background: #1C1917;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: 600;
-  transition: all 0.15s ease-out;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-}
-
-.btn-natural-primary:hover {
-  background: #292524;
-  transform: translateY(-0.5px);
-}
-
-.btn-brand-accent {
-  background: #EA580C;
-  color: white;
-  padding: 8px 16px;
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: 600;
-  transition: all 0.15s ease-out;
-  box-shadow: 0 1px 3px rgba(234, 88, 12, 0.2);
-}
-
-.btn-brand-accent:hover {
-  background: #C2410C;
-  transform: translateY(-0.5px);
-  box-shadow: 0 3px 8px rgba(234, 88, 12, 0.25);
-}
-
-.btn-natural-secondary {
-  background: white;
-  color: #292524;
-  border: 1px solid #E7E5E4;
-  padding: 8px 16px;
-  border-radius: 10px;
-  font-size: 12px;
-  font-weight: 600;
-  transition: all 0.15s ease-out;
-}
-
-.btn-natural-secondary:hover {
-  background: #F5F5F4;
-  border-color: #D6D3D1;
-  color: #1C1917;
-}
-
-.fusion-gradient {
-  background: linear-gradient(135deg, #EA580C 0%, #DB2777 100%);
-}
-
-.fusion-gradient-subtle {
-  background: linear-gradient(135deg, #FAFAF9 0%, #F5F5F4 100%);
-}
-
-.view-fundus-accent {
-  border-top: 3px solid #EA580C;
-}
-
-.view-oct-accent {
-  border-top: 3px solid #DB2777;
 }
 
 /* Subtle, refined scrollbars */
@@ -618,11 +471,11 @@ html, body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #D6D3D1;
+  background: #EFE4DC;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #A8A29E;
+  background: #D9CBC2;
 }
 
 @media print {
@@ -636,4 +489,3 @@ html, body {
     display: block !important;
   }
 }
-

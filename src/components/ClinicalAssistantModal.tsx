@@ -134,35 +134,35 @@ export const ClinicalAssistantModal: React.FC<ClinicalAssistantModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
       <div className="bg-white rounded-2xl max-w-2xl w-full border border-[#EFE4DC] shadow-xl overflow-hidden max-h-[90vh] flex flex-col animate-in fade-in zoom-in-95 duration-200">
         {/* Header */}
-        <div className="p-4 border-b border-[#EFE4DC] flex items-center justify-between bg-gradient-to-r from-[#FFF7ED] to-[#FDF2F8] shrink-0">
+        <div className="p-4 border-b border-[#EFE4DC] flex items-center justify-between bg-gradient-to-r from-[#FFE5D8] to-[#FBE4EC] shrink-0">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#EA580C] to-[#DB2777] flex items-center justify-center text-white">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-[#F05A28] to-[#DB2777] flex items-center justify-center text-white">
               <Bot className="w-4 h-4" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <h3 className="font-serif font-bold text-sm text-[#2E2628]">
+                <h3 className="font-serif font-bold text-sm text-[#2B2024]">
                   {t('clinicalAssistantTitle', 'Clinical Decision Support Assistant')}
                 </h3>
-                <span className="text-[10px] px-2 py-0.2 rounded-full bg-white border border-[#EFE4DC] text-[#6E5C5F] font-semibold">
+                <span className="text-[10px] px-2 py-0.2 rounded-full bg-white border border-[#EFE4DC] text-[#6F6267] font-semibold">
                   {t('controlledModelExplainerBadge', 'Controlled Model Explainer')}
                 </span>
               </div>
-              <p className="text-[11px] text-[#6E5C5F]">
+              <p className="text-[11px] text-[#6F6267]">
                 {t('groundedInOutputsForCase', `Grounded in structured model outputs for Case ${result.patientId}`)}
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-[#6E5C5F] hover:bg-white transition-colors"
+            className="p-1.5 rounded-lg text-[#6F6267] hover:bg-white transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Safety Warning Banner */}
-        <div className="bg-[#FFF7ED] px-4 py-2 border-b border-[#FED7AA] flex items-center gap-2 text-[11px] text-[#C2410C] shrink-0">
+        <div className="bg-[#FFE5D8] px-4 py-2 border-b border-[#FED7AA] flex items-center gap-2 text-[11px] text-[#D84818] shrink-0">
           <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
           <span>
             {t('clinicalAssistantSafetyWarning', 'Decision support only. Assistant cannot prescribe or establish a clinical diagnosis.')}
@@ -181,8 +181,8 @@ export const ClinicalAssistantModal: React.FC<ClinicalAssistantModalProps> = ({
               <div
                 className={`w-7 h-7 rounded-full flex items-center justify-center text-white shrink-0 mt-0.5 ${
                   m.sender === 'user'
-                    ? 'bg-[#2E2628]'
-                    : 'bg-gradient-to-br from-[#EA580C] to-[#DB2777]'
+                    ? 'bg-[#2B2024]'
+                    : 'bg-gradient-to-br from-[#F05A28] to-[#DB2777]'
                 }`}
               >
                 {m.sender === 'user' ? <User className="w-3.5 h-3.5" /> : <Bot className="w-3.5 h-3.5" />}
@@ -191,8 +191,8 @@ export const ClinicalAssistantModal: React.FC<ClinicalAssistantModalProps> = ({
               <div
                 className={`p-3 rounded-2xl max-w-[85%] leading-relaxed whitespace-pre-line ${
                   m.sender === 'user'
-                    ? 'bg-[#FFF7ED] text-[#2E2628] border border-[#FED7AA] rounded-tr-xs'
-                    : 'bg-[#FAF8F6] text-[#2E2628] border border-[#EFE4DC] rounded-tl-xs'
+                    ? 'bg-[#FFE5D8] text-[#2B2024] border border-[#FED7AA] rounded-tr-xs'
+                    : 'bg-[#FAF8F6] text-[#2B2024] border border-[#EFE4DC] rounded-tl-xs'
                 }`}
               >
                 {m.text}
@@ -202,8 +202,8 @@ export const ClinicalAssistantModal: React.FC<ClinicalAssistantModalProps> = ({
           ))}
 
           {isThinking && (
-            <div className="flex items-center gap-2 text-[#6E5C5F] text-xs p-2">
-              <Bot className="w-4 h-4 text-[#EA580C] animate-pulse" />
+            <div className="flex items-center gap-2 text-[#6F6267] text-xs p-2">
+              <Bot className="w-4 h-4 text-[#F05A28] animate-pulse" />
               <span>{t('analyzingCaseParameters', 'Analyzing case parameters...')}</span>
             </div>
           )}
@@ -212,12 +212,12 @@ export const ClinicalAssistantModal: React.FC<ClinicalAssistantModalProps> = ({
         {/* Suggested Queries */}
         <div className="p-2.5 bg-[#FAF8F6] border-t border-[#EFE4DC] overflow-x-auto shrink-0">
           <div className="flex items-center gap-1.5 whitespace-nowrap">
-            <span className="text-[10px] font-bold text-[#6E5C5F] mr-1 uppercase">{t('quickPromptsLabel', 'Quick Prompts:')}</span>
+            <span className="text-[10px] font-bold text-[#6F6267] mr-1 uppercase">{t('quickPromptsLabel', 'Quick Prompts:')}</span>
             {suggestedQueries.map((q, i) => (
               <button
                 key={i}
                 onClick={() => handleSend(q)}
-                className="px-2.5 py-1 rounded-full bg-white border border-[#EFE4DC] text-[11px] text-[#2E2628] hover:border-[#EA580C] hover:bg-[#FFF7ED] transition-colors"
+                className="px-2.5 py-1 rounded-full bg-white border border-[#EFE4DC] text-[11px] text-[#2B2024] hover:border-[#F05A28] hover:bg-[#FFE5D8] transition-colors"
               >
                 {q}
               </button>
@@ -233,12 +233,12 @@ export const ClinicalAssistantModal: React.FC<ClinicalAssistantModalProps> = ({
             onChange={(e) => setInputQuery(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             placeholder={t('askQuestionAssistantPlaceholder', 'Ask a question about this screening result...')}
-            className="flex-1 px-3 py-2 rounded-xl border border-[#EFE4DC] text-xs text-[#2E2628] focus:outline-none focus:border-[#EA580C]"
+            className="flex-1 px-3 py-2 rounded-xl border border-[#EFE4DC] text-xs text-[#2B2024] focus:outline-none focus:border-[#F05A28]"
           />
           <button
             onClick={() => handleSend()}
             disabled={!inputQuery.trim() || isThinking}
-            className="p-2 rounded-xl bg-gradient-to-r from-[#EA580C] to-[#DB2777] text-white disabled:opacity-40 hover:opacity-95 transition-opacity"
+            className="p-2 rounded-xl bg-gradient-to-r from-[#F05A28] to-[#DB2777] text-white disabled:opacity-40 hover:opacity-95 transition-opacity"
             aria-label={t('sendQueryAria', 'Send query')}
           >
             <Send className="w-4 h-4" />
