@@ -435,11 +435,11 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
                 </div>
 
                 {/* 2. SCREENING HELPER */}
-                <div className="p-5 rounded-2xl border border-[#EFE4DC] dark:border-[#382E33] bg-white dark:bg-[#2A2226] hover:border-[#F05A28] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="p-5 rounded-2xl border border-[#EFE4DC] dark:border-[#382E33] bg-white dark:bg-[#2A2226] hover:border-[#D94A78] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-lg bg-stone-700 text-white flex items-center justify-center">
-                        <Stethoscope className="w-4 h-4" />
+                      <div className="w-7 h-7 rounded-lg bg-[#FBE4EC] text-[#D94A78] flex items-center justify-center">
+                        <Stethoscope className="w-4 h-4 text-[#D94A78]" />
                       </div>
                       <div className="text-sm font-bold text-[#2B2024] dark:text-[#FFF7F2]">
                         {t('welcomeRoleHelperHeading', 'I HELP WITH SCREENING')}
@@ -455,7 +455,7 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
                       voiceService.stop();
                       onContinueAsHelper();
                     }}
-                    className="shrink-0 px-5 py-2.5 rounded-xl bg-stone-800 hover:bg-black text-white text-xs font-semibold shadow-xs transition-colors"
+                    className="shrink-0 px-5 py-2.5 rounded-xl bg-[#D94A78] hover:bg-[#BF3663] text-white text-xs font-semibold shadow-xs transition-colors"
                   >
                     {t('signInBtn', 'Sign In')}
                   </button>
@@ -465,8 +465,8 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
                 <div className="p-5 rounded-2xl border border-[#EFE4DC] dark:border-[#382E33] bg-white dark:bg-[#2A2226] hover:border-[#F05A28] transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-lg bg-stone-700 text-white flex items-center justify-center">
-                        <FlaskConical className="w-4 h-4" />
+                      <div className="w-7 h-7 rounded-lg bg-[#FFE5D8] text-[#F05A28] flex items-center justify-center">
+                        <FlaskConical className="w-4 h-4 text-[#F05A28]" />
                       </div>
                       <div className="text-sm font-bold text-[#2B2024] dark:text-[#FFF7F2]">
                         {t('welcomeRoleResearcherHeading', "I'M A RESEARCHER")}
@@ -482,7 +482,7 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
                       voiceService.stop();
                       onContinueAsResearcher();
                     }}
-                    className="shrink-0 px-5 py-2.5 rounded-xl border border-stone-300 dark:border-stone-600 hover:bg-stone-100 dark:hover:bg-stone-800 text-[#2B2024] dark:text-[#FFF7F2] text-xs font-semibold transition-colors"
+                    className="shrink-0 px-5 py-2.5 rounded-xl border border-[#EFE4DC] hover:border-[#D9CBC2] bg-white hover:bg-[#FFFDF9] text-[#2B2024] dark:text-[#FFF7F2] text-xs font-semibold transition-colors"
                   >
                     {t('signInBtn', 'Sign In')}
                   </button>

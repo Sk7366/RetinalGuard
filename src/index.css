@@ -64,7 +64,7 @@
   --color-error-red: #B42318;
 
   /* Orange Scales for CTAs & Screening */
-  --color-orange-50: #FFF7ED;
+  --color-orange-50: #FFE5D8;
   --color-orange-100: #FFE5D8;
   --color-orange-200: #FED7AA;
   --color-orange-500: #F05A28;
@@ -72,7 +72,7 @@
   --color-orange-700: #D84818;
 
   /* Raspberry Pink Scales for Accents & Highlights */
-  --color-pink-50: #FDF2F8;
+  --color-pink-50: #FBE4EC;
   --color-pink-100: #FBE4EC;
   --color-pink-200: #FBCFE8;
   --color-pink-500: #D94A78;
@@ -204,6 +204,59 @@ html, body {
 }
 
 /* =========================================================================
+   EXPLICIT DESIGN SYSTEM ATOMIC UTILITIES
+   Ensures 100% rendering fidelity for all core healthcare palette tokens:
+   - Primary Orange: #F05A28 (Hover: #D84818)
+   - Raspberry Pink: #D94A78 (Hover: #BF3663)
+   - Soft Peach: #FFE5D8
+   - Blush: #FBE4EC
+   - Warm Ivory: #FFFDF9
+   - Primary Text: #2B2024
+   - Secondary Text: #6F6267
+   - Success Teal: #087F6A
+   - Warning Amber: #B86B00
+   - Error Red: #B42318
+   ========================================================================= */
+
+.bg-\[\#F05A28\], .bg-primary-orange { background-color: #F05A28 !important; }
+.hover\:bg-\[\#D84818\]:hover { background-color: #D84818 !important; }
+.text-\[\#F05A28\], .text-primary-orange { color: #F05A28 !important; }
+.border-\[\#F05A28\], .border-primary-orange { border-color: #F05A28 !important; }
+
+.bg-\[\#D94A78\], .bg-raspberry-pink { background-color: #D94A78 !important; }
+.hover\:bg-\[\#BF3663\]:hover { background-color: #BF3663 !important; }
+.text-\[\#D94A78\], .text-raspberry-pink { color: #D94A78 !important; }
+.border-\[\#D94A78\], .border-raspberry-pink { border-color: #D94A78 !important; }
+
+.bg-\[\#FFE5D8\], .bg-soft-peach { background-color: #FFE5D8 !important; }
+.text-\[\#FFE5D8\], .text-soft-peach { color: #FFE5D8 !important; }
+.border-\[\#FFE5D8\], .border-soft-peach { border-color: #FFE5D8 !important; }
+
+.bg-\[\#FBE4EC\], .bg-blush { background-color: #FBE4EC !important; }
+.text-\[\#FBE4EC\], .text-blush { color: #FBE4EC !important; }
+.border-\[\#FBE4EC\], .border-blush { border-color: #FBE4EC !important; }
+
+.bg-\[\#FFFDF9\], .bg-warm-ivory { background-color: #FFFDF9 !important; }
+.text-\[\#2B2024\], .text-primary-text { color: #2B2024 !important; }
+.text-\[\#6F6267\], .text-secondary-text { color: #6F6267 !important; }
+.border-\[\#EFE4DC\] { border-color: #EFE4DC !important; }
+
+.text-\[\#087F6A\], .text-success-teal { color: #087F6A !important; }
+.bg-\[\#087F6A\], .bg-success-teal { background-color: #087F6A !important; }
+.bg-\[\#E6F5F2\] { background-color: #E6F5F2 !important; }
+.border-\[\#CCEBE5\] { border-color: #CCEBE5 !important; }
+
+.text-\[\#B86B00\], .text-warning-amber { color: #B86B00 !important; }
+.bg-\[\#B86B00\], .bg-warning-amber { background-color: #B86B00 !important; }
+.bg-\[\#FFF8E6\] { background-color: #FFF8E6 !important; }
+.border-\[\#FFF1CC\] { border-color: #FFF1CC !important; }
+
+.text-\[\#B42318\], .text-error-red { color: #B42318 !important; }
+.bg-\[\#B42318\], .bg-error-red { background-color: #B42318 !important; }
+.bg-\[\#FDF2F2\] { background-color: #FDF2F2 !important; }
+.border-\[\#FDE8E8\] { border-color: #FDE8E8 !important; }
+
+/* =========================================================================
    DESIGN SYSTEM UTILITIES: ACTIONS, ACCENTS & STATUS
    Rules:
    - Orange: primary CTAs and screening actions (#F05A28)
@@ -268,7 +321,7 @@ html, body {
 }
 
 .btn-secondary-accent:hover {
-  background-color: #FDF2F8;
+  background-color: #FBE4EC;
   border-color: #D94A78;
 }
 
@@ -389,7 +442,7 @@ html.dark body {
 
 html.dark .bg-white,
 html.dark .bg-\[\#FFFDF9\],
-html.dark .bg-\[\#FFFDFB\],
+html.dark .bg-\[\#FFFDF9\],
 html.dark .card-natural {
   background-color: #1B161A !important;
   color: #FAF5F7 !important;
@@ -397,12 +450,12 @@ html.dark .card-natural {
 }
 
 html.dark .text-\[\#2B2024\],
-html.dark .text-\[\#2E2628\] {
+html.dark .text-\[\#2B2024\] {
   color: #FAF5F7 !important;
 }
 
 html.dark .text-\[\#6F6267\],
-html.dark .text-\[\#6E5C5F\] {
+html.dark .text-\[\#6F6267\] {
   color: #C4B6BC !important;
 }
 
@@ -425,9 +478,9 @@ html.high-contrast .bg-\[\#FFFDF9\] {
 }
 
 html.high-contrast .text-\[\#2B2024\],
-html.high-contrast .text-\[\#2E2628\],
+html.high-contrast .text-\[\#2B2024\],
 html.high-contrast .text-\[\#6F6267\],
-html.high-contrast .text-\[\#6E5C5F\] {
+html.high-contrast .text-\[\#6F6267\] {
   color: #000000 !important;
   font-weight: 600 !important;
 }

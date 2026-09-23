@@ -692,7 +692,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   type="button"
                   id="navbar-primary-cta-screening-now"
                   onClick={() => handlePublicNav('get-screened')}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-gradient-to-r from-[#F05A28] to-[#E11D48] hover:from-[#D84818] hover:to-[#BE123C] text-white font-extrabold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all whitespace-nowrap ring-2 ring-[#F05A28]/30 shrink-0"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-[#F05A28] hover:bg-[#D84818] text-white font-extrabold text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all whitespace-nowrap ring-2 ring-[#F05A28]/25 shrink-0"
                 >
                   <Eye className="w-3.5 h-3.5 text-white" />
                   <span className="hidden sm:inline">{t('navScreeningNowCta', 'SCREENING NOW')}</span>
@@ -703,9 +703,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                   type="button"
                   id="navbar-secondary-cta-find-screening"
                   onClick={() => handlePublicNav('find-screening')}
-                  className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-[#FFE5D8] hover:bg-[#FFEDD5] text-[#D84818] border border-[#FED7AA] font-bold text-xs uppercase tracking-wider transition-all whitespace-nowrap shrink-0"
+                  className="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl bg-[#FBE4EC] hover:bg-[#F8D7E3] text-[#D94A78] border border-[#FBCFE8] font-bold text-xs uppercase tracking-wider transition-all whitespace-nowrap shrink-0"
                 >
-                  <MapPin className="w-3.5 h-3.5 text-[#F05A28]" />
+                  <MapPin className="w-3.5 h-3.5 text-[#D94A78]" />
                   <span>{t('navFindCenterShort', 'FIND CENTER')}</span>
                 </button>
               </div>

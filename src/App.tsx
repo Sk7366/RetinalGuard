@@ -80,9 +80,7 @@ function AppContent() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isRoleModalOpen, setIsRoleModalOpen] = useState(false);
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
-  const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(() => {
-    return localStorage.getItem('retinaguard_welcomed_v2') !== 'true';
-  });
+  const [isWelcomeModalOpen, setIsWelcomeModalOpen] = useState<boolean>(false);
   const [isPatientAuthModalOpen, setIsPatientAuthModalOpen] = useState<boolean>(false);
   const [patientAuthInitialTab, setPatientAuthInitialTab] = useState<'login' | 'register'>('register');
   const [isAccessibilityModalOpen, setIsAccessibilityModalOpen] = useState<boolean>(false);

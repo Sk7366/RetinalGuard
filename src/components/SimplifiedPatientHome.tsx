@@ -361,7 +361,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
               <button
                 id="hero-how-screening-works-btn"
                 onClick={scrollToHowScreeningWorks}
-                className="px-5 py-3.5 rounded-xl bg-white hover:bg-[#FFFDF9] text-[#2B2024] border border-[#EFE4DC] hover:border-[#D9CBC2] font-semibold text-sm sm:text-base transition-colors flex items-center justify-center gap-2 min-h-[48px]"
+                className="px-5 py-3.5 rounded-xl bg-[#FBE4EC] hover:bg-[#F8D7E3] text-[#D94A78] border border-[#FBCFE8] hover:border-[#D94A78] font-semibold text-sm sm:text-base transition-colors flex items-center justify-center gap-2 min-h-[48px]"
               >
                 <BookOpen className="w-4 h-4 text-[#D94A78]" />
                 <span>How Screening Works</span>
