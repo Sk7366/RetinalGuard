@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
   Activity,
+  ArrowLeft,
   ArrowRight,
   BarChart3,
   BookOpen,
@@ -18,6 +19,7 @@ import {
   Globe,
   HeartHandshake,
   HelpCircle,
+  Home,
   Layers,
   LayoutDashboard,
   LogIn,
@@ -84,6 +86,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   providerRoute,
   onNavigatePublic,
   onNavigateProvider,
+  onSwitchToPublic,
   hasActiveResult,
   onViewResults,
   currentRole,
@@ -163,10 +166,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               id="navbar-brand-logo-btn"
               type="button"
               onClick={() => {
-                if (isResearcher) {
-                  handleProviderNav('research');
-                } else if (isHelper) {
-                  handleProviderNav('dashboard');
+                if (onSwitchToPublic) {
+                  onSwitchToPublic();
                 } else {
                   handlePublicNav('overview');
                 }
@@ -214,10 +215,24 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             {/* -------------------------------------------------------------
                 A. PATIENT NAVIGATION
-                Screening Now | Why Screening | How It Works | Find Screening | Learn | Help
+                Home | Screening Now | Why Screening | How It Works | Find Screening | Learn | Help
                 ------------------------------------------------------------- */}
             {isPatient && (
               <>
+                <button
+                  type="button"
+                  id="nav-patient-home"
+                  onClick={() => handlePublicNav('overview')}
+                  className={`px-2.5 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                    publicRoute === 'overview'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] font-bold shadow-2xs'
+                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]'
+                  }`}
+                >
+                  <Home className="w-3.5 h-3.5" />
+                  <span>{t('navHome', 'Home')}</span>
+                </button>
+
                 <button
                   type="button"
                   id="nav-patient-screening-now"
@@ -686,7 +701,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 ULTRA-PROMINENT PRIMARY CTA FOR PATIENT: "SCREENING NOW"
                 The purpose of the platform must be immediately obvious: SCREENING
                 ------------------------------------------------------------- */}
-            {isPatient && (
+            {isPatient ? (
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <button
                   type="button"
@@ -709,6 +724,23 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <span>{t('navFindCenterShort', 'FIND CENTER')}</span>
                 </button>
               </div>
+            ) : (
+              <button
+                type="button"
+                id="navbar-back-to-patient-view"
+                onClick={() => {
+                  if (onSwitchToPublic) {
+                    onSwitchToPublic();
+                  } else {
+                    handlePublicNav('overview');
+                  }
+                }}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-[#FFE5D8] hover:bg-[#FFEDD5] text-[#D84818] border border-[#FED7AA] font-bold text-xs uppercase tracking-wider transition-all whitespace-nowrap shrink-0 shadow-xs"
+              >
+                <ArrowLeft className="w-3.5 h-3.5 text-[#F05A28]" />
+                <span className="hidden sm:inline">Public Patient View</span>
+                <span className="sm:hidden">Patient View</span>
+              </button>
             )}
 
             {/* -------------------------------------------------------------

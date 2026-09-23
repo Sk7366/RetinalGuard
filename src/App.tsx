@@ -61,18 +61,25 @@ function AppContent() {
 
   // App Experience: 'patient' (default) | 'helper' | 'researcher'
   const [experience, setExperience] = useState<AppExperience>(() => {
-    const user = authService.getCurrentUser();
-    if (user.role === 'researcher') return 'researcher';
-    if (user.role === 'helper' || user.role === 'technician' || user.role === 'provider') return 'helper';
+    const hash = typeof window !== 'undefined' ? window.location.hash.replace('#', '').trim() : '';
+    if (hash.startsWith('researcher/')) return 'researcher';
+    if (hash.startsWith('helper/') || hash.startsWith('provider/')) return 'helper';
     return 'patient';
   });
 
   // Navigation State
   const [isProviderMode, setIsProviderMode] = useState<boolean>(() => {
-    const user = authService.getCurrentUser();
-    return user.role === 'helper' || user.role === 'provider' || user.role === 'technician' || user.role === 'researcher';
+    const hash = typeof window !== 'undefined' ? window.location.hash.replace('#', '').trim() : '';
+    return hash.startsWith('helper/') || hash.startsWith('provider/') || hash.startsWith('researcher/');
   });
-  const [publicRoute, setPublicRoute] = useState<PublicRoute>('overview');
+  const [publicRoute, setPublicRoute] = useState<PublicRoute>(() => {
+    const hash = typeof window !== 'undefined' ? window.location.hash.replace('#', '').trim() : '';
+    if (hash.startsWith('public/')) {
+      const p = hash.replace('public/', '') as PublicRoute;
+      return p || 'overview';
+    }
+    return 'overview';
+  });
   const [providerRoute, setProviderRoute] = useState<ProviderRoute>('dashboard');
   const [isViewingActiveResult, setIsViewingActiveResult] = useState<boolean>(false);
 
@@ -163,7 +170,14 @@ function AppContent() {
         return;
       }
 
-      if (!hash) return;
+      // Default to Public Patient Overview if hash is empty or root
+      if (!hash || hash === '' || hash === '/' || hash === 'public/overview' || hash === 'overview') {
+        setExperience('patient');
+        setIsProviderMode(false);
+        setPublicRoute('overview');
+        setIsViewingActiveResult(false);
+        return;
+      }
 
       if (hash.startsWith('helper/') || hash.startsWith('provider/')) {
         if (!hasStaffAccess) {
