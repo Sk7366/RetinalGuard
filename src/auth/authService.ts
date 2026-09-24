@@ -25,7 +25,18 @@ export const authService = {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        return JSON.parse(saved);
+        const parsed: User = JSON.parse(saved);
+        // Only return authenticated user if they explicitly completed sign in with active token
+        if (
+          parsed &&
+          parsed.isLoggedIn === true &&
+          parsed.role !== 'public' &&
+          parsed.id !== 'guest-patient' &&
+          Boolean(parsed.token) &&
+          Boolean(parsed.email)
+        ) {
+          return parsed;
+        }
       }
     } catch {
       // ignore parsing error
@@ -33,47 +44,67 @@ export const authService = {
 
     return {
       id: 'guest-patient',
-      email: 'guest@community.retinaguard.ai',
-      name: 'Guest Visitor',
+      email: '',
+      name: '',
       role: 'public',
       experience: 'patient',
-      verificationStatus: 'pending',
+      emailVerified: false,
+      phoneVerified: false,
+      verificationStatus: 'unverified',
       authorizedRoles: ['patient'],
       permissions: ROLE_PERMISSIONS.public,
+      isLoggedIn: false,
     };
   },
 
   /**
+   * Check if the current session is an authenticated user (not guest)
+   */
+  isAuthenticated(): boolean {
+    const user = this.getCurrentUser();
+    return (
+      Boolean(user.isLoggedIn) &&
+      user.role !== 'public' &&
+      Boolean(user.token) &&
+      user.id !== 'guest-patient' &&
+      Boolean(user.email)
+    );
+  },
+
+  /**
    * Authenticate user with credentials or onboarding
+   * STRICT MODE ISOLATION: For that signed profile, ONLY that mode is enabled.
    */
   async login(
     email: string,
     role: UserRole = 'helper',
     meta?: Partial<User>
   ): Promise<User> {
-    const existing = this.getCurrentUser();
-    const existingAuth = existing.authorizedRoles || [];
     const normalizedRole: UserRole = role === 'public' ? 'patient' : role;
-    const combinedRoles: UserRole[] = Array.from(new Set([...existingAuth, normalizedRole, ...(meta?.authorizedRoles || [])]));
 
     const user: User = {
-      id: `usr-${Math.random().toString(36).substring(2, 9)}`,
+      id: meta?.id || `usr-${Math.random().toString(36).substring(2, 9)}`,
       email,
       name: meta?.name || email.split('@')[0].replace('.', ' ').replace(/^./, (c) => c.toUpperCase()),
-      role,
-      experience: role === 'researcher' ? 'researcher' : role === 'public' || role === 'patient' ? 'patient' : 'helper',
-      helperRoleTitle: meta?.helperRoleTitle || (role === 'helper' ? 'Community Health Worker' : undefined),
-      organization: meta?.organization || (role === 'researcher' ? 'AI Medical Imaging Collaborative' : 'Community Health Mission'),
+      role: normalizedRole,
+      experience: normalizedRole === 'researcher' ? 'researcher' : normalizedRole === 'helper' ? 'helper' : 'patient',
+      helperRoleTitle: meta?.helperRoleTitle || (normalizedRole === 'helper' ? 'Community Health Worker' : undefined),
+      organization: meta?.organization || (normalizedRole === 'researcher' ? 'AI Medical Imaging Collaborative' : 'Community Health Mission'),
       location: meta?.location || 'Bengaluru, India',
-      phone: meta?.phone || (role === 'helper' ? '+91 98450 67890' : undefined),
-      verificationStatus: meta?.verificationStatus || 'Verified',
+      phone: meta?.phone || (normalizedRole === 'helper' ? '+91 98450 67890' : undefined),
+      dateOfBirth: meta?.dateOfBirth,
+      emailVerified: meta?.emailVerified ?? true,
+      phoneVerified: meta?.phoneVerified ?? true,
+      verificationStatus: meta?.verificationStatus || (normalizedRole === 'helper' ? 'Verified' : 'verified'),
       isDemoVerification: meta?.isDemoVerification ?? true,
-      permissions: ROLE_PERMISSIONS[role] || ROLE_PERMISSIONS.helper,
-      authorizedRoles: combinedRoles.length > 0 ? combinedRoles : [normalizedRole],
+      permissions: ROLE_PERMISSIONS[normalizedRole] || ROLE_PERMISSIONS.patient,
+      // ONLY the signed profile's role is enabled:
+      authorizedRoles: [normalizedRole],
       clinicId: 'clinic-blr-01',
-      clinicName: 'Victoria Hospital Regional Eye Center',
-      token: `jwt_mock_${Date.now()}`,
+      clinicName: meta?.organization || 'Victoria Hospital Regional Eye Center',
+      token: `jwt_${normalizedRole}_${Date.now()}`,
       voiceGuidanceEnabled: true,
+      isLoggedIn: true,
     };
 
     try {
@@ -83,6 +114,21 @@ export const authService = {
     }
 
     return user;
+  },
+
+  /**
+   * Quick demo login for Patient Mode
+   */
+  async loginDemoPatient(): Promise<User> {
+    return this.login('meenakshi.amma@gmail.com', 'patient', {
+      name: 'K. Meenakshi Amma',
+      phone: '+91 98451 22334',
+      dateOfBirth: '1963-04-12',
+      emailVerified: true,
+      phoneVerified: true,
+      verificationStatus: 'verified',
+      preferredLanguage: 'en',
+    });
   },
 
   /**
@@ -114,6 +160,7 @@ export const authService = {
       permissions: ROLE_PERMISSIONS.patient,
       authorizedRoles: ['patient'],
       token: `jwt_patient_${Date.now()}`,
+      isLoggedIn: true,
     };
 
     try {
@@ -126,7 +173,7 @@ export const authService = {
   },
 
   /**
-   * Register a new Screening Helper
+   * Register a new Screening Helper (Medical Worker)
    */
   async registerHelper(data: {
     name: string;
@@ -158,6 +205,7 @@ export const authService = {
       token: `jwt_helper_${Date.now()}`,
       voiceGuidanceEnabled: true,
       registeredAt: new Date().toISOString(),
+      isLoggedIn: true,
     };
 
     try {
@@ -170,7 +218,7 @@ export const authService = {
   },
 
   /**
-   * Quick demo login for Screening Helper
+   * Quick demo login for Medical Worker (Screening Helper)
    */
   async loginDemoHelper(preset?: {
     name?: string;
@@ -214,13 +262,13 @@ export const authService = {
   },
 
   /**
-   * Quick demo login for Researcher
+   * Quick demo login for Researcher Mode
    */
   async loginDemoResearcher(): Promise<User> {
     return this.login('sai.krishnan@visionai.edu', 'researcher', {
       name: 'Dr. Sai Krishnan',
       organization: 'Medical AI & Retina Imaging Lab',
-      location: 'Indian Institute of Science / AIIMS',
+      location: 'Bengaluru, Karnataka',
       verificationStatus: 'verified',
       isDemoVerification: true,
     });
@@ -244,15 +292,17 @@ export const authService = {
   },
 
   /**
-   * Switch active persona
+   * Switch active persona (Mode selection)
    */
   switchRole(role: UserRole): User {
     const current = this.getCurrentUser();
+    const normalizedRole: UserRole = role === 'public' ? 'patient' : role;
     const updated: User = {
       ...current,
-      role,
-      experience: role === 'researcher' ? 'researcher' : role === 'public' || role === 'patient' ? 'patient' : 'helper',
-      permissions: ROLE_PERMISSIONS[role] || ROLE_PERMISSIONS.public,
+      role: normalizedRole,
+      experience: normalizedRole === 'researcher' ? 'researcher' : normalizedRole === 'helper' ? 'helper' : 'patient',
+      authorizedRoles: [normalizedRole],
+      permissions: ROLE_PERMISSIONS[normalizedRole] || ROLE_PERMISSIONS.public,
     };
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
@@ -263,7 +313,7 @@ export const authService = {
   },
 
   /**
-   * Logout - resets to public guest
+   * Logout - resets to public unauthenticated guest
    */
   logout(): User {
     try {
@@ -273,13 +323,16 @@ export const authService = {
     }
     return {
       id: 'guest-patient',
-      email: 'guest@community.retinaguard.ai',
-      name: 'Guest Visitor',
+      email: '',
+      name: '',
       role: 'public',
       experience: 'patient',
-      verificationStatus: 'pending',
+      emailVerified: false,
+      phoneVerified: false,
+      verificationStatus: 'unverified',
       authorizedRoles: ['patient'],
       permissions: ROLE_PERMISSIONS.public,
+      isLoggedIn: false,
     };
   },
 };

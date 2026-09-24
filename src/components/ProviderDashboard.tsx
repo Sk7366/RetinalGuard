@@ -9,10 +9,13 @@ import {
   Camera,
   Check,
   CheckCircle2,
+  ChevronRight,
   Clock,
+  Cpu,
   Eye,
   FileCheck,
   FileText,
+  Layers,
   MapPin,
   Phone,
   RotateCcw,
@@ -173,7 +176,6 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
 }) => {
   const { t } = useTranslation();
   const [baseMetrics, setBaseMetrics] = useState(SIMULATED_TODAY_METRICS);
-  const [searchQuery, setSearchQuery] = useState('');
   const [appointments, setAppointments] = useState<TodayAppointmentItem[]>(SAMPLE_TODAY_APPOINTMENTS);
   const [followUps, setFollowUps] = useState<FollowUpItem[]>(SAMPLE_FOLLOW_UPS);
   const [activeUser, setActiveUser] = useState<User>(() => propUser || authService.getCurrentUser());
@@ -196,17 +198,20 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
     };
   }, []);
 
-  // Live session increments
+  // Compute live increments
   const liveTotal = history.length;
-  const liveLow = history.filter((h) => h.finalGrade <= 1).length;
   const liveReview = history.filter((h) => h.finalGrade === 2).length;
   const livePriority = history.filter((h) => h.finalGrade >= 3 || h.oct.dmeDetected).length;
 
-  const todayScreenings = baseMetrics.totalScreened + liveTotal;
-  const lowConcern = baseMetrics.lowConcern + liveLow;
-  const reviewRecommended = baseMetrics.reviewRecommended + liveReview;
-  const priorityReferral = baseMetrics.priorityReferral + livePriority;
-  const ungradable = baseMetrics.ungradable;
+  // Exact 4 Dashboard Metrics requested:
+  // 1. Today's Screening
+  // 2. Awaiting Review
+  // 3. Referral Recommended
+  // 4. Follow-up Due
+  const todaysScreeningCount = baseMetrics.totalScreened + liveTotal;
+  const awaitingReviewCount = baseMetrics.reviewRecommended + liveReview;
+  const referralRecommendedCount = baseMetrics.priorityReferral + livePriority;
+  const followUpDueCount = followUps.length;
 
   const handleSimulateStatus = (status: VerificationStatus) => {
     const updated = authService.setVerificationStatus(status);
@@ -232,33 +237,33 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
   };
 
   const roleTitle = activeUser.helperRoleTitle || 'Community Health Worker';
-  const isDemoVerified = activeUser.isDemoVerification ?? true;
 
   return (
-    <div className="space-y-7 max-w-7xl mx-auto pb-20" id="screening-helper-dashboard-root">
+    <div className="space-y-7 max-w-7xl mx-auto pb-20 px-2 sm:px-4" id="screening-helper-dashboard-root">
       {/* =========================================================================
-          HELPER HEADER & VERIFICATION BADGE
+          1. HEADER: Screening Helper
+          Do not fake verification.
+          Only verified Screening Helpers should access this workspace in production.
+          If verification is currently demo-only, clearly show: DEMO VERIFIED
           ========================================================================= */}
       <section className="bg-white rounded-2xl border border-[#EFE4DC] p-5 sm:p-6 lg:p-7 shadow-xs">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
           <div className="space-y-2.5 max-w-3xl">
-            {/* Context Badges */}
+            {/* Header Badge & Demo Verification */}
             <div className="flex items-center gap-2 flex-wrap">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-black uppercase tracking-wider bg-[#FFE5D8] text-[#F05A28] border border-[#FED7AA]">
                 <Stethoscope className="w-3.5 h-3.5 text-[#F05A28]" />
-                <span>SCREENING HELPER WORKSPACE</span>
+                <span>Screening Helper</span>
               </span>
 
-              {/* CRITICAL: DEMO VERIFIED BADGE */}
+              {/* CRITICAL REQUIRED BADGE: DEMO VERIFIED */}
               <span
                 id="badge-demo-verified"
                 className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-black bg-[#ECFDF5] text-[#047857] border border-[#A7F3D0] shadow-2xs"
+                title="Accredited Screening Helper credentials active in preview mode"
               >
                 <ShieldCheck className="w-4 h-4 text-[#059669]" />
                 <span>DEMO VERIFIED</span>
-                <span className="text-[10px] font-normal text-[#065F46] hidden sm:inline">
-                  · Accredited Healthcare Personnel
-                </span>
               </span>
 
               <span className="text-[11px] text-[#6F6267] bg-[#FFFDF9] px-2.5 py-1 rounded-md border border-[#EFE4DC]">
@@ -268,23 +273,31 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
 
             {/* Helper Identity */}
             <div>
-              <h1 className="text-xl sm:text-2xl lg:text-3xl font-serif font-bold text-[#2B2024] tracking-tight flex items-center gap-2 flex-wrap">
-                <span>{activeUser.name || 'Ananya Rao'}</span>
-                <span className="text-sm sm:text-base font-normal text-[#F05A28] font-sans">
-                  · {roleTitle}
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-serif font-bold text-[#2B2024] tracking-tight flex items-center gap-2 flex-wrap">
+                <span>Screening Helper</span>
+                <span className="text-base sm:text-lg font-normal text-[#F05A28] font-sans">
+                  · {activeUser.name || 'Ananya Rao'} ({roleTitle})
                 </span>
               </h1>
               <p className="text-xs sm:text-sm text-[#6F6267] mt-1 leading-relaxed max-w-2xl">
-                Frontline non-mydriatic retinal photography intake, immediate AI risk screening, clinical appointment check-ins, and closed-loop patient referral coordination.
+                Frontline non-mydriatic fundus intake, automated clarity verification, AI screening support, and closed-loop specialist referral dispatch.
               </p>
+            </div>
+
+            {/* Verification Safety Principle Notice */}
+            <div className="flex items-center gap-1.5 text-[11px] text-[#6F6267] pt-0.5">
+              <ShieldAlert className="w-3.5 h-3.5 text-[#059669] shrink-0" />
+              <span>
+                <strong>Verification Policy:</strong> Only verified Screening Helpers should access this workspace in production. Demo verification is active for testing.
+              </span>
             </div>
           </div>
 
-          {/* Quick Actions & Demo Switcher */}
+          {/* Quick Header CTA */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0">
             <button
               type="button"
-              id="dashboard-quick-start-screening-btn"
+              id="dashboard-header-start-screening-btn"
               onClick={onNewScreening}
               className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#F05A28] hover:bg-[#D84818] text-white text-sm font-bold shadow-xs transition-colors cursor-pointer"
             >
@@ -294,7 +307,7 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
 
             <button
               type="button"
-              id="dashboard-quick-camp-mode-btn"
+              id="dashboard-header-camp-btn"
               onClick={onStartCamp}
               className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white hover:bg-[#FFFDF9] text-[#2B2024] border border-[#EFE4DC] text-sm font-semibold transition-colors cursor-pointer"
             >
@@ -304,22 +317,22 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
           </div>
         </div>
 
-        {/* PROTOTYPE TESTING CONTROLS IN HELPER DASHBOARD */}
+        {/* Prototype Verification Simulation Toolbar */}
         <div className="mt-4 pt-4 border-t border-[#EFE4DC] flex flex-wrap items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-bold text-[#8E7E81] uppercase tracking-wider">
-              Prototype Verification Test:
+              Verification State:
             </span>
-            <span className="text-[11px] text-[#6F6267]">
-              Current Status: <strong className="text-[#059669]">Verified</strong>
+            <span className="text-[11px] text-[#059669] font-semibold bg-[#ECFDF5] px-2 py-0.5 rounded border border-[#A7F3D0]">
+              ✓ Verified (Demo Mode Active)
             </span>
           </div>
           <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-[11px] text-[#8E7E81]">Test Gate Restrictions:</span>
             <button
               type="button"
               onClick={() => handleSimulateStatus('Pending Verification')}
               className="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-[#FFFBEB] hover:bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] transition-colors cursor-pointer"
-              title="Test Restricted Gate when status is Pending Verification"
             >
               Simulate Pending Gate
             </button>
@@ -327,284 +340,453 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
               type="button"
               onClick={() => handleSimulateStatus('Rejected')}
               className="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-[#FEF2F2] hover:bg-[#FEE2E2] text-[#991B1B] border border-[#FECACA] transition-colors cursor-pointer"
-              title="Test Restricted Gate when status is Rejected"
             >
               Simulate Rejected Gate
             </button>
-            <button
-              type="button"
-              onClick={() => handleSimulateStatus('Suspended')}
-              className="px-2.5 py-1 rounded-lg text-[11px] font-medium bg-[#FDF4FF] hover:bg-[#FCE7F3] text-[#9E254E] border border-[#F5D0FE] transition-colors cursor-pointer"
-              title="Test Restricted Gate when status is Suspended"
-            >
-              Simulate Suspended Gate
-            </button>
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          PRIORITY 1: START SCREENING (TOP PRIMARY ACTION MODULE)
+          2. DASHBOARD METRICS:
+          Today's Screening
+          Awaiting Review
+          Referral Recommended
+          Follow-up Due
           ========================================================================= */}
       <section
-        id="section-helper-start-screening"
-        className="bg-gradient-to-r from-[#FFE5D8] via-white to-[#FFFDF9] rounded-2xl border-2 border-[#FED7AA] p-5 sm:p-6 lg:p-7 shadow-xs space-y-4"
-        aria-label="Start Screening Priority Section"
-      >
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#F05A28] animate-pulse" />
-            <h2 className="text-base sm:text-lg font-bold text-[#2B2024] uppercase tracking-wide">
-              1. Start Screening
-            </h2>
-            <span className="px-2 py-0.5 rounded text-[10px] font-black uppercase bg-[#F05A28] text-white">
-              Primary Workflow
-            </span>
-          </div>
-          <span className="text-xs text-[#8E7E81]">
-            Standard 45° Non-Mydriatic Protocol
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-center">
-          <div className="lg:col-span-2 space-y-2">
-            <h3 className="text-lg sm:text-xl font-serif font-bold text-[#2B2024]">
-              Ready to examine next patient encounter
-            </h3>
-            <p className="text-xs sm:text-sm text-[#6F6267] leading-relaxed">
-              Capture or upload 2D macula-centered & disc-centered fundus photographs. Automated clarity analysis validates focus and illumination before instant multimodal AI risk triaging.
-            </p>
-
-            <div className="flex items-center gap-4 text-xs text-[#6F6267] pt-2">
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#059669]" />
-                Auto-Quality Gate
-              </span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#059669]" />
-                Grad-CAM Lesion Heatmap
-              </span>
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#059669]" />
-                OCT-DME Verification
-              </span>
-            </div>
-          </div>
-
-          <div className="flex flex-col sm:flex-row lg:flex-col gap-3 justify-center">
-            <button
-              type="button"
-              id="btn-launch-screening-encounter"
-              onClick={onNewScreening}
-              className="w-full inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl bg-[#F05A28] hover:bg-[#D84818] text-white text-sm font-bold shadow-md transition-all cursor-pointer group"
-            >
-              <Camera className="w-5 h-5 text-orange-100 group-hover:scale-110 transition-transform" />
-              <span>Launch Screening Encounter</span>
-              <ArrowRight className="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" />
-            </button>
-
-            <button
-              type="button"
-              id="btn-launch-camp-flow"
-              onClick={onStartCamp}
-              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-[#FFFDF9] text-[#2B2024] border border-[#EFE4DC] text-xs font-bold transition-colors cursor-pointer"
-            >
-              <Tent className="w-4 h-4 text-[#F05A28]" />
-              <span>Screening Camp High-Throughput Mode</span>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          PRIORITY 2: TODAY'S CASES
-          ========================================================================= */}
-      <section
-        id="section-helper-todays-cases"
-        className="space-y-4"
-        aria-label="Today's Cases Priority Section"
+        id="section-helper-dashboard-metrics"
+        aria-label="Dashboard Metrics Section"
+        className="space-y-2.5"
       >
         <div className="flex items-center justify-between text-xs px-0.5">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-[#F05A28]" />
-            <h2 className="font-bold uppercase tracking-wider text-[#2B2024] text-sm">
-              2. Today's Cases & Triage Metrics
-            </h2>
-          </div>
-          <span className="text-[11px] font-medium text-[#6F6267] bg-[#FFFDF9] px-2.5 py-0.5 rounded border border-[#EFE4DC]">
-            Today's Field Cohort
+          <span className="font-bold uppercase tracking-wider text-[#6F6267] text-[11px]">
+            Dashboard Metrics
+          </span>
+          <span className="text-[11px] text-[#8E7E81]">
+            Real-time encounter indicators
           </span>
         </div>
 
-        {/* 5 KPI SUMMARY METRIC CARDS */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-          {/* 1. Today's screenings */}
-          <div className="bg-white p-4 rounded-xl border border-[#EFE4DC] shadow-2xs flex flex-col justify-between">
-            <div className="flex items-center justify-between text-xs text-[#6F6267] mb-1.5">
-              <span className="font-bold text-[#2B2024]">Today's Screenings</span>
-              <Activity className="w-3.5 h-3.5 text-[#F05A28]" />
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5">
+          {/* METRIC 1: Today's Screening */}
+          <div
+            id="metric-todays-screening"
+            className="bg-white p-5 rounded-2xl border border-[#EFE4DC] shadow-xs flex flex-col justify-between space-y-2 hover:border-[#FED7AA] transition-all"
+          >
+            <div className="flex items-center justify-between text-xs text-[#6F6267]">
+              <span className="font-bold text-[#2B2024] text-xs">Today's Screening</span>
+              <Activity className="w-4 h-4 text-[#F05A28]" />
             </div>
             <div>
-              <div className="text-2xl sm:text-3xl font-bold tracking-tight text-[#2B2024]">
-                {todayScreenings}
+              <div className="text-3xl sm:text-4xl font-bold tracking-tight text-[#2B2024]">
+                {todaysScreeningCount}
               </div>
-              <div className="flex items-center gap-1 text-[10px] text-[#059669] mt-1 font-semibold">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#059669]" />
-                <span>Audited Encounters</span>
+              <div className="flex items-center gap-1.5 text-[11px] text-[#059669] mt-1 font-semibold">
+                <span className="w-2 h-2 rounded-full bg-[#059669]" />
+                <span>Completed Encounters</span>
               </div>
             </div>
           </div>
 
-          {/* 2. Low concern */}
-          <div className="bg-white p-4 rounded-xl border border-[#EFE4DC] shadow-2xs flex flex-col justify-between">
-            <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="font-bold text-[#2B2024]">Low Concern</span>
-              <span className="text-[9px] font-bold text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
-                Normal / Mild
-              </span>
+          {/* METRIC 2: Awaiting Review */}
+          <div
+            id="metric-awaiting-review"
+            onClick={() => onNavigate('review-queue')}
+            className="bg-white p-5 rounded-2xl border border-[#EFE4DC] shadow-xs flex flex-col justify-between space-y-2 hover:border-[#FCD34D] transition-all cursor-pointer group"
+          >
+            <div className="flex items-center justify-between text-xs text-[#6F6267]">
+              <span className="font-bold text-[#2B2024] text-xs">Awaiting Review</span>
+              <AlertTriangle className="w-4 h-4 text-[#D97706] group-hover:scale-110 transition-transform" />
             </div>
             <div>
-              <div className="text-2xl sm:text-3xl font-bold tracking-tight text-[#2B2024]">
-                {lowConcern}
+              <div className="text-3xl sm:text-4xl font-bold tracking-tight text-[#D97706]">
+                {awaitingReviewCount}
               </div>
-              <div className="text-[10px] text-[#6F6267] mt-1">
-                Grade 0 & Grade 1 (Routine 1y)
+              <div className="flex items-center gap-1.5 text-[11px] text-[#92400E] mt-1 font-medium">
+                <span>Pending Supervisory Adjudication</span>
               </div>
             </div>
           </div>
 
-          {/* 3. Review recommended */}
-          <div className="bg-white p-4 rounded-xl border border-[#EFE4DC] shadow-2xs flex flex-col justify-between">
-            <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="font-bold text-[#2B2024]">Review Recommended</span>
-              <span className="text-[9px] font-bold text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
-                Moderate
-              </span>
+          {/* METRIC 3: Referral Recommended */}
+          <div
+            id="metric-referral-recommended"
+            onClick={() => onNavigate('referrals')}
+            className="bg-white p-5 rounded-2xl border border-[#EFE4DC] shadow-xs flex flex-col justify-between space-y-2 hover:border-[#FCA5A5] transition-all cursor-pointer group"
+          >
+            <div className="flex items-center justify-between text-xs text-[#6F6267]">
+              <span className="font-bold text-[#2B2024] text-xs">Referral Recommended</span>
+              <AlertCircle className="w-4 h-4 text-[#DC2626] group-hover:scale-110 transition-transform" />
             </div>
             <div>
-              <div className="text-2xl sm:text-3xl font-bold tracking-tight text-[#2B2024]">
-                {reviewRecommended}
+              <div className="text-3xl sm:text-4xl font-bold tracking-tight text-[#DC2626]">
+                {referralRecommendedCount}
               </div>
-              <div className="text-[10px] text-[#6F6267] mt-1">
-                Grade 2 Moderate NPDR
+              <div className="flex items-center gap-1.5 text-[11px] text-[#991B1B] mt-1 font-medium">
+                <span>Urgent & Routine Specialist Referrals</span>
               </div>
             </div>
           </div>
 
-          {/* 4. Priority referral */}
-          <div className="bg-white p-4 rounded-xl border border-[#EFE4DC] shadow-2xs flex flex-col justify-between">
-            <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="font-bold text-[#2B2024]">Priority Referral</span>
-              <span className="text-[9px] font-bold text-red-800 bg-red-50 px-1.5 py-0.5 rounded border border-red-200">
-                Urgent
-              </span>
+          {/* METRIC 4: Follow-up Due */}
+          <div
+            id="metric-follow-up-due"
+            onClick={() => onNavigate('referrals')}
+            className="bg-white p-5 rounded-2xl border border-[#EFE4DC] shadow-xs flex flex-col justify-between space-y-2 hover:border-[#FED7AA] transition-all cursor-pointer group"
+          >
+            <div className="flex items-center justify-between text-xs text-[#6F6267]">
+              <span className="font-bold text-[#2B2024] text-xs">Follow-up Due</span>
+              <Clock className="w-4 h-4 text-[#F05A28] group-hover:scale-110 transition-transform" />
             </div>
             <div>
-              <div className="text-2xl sm:text-3xl font-bold tracking-tight text-red-700">
-                {priorityReferral}
+              <div className="text-3xl sm:text-4xl font-bold tracking-tight text-[#2B2024]">
+                {followUpDueCount}
               </div>
-              <div className="text-[10px] text-red-600 mt-1 font-medium">
-                Grade 3, 4, or Active DME
-              </div>
-            </div>
-          </div>
-
-          {/* 5. Ungradable */}
-          <div className="bg-white p-4 rounded-xl border border-[#EFE4DC] shadow-2xs flex flex-col justify-between col-span-2 sm:col-span-1">
-            <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="font-bold text-[#2B2024]">Ungradable</span>
-              <span className="text-[9px] font-bold text-stone-700 bg-stone-100 px-1.5 py-0.5 rounded border border-stone-300">
-                Retake
-              </span>
-            </div>
-            <div>
-              <div className="text-2xl sm:text-3xl font-bold tracking-tight text-[#2B2024]">
-                {ungradable}
-              </div>
-              <div className="text-[10px] text-[#6F6267] mt-1">
-                Recapture Required (QC)
+              <div className="flex items-center gap-1.5 text-[11px] text-[#6F6267] mt-1 font-medium">
+                <span>Recall Care Checks & Appointments</span>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* TODAY'S SCREENED CASES LIST */}
-        <div className="bg-white rounded-2xl border border-[#EFE4DC] p-5 shadow-xs space-y-3">
-          <div className="flex items-center justify-between flex-wrap gap-2">
-            <div>
-              <h3 className="text-sm font-bold text-[#2B2024]">
-                Recent Screened Patients (Today's Encounters)
-              </h3>
-              <p className="text-xs text-[#6F6267]">
-                Quick case review with automated grade summary and immediate inspect action.
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => onNavigate('screenings')}
-              className="text-xs font-bold text-[#F05A28] hover:text-[#D84818] flex items-center gap-1 transition-colors"
-            >
-              <span>View All Today's Cases</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            {PRESET_CASES.slice(0, 3).map((c) => (
-              <div
-                key={c.id}
-                className="p-3.5 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] bg-[#FFFDF9] hover:bg-white transition-all shadow-2xs flex flex-col justify-between space-y-3"
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-xs text-[#2B2024]">{c.patientCode}</span>
-                      <RiskChip grade={c.expectedTriage.finalGrade} size="sm" />
-                    </div>
-                    <div className="text-xs font-medium text-[#2B2024] mt-1">{c.name}</div>
-                    <div className="text-[11px] text-[#6F6267]">
-                      Age {c.expectedTriage.clinicalInput.age} · HbA1c {c.expectedTriage.clinicalInput.hba1c}% · {c.expectedTriage.clinicalInput.diabetesDurationYears}y DM
-                    </div>
-                  </div>
-                  <span className="text-[10px] text-[#8E7E81] bg-[#F5EFEB] px-1.5 py-0.5 rounded font-mono">
-                    OD & OS
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between pt-2 border-t border-[#F5EFEB] text-xs">
-                  <span className="text-[10px] font-semibold text-[#6F6267]">
-                    {c.expectedTriage.oct.dmeDetected ? '⚠️ Macular Edema' : 'Fundus QC: Pass'}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => onSelectResult(c.expectedTriage)}
-                    className="px-2.5 py-1 rounded-lg bg-white border border-[#EFE4DC] hover:border-[#F05A28] text-[#2B2024] hover:text-[#F05A28] text-[11px] font-bold transition-colors cursor-pointer"
-                  >
-                    Inspect Result
-                  </button>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
       </section>
 
       {/* =========================================================================
-          PRIORITY 3: REVIEW QUEUE
+          3. PRIMARY ACTIONS:
+          Start Screening
+          Review Queue
+          Appointments
+          Referrals
           ========================================================================= */}
       <section
-        id="section-helper-review-queue"
+        id="section-helper-primary-actions"
+        aria-label="Primary Actions Section"
+        className="space-y-3"
+      >
+        <div className="flex items-center justify-between text-xs px-0.5">
+          <span className="font-bold uppercase tracking-wider text-[#2B2024] text-sm">
+            Primary Actions
+          </span>
+          <span className="text-[11px] text-[#8E7E81]">
+            Direct frontline helper controls
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+          {/* 1. Start Screening */}
+          <div
+            id="action-card-start-screening"
+            onClick={onNewScreening}
+            className="bg-gradient-to-br from-[#FFE5D8] to-white p-5 rounded-2xl border-2 border-[#FED7AA] shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between space-y-3 group"
+          >
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-[#F05A28] text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform">
+                <Camera className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#F05A28] text-white">
+                Primary Intake
+              </span>
+            </div>
+            <div>
+              <h3 className="font-serif font-bold text-base text-[#2B2024] group-hover:text-[#F05A28] transition-colors">
+                Start Screening
+              </h3>
+              <p className="text-xs text-[#6F6267] mt-1 leading-relaxed">
+                Register patient, capture 45° non-mydriatic fundus images, and run automated clarity validation.
+              </p>
+            </div>
+            <div className="pt-2 border-t border-[#FED7AA]/60 flex items-center text-xs font-bold text-[#F05A28]">
+              <span>Launch New Encounter</span>
+              <ArrowRight className="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" />
+            </div>
+          </div>
+
+          {/* 2. Review Queue */}
+          <div
+            id="action-card-review-queue"
+            onClick={() => onNavigate('review-queue')}
+            className="bg-white p-5 rounded-2xl border border-[#EFE4DC] hover:border-[#FED7AA] shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between space-y-3 group"
+          >
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-[#FFFDF9] text-[#2B2024] border border-[#EFE4DC] flex items-center justify-center group-hover:border-[#F05A28] group-hover:text-[#F05A28] transition-all">
+                <FileCheck className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200">
+                {awaitingReviewCount} Cases
+              </span>
+            </div>
+            <div>
+              <h3 className="font-serif font-bold text-base text-[#2B2024] group-hover:text-[#F05A28] transition-colors">
+                Review Queue
+              </h3>
+              <p className="text-xs text-[#6F6267] mt-1 leading-relaxed">
+                Supervisory adjudication for flagged encounters, ungradable image retakes, and clinician sign-offs.
+              </p>
+            </div>
+            <div className="pt-2 border-t border-[#EFE4DC] flex items-center text-xs font-bold text-[#2B2024] group-hover:text-[#F05A28]">
+              <span>Open Review Queue</span>
+              <ArrowRight className="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" />
+            </div>
+          </div>
+
+          {/* 3. Appointments */}
+          <div
+            id="action-card-appointments"
+            onClick={() => onNavigate('appointments')}
+            className="bg-white p-5 rounded-2xl border border-[#EFE4DC] hover:border-[#FED7AA] shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between space-y-3 group"
+          >
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-[#FFFDF9] text-[#2B2024] border border-[#EFE4DC] flex items-center justify-center group-hover:border-[#F05A28] group-hover:text-[#F05A28] transition-all">
+                <Calendar className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-50 text-blue-800 border border-blue-200">
+                {appointments.length} Today
+              </span>
+            </div>
+            <div>
+              <h3 className="font-serif font-bold text-base text-[#2B2024] group-hover:text-[#F05A28] transition-colors">
+                Appointments
+              </h3>
+              <p className="text-xs text-[#6F6267] mt-1 leading-relaxed">
+                Daily scheduled patient slots, arrival check-in status, and capacity slot management.
+              </p>
+            </div>
+            <div className="pt-2 border-t border-[#EFE4DC] flex items-center text-xs font-bold text-[#2B2024] group-hover:text-[#F05A28]">
+              <span>Manage Appointments</span>
+              <ArrowRight className="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" />
+            </div>
+          </div>
+
+          {/* 4. Referrals */}
+          <div
+            id="action-card-referrals"
+            onClick={() => onNavigate('referrals')}
+            className="bg-white p-5 rounded-2xl border border-[#EFE4DC] hover:border-[#FED7AA] shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between space-y-3 group"
+          >
+            <div className="flex items-center justify-between">
+              <div className="w-10 h-10 rounded-xl bg-[#FFFDF9] text-[#2B2024] border border-[#EFE4DC] flex items-center justify-center group-hover:border-[#F05A28] group-hover:text-[#F05A28] transition-all">
+                <Send className="w-5 h-5" />
+              </div>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-red-50 text-red-800 border border-red-200">
+                {referralRecommendedCount} Active
+              </span>
+            </div>
+            <div>
+              <h3 className="font-serif font-bold text-base text-[#2B2024] group-hover:text-[#F05A28] transition-colors">
+                Referrals
+              </h3>
+              <p className="text-xs text-[#6F6267] mt-1 leading-relaxed">
+                Dispatched ophthalmologist referral tokens, hospital handovers, and anti-VEGF consults.
+              </p>
+            </div>
+            <div className="pt-2 border-t border-[#EFE4DC] flex items-center text-xs font-bold text-[#2B2024] group-hover:text-[#F05A28]">
+              <span>View Referrals & Tokens</span>
+              <ArrowRight className="w-4 h-4 ml-auto group-hover:translate-x-1 transition-transform" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          4. SCREENING WORKFLOW:
+          Patient
+          → Capture / Upload Image
+          → Image Quality Check
+          → AI-Assisted Screening Support
+          → Human Review
+          → Referral
+          → Follow-up
+          ========================================================================= */}
+      <section
+        id="section-helper-screening-workflow"
+        aria-label="Screening Workflow Section"
         className="bg-white rounded-2xl border border-[#EFE4DC] p-5 sm:p-6 shadow-xs space-y-4"
-        aria-label="Review Queue Priority Section"
       >
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-[#F05A28]" />
             <h2 className="text-base font-bold text-[#2B2024] uppercase tracking-wide">
-              3. Review Queue
+              Screening Workflow
             </h2>
-            <span className="text-xs px-2 py-0.5 rounded-full font-bold bg-red-50 text-red-700 border border-red-200">
-              {priorityReferral} Cases Flagged for Ophthalmology Action
+            <span className="text-xs px-2.5 py-0.5 rounded-md font-semibold bg-[#FFE5D8] text-[#F05A28]">
+              Standardized 7-Stage Protocol
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={onNewScreening}
+            className="text-xs font-bold text-[#F05A28] hover:text-[#D84818] inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <span>Start Screening Encounter</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        <p className="text-xs text-[#6F6267]">
+          End-to-end clinical workflow designed for non-mydriatic screening encounters, image quality enforcement, and closed-loop care.
+        </p>
+
+        {/* 7-Stage Interactive Visual Stepper */}
+        <div className="grid grid-cols-1 md:grid-cols-7 gap-2 pt-1">
+          {/* Stage 1: Patient */}
+          <div
+            onClick={onNewScreening}
+            className="p-3 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] bg-[#FFFDF9] hover:bg-white transition-all cursor-pointer space-y-1.5 flex flex-col justify-between"
+          >
+            <div className="flex items-center justify-between">
+              <span className="w-5 h-5 rounded-full bg-[#FFE5D8] text-[#F05A28] text-[10px] font-bold flex items-center justify-center">
+                1
+              </span>
+              <UserIcon className="w-3.5 h-3.5 text-[#8E7E81]" />
+            </div>
+            <div>
+              <div className="font-bold text-xs text-[#2B2024]">Patient</div>
+              <div className="text-[10px] text-[#6F6267] leading-tight mt-0.5">
+                Demographics & diabetes history
+              </div>
+            </div>
+          </div>
+
+          {/* Stage 2: Capture / Upload Image */}
+          <div
+            onClick={onNewScreening}
+            className="p-3 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] bg-[#FFFDF9] hover:bg-white transition-all cursor-pointer space-y-1.5 flex flex-col justify-between"
+          >
+            <div className="flex items-center justify-between">
+              <span className="w-5 h-5 rounded-full bg-[#FFE5D8] text-[#F05A28] text-[10px] font-bold flex items-center justify-center">
+                2
+              </span>
+              <Camera className="w-3.5 h-3.5 text-[#8E7E81]" />
+            </div>
+            <div>
+              <div className="font-bold text-xs text-[#2B2024]">Capture / Upload</div>
+              <div className="text-[10px] text-[#6F6267] leading-tight mt-0.5">
+                45° fundus & optional OCT scan
+              </div>
+            </div>
+          </div>
+
+          {/* Stage 3: Image Quality Check */}
+          <div
+            onClick={onNewScreening}
+            className="p-3 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] bg-[#FFFDF9] hover:bg-white transition-all cursor-pointer space-y-1.5 flex flex-col justify-between"
+          >
+            <div className="flex items-center justify-between">
+              <span className="w-5 h-5 rounded-full bg-[#FFE5D8] text-[#F05A28] text-[10px] font-bold flex items-center justify-center">
+                3
+              </span>
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#8E7E81]" />
+            </div>
+            <div>
+              <div className="font-bold text-xs text-[#2B2024]">Quality Check</div>
+              <div className="text-[10px] text-[#6F6267] leading-tight mt-0.5">
+                Automated clarity & illumination gate
+              </div>
+            </div>
+          </div>
+
+          {/* Stage 4: AI-Assisted Screening Support */}
+          <div
+            onClick={onNewScreening}
+            className="p-3 rounded-xl border border-[#FED7AA] bg-[#FFE5D8]/40 hover:bg-[#FFE5D8]/70 transition-all cursor-pointer space-y-1.5 flex flex-col justify-between"
+          >
+            <div className="flex items-center justify-between">
+              <span className="w-5 h-5 rounded-full bg-[#F05A28] text-white text-[10px] font-bold flex items-center justify-center">
+                4
+              </span>
+              <Sparkles className="w-3.5 h-3.5 text-[#F05A28]" />
+            </div>
+            <div>
+              <div className="font-bold text-xs text-[#2B2024]">AI-Assisted Support</div>
+              <div className="text-[10px] text-[#6F6267] leading-tight mt-0.5">
+                DR stage & DME fluid detection
+              </div>
+            </div>
+          </div>
+
+          {/* Stage 5: Human Review */}
+          <div
+            onClick={() => onNavigate('review-queue')}
+            className="p-3 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] bg-[#FFFDF9] hover:bg-white transition-all cursor-pointer space-y-1.5 flex flex-col justify-between"
+          >
+            <div className="flex items-center justify-between">
+              <span className="w-5 h-5 rounded-full bg-[#FFE5D8] text-[#F05A28] text-[10px] font-bold flex items-center justify-center">
+                5
+              </span>
+              <Stethoscope className="w-3.5 h-3.5 text-[#8E7E81]" />
+            </div>
+            <div>
+              <div className="font-bold text-xs text-[#2B2024]">Human Review</div>
+              <div className="text-[10px] text-[#6F6267] leading-tight mt-0.5">
+                Clinical adjudication & sign-off
+              </div>
+            </div>
+          </div>
+
+          {/* Stage 6: Referral */}
+          <div
+            onClick={() => onNavigate('referrals')}
+            className="p-3 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] bg-[#FFFDF9] hover:bg-white transition-all cursor-pointer space-y-1.5 flex flex-col justify-between"
+          >
+            <div className="flex items-center justify-between">
+              <span className="w-5 h-5 rounded-full bg-[#FFE5D8] text-[#F05A28] text-[10px] font-bold flex items-center justify-center">
+                6
+              </span>
+              <Send className="w-3.5 h-3.5 text-[#8E7E81]" />
+            </div>
+            <div>
+              <div className="font-bold text-xs text-[#2B2024]">Referral</div>
+              <div className="text-[10px] text-[#6F6267] leading-tight mt-0.5">
+                Fast-track specialist handover
+              </div>
+            </div>
+          </div>
+
+          {/* Stage 7: Follow-up */}
+          <div
+            onClick={() => onNavigate('referrals')}
+            className="p-3 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] bg-[#FFFDF9] hover:bg-white transition-all cursor-pointer space-y-1.5 flex flex-col justify-between"
+          >
+            <div className="flex items-center justify-between">
+              <span className="w-5 h-5 rounded-full bg-[#FFE5D8] text-[#F05A28] text-[10px] font-bold flex items-center justify-center">
+                7
+              </span>
+              <Clock className="w-3.5 h-3.5 text-[#8E7E81]" />
+            </div>
+            <div>
+              <div className="font-bold text-xs text-[#2B2024]">Follow-up</div>
+              <div className="text-[10px] text-[#6F6267] leading-tight mt-0.5">
+                Closed-loop recall verification
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* =========================================================================
+          5. REVIEW QUEUE PREVIEW:
+          Shows recent cases matching:
+          - Case ID
+          - Time
+          - Image quality
+          - Screening status
+          - Priority/status
+          - Next action
+          ========================================================================= */}
+      <section
+        id="section-helper-review-queue-preview"
+        aria-label="Review Queue Section"
+        className="bg-white rounded-2xl border border-[#EFE4DC] p-5 sm:p-6 shadow-xs space-y-4"
+      >
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#F05A28]" />
+            <h2 className="text-base font-bold text-[#2B2024] uppercase tracking-wide">
+              Review Queue
+            </h2>
+            <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-amber-50 text-amber-800 border border-amber-200">
+              {awaitingReviewCount} Awaiting Review
             </span>
           </div>
 
@@ -620,67 +802,137 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
         </div>
 
         <p className="text-xs text-[#6F6267]">
-          Priority cases requiring supervisory review, ophthalmologist confirmation, or urgent hospital referral dispatch.
+          Cases requiring supervisory review, ophthalmoscopic adjudication, or hospital referral dispatch.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-          {PRESET_CASES.slice(2, 4).map((c) => (
-            <div
-              key={c.id}
-              className="p-4 rounded-xl border border-red-200 bg-red-50/30 hover:bg-red-50/50 transition-colors flex items-center justify-between gap-3"
-            >
-              <div className="space-y-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="font-bold text-xs sm:text-sm text-[#2B2024]">{c.patientCode}</span>
-                  <RiskChip grade={c.expectedTriage.finalGrade} size="sm" />
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-red-100 text-red-800">
-                    URGENT (24-48h)
-                  </span>
-                </div>
-                <div className="text-xs text-[#6F6267] truncate">
-                  {c.name} · {c.expectedTriage.clinicalInput.age}y · HbA1c {c.expectedTriage.clinicalInput.hba1c}%
-                </div>
-                <div className="text-[11px] font-bold text-red-700">
-                  {c.expectedTriage.oct.dmeDetected
-                    ? '⚠️ Active Cystoid Macular Edema'
-                    : 'Severe NPDR Retinopathy Lesions'}
-                </div>
-              </div>
+        {/* Case Cards Table with 6 Fields: Case ID, Time, Image quality, Screening status, Priority/status, Next action */}
+        <div className="overflow-x-auto border border-[#EFE4DC] rounded-xl">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-[#FAF8F6] border-b border-[#EFE4DC] text-[11px] font-bold text-[#6F6267] uppercase tracking-wider">
+              <tr>
+                <th className="py-3 px-3.5">Case ID</th>
+                <th className="py-3 px-3.5">Time</th>
+                <th className="py-3 px-3.5">Image quality</th>
+                <th className="py-3 px-3.5">Screening status</th>
+                <th className="py-3 px-3.5">Priority / Status</th>
+                <th className="py-3 px-3.5 text-right">Next action</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-[#EFE4DC]">
+              {PRESET_CASES.slice(1, 4).map((c, idx) => {
+                const triage = c.expectedTriage;
+                const times = ['09:30 AM', '10:15 AM', '11:00 AM'];
+                const isUrgent = triage.finalGrade >= 3 || triage.oct.dmeDetected;
+                const isModerate = triage.finalGrade === 2;
 
-              <div className="flex flex-col gap-1.5 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => onSelectResult(c.expectedTriage)}
-                  className="px-3 py-1.5 rounded-lg bg-white border border-[#EFE4DC] text-[#2B2024] hover:text-[#F05A28] text-xs font-bold transition-colors shadow-2xs cursor-pointer text-center"
-                >
-                  Inspect Case
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onNavigate('referrals')}
-                  className="px-3 py-1 rounded-lg bg-[#F05A28] hover:bg-[#D84818] text-white text-[10px] font-bold transition-colors cursor-pointer text-center"
-                >
-                  Dispatch Referral
-                </button>
-              </div>
-            </div>
-          ))}
+                return (
+                  <tr key={c.id} className="hover:bg-[#FFFDF9] transition-colors">
+                    {/* 1. Case ID */}
+                    <td className="py-3 px-3.5">
+                      <div className="font-mono font-bold text-[#2B2024] text-xs">
+                        {c.patientCode}
+                      </div>
+                      <div className="text-[11px] text-[#6F6267]">
+                        {c.name} · {triage.clinicalInput.age}y
+                      </div>
+                    </td>
+
+                    {/* 2. Time */}
+                    <td className="py-3 px-3.5 whitespace-nowrap">
+                      <div className="text-xs text-[#2B2024] font-medium flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-[#F05A28]" />
+                        <span>{times[idx] || 'Today'}</span>
+                      </div>
+                    </td>
+
+                    {/* 3. Image quality */}
+                    <td className="py-3 px-3.5 whitespace-nowrap">
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                        <CheckCircle2 className="w-2.5 h-2.5" />
+                        <span>Good (Gradeable)</span>
+                      </span>
+                    </td>
+
+                    {/* 4. Screening status */}
+                    <td className="py-3 px-3.5">
+                      <div className="font-bold text-[#2B2024]">
+                        Grade {triage.finalGrade} Output
+                      </div>
+                      <div className="text-[10px] text-[#8E7E81]">
+                        {triage.oct.dmeDetected ? '⚠️ Macular Edema Present' : 'No Foveal Fluid'}
+                      </div>
+                    </td>
+
+                    {/* 5. Priority/status */}
+                    <td className="py-3 px-3.5 whitespace-nowrap">
+                      {isUrgent ? (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-red-700 bg-red-50 px-2 py-0.5 rounded border border-red-200">
+                          <AlertCircle className="w-2.5 h-2.5" />
+                          <span>Referral Recommended</span>
+                        </span>
+                      ) : isModerate ? (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                          <AlertTriangle className="w-2.5 h-2.5" />
+                          <span>Review Recommended</span>
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                          <CheckCircle2 className="w-2.5 h-2.5" />
+                          <span>Low Concern / Routine</span>
+                        </span>
+                      )}
+                    </td>
+
+                    {/* 6. Next action */}
+                    <td className="py-3 px-3.5 text-right whitespace-nowrap space-x-1.5">
+                      <button
+                        type="button"
+                        onClick={() => onSelectResult(triage)}
+                        className="px-2.5 py-1 rounded-lg bg-white border border-[#EFE4DC] hover:border-[#F05A28] text-[#2B2024] hover:text-[#F05A28] text-xs font-bold transition-colors cursor-pointer"
+                      >
+                        Inspect Result
+                      </button>
+
+                      {isUrgent ? (
+                        <button
+                          type="button"
+                          onClick={() => onNavigate('referrals')}
+                          className="px-2.5 py-1 rounded-lg bg-[#F05A28] hover:bg-[#D84818] text-white text-xs font-bold transition-colors cursor-pointer"
+                        >
+                          Dispatch
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => onNavigate('review-queue')}
+                          className="px-2.5 py-1 rounded-lg bg-[#15803D] hover:bg-[#166534] text-white text-xs font-bold transition-colors cursor-pointer"
+                        >
+                          Review
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       </section>
 
       {/* =========================================================================
-          PRIORITY 4: APPOINTMENTS
+          6. APPOINTMENTS:
+          Today's booked slots & patient arrival status
           ========================================================================= */}
       <section
-        id="section-helper-appointments"
+        id="section-helper-appointments-preview"
+        aria-label="Appointments Section"
         className="bg-white rounded-2xl border border-[#EFE4DC] p-5 sm:p-6 shadow-xs space-y-4"
-        aria-label="Appointments Priority Section"
       >
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-[#F05A28]" />
             <h2 className="text-base font-bold text-[#2B2024] uppercase tracking-wide">
-              4. Appointments
+              Appointments
             </h2>
             <span className="text-xs px-2 py-0.5 rounded-full font-bold bg-[#FFE5D8] text-[#D84818] border border-[#FED7AA]">
               {appointments.length} Scheduled Today
@@ -697,10 +949,6 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
-
-        <p className="text-xs text-[#6F6267]">
-          Patients booked for diabetic retinopathy screening encounters at your center today.
-        </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {appointments.map((apt) => (
@@ -743,7 +991,7 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
                 </span>
                 <button
                   type="button"
-                  onClick={() => onNewScreening()}
+                  onClick={onNewScreening}
                   className="px-2.5 py-1 rounded-lg bg-[#F05A28] hover:bg-[#D84818] text-white text-[11px] font-bold transition-colors cursor-pointer"
                 >
                   Screen Patient
@@ -755,21 +1003,21 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
       </section>
 
       {/* =========================================================================
-          PRIORITY 5: FOLLOW-UPS
+          7. REFERRALS & FOLLOW-UPS
           ========================================================================= */}
       <section
-        id="section-helper-follow-ups"
+        id="section-helper-follow-ups-preview"
+        aria-label="Referrals & Follow-ups Section"
         className="bg-white rounded-2xl border border-[#EFE4DC] p-5 sm:p-6 shadow-xs space-y-4"
-        aria-label="Follow-ups Priority Section"
       >
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-[#F05A28]" />
             <h2 className="text-base font-bold text-[#2B2024] uppercase tracking-wide">
-              5. Follow-ups & Care Coordination
+              Referrals & Follow-ups
             </h2>
             <span className="text-xs px-2 py-0.5 rounded-full font-bold bg-[#FFFDF9] text-[#2B2024] border border-[#EFE4DC]">
-              {followUps.length} Action Items
+              {followUps.length} Care Follow-ups
             </span>
           </div>
 
@@ -783,10 +1031,6 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
-
-        <p className="text-xs text-[#6F6267]">
-          Closed-loop tracking for patients requiring hospital ophthalmologist confirmation, repeat fundus photography, or anti-VEGF injection follow-up.
-        </p>
 
         <div className="space-y-2.5">
           {followUps.map((item) => (
@@ -809,7 +1053,7 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
                   </span>
                 </div>
                 <div className="text-xs text-[#6F6267]">
-                  <strong className="text-[#2B2024]">{item.actionRequired}</strong> · Destination: {item.facility}
+                  <strong className="text-[#2B2024]">{item.actionRequired}</strong> · Clinic: {item.facility}
                 </div>
               </div>
 
@@ -834,7 +1078,7 @@ export const ProviderDashboard: React.FC<ProviderDashboardProps> = ({
                   {item.contactStatus === 'Pending Call'
                     ? 'Log Call / SMS'
                     : item.contactStatus === 'Reminder Sent'
-                    ? 'Confirm Appointment'
+                    ? 'Confirm Handover'
                     : 'Verified Completed'}
                 </button>
               </div>

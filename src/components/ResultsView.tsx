@@ -54,10 +54,10 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
   // Active view perspective tab: "Clinical view" | "Simple explanation" | "Technical details"
   const [activeTab, setActiveTab] = useState<ViewPerspective>('clinical');
 
-  // Fundus view mode: 'original' | 'clahe' | 'gradcam'
-  const [fundusMode, setFundusMode] = useState<'original' | 'clahe' | 'gradcam'>('gradcam');
-  // OCT view mode: 'scan' | 'gradcam'
-  const [octMode, setOctMode] = useState<'scan' | 'gradcam'>('gradcam');
+  // Fundus view mode: 'original' | 'clahe' | 'gradcam' (default to 'original' - do not expose research features by default)
+  const [fundusMode, setFundusMode] = useState<'original' | 'clahe' | 'gradcam'>('original');
+  // OCT view mode: 'scan' | 'gradcam' (default to 'scan')
+  const [octMode, setOctMode] = useState<'scan' | 'gradcam'>('scan');
 
   // Heatmap opacity slider
   const [camOpacity, setCamOpacity] = useState<number>(0.75);
@@ -905,8 +905,8 @@ export const ResultsView: React.FC<ResultsViewProps> = ({
         </section>
       )}
 
-      {/* PERSPECTIVE: TECHNICAL DETAILS (SHAP, MODALITY OUTPUTS, FUSION LOGIC) */}
-      {(activeTab === 'technical' || activeTab === 'clinical') && (
+      {/* PERSPECTIVE: TECHNICAL DETAILS (SHAP, MODALITY OUTPUTS, FUSION LOGIC) - NOT EXPOSED BY DEFAULT */}
+      {activeTab === 'technical' && (
         <>
           {/* 11. SHAP WATERFALL & CLINICAL FEATURE EXPLAINABILITY */}
           {result.metadata.provided && (

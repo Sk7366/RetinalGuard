@@ -14,7 +14,6 @@ import {
   ArrowRight,
   Search,
   Check,
-  Sun,
   Building,
   Tent,
   Play,
@@ -227,91 +226,8 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
 
   return (
     <div className={`space-y-12 pb-24 ${textSizeClass} text-[#2B2024]`}>
-      
       {/* =========================================================================
-          1. REFINED ACCESSIBILITY & MULTILINGUAL UTILITY BAR
-          Clean warm ivory surface with subtle borders & accessible toggles
-          ========================================================================= */}
-      <section
-        aria-label="Language and accessibility settings"
-        className="rounded-2xl p-3 sm:p-3.5 border border-[#EFE4DC] bg-white shadow-xs flex flex-wrap items-center justify-between gap-3"
-      >
-        {/* Language selector chips */}
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#6F6267] mr-1 hidden sm:inline">
-            {t("languageLabel", "Language:")}
-          </span>
-          {supportedLanguages.map((lang) => {
-            const isSelected = lang.code === language;
-            return (
-              <button
-                key={lang.code}
-                onClick={() => setLanguage(lang.code)}
-                aria-pressed={isSelected}
-                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all shrink-0 min-h-[38px] flex items-center gap-1.5 ${
-                  isSelected
-                    ? "bg-[#2B2024] text-white shadow-xs"
-                    : "bg-[#FFFDF9] hover:bg-[#FFE5D8]/30 text-[#6F6267] hover:text-[#2B2024] border border-[#EFE4DC]"
-                }`}
-              >
-                <span>{lang.nativeLabel}</span>
-                {isSelected && <Check className="w-3 h-3 ml-0.5 text-stone-300" />}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Font size & High Contrast toggles */}
-        <div className="flex items-center gap-2 flex-wrap ml-auto">
-          {/* Font size selector */}
-          <div className="flex items-center bg-[#FFFDF9] p-0.5 rounded-xl border border-[#EFE4DC]">
-            <button
-              onClick={() => onSetTextSize && onSetTextSize("standard")}
-              title={t("standardText", "Standard text")}
-              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
-                currentTextSize === "standard" ? "bg-white text-[#2B2024] shadow-xs" : "text-[#6F6267] hover:text-[#2B2024]"
-              }`}
-            >
-              A
-            </button>
-            <button
-              onClick={() => onSetTextSize && onSetTextSize("large")}
-              title={t("largeText", "Large text")}
-              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
-                currentTextSize === "large" ? "bg-white text-[#2B2024] shadow-xs" : "text-[#6F6267] hover:text-[#2B2024]"
-              }`}
-            >
-              A+
-            </button>
-            <button
-              onClick={() => onSetTextSize && onSetTextSize("xl")}
-              title={t("xlText", "Extra large text")}
-              className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all ${
-                currentTextSize === "xl" ? "bg-white text-[#2B2024] shadow-xs" : "text-[#6F6267] hover:text-[#2B2024]"
-              }`}
-            >
-              A++
-            </button>
-          </div>
-
-          {/* High Contrast Toggle */}
-          <button
-            onClick={onToggleHighContrast}
-            aria-pressed={isHighContrast}
-            className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 min-h-[38px] transition-colors border ${
-              isHighContrast
-                ? "bg-[#2B2024] text-white border-[#2B2024]"
-                : "bg-white text-[#2B2024] border-[#EFE4DC] hover:bg-[#FFFDF9]"
-            }`}
-          >
-            <Sun className="w-3.5 h-3.5 text-[#6F6267]" />
-            <span>{t("highContrast", "High Contrast")}</span>
-          </button>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          2. HERO SECTION: "Your eyes can change before you notice."
+          HERO SECTION: "Your eyes can change before you notice."
           Premium Healthcare Technology aesthetic with warm ivory backdrop,
           deep charcoal/plum typography (#2B2024), primary orange action (#F05A28),
           raspberry-pink secondary accents (#D94A78), and visual animated screening journey.

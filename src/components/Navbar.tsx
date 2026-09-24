@@ -32,6 +32,8 @@ import {
   ShieldAlert,
   ShieldCheck,
   Sparkles,
+  Stethoscope,
+  Microscope,
   User as UserIcon,
   UserCheck,
   Users,
@@ -107,16 +109,25 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [modeMenuOpen, setModeMenuOpen] = useState(false);
 
   // Refs for click outside handling
   const moreRef = useRef<HTMLDivElement>(null);
   const langRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
+  const modeMenuRef = useRef<HTMLDivElement>(null);
 
   // Roles identification
   const isPatient = experience === 'patient' && !isProviderMode;
   const isHelper = experience === 'helper' || (isProviderMode && currentRole !== 'researcher');
   const isResearcher = experience === 'researcher' || currentRole === 'researcher';
+
+  // Check if current user is an authenticated session user
+  const isUserAuthenticated =
+    Boolean(currentUser?.isLoggedIn) &&
+    currentUser?.role !== 'public' &&
+    currentUser?.id !== 'guest-patient' &&
+    Boolean(currentUser?.email);
 
   const currentLangObj =
     SUPPORTED_LANGUAGES.find((l) => l.code === currentLanguage) || SUPPORTED_LANGUAGES[0];
@@ -132,6 +143,9 @@ export const Navbar: React.FC<NavbarProps> = ({
       }
       if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
         setProfileMenuOpen(false);
+      }
+      if (modeMenuRef.current && !modeMenuRef.current.contains(event.target as Node)) {
+        setModeMenuOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -656,6 +670,102 @@ export const Navbar: React.FC<NavbarProps> = ({
               - Hamburger Toggle (< 1024px)
               ===================================================================== */}
           <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+            {/* =====================================================================
+                WORKSPACE MODE SELECTOR & SWITCHER (PATIENT / MEDICAL WORKER / RESEARCHER)
+                Mode is enabled only while signing in, and for that signed profile only that mode is enabled.
+                ===================================================================== */}
+            <div className="relative" ref={modeMenuRef}>
+              <button
+                type="button"
+                id="navbar-workspace-mode-badge"
+                onClick={() => setModeMenuOpen(!modeMenuOpen)}
+                className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl border text-xs font-bold transition-all shadow-2xs cursor-pointer ${
+                  isPatient
+                    ? 'bg-[#FFF7ED] text-[#C2410C] border-[#FED7AA] hover:bg-[#FFEDD5]'
+                    : isHelper
+                    ? 'bg-[#ECFDF5] text-[#047857] border-[#A7F3D0] hover:bg-[#D1FAE5]'
+                    : 'bg-[#F4F4F5] text-[#18181B] border-[#D4D4D8] hover:bg-[#E4E4E7]'
+                }`}
+                title="Switch mode: Patient, Medical Worker, Researcher"
+              >
+                {isPatient ? (
+                  <>
+                    <Eye className="w-3.5 h-3.5 text-[#EA580C]" />
+                    <span className="hidden sm:inline">Patient Mode</span>
+                    <span className="sm:hidden">Patient</span>
+                  </>
+                ) : isHelper ? (
+                  <>
+                    <Stethoscope className="w-3.5 h-3.5 text-[#059669]" />
+                    <span className="hidden sm:inline">Medical Worker Mode</span>
+                    <span className="sm:hidden">Worker</span>
+                  </>
+                ) : (
+                  <>
+                    <Microscope className="w-3.5 h-3.5 text-[#18181B]" />
+                    <span className="hidden sm:inline">Researcher Mode</span>
+                    <span className="sm:hidden">Research</span>
+                  </>
+                )}
+                <ChevronDown className={`w-3 h-3 transition-transform ${modeMenuOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {modeMenuOpen && (
+                <div
+                  id="navbar-mode-selector-dropdown"
+                  className="absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-2xl border border-[#EFE4DC] p-3.5 z-50 animate-in fade-in"
+                >
+                  <div className="pb-2.5 border-b border-[#EFE4DC]">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-[#8E7E81] uppercase tracking-wider">
+                        Active Workspace
+                      </span>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0]">
+                        ENABLED
+                      </span>
+                    </div>
+                    <div className="text-sm font-bold text-[#1F181A] mt-0.5">
+                      {isPatient ? 'Patient Mode' : isHelper ? 'Medical Worker Mode' : 'Researcher Mode'}
+                    </div>
+                    <p className="text-[11px] text-[#6F6267] mt-1 leading-relaxed">
+                      For your signed profile, only this mode is enabled. To enable another mode, sign in with that role profile.
+                    </p>
+                  </div>
+
+                  <div className="pt-2.5 space-y-1.5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setModeMenuOpen(false);
+                        onOpenRoleModal();
+                      }}
+                      className="w-full text-left px-3 py-2 rounded-xl bg-[#F05A28] hover:bg-[#D84818] text-white text-xs font-bold transition-colors flex items-center justify-between shadow-xs cursor-pointer"
+                    >
+                      <div className="flex items-center gap-2">
+                        <RotateCcw className="w-3.5 h-3.5 text-white" />
+                        <span>Switch Mode (Sign In)</span>
+                      </div>
+                      <ArrowRight className="w-3.5 h-3.5 text-white" />
+                    </button>
+
+                    {isUserAuthenticated && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setModeMenuOpen(false);
+                          if (onLogout) onLogout();
+                        }}
+                        className="w-full text-left px-3 py-1.5 rounded-xl text-xs font-semibold text-[#DC2626] hover:bg-red-50 flex items-center justify-between transition-colors cursor-pointer mt-1"
+                      >
+                        <span>Sign Out to Guest</span>
+                        <LogOut className="w-3.5 h-3.5 text-[#DC2626]" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
             {isPatient ? (
               <>
                 {/* 1. LANGUAGE SELECTOR */}
@@ -813,11 +923,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                     type="button"
                     id="navbar-patient-signin-btn"
                     onClick={onOpenRoleModal}
-                    className="hidden sm:inline-flex px-2.5 sm:px-3 py-2 rounded-xl border border-[#EFE4DC] hover:border-[#FED7AA] bg-white hover:bg-[#FFE5D8] text-xs font-semibold text-[#2B2024] hover:text-[#F05A28] items-center gap-1.5 transition-colors whitespace-nowrap shadow-2xs"
+                    className="inline-flex px-2.5 sm:px-3 py-2 rounded-xl border border-[#FED7AA] bg-[#FFE5D8] hover:bg-[#FFEDD5] text-xs font-bold text-[#D84818] items-center gap-1.5 transition-colors whitespace-nowrap shadow-2xs cursor-pointer"
                   >
                     <UserIcon className="w-3.5 h-3.5 text-[#F05A28]" />
-                    <span className="hidden md:inline">{t('navProfileSignIn', 'Profile / Sign In')}</span>
-                    <span className="md:hidden">{t('navSignIn', 'Sign In')}</span>
+                    <span className="hidden md:inline">Sign In / Mode</span>
+                    <span className="md:hidden">Sign In</span>
                   </button>
                 )}
 
@@ -1033,6 +1143,36 @@ export const Navbar: React.FC<NavbarProps> = ({
           id="navbar-mobile-drawer"
           className="lg:hidden border-t border-[#EFE4DC] bg-white px-4 pt-3 pb-6 space-y-4 max-h-[calc(100vh-4rem)] overflow-y-auto shadow-2xl animate-in slide-in-from-top-2"
         >
+          {/* PROMINENT MOBILE MODE CARD */}
+          <div className="p-3.5 rounded-2xl bg-[#FFFDF9] border border-[#FED7AA] space-y-2 shadow-2xs">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold text-[#C2410C] uppercase tracking-wider">
+                Current Workspace Mode
+              </span>
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-[#FFE5D8] text-[#EA580C] border border-[#FED7AA]">
+                {isPatient ? 'Patient Mode' : isHelper ? 'Medical Worker Mode' : 'Researcher Mode'}
+              </span>
+            </div>
+            <p className="text-xs text-[#6F6267] leading-relaxed">
+              {isPatient
+                ? 'Patient Mode: Find screening centers, view reports, and book appointments.'
+                : isHelper
+                ? 'Medical Worker Mode: Screening helper intake, clarity checks, and clinical review queue.'
+                : 'Researcher Mode: Multimodal late fusion, model evaluation, and benchmarks.'}
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenRoleModal();
+              }}
+              className="w-full py-2.5 px-3 rounded-xl bg-[#F05A28] hover:bg-[#D84818] text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
+            >
+              <RotateCcw className="w-3.5 h-3.5 text-white" />
+              <span>Switch Mode (Sign In)</span>
+            </button>
+          </div>
+
           {/* PATIENT MOBILE MENU */}
           {isPatient && (
             <div className="space-y-4">

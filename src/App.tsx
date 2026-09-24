@@ -38,6 +38,7 @@ import { SimplifiedPatientHome } from './components/SimplifiedPatientHome';
 import { WelcomeModal } from './components/WelcomeModal';
 import { PatientAuthModal } from './components/PatientAuthModal';
 import { AccessibilitySettingsModal } from './components/AccessibilitySettingsModal';
+import { Stethoscope } from 'lucide-react';
 import { PatientReportsView } from './components/PatientReportsView';
 import { PatientJourneyView } from './components/PatientJourneyView';
 import { PatientProfileView } from './components/PatientProfileView';
@@ -402,11 +403,7 @@ function AppContent() {
           handleSuccessLogin(updated);
         }}
         onOpenRoleModal={() => {
-          if (experience === 'patient') {
-            setIsPatientAuthModalOpen(true);
-          } else {
-            setIsRoleModalOpen(true);
-          }
+          setIsRoleModalOpen(true);
         }}
         onOpenHelpModal={() => setIsHelpModalOpen(true)}
         onSelectPreset={handleSelectPreset}
@@ -418,11 +415,7 @@ function AppContent() {
         onLanguageChange={setCurrentLanguage}
         userEmail={currentUser.email}
         onOpenAuth={() => {
-          if (experience === 'patient') {
-            setIsPatientAuthModalOpen(true);
-          } else {
-            setIsRoleModalOpen(true);
-          }
+          setIsRoleModalOpen(true);
         }}
         onLogout={handleLogout}
         onOpenAccessibilityModal={() => setIsAccessibilityModalOpen(true)}
@@ -609,6 +602,7 @@ function AppContent() {
                 onNavigateToJourney={() => navigatePublic('my-screening')}
                 onOpenAccessibility={() => setIsAccessibilityModalOpen(true)}
                 onSwitchWorkspace={() => setIsRoleModalOpen(true)}
+                onOpenSignIn={() => setIsRoleModalOpen(true)}
                 onLogout={handleLogout}
               />
             )}
@@ -670,6 +664,42 @@ function AppContent() {
               )
             )}
           </>
+        ) : experience === 'helper' && currentUser.role !== 'helper' ? (
+          /* =========================================================================
+             MEDICAL WORKER MODE RESTRICTION GATE
+             Only a signed-in Medical Worker profile can enter this workspace.
+             ========================================================================= */
+          <div className="max-w-xl mx-auto my-12 bg-white rounded-3xl border border-[#EFE4DC] p-8 text-center space-y-4 shadow-xl">
+            <div className="w-14 h-14 rounded-2xl bg-[#ECFDF5] border border-[#A7F3D0] text-[#059669] flex items-center justify-center mx-auto shadow-xs">
+              <Stethoscope className="w-7 h-7 text-[#059669]" />
+            </div>
+            <div className="space-y-1">
+              <h2 className="text-xl font-serif font-bold text-[#1F181A]">Medical Worker Mode Required</h2>
+              <p className="text-xs text-[#6F6267] leading-relaxed">
+                The frontline Screening Helper workspace is enabled only for signed-in Medical Worker profiles. For your current profile, this mode is not enabled.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-2.5 justify-center pt-2">
+              <button
+                type="button"
+                onClick={() => setIsRoleModalOpen(true)}
+                className="px-5 py-2.5 rounded-xl bg-[#059669] hover:bg-[#047857] text-white text-xs font-bold shadow-xs cursor-pointer"
+              >
+                Sign In to Medical Worker Mode
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setExperience('patient');
+                  setIsProviderMode(false);
+                  navigatePublic('overview');
+                }}
+                className="px-4 py-2.5 rounded-xl border border-[#EFE4DC] text-xs font-bold text-[#6F6267] hover:bg-[#FAF7F4] cursor-pointer"
+              >
+                Return to Patient Mode
+              </button>
+            </div>
+          </div>
         ) : currentUser.role === 'helper' &&
           currentUser.verificationStatus !== 'Verified' &&
           currentUser.verificationStatus !== 'verified' ? (
@@ -924,6 +954,10 @@ function AppContent() {
         onSuccess={(user) => {
           handleSuccessLogin(user);
           setIsPatientAuthModalOpen(false);
+        }}
+        onSwitchToStaffLogin={() => {
+          setIsPatientAuthModalOpen(false);
+          setIsRoleModalOpen(true);
         }}
         initialTab={patientAuthInitialTab}
       />

@@ -20,18 +20,25 @@ import { User, VerificationStatus } from '../types';
 import { authService } from '../auth/authService';
 
 interface ScreeningHelperVerificationGateProps {
-  currentUser: User;
-  onVerificationUpdated: (updatedUser: User) => void;
-  onOpenSignInModal: () => void;
-  onNavigateToPatientPortal: () => void;
+  currentUser?: User;
+  user?: User;
+  onVerificationUpdated?: (updatedUser: User) => void;
+  onStatusUpdated?: (updatedUser: User) => void;
+  onOpenSignInModal?: () => void;
+  onNavigateToPatientPortal?: () => void;
+  onSwitchToPatient?: () => void;
 }
 
 export const ScreeningHelperVerificationGate: React.FC<ScreeningHelperVerificationGateProps> = ({
-  currentUser,
+  currentUser: propCurrentUser,
+  user: propUser,
   onVerificationUpdated,
+  onStatusUpdated,
   onOpenSignInModal,
   onNavigateToPatientPortal,
+  onSwitchToPatient,
 }) => {
+  const currentUser = propCurrentUser || propUser || authService.getCurrentUser();
   const rawStatus = currentUser.verificationStatus || 'Pending Verification';
   const statusNormalized = rawStatus.toLowerCase();
 
@@ -39,14 +46,24 @@ export const ScreeningHelperVerificationGate: React.FC<ScreeningHelperVerificati
   const isRejected = statusNormalized.includes('reject');
   const isSuspended = statusNormalized.includes('suspend');
 
+  const notifyUpdated = (updated: User) => {
+    if (onStatusUpdated) onStatusUpdated(updated);
+    if (onVerificationUpdated) onVerificationUpdated(updated);
+  };
+
   const handleSimulateStatus = (newStatus: VerificationStatus) => {
     const updated = authService.setVerificationStatus(newStatus);
-    onVerificationUpdated(updated);
+    notifyUpdated(updated);
   };
 
   const handleActivateDemoVerified = () => {
     const updated = authService.setVerificationStatus('Verified');
-    onVerificationUpdated(updated);
+    notifyUpdated(updated);
+  };
+
+  const handleReturnToPatient = () => {
+    if (onSwitchToPatient) onSwitchToPatient();
+    else if (onNavigateToPatientPortal) onNavigateToPatientPortal();
   };
 
   return (
@@ -297,7 +314,7 @@ export const ScreeningHelperVerificationGate: React.FC<ScreeningHelperVerificati
 
         <button
           type="button"
-          onClick={onNavigateToPatientPortal}
+          onClick={handleReturnToPatient}
           className="text-[#6E5C5F] hover:text-[#2E2628] font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
         >
           <span>Return to Patient Portal</span>

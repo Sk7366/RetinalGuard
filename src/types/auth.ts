@@ -22,9 +22,11 @@ export type HelperRoleTitle =
 export type VerificationStatus =
   | 'Pending Verification'
   | 'Verified'
+  | 'Unverified'
   | 'Rejected'
   | 'Suspended'
   | 'verified'
+  | 'unverified'
   | 'pending'
   | 'rejected'
   | 'suspended';
@@ -66,6 +68,7 @@ export interface User {
   token?: string;
   voiceGuidanceEnabled?: boolean;
   authorizedRoles?: UserRole[];
+  isLoggedIn?: boolean;
 }
 
 export interface AccessibilitySettings {
