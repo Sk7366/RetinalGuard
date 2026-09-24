@@ -24,6 +24,7 @@ export const DEFAULT_SCREENING_CENTERS: ScreeningCenterLocation[] = [
     equipment: ['Topcon NW400 Non-Mydriatic Camera', 'Heidelberg Spectralis OCT'],
     distanceKm: 3.2,
     isCampActive: false,
+    languagesSupported: ['English', 'Kannada', 'Hindi'],
   },
   {
     id: 'center-blr-indiranagar',
@@ -47,6 +48,7 @@ export const DEFAULT_SCREENING_CENTERS: ScreeningCenterLocation[] = [
     distanceKm: 5.8,
     isCampActive: true,
     campDates: 'Active Outreach: Sept 23 - Sept 30, 2026',
+    languagesSupported: ['English', 'Kannada', 'Tamil', 'Hindi'],
   },
   {
     id: 'center-mum-dharavi',
@@ -69,6 +71,7 @@ export const DEFAULT_SCREENING_CENTERS: ScreeningCenterLocation[] = [
     distanceKm: 1.4,
     isCampActive: true,
     campDates: 'Active Outreach: Oct 01 - Oct 15, 2026',
+    languagesSupported: ['Hindi', 'Marathi', 'Tamil', 'English'],
   },
   {
     id: 'center-del-aiims',
@@ -91,6 +94,7 @@ export const DEFAULT_SCREENING_CENTERS: ScreeningCenterLocation[] = [
     equipment: ['Zeiss Clarus 500 Ultra-Widefield', 'Cirrus HD-OCT 5000'],
     distanceKm: 6.1,
     isCampActive: false,
+    languagesSupported: ['Hindi', 'English', 'Punjabi'],
   },
   {
     id: 'center-che-egmore',
@@ -112,6 +116,7 @@ export const DEFAULT_SCREENING_CENTERS: ScreeningCenterLocation[] = [
     equipment: ['Canon CR-2 AF Non-Mydriatic Camera'],
     distanceKm: 4.5,
     isCampActive: false,
+    languagesSupported: ['Tamil', 'English'],
   },
   {
     id: 'center-hyd-lvpei',
@@ -134,6 +139,7 @@ export const DEFAULT_SCREENING_CENTERS: ScreeningCenterLocation[] = [
     equipment: ['Topcon Triton Swept-Source OCT', 'Canon CR-2 Plus'],
     distanceKm: 7.2,
     isCampActive: false,
+    languagesSupported: ['Telugu', 'English', 'Hindi', 'Urdu'],
   },
 ];
 
@@ -398,7 +404,7 @@ class BookingService {
   }
 
   public getDemoDisclaimer(): string {
-    return 'DEMO AVAILABILITY: Backend real-time clinic scheduling system is running in demonstration mode. Availability, dates, and slots shown are sample demonstration data and do not reflect live hospital scheduling.';
+    return 'DEMO DATA: Backend real-time clinic scheduling system is running in demonstration mode. Availability, dates, and slots shown are sample demonstration data (DEMO DATA) and do not reflect live hospital scheduling.';
   }
 
   // Get list of centers with optional city and query filtering
@@ -427,6 +433,7 @@ class BookingService {
             equipment: c.equipment || [],
             isCampActive: c.is_camp_active,
             campDates: c.camp_dates,
+            languagesSupported: c.languages_supported || ['English'],
           }));
         }
       } catch (e) {

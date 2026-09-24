@@ -17,6 +17,11 @@ export const VoiceReaderBar: React.FC = () => {
     return null;
   }
 
+  // If this is the prominent Screening Voice Guide, the controls are embedded inside the page
+  if (state.currentTitle.toLowerCase().includes('voice guide') || state.currentTitle.toLowerCase().includes('screening')) {
+    return null;
+  }
+
   const currentLangObj = SUPPORTED_LANGUAGES.find((l) => l.code === state.currentLanguage);
 
   return (

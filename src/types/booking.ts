@@ -23,6 +23,7 @@ export interface ScreeningCenterLocation {
   distanceKm?: number;
   isCampActive: boolean;
   campDates?: string;
+  languagesSupported?: string[];
 }
 
 export interface ScreeningSlot {

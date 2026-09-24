@@ -10,8 +10,10 @@ import {
   CheckCircle2,
   Clock,
   ExternalLink,
+  Globe,
   Info,
   Layers,
+  Lock,
   Mail,
   MapPin,
   Navigation,
@@ -19,7 +21,7 @@ import {
   Printer,
   RefreshCw,
   Search,
-  Share2,
+  ShieldAlert,
   ShieldCheck,
   Smartphone,
   Sparkles,
@@ -28,7 +30,13 @@ import {
   X,
 } from 'lucide-react';
 import { bookingService } from '../services/bookingService';
-import { Appointment, AppointmentStatus, BookingFormInput, ScreeningCenterLocation, ScreeningSlot } from '../types/booking';
+import {
+  Appointment,
+  AppointmentStatus,
+  BookingFormInput,
+  ScreeningCenterLocation,
+  ScreeningSlot,
+} from '../types/booking';
 import { useTranslation } from '../i18n/I18nContext';
 
 interface ScreeningBookingFlowProps {
@@ -44,7 +52,13 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  // Workflow steps: 1: Find Center -> 2: Select Service -> 3: Select Date & Slot -> 4: Patient Info & Book -> 5: Confirmed
+  // Workflow steps:
+  // 1: Find Center & Select Center
+  // 2: Select Service
+  // 3: Select Date
+  // 4: Select Time
+  // 5: Confirm
+  // 6: Booking Confirmation
   const [currentStep, setCurrentStep] = useState<number>(initialCenterId ? 2 : 1);
 
   // Data state
@@ -81,10 +95,11 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
   const [isCancelling, setIsCancelling] = useState(false);
   const [cancelReason, setCancelReason] = useState('');
 
-  // Lookup existing appointments tab
+  // Lookup existing appointments tab (RLS / Patient Privacy: Patients can only see their own appointments)
   const [activeTab, setActiveTab] = useState<'book' | 'my-bookings'>('book');
-  const [lookupQuery, setLookupQuery] = useState('');
+  const [patientAuthIdentifier, setPatientAuthIdentifier] = useState('');
   const [patientAppointments, setPatientAppointments] = useState<Appointment[]>([]);
+  const [hasSearchedPatientAppts, setHasSearchedPatientAppts] = useState(false);
   const [isLookingUp, setIsLookingUp] = useState(false);
 
   const isLive = bookingService.isBackendLive();
@@ -103,7 +118,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
     });
   }, [selectedCity, searchQuery, initialCenterId]);
 
-  // When center is selected, load default service and dates
+  // When center is selected, advance to Step 2 (Select Service)
   const handleSelectCenter = async (center: ScreeningCenterLocation) => {
     setSelectedCenter(center);
     setSelectedService(center.services[0] || 'Comprehensive Retinal Fundus Screening');
@@ -118,8 +133,8 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
     setCurrentStep(2);
   };
 
-  // Date selection change
-  const handleDateChange = async (date: string) => {
+  // When date is selected in Step 3
+  const handleSelectDate = async (date: string) => {
     setSelectedDate(date);
     if (selectedCenter) {
       const slots = await bookingService.getSlotsForDate(selectedCenter.id, date);
@@ -128,7 +143,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
     }
   };
 
-  // Submit booking
+  // Submit booking in Step 5 (Confirm)
   const handleBookScreening = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedCenter || !selectedSlot || !selectedDate) {
@@ -162,7 +177,8 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
 
       const appt = await bookingService.bookAppointment(input);
       setConfirmedAppointment(appt);
-      setCurrentStep(5);
+      setPatientAuthIdentifier(appt.patientPhone); // remember for private lookup
+      setCurrentStep(6);
     } catch (err: any) {
       setBookingError(err.message || 'Failed to complete booking. Please try again.');
     } finally {
@@ -199,10 +215,15 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
     }
   };
 
-  // Lookup existing appointments
-  const handleLookup = async () => {
+  // Lookup existing appointments (Patients can only see their own appointments)
+  const handlePatientAppointmentLookup = async () => {
+    if (!patientAuthIdentifier.trim()) {
+      setBookingError('Please enter your registered phone number or booking reference code.');
+      return;
+    }
     setIsLookingUp(true);
-    const results = await bookingService.getPatientAppointments(lookupQuery);
+    setHasSearchedPatientAppts(true);
+    const results = await bookingService.getPatientAppointments(patientAuthIdentifier.trim());
     setPatientAppointments(results);
     setIsLookingUp(false);
   };
@@ -217,10 +238,10 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
             <span>Retinal Screening Appointments</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-serif font-extrabold text-[#1F181A] dark:text-white tracking-tight">
-            Screening Center Booking
+            FIND A SCREENING CENTER
           </h1>
           <p className="text-sm text-[#6E5C5F] dark:text-[#A8989B] mt-1">
-            Book a non-invasive retinal photography appointment at your local community eye center or mobile screening outreach van.
+            Locate verified community eye centers, mobile retinal vans, and screening clinics near you.
           </p>
         </div>
 
@@ -228,23 +249,25 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
           <button
             type="button"
             onClick={() => setActiveTab('book')}
-            className={`px-4 py-2 rounded-lg transition-all ${
+            className={`px-4 py-2 rounded-lg transition-all cursor-pointer ${
               activeTab === 'book'
-                ? 'bg-white dark:bg-[#1D191B] text-[#EA580C] shadow-2xs'
+                ? 'bg-white dark:bg-[#1D191B] text-[#EA580C] shadow-2xs font-extrabold'
                 : 'text-[#6E5C5F] dark:text-[#A8989B]'
             }`}
           >
-            Book Screening
+            Find & Book Center
           </button>
           <button
             type="button"
             onClick={() => {
               setActiveTab('my-bookings');
-              handleLookup();
+              if (patientAuthIdentifier.trim()) {
+                handlePatientAppointmentLookup();
+              }
             }}
-            className={`px-4 py-2 rounded-lg transition-all ${
+            className={`px-4 py-2 rounded-lg transition-all cursor-pointer ${
               activeTab === 'my-bookings'
-                ? 'bg-white dark:bg-[#1D191B] text-[#EA580C] shadow-2xs'
+                ? 'bg-white dark:bg-[#1D191B] text-[#EA580C] shadow-2xs font-extrabold'
                 : 'text-[#6E5C5F] dark:text-[#A8989B]'
             }`}
           >
@@ -254,9 +277,10 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
       </div>
 
       {/* =====================================================================
-          MANDATORY DEMO DISCLAIMER BANNER
-          "If backend availability is not yet implemented, clearly label the
-          interface as DEMO and do not pretend the slots are real."
+          EXPLICIT DEMO DATA LABEL & BANNER
+          "If real availability/backend functionality is not yet implemented,
+          DO NOT pretend that fake slots are real.
+          Clearly label demo data as: DEMO DATA"
           ===================================================================== */}
       {!isLive ? (
         <div
@@ -267,32 +291,38 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
           <AlertTriangle className="w-5 h-5 text-[#D97706] shrink-0 mt-0.5" />
           <div className="space-y-1">
             <div className="flex items-center gap-2 font-black uppercase tracking-wider text-xs">
-              <span className="px-2 py-0.5 rounded-md bg-[#D97706] text-white">DEMO MODE</span>
-              <span>Backend Availability Is Simulated</span>
+              <span className="px-2 py-0.5 rounded-md bg-[#D97706] text-white">DEMO DATA</span>
+              <span>Backend Hospital Integration In Demonstration Mode</span>
             </div>
             <p className="leading-relaxed">
-              Real-time hospital booking integration is running in demonstration mode. The available dates and time slots shown below are <strong>sample demonstration slots</strong> to showcase the end-to-end booking workflow and do not represent actual live clinical appointments.
+              This scheduling system is running with <strong>DEMO DATA</strong>. Available dates and time slots shown below are demonstration records to showcase the end-to-end booking experience and do not reflect live hospital scheduling.
             </p>
           </div>
         </div>
       ) : (
         <div className="p-3.5 rounded-2xl bg-[#F0FDF4] dark:bg-[#132317] border border-[#86EFAC] dark:border-[#166534] text-xs text-[#166534] dark:text-[#86EFAC] flex items-center gap-2.5">
           <ShieldCheck className="w-4 h-4 text-[#16A34A]" />
-          <span>Connected to live Supabase scheduling with Row Level Security (RLS) active.</span>
+          <span>Connected to live scheduling backend with Row Level Security (RLS) active.</span>
         </div>
       )}
 
       {/* =====================================================================
-          TAB 1: BOOK SCREENING WORKFLOW
-          Workflow:
-          Find Screening Center -> Select Center -> View Services ->
-          View Available Dates -> View Available Time Slots -> Book -> Confirmation -> Reminder
+          TAB 1: FIND & BOOK SCREENING WORKFLOW
+          Exact Flow:
+          Find Center
+          → Select Center
+          → Select Service
+          → Select Date
+          → Select Time
+          → Confirm
+          → Booking Confirmation
           ===================================================================== */}
       {activeTab === 'book' && (
         <div className="space-y-8">
-          {/* Progress Indicator Steps */}
+          {/* Flow Stepper Bar */}
           <div className="bg-white dark:bg-[#1C1719] border border-[#EFE4DC] dark:border-[#382E32] rounded-2xl p-4 sm:p-5 shadow-xs">
             <div className="flex items-center justify-between overflow-x-auto pb-1 text-xs font-bold gap-2">
+              {/* Step 1: Find / Select Center */}
               <div
                 className={`flex items-center gap-2 shrink-0 ${
                   currentStep >= 1 ? 'text-[#EA580C]' : 'text-[#8E7E81]'
@@ -314,6 +344,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
 
               <span className="text-[#C4B7BA]">→</span>
 
+              {/* Step 2: Select Service */}
               <div
                 className={`flex items-center gap-2 shrink-0 ${
                   currentStep >= 2 ? 'text-[#EA580C]' : 'text-[#8E7E81]'
@@ -330,11 +361,12 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                 >
                   {currentStep > 2 ? <Check className="w-3.5 h-3.5" /> : '2'}
                 </div>
-                <span>View Services</span>
+                <span>Select Service</span>
               </div>
 
               <span className="text-[#C4B7BA]">→</span>
 
+              {/* Step 3: Select Date */}
               <div
                 className={`flex items-center gap-2 shrink-0 ${
                   currentStep >= 3 ? 'text-[#EA580C]' : 'text-[#8E7E81]'
@@ -351,11 +383,12 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                 >
                   {currentStep > 3 ? <Check className="w-3.5 h-3.5" /> : '3'}
                 </div>
-                <span>Dates & Slots</span>
+                <span>Select Date</span>
               </div>
 
               <span className="text-[#C4B7BA]">→</span>
 
+              {/* Step 4: Select Time */}
               <div
                 className={`flex items-center gap-2 shrink-0 ${
                   currentStep >= 4 ? 'text-[#EA580C]' : 'text-[#8E7E81]'
@@ -372,32 +405,66 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                 >
                   {currentStep > 4 ? <Check className="w-3.5 h-3.5" /> : '4'}
                 </div>
-                <span>Book Details</span>
+                <span>Select Time</span>
               </div>
 
               <span className="text-[#C4B7BA]">→</span>
 
+              {/* Step 5: Confirm */}
               <div
                 className={`flex items-center gap-2 shrink-0 ${
-                  currentStep === 5 ? 'text-[#15803D]' : 'text-[#8E7E81]'
+                  currentStep >= 5 ? 'text-[#EA580C]' : 'text-[#8E7E81]'
                 }`}
               >
                 <div
                   className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
-                    currentStep === 5 ? 'bg-[#15803D] text-white' : 'bg-[#E5D7CD] text-[#7A696C]'
+                    currentStep > 5
+                      ? 'bg-[#15803D] text-white'
+                      : currentStep === 5
+                      ? 'bg-[#EA580C] text-white'
+                      : 'bg-[#E5D7CD] text-[#7A696C]'
                   }`}
                 >
-                  5
+                  {currentStep > 5 ? <Check className="w-3.5 h-3.5" /> : '5'}
                 </div>
-                <span>Confirmation</span>
+                <span>Confirm</span>
+              </div>
+
+              <span className="text-[#C4B7BA]">→</span>
+
+              {/* Step 6: Booking Confirmation */}
+              <div
+                className={`flex items-center gap-2 shrink-0 ${
+                  currentStep === 6 ? 'text-[#15803D]' : 'text-[#8E7E81]'
+                }`}
+              >
+                <div
+                  className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                    currentStep === 6 ? 'bg-[#15803D] text-white' : 'bg-[#E5D7CD] text-[#7A696C]'
+                  }`}
+                >
+                  6
+                </div>
+                <span>Booking Confirmation</span>
               </div>
             </div>
           </div>
 
-          {/* STEP 1: FIND & SELECT SCREENING CENTER */}
+          {/* =================================================================
+              STEP 1: FIND & SELECT CENTER
+              Patient sees:
+              - Center
+              - Location
+              - Distance where available
+              - Available services
+              - Languages supported where available
+              - Available dates
+              - Available time slots
+              Primary CTA: Book a Screening
+              ================================================================= */}
           {currentStep === 1 && (
             <div className="space-y-6">
-              {/* Search & City Filter */}
+              {/* Search & City Filter Bar */}
               <div className="bg-white dark:bg-[#1C1719] border border-[#EFE4DC] dark:border-[#382E32] rounded-2xl p-4 sm:p-5 shadow-xs space-y-4">
                 <div className="flex flex-col sm:flex-row gap-3">
                   <div className="relative flex-1">
@@ -406,7 +473,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                       type="text"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Search clinic name, PIN code (e.g. 560011), or street address..."
+                      placeholder="Search center name, PIN code (e.g. 560011), city or street address..."
                       className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#EFE4DC] dark:border-[#382E32] bg-[#FAF7F4] dark:bg-[#251E22] text-xs sm:text-sm text-[#1F181A] dark:text-white placeholder:text-[#8E7E81] focus:outline-none focus:border-[#EA580C]"
                     />
                   </div>
@@ -417,7 +484,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                         key={city}
                         type="button"
                         onClick={() => setSelectedCity(city)}
-                        className={`px-3 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
+                        className={`px-3 py-2 rounded-xl text-xs font-bold transition-all shrink-0 cursor-pointer ${
                           selectedCity === city
                             ? 'bg-[#EA580C] text-white'
                             : 'bg-[#FAF7F4] dark:bg-[#251E22] border border-[#EFE4DC] dark:border-[#382E32] text-[#6E5C5F] dark:text-[#C4B7BA]'
@@ -438,38 +505,54 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                     className="bg-white dark:bg-[#1C1719] border border-[#EFE4DC] dark:border-[#382E32] hover:border-[#EA580C] dark:hover:border-[#EA580C] rounded-2xl p-5 shadow-xs transition-all flex flex-col justify-between group"
                   >
                     <div className="space-y-3">
+                      {/* Distance where available & Category */}
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-[11px] font-bold text-[#6E5C5F] dark:text-[#A8989B] bg-[#FAF7F4] dark:bg-[#251E22] px-2.5 py-1 rounded-lg border border-[#EFE4DC] dark:border-[#382E32] flex items-center gap-1">
-                          <Navigation className="w-3 h-3 text-[#EA580C]" />
-                          ~{center.distanceKm || 2.5} km away
-                        </span>
-                        {center.isCampActive ? (
-                          <span className="text-[11px] font-bold text-[#EA580C] bg-[#FFF7ED] dark:bg-[#2C1D17] px-2.5 py-1 rounded-lg border border-[#FDBA74] flex items-center gap-1">
-                            <Tent className="w-3 h-3" />
-                            Camp Active
+                        {center.distanceKm !== undefined ? (
+                          <span className="text-[11px] font-bold text-[#6E5C5F] dark:text-[#A8989B] bg-[#FAF7F4] dark:bg-[#251E22] px-2.5 py-1 rounded-lg border border-[#EFE4DC] dark:border-[#382E32] flex items-center gap-1">
+                            <Navigation className="w-3 h-3 text-[#EA580C]" />
+                            Distance: ~{center.distanceKm} km
                           </span>
                         ) : (
                           <span className="text-[11px] text-[#8E7E81] uppercase font-semibold">
-                            Permanent Clinic
+                            Screening Center
+                          </span>
+                        )}
+
+                        {center.isCampActive ? (
+                          <span className="text-[11px] font-bold text-[#EA580C] bg-[#FFF7ED] dark:bg-[#2C1D17] px-2.5 py-1 rounded-lg border border-[#FDBA74] flex items-center gap-1">
+                            <Tent className="w-3 h-3" />
+                            Active Camp
+                          </span>
+                        ) : (
+                          <span className="text-[11px] text-[#8E7E81] uppercase font-semibold">
+                            Fixed Clinic
                           </span>
                         )}
                       </div>
 
+                      {/* Center Name */}
                       <h3 className="font-serif font-bold text-base text-[#1F181A] dark:text-white group-hover:text-[#EA580C] transition-colors">
                         {center.name}
                       </h3>
 
-                      <p className="text-xs text-[#524346] dark:text-[#C4B7BA] flex items-start gap-1.5 leading-relaxed">
+                      {/* Location: address, city, pinCode */}
+                      <div className="text-xs text-[#524346] dark:text-[#C4B7BA] flex items-start gap-1.5 leading-relaxed">
                         <MapPin className="w-3.5 h-3.5 text-[#EA580C] shrink-0 mt-0.5" />
-                        <span>
-                          {center.address}, {center.city} — {center.pinCode}
-                        </span>
-                      </p>
+                        <div>
+                          <span className="font-semibold text-[#1F181A] dark:text-white block">Location:</span>
+                          <span>
+                            {center.address}, {center.city} — {center.pinCode}
+                          </span>
+                        </div>
+                      </div>
 
+                      {/* Available time slots & Operating hours */}
                       <div className="text-xs text-[#6E5C5F] dark:text-[#A8989B] space-y-1 pt-2 border-t border-[#F2ECE7] dark:border-[#2C2428]">
                         <div className="flex items-center gap-1.5">
                           <Clock className="w-3.5 h-3.5 text-[#8E7E81]" />
-                          <span>{center.operatingHours}</span>
+                          <span>
+                            <strong>Available time slots:</strong> {center.operatingHours}
+                          </span>
                         </div>
                         <div className="flex items-center gap-1.5 font-mono text-[11px]">
                           <Phone className="w-3.5 h-3.5 text-[#8E7E81]" />
@@ -477,26 +560,56 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                         </div>
                       </div>
 
-                      <div className="pt-2 flex flex-wrap gap-1">
-                        {center.services.slice(0, 2).map((s, i) => (
-                          <span
-                            key={i}
-                            className="text-[10px] px-2 py-0.5 rounded-md bg-[#FAF7F4] dark:bg-[#251E22] border border-[#EFE4DC] dark:border-[#382E32] text-[#6E5C5F] dark:text-[#C4B7BA]"
-                          >
-                            {s}
+                      {/* Available dates preview */}
+                      <div className="text-xs text-[#15803D] dark:text-[#4ADE80] font-semibold flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5" />
+                        <span>Available dates: Daily slots open this week</span>
+                        {!isLive && (
+                          <span className="text-[9px] px-1 py-0.2 rounded bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] uppercase font-bold">
+                            DEMO DATA
                           </span>
-                        ))}
+                        )}
+                      </div>
+
+                      {/* Languages supported where available */}
+                      {center.languagesSupported && center.languagesSupported.length > 0 && (
+                        <div className="pt-2 border-t border-[#F2ECE7] dark:border-[#2C2428] text-[11px] text-[#6E5C5F] dark:text-[#A8989B] flex items-center gap-1.5">
+                          <Globe className="w-3.5 h-3.5 text-[#EA580C] shrink-0" />
+                          <span>
+                            <strong>Languages supported:</strong> {center.languagesSupported.join(', ')}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Available services */}
+                      <div className="pt-2 border-t border-[#F2ECE7] dark:border-[#2C2428] space-y-1.5">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-[#8E7E81] block">
+                          Available Services:
+                        </span>
+                        <div className="flex flex-wrap gap-1">
+                          {center.services.map((s, i) => (
+                            <span
+                              key={i}
+                              className="text-[10px] px-2 py-0.5 rounded-md bg-[#FAF7F4] dark:bg-[#251E22] border border-[#EFE4DC] dark:border-[#382E32] text-[#6E5C5F] dark:text-[#C4B7BA]"
+                            >
+                              {s}
+                            </span>
+                          ))}
+                        </div>
                       </div>
                     </div>
 
+                    {/* Primary CTA: Book a Screening */}
                     <div className="mt-5 pt-4 border-t border-[#F2ECE7] dark:border-[#2C2428] flex items-center gap-2">
                       <button
                         type="button"
+                        id={`btn-select-center-${center.id}`}
                         onClick={() => handleSelectCenter(center)}
-                        className="flex-1 py-2.5 px-4 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-bold transition-all shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="flex-1 py-3 px-4 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-extrabold uppercase tracking-wider transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
                       >
-                        <span>Select Center</span>
-                        <ArrowRight className="w-3.5 h-3.5" />
+                        <Calendar className="w-3.5 h-3.5" />
+                        <span>Book a Screening</span>
+                        <ArrowRight className="w-3.5 h-3.5 ml-1" />
                       </button>
 
                       <a
@@ -515,13 +628,15 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
             </div>
           )}
 
-          {/* STEP 2: VIEW SERVICES */}
+          {/* =================================================================
+              STEP 2: SELECT SERVICE
+              ================================================================= */}
           {currentStep === 2 && selectedCenter && (
             <div className="bg-white dark:bg-[#1C1719] border border-[#EFE4DC] dark:border-[#382E32] rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
               <div className="flex items-center justify-between pb-4 border-b border-[#F2ECE7] dark:border-[#2C2428]">
                 <div>
                   <span className="text-xs font-bold text-[#EA580C] uppercase tracking-wider block">
-                    Step 2 • Screening Services
+                    Step 2 • Select Service
                   </span>
                   <h2 className="text-xl sm:text-2xl font-extrabold text-[#1F181A] dark:text-white mt-1">
                     Available Services at {selectedCenter.name}
@@ -534,7 +649,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                 <button
                   type="button"
                   onClick={() => setCurrentStep(1)}
-                  className="px-3 py-1.5 rounded-xl border border-[#EFE4DC] dark:border-[#382E32] text-xs font-bold text-[#6E5C5F] hover:bg-[#FAF7F4] flex items-center gap-1"
+                  className="px-3 py-1.5 rounded-xl border border-[#EFE4DC] dark:border-[#382E32] text-xs font-bold text-[#6E5C5F] hover:bg-[#FAF7F4] flex items-center gap-1 cursor-pointer"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>Change Center</span>
@@ -598,9 +713,9 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                 <button
                   type="button"
                   onClick={() => setCurrentStep(1)}
-                  className="px-4 py-2.5 rounded-xl border border-[#EFE4DC] dark:border-[#382E32] text-xs font-bold text-[#6E5C5F] hover:bg-[#FAF7F4]"
+                  className="px-4 py-2.5 rounded-xl border border-[#EFE4DC] dark:border-[#382E32] text-xs font-bold text-[#6E5C5F] hover:bg-[#FAF7F4] cursor-pointer"
                 >
-                  Back
+                  Back to Find Center
                 </button>
 
                 <button
@@ -609,50 +724,42 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                   disabled={!selectedService}
                   className="px-6 py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs uppercase tracking-wider shadow-xs flex items-center gap-2 cursor-pointer disabled:opacity-50"
                 >
-                  <span>Select Dates & Slots</span>
+                  <span>Select Date</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
           )}
 
-          {/* STEP 3: VIEW AVAILABLE DATES & TIME SLOTS */}
+          {/* =================================================================
+              STEP 3: SELECT DATE
+              ================================================================= */}
           {currentStep === 3 && selectedCenter && (
-            <div className="bg-white dark:bg-[#1C1719] border border-[#EFE4DC] dark:border-[#382E32] rounded-3xl p-6 sm:p-8 shadow-xs space-y-8">
+            <div className="bg-white dark:bg-[#1C1719] border border-[#EFE4DC] dark:border-[#382E32] rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#F2ECE7] dark:border-[#2C2428]">
                 <div>
                   <span className="text-xs font-bold text-[#EA580C] uppercase tracking-wider block">
-                    Step 3 • Available Schedule
+                    Step 3 • Select Date
                   </span>
                   <h2 className="text-xl sm:text-2xl font-extrabold text-[#1F181A] dark:text-white mt-1">
-                    Select Date & Time Slot
+                    Available Dates for Screening
                   </h2>
                   <p className="text-xs text-[#6E5C5F] dark:text-[#A8989B] mt-0.5">
                     {selectedCenter.name} • {selectedService}
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-[#8E7E81] bg-[#FAF7F4] dark:bg-[#251E22] px-3 py-1.5 rounded-xl border border-[#EFE4DC] dark:border-[#382E32] font-semibold">
-                    Operating: {selectedCenter.operatingHours}
+                {!isLive && (
+                  <span className="px-2.5 py-1 rounded-lg bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] text-xs font-black uppercase tracking-wider">
+                    DEMO DATA
                   </span>
-                </div>
+                )}
               </div>
-
-              {/* Notice regarding demo availability */}
-              {!isLive && (
-                <div className="p-3 rounded-xl bg-[#FFFBEB] dark:bg-[#2E2413] border border-[#FDE68A] dark:border-[#78350F] text-xs text-[#92400E] dark:text-[#FDE68A] flex items-center gap-2">
-                  <Info className="w-4 h-4 text-[#D97706] shrink-0" />
-                  <span>
-                    <strong>Demo Schedule:</strong> Available slots are generated for functional validation. Choose an available slot to proceed.
-                  </span>
-                </div>
-              )}
 
               {/* DATE SELECTOR */}
               <div className="space-y-3">
                 <label className="text-xs font-bold uppercase tracking-wider text-[#1F181A] dark:text-white block">
-                  1. Choose Date
+                  Choose an Available Date
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-2.5">
                   {availableDates.map((item) => {
@@ -665,8 +772,8 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                       <button
                         key={item.date}
                         type="button"
-                        onClick={() => handleDateChange(item.date)}
-                        className={`p-3 rounded-2xl border-2 text-center transition-all cursor-pointer ${
+                        onClick={() => handleSelectDate(item.date)}
+                        className={`p-3.5 rounded-2xl border-2 text-center transition-all cursor-pointer ${
                           isSelected
                             ? 'border-[#EA580C] bg-[#FFF7ED] dark:bg-[#2C1D17] text-[#EA580C] font-bold shadow-xs'
                             : 'border-[#EFE4DC] dark:border-[#382E32] bg-[#FAF7F4] dark:bg-[#251E22] text-[#382E30] dark:text-[#DDD3CD] hover:border-[#EA580C]/50'
@@ -685,16 +792,64 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                 </div>
               </div>
 
-              {/* TIME SLOTS SELECTOR */}
-              <div className="space-y-3 pt-4 border-t border-[#F2ECE7] dark:border-[#2C2428]">
-                <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold uppercase tracking-wider text-[#1F181A] dark:text-white block">
-                    2. Choose Available Time Slot
-                  </label>
-                  <span className="text-xs text-[#7A696C]">
-                    Date: {selectedDate ? new Date(selectedDate + 'T00:00:00').toLocaleDateString(undefined, { dateStyle: 'medium' }) : ''}
+              <div className="pt-4 flex items-center justify-between border-t border-[#F2ECE7] dark:border-[#2C2428]">
+                <button
+                  type="button"
+                  onClick={() => setCurrentStep(2)}
+                  className="px-4 py-2.5 rounded-xl border border-[#EFE4DC] dark:border-[#382E32] text-xs font-bold text-[#6E5C5F] hover:bg-[#FAF7F4] cursor-pointer"
+                >
+                  Back to Services
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setCurrentStep(4)}
+                  disabled={!selectedDate}
+                  className="px-6 py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs uppercase tracking-wider shadow-xs flex items-center gap-2 cursor-pointer disabled:opacity-50"
+                >
+                  <span>Select Time</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* =================================================================
+              STEP 4: SELECT TIME
+              ================================================================= */}
+          {currentStep === 4 && selectedCenter && (
+            <div className="bg-white dark:bg-[#1C1719] border border-[#EFE4DC] dark:border-[#382E32] rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#F2ECE7] dark:border-[#2C2428]">
+                <div>
+                  <span className="text-xs font-bold text-[#EA580C] uppercase tracking-wider block">
+                    Step 4 • Select Time
                   </span>
+                  <h2 className="text-xl sm:text-2xl font-extrabold text-[#1F181A] dark:text-white mt-1">
+                    Available Time Slots
+                  </h2>
+                  <p className="text-xs text-[#6E5C5F] dark:text-[#A8989B] mt-0.5">
+                    Date:{' '}
+                    {selectedDate
+                      ? new Date(selectedDate + 'T00:00:00').toLocaleDateString(undefined, {
+                          dateStyle: 'full',
+                        })
+                      : ''}{' '}
+                    • {selectedCenter.name}
+                  </p>
                 </div>
+
+                {!isLive && (
+                  <span className="px-2.5 py-1 rounded-lg bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] text-xs font-black uppercase tracking-wider">
+                    DEMO DATA
+                  </span>
+                )}
+              </div>
+
+              {/* TIME SLOTS SELECTOR */}
+              <div className="space-y-3">
+                <label className="text-xs font-bold uppercase tracking-wider text-[#1F181A] dark:text-white block">
+                  Choose a Time Slot
+                </label>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                   {slotsForDate.map((slot) => {
@@ -712,7 +867,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                           isFull
                             ? 'opacity-40 bg-[#F3ECE5] border-transparent cursor-not-allowed'
                             : isSelected
-                            ? 'border-[#EA580C] bg-[#FFF7ED] dark:bg-[#2C1D17] shadow-xs'
+                            ? 'border-[#EA580C] bg-[#FFF7ED] dark:bg-[#2C1D17] shadow-xs cursor-pointer'
                             : 'border-[#EFE4DC] dark:border-[#382E32] bg-[#FAF7F4] dark:bg-[#251E22] hover:border-[#EA580C]/40 cursor-pointer'
                         }`}
                       >
@@ -735,8 +890,8 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                             {isFull ? 'Full' : `${remaining} available`}
                           </span>
                           {slot.isDemo && (
-                            <span className="text-[9px] uppercase px-1.5 py-0.5 rounded bg-[#E5D7CD] dark:bg-[#382E32] text-[#6E5C5F] dark:text-[#A8989B]">
-                              Demo
+                            <span className="text-[9px] uppercase px-1.5 py-0.5 rounded bg-[#E5D7CD] dark:bg-[#382E32] text-[#6E5C5F] dark:text-[#A8989B] font-bold">
+                              DEMO DATA
                             </span>
                           )}
                         </div>
@@ -749,27 +904,30 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
               <div className="pt-4 flex items-center justify-between border-t border-[#F2ECE7] dark:border-[#2C2428]">
                 <button
                   type="button"
-                  onClick={() => setCurrentStep(2)}
-                  className="px-4 py-2.5 rounded-xl border border-[#EFE4DC] dark:border-[#382E32] text-xs font-bold text-[#6E5C5F] hover:bg-[#FAF7F4]"
+                  onClick={() => setCurrentStep(3)}
+                  className="px-4 py-2.5 rounded-xl border border-[#EFE4DC] dark:border-[#382E32] text-xs font-bold text-[#6E5C5F] hover:bg-[#FAF7F4] cursor-pointer"
                 >
-                  Back
+                  Back to Dates
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => setCurrentStep(4)}
+                  onClick={() => setCurrentStep(5)}
                   disabled={!selectedSlot}
                   className="px-6 py-2.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white font-bold text-xs uppercase tracking-wider shadow-xs flex items-center gap-2 cursor-pointer disabled:opacity-50"
                 >
-                  <span>Enter Patient Details</span>
+                  <span>Confirm Appointment</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
           )}
 
-          {/* STEP 4: PATIENT DETAILS & BOOK */}
-          {currentStep === 4 && selectedCenter && selectedSlot && (
+          {/* =================================================================
+              STEP 5: CONFIRM (REVIEW DETAILS & PARTICIPANT REGISTRATION)
+              Primary CTA: Book a Screening
+              ================================================================= */}
+          {currentStep === 5 && selectedCenter && selectedSlot && (
             <form
               onSubmit={handleBookScreening}
               className="bg-white dark:bg-[#1C1719] border border-[#EFE4DC] dark:border-[#382E32] rounded-3xl p-6 sm:p-8 shadow-xs space-y-6"
@@ -777,10 +935,10 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#F2ECE7] dark:border-[#2C2428]">
                 <div>
                   <span className="text-xs font-bold text-[#EA580C] uppercase tracking-wider block">
-                    Step 4 • Participant Confirmation
+                    Step 5 • Confirm & Register
                   </span>
                   <h2 className="text-xl sm:text-2xl font-extrabold text-[#1F181A] dark:text-white mt-1">
-                    Complete Your Screening Registration
+                    Confirm Screening Details
                   </h2>
                 </div>
 
@@ -812,7 +970,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                 </div>
               )}
 
-              {/* Form fields */}
+              {/* Patient Fields */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                 <div>
                   <label className="font-bold text-[#1F181A] dark:text-white block mb-1">
@@ -830,7 +988,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
 
                 <div>
                   <label className="font-bold text-[#1F181A] dark:text-white block mb-1">
-                    Contact Phone Number (for SMS token & reminders) *
+                    Contact Phone Number (for confirmation & reminders) *
                   </label>
                   <input
                     type="tel"
@@ -957,17 +1115,16 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                 )}
               </div>
 
-              {/* CTA BUTTON */}
+              {/* PRIMARY CTA: Book a Screening */}
               <div className="pt-4 flex items-center justify-between border-t border-[#F2ECE7] dark:border-[#2C2428]">
                 <button
                   type="button"
-                  onClick={() => setCurrentStep(3)}
-                  className="px-4 py-2.5 rounded-xl border border-[#EFE4DC] dark:border-[#382E32] text-xs font-bold text-[#6E5C5F] hover:bg-[#FAF7F4]"
+                  onClick={() => setCurrentStep(4)}
+                  className="px-4 py-2.5 rounded-xl border border-[#EFE4DC] dark:border-[#382E32] text-xs font-bold text-[#6E5C5F] hover:bg-[#FAF7F4] cursor-pointer"
                 >
-                  Back
+                  Back to Time
                 </button>
 
-                {/* PRIMARY CTA AS REQUIRED: [ Book a Screening ] */}
                 <button
                   type="submit"
                   id="btn-book-a-screening"
@@ -990,21 +1147,21 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
             </form>
           )}
 
-          {/* STEP 5: CONFIRMATION & ACTIONS
-              After booking show:
-              Booking Confirmed
-              Center
-              Date
-              Time
-              Booking Reference
+          {/* =================================================================
+              STEP 6: BOOKING CONFIRMATION
+              Confirmation should show:
+              - Center
+              - Date
+              - Time
+              - Booking Reference
               Actions:
-              Add to Calendar
-              Reschedule
-              Cancel
-          */}
-          {currentStep === 5 && confirmedAppointment && (
+              - Add to Calendar
+              - Reschedule
+              - Cancel
+              ================================================================= */}
+          {currentStep === 6 && confirmedAppointment && (
             <div className="bg-white dark:bg-[#1C1719] border-2 border-[#15803D]/30 rounded-3xl p-6 sm:p-10 shadow-xs space-y-8 animate-in zoom-in-95">
-              {/* Top Confirmed Header */}
+              {/* Confirmed Top Header */}
               <div className="text-center space-y-3 pb-6 border-b border-[#F2ECE7] dark:border-[#2C2428]">
                 <div className="w-16 h-16 rounded-full bg-[#F0FDF4] dark:bg-[#152D1C] border-2 border-[#86EFAC] dark:border-[#166534] flex items-center justify-center text-[#15803D] dark:text-[#4ADE80] mx-auto shadow-xs">
                   <CheckCircle2 className="w-9 h-9" />
@@ -1013,16 +1170,16 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                   <span>Status: {confirmedAppointment.status}</span>
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-[#1F181A] dark:text-white tracking-tight">
-                  Booking Confirmed
+                  Booking Confirmation
                 </h2>
                 <p className="text-sm text-[#524346] dark:text-[#DDD3CD] max-w-lg mx-auto">
                   Your appointment slot is reserved. A confirmation SMS with directions and queue guidelines has been logged for <strong>{confirmedAppointment.patientPhone}</strong>.
                 </p>
               </div>
 
-              {/* BOOKING DETAILS CARD */}
+              {/* Exact required fields: Center, Date, Time, Booking Reference */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Center */}
+                {/* 1. Center */}
                 <div className="p-5 rounded-2xl bg-[#FAF7F4] dark:bg-[#251E22] border border-[#EFE4DC] dark:border-[#382E32] space-y-1.5">
                   <span className="text-xs font-bold text-[#EA580C] uppercase tracking-wider flex items-center gap-1.5">
                     <MapPin className="w-3.5 h-3.5" />
@@ -1039,27 +1196,37 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                   </p>
                 </div>
 
-                {/* Date & Time */}
+                {/* 2. Date */}
                 <div className="p-5 rounded-2xl bg-[#FAF7F4] dark:bg-[#251E22] border border-[#EFE4DC] dark:border-[#382E32] space-y-1.5">
                   <span className="text-xs font-bold text-[#EA580C] uppercase tracking-wider flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5" />
-                    <span>Date & Time</span>
+                    <span>Date</span>
                   </span>
                   <div className="text-base font-bold text-[#1F181A] dark:text-white">
                     {new Date(confirmedAppointment.appointmentDate + 'T00:00:00').toLocaleDateString(undefined, {
                       dateStyle: 'full',
                     })}
                   </div>
-                  <div className="text-sm font-semibold text-[#15803D] dark:text-[#4ADE80] flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5" />
-                    <span>{confirmedAppointment.appointmentTime}</span>
-                  </div>
                   <p className="text-xs text-[#6E5C5F] dark:text-[#A8989B] pt-1">
                     Service: {confirmedAppointment.serviceType}
                   </p>
                 </div>
 
-                {/* Booking Reference */}
+                {/* 3. Time */}
+                <div className="p-5 rounded-2xl bg-[#FAF7F4] dark:bg-[#251E22] border border-[#EFE4DC] dark:border-[#382E32] space-y-1.5">
+                  <span className="text-xs font-bold text-[#EA580C] uppercase tracking-wider flex items-center gap-1.5">
+                    <Clock className="w-3.5 h-3.5" />
+                    <span>Time</span>
+                  </span>
+                  <div className="text-base font-bold text-[#15803D] dark:text-[#4ADE80]">
+                    {confirmedAppointment.appointmentTime}
+                  </div>
+                  <p className="text-xs text-[#6E5C5F] dark:text-[#A8989B] pt-1">
+                    Estimated Duration: ~10 minutes
+                  </p>
+                </div>
+
+                {/* 4. Booking Reference */}
                 <div className="p-5 rounded-2xl bg-[#FAF7F4] dark:bg-[#251E22] border border-[#EFE4DC] dark:border-[#382E32] space-y-1.5">
                   <span className="text-xs font-bold text-[#EA580C] uppercase tracking-wider">
                     Booking Reference
@@ -1068,36 +1235,26 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                     {confirmedAppointment.referenceCode}
                   </div>
                   <p className="text-xs text-[#7A696C]">
-                    Keep this reference for check-in upon arrival at the screening reception desk.
+                    Keep this reference code for receptionist check-in upon arrival.
                   </p>
-                </div>
-
-                {/* Patient & Reminder Summary */}
-                <div className="p-5 rounded-2xl bg-[#FAF7F4] dark:bg-[#251E22] border border-[#EFE4DC] dark:border-[#382E32] space-y-1.5">
-                  <span className="text-xs font-bold text-[#EA580C] uppercase tracking-wider flex items-center gap-1.5">
-                    <Smartphone className="w-3.5 h-3.5" />
-                    <span>Reminder & Patient</span>
-                  </span>
-                  <div className="text-sm font-bold text-[#1F181A] dark:text-white">
-                    {confirmedAppointment.patientName} ({confirmedAppointment.diabetesType || 'Participant'})
-                  </div>
-                  <p className="text-xs text-[#6E5C5F] dark:text-[#A8989B]">
-                    Reminder scheduled 24 hrs prior to {confirmedAppointment.patientPhone}
-                  </p>
-                  <div className="text-[11px] text-[#15803D] font-bold">
-                    ✓ Reminder token activated
-                  </div>
                 </div>
               </div>
 
               {/* REQUIRED ACTIONS: Add to Calendar, Reschedule, Cancel */}
               <div className="p-6 rounded-2xl bg-[#FFF7ED] dark:bg-[#2C1D17] border border-[#FDBA74] space-y-4">
-                <span className="text-xs font-bold uppercase tracking-wider text-[#7C2D12] dark:text-[#FDBA74] block">
-                  Appointment Actions
-                </span>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold uppercase tracking-wider text-[#7C2D12] dark:text-[#FDBA74] block">
+                    Actions:
+                  </span>
+                  {!isLive && (
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] uppercase font-bold">
+                      DEMO DATA
+                    </span>
+                  )}
+                </div>
 
                 <div className="flex flex-wrap items-center gap-3">
-                  {/* Action 1: Add to Calendar (ICS + Google) */}
+                  {/* Action 1: Add to Calendar */}
                   <button
                     type="button"
                     id="btn-add-to-calendar"
@@ -1147,13 +1304,13 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                     className="px-4 py-2.5 rounded-xl border border-[#FECACA] bg-white dark:bg-[#1D191B] text-[#DC2626] hover:bg-[#FEF2F2] text-xs font-bold uppercase tracking-wider transition-colors flex items-center gap-2 cursor-pointer"
                   >
                     <X className="w-4 h-4" />
-                    <span>Cancel Appointment</span>
+                    <span>Cancel</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => window.print()}
-                    className="p-2.5 rounded-xl border border-[#EFE4DC] dark:border-[#382E32] bg-white dark:bg-[#1D191B] text-[#382E30] dark:text-[#DDD3CD] hover:border-[#EA580C] transition-colors"
+                    className="p-2.5 rounded-xl border border-[#EFE4DC] dark:border-[#382E32] bg-white dark:bg-[#1D191B] text-[#382E30] dark:text-[#DDD3CD] hover:border-[#EA580C] transition-colors cursor-pointer"
                     title="Print Confirmation Slip"
                   >
                     <Printer className="w-4 h-4" />
@@ -1161,7 +1318,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                 </div>
               </div>
 
-              {/* Bottom Navigation */}
+              {/* Bottom Nav */}
               <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-[#F2ECE7] dark:border-[#2C2428] text-xs">
                 <button
                   type="button"
@@ -1180,7 +1337,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                   <button
                     type="button"
                     onClick={onNavigateToScreening}
-                    className="px-4 py-2 rounded-xl border border-[#EFE4DC] dark:border-[#382E32] font-semibold text-[#6E5C5F] hover:bg-[#FAF7F4] transition-colors"
+                    className="px-4 py-2 rounded-xl border border-[#EFE4DC] dark:border-[#382E32] font-semibold text-[#6E5C5F] hover:bg-[#FAF7F4] transition-colors cursor-pointer"
                   >
                     Try AI Demo Screening Experience →
                   </button>
@@ -1243,7 +1400,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
 
                   <div>
                     <label className="font-bold block mb-1">Select Available Time Slot</label>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto">
                       {rescheduleSlots.map((slot) => {
                         const isFull = slot.bookedCount >= slot.capacity;
                         const isSelected = rescheduleSlot?.id === slot.id;
@@ -1278,7 +1435,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                   <button
                     type="button"
                     onClick={() => setIsRescheduling(false)}
-                    className="px-4 py-2 rounded-xl border border-[#EFE4DC] text-xs font-bold text-[#6E5C5F]"
+                    className="px-4 py-2 rounded-xl border border-[#EFE4DC] text-xs font-bold text-[#6E5C5F] cursor-pointer"
                   >
                     Close
                   </button>
@@ -1327,7 +1484,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                   <button
                     type="button"
                     onClick={() => setIsCancelling(false)}
-                    className="px-4 py-2 rounded-xl border border-[#EFE4DC] text-xs font-bold text-[#6E5C5F]"
+                    className="px-4 py-2 rounded-xl border border-[#EFE4DC] text-xs font-bold text-[#6E5C5F] cursor-pointer"
                   >
                     Keep Appointment
                   </button>
@@ -1346,47 +1503,69 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
       )}
 
       {/* =====================================================================
-          TAB 2: MY APPOINTMENTS LOOKUP (PATIENT VIEW)
+          TAB 2: MY APPOINTMENTS (PATIENTS CAN ONLY SEE THEIR OWN APPOINTMENTS)
+          Enforces patient data privacy and Row-Level Security:
+          Patient must authenticate with their registered phone or reference code.
           ===================================================================== */}
       {activeTab === 'my-bookings' && (
         <div className="bg-white dark:bg-[#1C1719] border border-[#EFE4DC] dark:border-[#382E32] rounded-3xl p-6 sm:p-8 shadow-xs space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#F2ECE7] dark:border-[#2C2428]">
             <div>
+              <div className="flex items-center gap-2 mb-1">
+                <Lock className="w-4 h-4 text-[#EA580C]" />
+                <span className="text-xs font-bold text-[#EA580C] uppercase tracking-wider">
+                  Patient Data Privacy & RLS
+                </span>
+              </div>
               <h2 className="text-xl font-extrabold text-[#1F181A] dark:text-white">
                 My Screening Appointments
               </h2>
               <p className="text-xs text-[#6E5C5F] dark:text-[#A8989B]">
-                Lookup and manage your existing appointments using your Booking Reference code or phone number.
+                Patients can only see their own appointments. Enter your registered phone number or booking reference to view your records.
               </p>
             </div>
 
             <div className="flex gap-2">
               <input
                 type="text"
-                value={lookupQuery}
-                onChange={(e) => setLookupQuery(e.target.value)}
-                placeholder="Search reference (e.g. BR-...) or phone..."
-                className="px-3.5 py-2 rounded-xl border border-[#EFE4DC] text-xs bg-[#FAF7F4] w-64 focus:outline-none focus:border-[#EA580C]"
+                value={patientAuthIdentifier}
+                onChange={(e) => setPatientAuthIdentifier(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handlePatientAppointmentLookup();
+                }}
+                placeholder="Phone (e.g. 9845012345) or Reference (BR-...)"
+                className="px-3.5 py-2 rounded-xl border border-[#EFE4DC] dark:border-[#382E32] text-xs bg-[#FAF7F4] dark:bg-[#251E22] w-64 sm:w-72 focus:outline-none focus:border-[#EA580C]"
               />
               <button
                 type="button"
-                onClick={handleLookup}
-                className="px-4 py-2 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-bold shadow-2xs"
+                onClick={handlePatientAppointmentLookup}
+                disabled={isLookingUp}
+                className="px-4 py-2 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-bold shadow-2xs cursor-pointer"
               >
-                Search
+                {isLookingUp ? 'Searching...' : 'View My Records'}
               </button>
             </div>
           </div>
 
           <div className="space-y-4">
-            {patientAppointments.length === 0 ? (
+            {!hasSearchedPatientAppts && patientAppointments.length === 0 ? (
+              <div className="text-center py-10 space-y-3 text-[#8E7E81]">
+                <Lock className="w-8 h-8 mx-auto text-[#EA580C]" />
+                <p className="text-xs font-semibold text-[#524346] dark:text-[#DDD3CD] max-w-md mx-auto">
+                  To protect your health records and enforce patient privacy, screening appointments are restricted to authorized patient lookups.
+                </p>
+                <p className="text-[11px] text-[#7A696C]">
+                  Please enter your phone number or booking reference code in the search bar above to view your scheduled visits.
+                </p>
+              </div>
+            ) : patientAppointments.length === 0 ? (
               <div className="text-center py-10 space-y-2 text-[#8E7E81]">
                 <Calendar className="w-8 h-8 mx-auto" />
-                <p className="text-xs font-semibold">No appointments found matching search.</p>
+                <p className="text-xs font-semibold">No appointments found matching "{patientAuthIdentifier}".</p>
                 <button
                   type="button"
                   onClick={() => setActiveTab('book')}
-                  className="text-xs font-bold text-[#EA580C] hover:underline"
+                  className="text-xs font-bold text-[#EA580C] hover:underline cursor-pointer"
                 >
                   Book a new screening appointment →
                 </button>
@@ -1418,8 +1597,8 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                         {appt.status}
                       </span>
                       {appt.isDemo && (
-                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#E5D7CD] dark:bg-[#382E32] text-[#6E5C5F] uppercase font-bold">
-                          Demo
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] uppercase font-bold">
+                          DEMO DATA
                         </span>
                       )}
                     </div>
@@ -1443,7 +1622,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                     <button
                       type="button"
                       onClick={() => bookingService.generateIcsFile(appt)}
-                      className="px-3 py-1.5 rounded-xl border border-[#EFE4DC] bg-white text-xs font-bold text-[#1F181A] hover:border-[#EA580C] flex items-center gap-1"
+                      className="px-3 py-1.5 rounded-xl border border-[#EFE4DC] bg-white text-xs font-bold text-[#1F181A] hover:border-[#EA580C] flex items-center gap-1 cursor-pointer"
                     >
                       <Calendar className="w-3 h-3 text-[#EA580C]" />
                       <span>Calendar</span>
@@ -1453,12 +1632,15 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                       <button
                         type="button"
                         onClick={async () => {
-                          const updated = await bookingService.cancelAppointment(appt.id, 'Cancelled from patient portal');
+                          const updated = await bookingService.cancelAppointment(
+                            appt.id,
+                            'Cancelled from patient portal'
+                          );
                           setPatientAppointments((prev) =>
                             prev.map((item) => (item.id === updated.id ? updated : item))
                           );
                         }}
-                        className="px-3 py-1.5 rounded-xl border border-[#FECACA] bg-white text-xs font-bold text-[#DC2626] hover:bg-[#FEF2F2]"
+                        className="px-3 py-1.5 rounded-xl border border-[#FECACA] bg-white text-xs font-bold text-[#DC2626] hover:bg-[#FEF2F2] cursor-pointer"
                       >
                         Cancel
                       </button>

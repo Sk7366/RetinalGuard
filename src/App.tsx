@@ -26,7 +26,6 @@ import { ProviderAppointmentsView } from './components/ProviderAppointmentsView'
 import { ReviewQueueView } from './components/ReviewQueueView';
 import { RoleSelectionModal } from './components/RoleSelectionModal';
 import { HelpSupportModal } from './components/HelpSupportModal';
-import { VoiceAssistant } from './components/VoiceAssistant';
 import { ResearchWorkspaceView } from './components/ResearchWorkspaceView';
 import { ResearcherSignIn } from './components/ResearcherSignIn';
 import { ScreeningCampFlow } from './components/ScreeningCampFlow';
@@ -899,16 +898,6 @@ function AppContent() {
 
       {/* Floating Voice Reader Bar when narration is playing */}
       <VoiceReaderBar />
-
-      {/* Persistent, Context-Aware Voice Assistant (Bottom-Right) - Only for Helpers/Staff/Researchers, NEVER in Patient mode */}
-      {experience !== 'patient' && (
-        <VoiceAssistant
-          role={currentUser.role}
-          voiceGuidanceEnabled={voiceGuidanceEnabled}
-          onToggleVoiceGuidance={setVoiceGuidanceEnabled}
-          currentRoute={isProviderMode ? providerRoute : publicRoute}
-        />
-      )}
 
       {/* First-Time Patient Welcome & Voice-Guided Onboarding Modal */}
       <WelcomeModal

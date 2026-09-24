@@ -25,6 +25,7 @@ import { ResearchEvaluationSection } from './ResearchEvaluationSection';
 import { ResearchExplainabilitySection } from './ResearchExplainabilitySection';
 import { MLflowSection } from './MLflowSection';
 import { ArchitectureView } from './ArchitectureView';
+import { ScreeningVoiceGuide } from './ScreeningVoiceGuide';
 import { User } from '../types';
 import { useTranslation } from '../i18n/I18nContext';
 
@@ -241,6 +242,31 @@ export const ResearchWorkspaceView: React.FC<ResearchWorkspaceViewProps> = ({
           </button>
         </div>
       </div>
+
+      {/* 2.5 PROMINENT SCREENING VOICE GUIDE (RESEARCHER ROLE) */}
+      <ScreeningVoiceGuide
+        role="researcher"
+        currentStep={
+          activeTab === 'overview'
+            ? 1
+            : activeTab === 'models'
+            ? 2
+            : activeTab === 'datasets'
+            ? 3
+            : activeTab === 'experiments'
+            ? 4
+            : activeTab === 'evaluation'
+            ? 5
+            : activeTab === 'explainability'
+            ? 6
+            : 7
+        }
+        totalSteps={7}
+        stepContext={{
+          stepKey: activeTab,
+          isComplete: activeTab === 'model-versions',
+        }}
+      />
 
       {/* 3. TAB 1: RESEARCH OVERVIEW */}
       {activeTab === 'overview' && (

@@ -212,27 +212,32 @@ export const ProviderAppointmentsView: React.FC<ProviderAppointmentsViewProps> =
 
       {/* MANDATORY DEMO / RLS BANNER */}
       {!isLive ? (
-        <div className="p-4 rounded-2xl bg-[#FEF3C7] dark:bg-[#2A2312] border-2 border-[#F59E0B] text-[#92400E] dark:text-[#FDE68A] text-xs sm:text-sm flex items-start gap-3">
+        <div
+          role="region"
+          aria-label="Demonstration Notice"
+          className="p-4 rounded-2xl bg-[#FEF3C7] dark:bg-[#2A2312] border-2 border-[#F59E0B] text-[#92400E] dark:text-[#FDE68A] text-xs sm:text-sm flex items-start gap-3 shadow-xs"
+        >
           <AlertTriangle className="w-5 h-5 text-[#D97706] shrink-0 mt-0.5" />
           <div className="space-y-1">
             <div className="flex items-center gap-2 font-black uppercase tracking-wider text-xs">
-              <span className="px-2 py-0.5 rounded-md bg-[#D97706] text-white">DEMO MODE</span>
+              <span className="px-2 py-0.5 rounded-md bg-[#D97706] text-white">DEMO DATA</span>
               <span>Local State Simulation Active</span>
             </div>
             <p className="leading-relaxed">
-              Appointments and slot management are operating in local test state. In production, Supabase Row Level Security ensures authorized staff can <strong>only view and manage appointments belonging to their assigned center</strong>.
+              Appointments and slot management are currently populated with <strong>DEMO DATA</strong>. In production, Supabase Row Level Security (RLS) guarantees that <strong>providers can only manage authorized center appointments</strong>.
             </p>
           </div>
         </div>
       ) : (
         <div className="p-3.5 rounded-2xl bg-[#F0FDF4] dark:bg-[#132317] border border-[#86EFAC] dark:border-[#166534] text-xs text-[#166534] dark:text-[#86EFAC] flex items-center gap-2">
           <ShieldCheck className="w-4 h-4 text-[#16A34A]" />
-          <span>RLS Active: You are authenticated to manage records for {currentCenter.name}.</span>
+          <span>RLS Enforced: Providers can only manage authorized center appointments for {currentCenter.name}.</span>
         </div>
       )}
 
-      {/* METRICS ROW (Appointments, Available Slots, Booked Slots, Completed, Cancelled) */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      {/* METRICS ROW (Exact structure requested: Appointments, Available Slots, Booked Slots, Completed, Cancelled, Rescheduled, No Show) */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
+        {/* 1. Appointments */}
         <div className="p-4 rounded-2xl bg-white dark:bg-[#1C1719] border border-[#EFE4DC] dark:border-[#382E32] shadow-2xs">
           <span className="text-[11px] font-bold uppercase tracking-wider text-[#8E7E81] block">
             Appointments
@@ -245,6 +250,7 @@ export const ProviderAppointmentsView: React.FC<ProviderAppointmentsViewProps> =
           </span>
         </div>
 
+        {/* 2. Available Slots */}
         <div className="p-4 rounded-2xl bg-white dark:bg-[#1C1719] border border-[#EFE4DC] dark:border-[#382E32] shadow-2xs">
           <span className="text-[11px] font-bold uppercase tracking-wider text-[#8E7E81] block">
             Available Slots
@@ -253,15 +259,16 @@ export const ProviderAppointmentsView: React.FC<ProviderAppointmentsViewProps> =
             {availableSlotsCount}
           </div>
           <span className="text-[10px] text-[#6F6267] dark:text-[#A8989B]">
-            Across next 5 days
+            Across upcoming schedule
           </span>
         </div>
 
+        {/* 3. Booked Slots */}
         <div className="p-4 rounded-2xl bg-white dark:bg-[#1C1719] border border-[#EFE4DC] dark:border-[#382E32] shadow-2xs">
           <span className="text-[11px] font-bold uppercase tracking-wider text-[#8E7E81] block">
             Booked Slots
           </span>
-          <div className="text-2xl font-black text-[#F05A28] mt-1">
+          <div className="text-2xl font-black text-[#EA580C] mt-1">
             {bookedSlotsCount}
           </div>
           <span className="text-[10px] text-[#6F6267] dark:text-[#A8989B]">
@@ -269,6 +276,7 @@ export const ProviderAppointmentsView: React.FC<ProviderAppointmentsViewProps> =
           </span>
         </div>
 
+        {/* 4. Completed */}
         <div className="p-4 rounded-2xl bg-white dark:bg-[#1C1719] border border-[#EFE4DC] dark:border-[#382E32] shadow-2xs">
           <span className="text-[11px] font-bold uppercase tracking-wider text-[#8E7E81] block">
             Completed
@@ -281,6 +289,7 @@ export const ProviderAppointmentsView: React.FC<ProviderAppointmentsViewProps> =
           </span>
         </div>
 
+        {/* 5. Cancelled */}
         <div className="p-4 rounded-2xl bg-white dark:bg-[#1C1719] border border-[#EFE4DC] dark:border-[#382E32] shadow-2xs">
           <span className="text-[11px] font-bold uppercase tracking-wider text-[#8E7E81] block">
             Cancelled
@@ -289,10 +298,24 @@ export const ProviderAppointmentsView: React.FC<ProviderAppointmentsViewProps> =
             {cancelledCount}
           </div>
           <span className="text-[10px] text-[#6F6267] dark:text-[#A8989B]">
-            {rescheduledCount} Rescheduled
+            Released slots
           </span>
         </div>
 
+        {/* 6. Rescheduled */}
+        <div className="p-4 rounded-2xl bg-white dark:bg-[#1C1719] border border-[#EFE4DC] dark:border-[#382E32] shadow-2xs">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-[#8E7E81] block">
+            Rescheduled
+          </span>
+          <div className="text-2xl font-black text-[#7C3AED] mt-1">
+            {rescheduledCount}
+          </div>
+          <span className="text-[10px] text-[#6F6267] dark:text-[#A8989B]">
+            Reassigned dates
+          </span>
+        </div>
+
+        {/* 7. No Show */}
         <div className="p-4 rounded-2xl bg-white dark:bg-[#1C1719] border border-[#EFE4DC] dark:border-[#382E32] shadow-2xs">
           <span className="text-[11px] font-bold uppercase tracking-wider text-[#8E7E81] block">
             No Show
@@ -742,8 +765,8 @@ export const ProviderAppointmentsView: React.FC<ProviderAppointmentsViewProps> =
                       {slot.isActive ? 'Close Slot' : 'Re-open Slot'}
                     </button>
                     {slot.isDemo && (
-                      <span className="text-[9px] text-[#8E7E81] uppercase font-bold">
-                        Demo Slot
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] uppercase font-bold">
+                        DEMO DATA
                       </span>
                     )}
                   </div>

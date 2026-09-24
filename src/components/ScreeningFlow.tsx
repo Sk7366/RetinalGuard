@@ -72,6 +72,7 @@ import { generateClinicalPdfReport } from '../utils/pdfGenerator';
 import { ImageQualityStep } from './ImageQualityStep';
 import { ImageUploader } from './ImageUploader';
 import { RiskChip } from './RiskChip';
+import { ScreeningVoiceGuide } from './ScreeningVoiceGuide';
 
 export type ScreeningStepNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
@@ -475,87 +476,20 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
   return (
     <div className="space-y-6 pb-20 max-w-5xl mx-auto" id="screening-flow-container">
       {/* =====================================================================
-          VOICE GUIDANCE TOP BAR (Multilingual Audio Navigation)
+          SCREENING VOICE GUIDE (SCREENING HELPER ROLE)
+          Prominently placed, with OFF/ON control, Play, Pause, Repeat, Stop
           ===================================================================== */}
-      <div className="p-3.5 sm:p-4 rounded-2xl bg-[#FFFDFB] border border-[#EFE4DC] shadow-2xs flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${voiceGuidanceEnabled ? 'bg-[#EA580C] text-white shadow-2xs' : 'bg-stone-100 text-stone-400'}`}>
-            {voiceGuidanceEnabled ? <Volume2 className="w-5 h-5" /> : <VolumeX className="w-5 h-5" />}
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-bold text-[#2E2628]">{t('voiceGuidance', 'Voice Guidance')}</span>
-              <button
-                type="button"
-                onClick={handleToggleVoiceGuidance}
-                className={`px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase transition-colors ${
-                  voiceGuidanceEnabled
-                    ? 'bg-emerald-100 text-emerald-800'
-                    : 'bg-stone-200 text-stone-600'
-                }`}
-              >
-                {voiceGuidanceEnabled ? t('on', 'ON') : t('off', 'OFF')}
-              </button>
-            </div>
-            <p className="text-[11px] text-[#6E5C5F]">
-              {t('spokenStepByStepDesc', 'Spoken step-by-step instructions in your selected language')}
-            </p>
-          </div>
-        </div>
-
-        {/* Audio Action Controls: Play / Pause / Repeat / Stop */}
-        {voiceGuidanceEnabled && (
-          <div className="flex items-center gap-1.5 bg-white border border-[#EFE4DC] px-2 py-1 rounded-xl shadow-2xs">
-            {voiceState.isPlaying ? (
-              <button
-                type="button"
-                onClick={() => voiceService.pause()}
-                className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-700 transition-colors"
-                title={t('pauseAudio', 'Pause audio')}
-              >
-                <Pause className="w-3.5 h-3.5 text-[#EA580C]" />
-              </button>
-            ) : (
-              <button
-                type="button"
-                onClick={() => {
-                  if (voiceState.isPaused) {
-                    voiceService.resume();
-                  } else {
-                    speakStepInstruction(currentStep);
-                  }
-                }}
-                className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-700 transition-colors"
-                title={t('playAudioInstruction', 'Play audio instruction')}
-              >
-                <Play className="w-3.5 h-3.5 text-[#EA580C]" />
-              </button>
-            )}
-
-            <button
-              type="button"
-              onClick={() => speakStepInstruction(currentStep)}
-              className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-700 transition-colors"
-              title={t('repeatInstruction', 'Repeat instruction')}
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-            </button>
-
-            <button
-              type="button"
-              onClick={() => voiceService.stop()}
-              className="p-1.5 rounded-lg hover:bg-stone-100 text-stone-700 transition-colors"
-              title={t('stopAudio', 'Stop audio')}
-            >
-              <Square className="w-3.5 h-3.5" />
-            </button>
-
-            <span className="text-[10px] font-semibold text-[#9E8D91] px-1 border-l border-stone-200 ml-1">
-              {t('step', 'Step')} {currentStep}/9
-            </span>
-          </div>
-        )}
-      </div>
+      <ScreeningVoiceGuide
+        role="helper"
+        currentStep={currentStep <= 7 ? currentStep : 7}
+        totalSteps={9}
+        stepContext={{
+          hasImageUploaded: Boolean(customFundusUrl || activeFundusUrl),
+          hasOctUploaded: Boolean(customOctUrl || (includeOct && activeOctUrl)),
+          isAnalyzing: isProcessing,
+          isComplete: Boolean(triageResult) || currentStep >= 7,
+        }}
+      />
 
       {/* =====================================================================
           STEPPER PROGRESS HEADER (9 STEPS)
