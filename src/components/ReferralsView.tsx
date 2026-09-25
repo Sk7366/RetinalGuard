@@ -593,7 +593,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                     <div className="flex items-center justify-between text-[11px] pt-2 border-t border-[#FAF8F6] text-[#9C8E91] gap-2">
                       <span className="flex items-center gap-1 min-w-0 flex-1">
                         <MapPin className="w-3 h-3 text-[#EA580C] shrink-0" />
-                        <span className="truncate">{item.assignedClinic.replace(' (Simulated)', '')}</span>
+                        <span className="truncate">{t(item.assignedClinic.replace(' (Simulated)', ''), item.assignedClinic.replace(' (Simulated)', ''))}</span>
                       </span>
                       <span className="font-mono text-[10px] shrink-0">{item.updatedAt}</span>
                     </div>
@@ -735,7 +735,7 @@ export const ReferralsView: React.FC<ReferralsViewProps> = ({
                   </div>
                   <div className="font-bold text-[#2E2628] flex items-center gap-1.5">
                     <MapPin className="w-3.5 h-3.5 text-[#EA580C]" />
-                    <span>{selectedReferral.assignedClinic}</span>
+                    <span>{t(selectedReferral.assignedClinic, selectedReferral.assignedClinic)}</span>
                   </div>
                   <div className="text-[#6E5C5F] text-[11px] flex items-center gap-1.5">
                     <Stethoscope className="w-3.5 h-3.5 text-[#DB2777]" />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   MapPin,
   BookOpen,
@@ -86,68 +86,104 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
   const [isPlayingJourney, setIsPlayingJourney] = useState(true);
   const journeyTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const journeySteps: JourneyStep[] = [
+  const journeySteps: JourneyStep[] = useMemo(() => [
     {
       id: "step-person",
-      title: "1. Person",
-      tagline: "Comfortable Check-in",
-      description: "You arrive at your local community center, clinic, or mobile eye camp. No needles, zero pain, and no stressful prep.",
-      detail: "A friendly health worker greets you, records your basic diabetes history, and seats you in front of the gentle camera.",
+      title: t("1. Person", "1. Person"),
+      tagline: t("Comfortable Check-in", "Comfortable Check-in"),
+      description: t(
+        "You arrive at your local community center, clinic, or mobile eye camp. No needles, zero pain, and no stressful prep.",
+        "You arrive at your local community center, clinic, or mobile eye camp. No needles, zero pain, and no stressful prep."
+      ),
+      detail: t(
+        "A friendly health worker greets you, records your basic diabetes history, and seats you in front of the gentle camera.",
+        "A friendly health worker greets you, records your basic diabetes history, and seats you in front of the gentle camera."
+      ),
       icon: User,
       accentColor: "#F05A28",
       illustrationType: "person",
     },
     {
       id: "step-image",
-      title: "2. Retinal Image",
-      tagline: "3-Minute Digital Scan",
-      description: "A non-mydriatic fundus camera softly captures high-resolution digital photographs of your retina.",
-      detail: "Nothing touches your eye. For most patients, no blurry dilating drops are required, allowing an immediate return to your day.",
+      title: t("2. Retinal Image", "2. Retinal Image"),
+      tagline: t("3-Minute Digital Scan", "3-Minute Digital Scan"),
+      description: t(
+        "A non-mydriatic fundus camera softly captures high-resolution digital photographs of your retina.",
+        "A non-mydriatic fundus camera softly captures high-resolution digital photographs of your retina."
+      ),
+      detail: t(
+        "Nothing touches your eye. For most patients, no blurry dilating drops are required, allowing an immediate return to your day.",
+        "Nothing touches your eye. For most patients, no blurry dilating drops are required, allowing an immediate return to your day."
+      ),
       icon: Camera,
       accentColor: "#D94A78",
       illustrationType: "fundus",
     },
     {
       id: "step-analysis",
-      title: "3. AI-Assisted Analysis",
-      tagline: "Intelligent Triage",
-      description: "Validated algorithms inspect microvascular structures for microscopic microaneurysms and fluid indicators.",
-      detail: "Identifies early diabetic retinal changes years before symptoms appear, with continuous reliability and safety checks.",
+      title: t("3. AI-Assisted Analysis", "3. AI-Assisted Analysis"),
+      tagline: t("Intelligent Triage", "Intelligent Triage"),
+      description: t(
+        "Validated algorithms inspect microvascular structures for microscopic microaneurysms and fluid indicators.",
+        "Validated algorithms inspect microvascular structures for microscopic microaneurysms and fluid indicators."
+      ),
+      detail: t(
+        "Identifies early diabetic retinal changes years before symptoms appear, with continuous reliability and safety checks.",
+        "Identifies early diabetic retinal changes years before symptoms appear, with continuous reliability and safety checks."
+      ),
       icon: Cpu,
       accentColor: "#F05A28",
       illustrationType: "ai",
     },
     {
       id: "step-doctor",
-      title: "4. Professional Review",
-      tagline: "Doctor Verification",
-      description: "A qualified optometrist or ophthalmologist reviews the image findings to confirm clinical accuracy.",
-      detail: "Ensures human clinical oversight and dual-modality safety on every case before medical recommendations are finalized.",
+      title: t("4. Professional Review", "4. Professional Review"),
+      tagline: t("Doctor Verification", "Doctor Verification"),
+      description: t(
+        "A qualified optometrist or ophthalmologist reviews the image findings to confirm clinical accuracy.",
+        "A qualified optometrist or ophthalmologist reviews the image findings to confirm clinical accuracy."
+      ),
+      detail: t(
+        "Ensures human clinical oversight and dual-modality safety on every case before medical recommendations are finalized.",
+        "Ensures human clinical oversight and dual-modality safety on every case before medical recommendations are finalized."
+      ),
       icon: Stethoscope,
       accentColor: "#D94A78",
       illustrationType: "doctor",
     },
     {
       id: "step-next",
-      title: "5. Clear Next Step",
-      tagline: "Plain-Language Plan",
-      description: "You receive an easy-to-read personal report with a clear plan tailored to your retinal health.",
-      detail: "Either a reassuring all-clear for next year's annual check, or a fast-track appointment with a specialist doctor.",
+      title: t("5. Clear Next Step", "5. Clear Next Step"),
+      tagline: t("Plain-Language Plan", "Plain-Language Plan"),
+      description: t(
+        "You receive an easy-to-read personal report with a clear plan tailored to your retinal health.",
+        "You receive an easy-to-read personal report with a clear plan tailored to your retinal health."
+      ),
+      detail: t(
+        "Either a reassuring all-clear for next year's annual check, or a fast-track appointment with a specialist doctor.",
+        "Either a reassuring all-clear for next year's annual check, or a fast-track appointment with a specialist doctor."
+      ),
       icon: ShieldCheck,
       accentColor: "#F05A28",
       illustrationType: "report",
     },
     {
       id: "step-followup",
-      title: "6. Follow-up",
-      tagline: "Continuous Care",
-      description: "We help coordinate your specialist visit or set automated reminders for your next annual check.",
-      detail: "Care navigators support you with SMS reminders, transportation guidance, and longitudinal health tracking.",
+      title: t("6. Follow-up", "6. Follow-up"),
+      tagline: t("Continuous Care", "Continuous Care"),
+      description: t(
+        "We help coordinate your specialist visit or set automated reminders for your next annual check.",
+        "We help coordinate your specialist visit or set automated reminders for your next annual check."
+      ),
+      detail: t(
+        "Care navigators support you with SMS reminders, transportation guidance, and longitudinal health tracking.",
+        "Care navigators support you with SMS reminders, transportation guidance, and longitudinal health tracking."
+      ),
       icon: BellRing,
       accentColor: "#D94A78",
       illustrationType: "followup",
     },
-  ];
+  ], [t]);
 
   // Auto-play the screening journey
   useEffect(() => {
@@ -242,22 +278,25 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
             <div className="flex flex-wrap items-center gap-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-[#FFE5D8] text-[#D84818] border border-[#FED7AA]">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#F05A28]" />
-                <span>Painless • 3-Minute Digital Scan</span>
+                <span>{t("Painless • 3-Minute Digital Scan", "Painless • 3-Minute Digital Scan")}</span>
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-[#FBE4EC] text-[#BF3663] border border-[#FBCFE8]">
                 <Heart className="w-3.5 h-3.5 text-[#D94A78]" />
-                <span>Community Clinics & Free Camps</span>
+                <span>{t("Community Clinics & Free Camps", "Community Clinics & Free Camps")}</span>
               </span>
             </div>
 
             {/* Required Primary Headline */}
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-semibold text-[#2B2024] tracking-tight leading-[1.16]">
-              Your eyes can change before you notice.
+              {t("Your eyes can change before you notice.", "Your eyes can change before you notice.")}
             </h1>
 
             {/* Required Supporting Text */}
             <p className="text-base sm:text-lg text-[#6F6267] leading-relaxed max-w-2xl font-normal">
-              Learn about retinal screening, find screening services, and stay connected to your screening journey.
+              {t(
+                "Learn about retinal screening, find screening services, and stay connected to your screening journey.",
+                "Learn about retinal screening, find screening services, and stay connected to your screening journey."
+              )}
             </p>
 
             {/* Primary & Secondary CTAs + Read Aloud */}
@@ -269,7 +308,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                 className="px-6 py-3.5 rounded-xl bg-[#F05A28] hover:bg-[#D84818] text-white font-semibold text-sm sm:text-base shadow-xs transition-colors flex items-center justify-center gap-2.5 min-h-[48px]"
               >
                 <MapPin className="w-4 h-4 text-white" />
-                <span>Find a Screening</span>
+                <span>{t("Find a Screening", "Find a Screening")}</span>
                 <ArrowRight className="w-4 h-4 text-white/90" />
               </button>
 
@@ -280,7 +319,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                 className="px-5 py-3.5 rounded-xl bg-[#FBE4EC] hover:bg-[#F8D7E3] text-[#D94A78] border border-[#FBCFE8] hover:border-[#D94A78] font-semibold text-sm sm:text-base transition-colors flex items-center justify-center gap-2 min-h-[48px]"
               >
                 <BookOpen className="w-4 h-4 text-[#D94A78]" />
-                <span>How Screening Works</span>
+                <span>{t("How Screening Works", "How Screening Works")}</span>
               </button>
 
               {/* Read Aloud Button: 🔊 Read Aloud */}
@@ -288,8 +327,11 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                 id="hero-read-aloud-btn"
                 onClick={() =>
                   handleSpeak(
-                    "Your eyes can change before you notice. Learn about retinal screening, find screening services, and stay connected to your screening journey.",
-                    "Your eyes can change before you notice",
+                    t(
+                      "Your eyes can change before you notice. Learn about retinal screening, find screening services, and stay connected to your screening journey.",
+                      "Your eyes can change before you notice. Learn about retinal screening, find screening services, and stay connected to your screening journey."
+                    ),
+                    t("Your eyes can change before you notice.", "Your eyes can change before you notice."),
                     "hero"
                   )
                 }
@@ -303,12 +345,12 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                 {isReadingHero ? (
                   <>
                     <VolumeX className="w-4 h-4 text-[#F05A28]" />
-                    <span>Pause Audio</span>
+                    <span>{t("Pause Audio", "Pause Audio")}</span>
                   </>
                 ) : (
                   <>
                     <Volume2 className="w-4 h-4 text-[#F05A28]" />
-                    <span>🔊 Read Aloud</span>
+                    <span>{t("🔊 Read Aloud", "🔊 Read Aloud")}</span>
                   </>
                 )}
               </button>
@@ -318,15 +360,15 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
             <div className="pt-4 border-t border-[#EFE4DC] flex flex-wrap items-center gap-y-2 gap-x-6 text-xs text-[#6F6267]">
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-[#087F6A] shrink-0" />
-                <span>No painful eye drops needed for most checks</span>
+                <span>{t("No painful eye drops needed for most checks", "No painful eye drops needed for most checks")}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-[#087F6A] shrink-0" />
-                <span>Results reviewed by certified eye professionals</span>
+                <span>{t("Results reviewed by certified eye professionals", "Results reviewed by certified eye professionals")}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="w-4 h-4 text-[#087F6A] shrink-0" />
-                <span>90%+ of severe diabetic sight loss is preventable</span>
+                <span>{t("90%+ of severe diabetic sight loss is preventable", "90%+ of severe diabetic sight loss is preventable")}</span>
               </div>
             </div>
 
@@ -340,10 +382,10 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
               <div className="flex items-center justify-between gap-2 pb-3 border-b border-[#EFE4DC]">
                 <div>
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#D94A78]">
-                    Patient Pathway
+                    {t("Patient Pathway", "Patient Pathway")}
                   </span>
                   <h3 className="text-base font-serif font-semibold text-[#2B2024]">
-                    Your Screening Journey
+                    {t("Your Screening Journey", "Your Screening Journey")}
                   </h3>
                 </div>
 
@@ -436,10 +478,10 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                         <User className="w-6 h-6" />
                       </div>
                       <p className="text-xs font-semibold text-[#2B2024]">
-                        Walk-in Welcome • No Doctor Referral Required
+                        {t("Walk-in Welcome • No Doctor Referral Required", "Walk-in Welcome • No Doctor Referral Required")}
                       </p>
                       <p className="text-[11px] text-[#6F6267] max-w-xs mx-auto">
-                        Community camps and partner clinics offer walk-in slots with zero preparation stress.
+                        {t("Community camps and partner clinics offer walk-in slots with zero preparation stress.", "Community camps and partner clinics offer walk-in slots with zero preparation stress.")}
                       </p>
                     </div>
                   )}
@@ -454,7 +496,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                         />
                       </div>
                       <span className="mt-2 text-[10px] font-bold text-[#6F6267] bg-white border border-[#EFE4DC] px-2 py-0.5 rounded-md">
-                        Illustrative Demo
+                        {t("Illustrative Demo", "Illustrative Demo")}
                       </span>
                     </div>
                   )}
@@ -473,7 +515,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                         </div>
                       </div>
                       <span className="mt-2 text-[10px] font-bold text-[#6F6267] bg-white border border-[#EFE4DC] px-2 py-0.5 rounded-md">
-                        Illustrative Demo
+                        {t("Illustrative Demo", "Illustrative Demo")}
                       </span>
                     </div>
                   )}
@@ -485,10 +527,10 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                       </div>
                       <div className="inline-flex items-center gap-1 text-xs font-bold text-[#087F6A] bg-[#E6F5F2] border border-[#CCEBE5] px-2 py-0.5 rounded-md">
                         <CheckCircle2 className="w-3.5 h-3.5 text-[#087F6A]" />
-                        <span>Verified by Ophthalmologist</span>
+                        <span>{t("Verified by Ophthalmologist", "Verified by Ophthalmologist")}</span>
                       </div>
                       <p className="text-[11px] text-[#6F6267] max-w-xs mx-auto">
-                        Every scan is calibrated and confirmed by trained human eye care specialists.
+                        {t("Every scan is calibrated and confirmed by trained human eye care specialists.", "Every scan is calibrated and confirmed by trained human eye care specialists.")}
                       </p>
                     </div>
                   )}
@@ -499,10 +541,10 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                         <ShieldCheck className="w-6 h-6" />
                       </div>
                       <p className="text-xs font-semibold text-[#2B2024]">
-                        Clear, Actionable Next Steps
+                        {t("Clear, Actionable Next Steps", "Clear, Actionable Next Steps")}
                       </p>
                       <p className="text-[11px] text-[#6F6267] max-w-xs mx-auto">
-                        Simple language explanation: Routine 12-month recall or priority doctor review.
+                        {t("Simple language explanation: Routine 12-month recall or priority doctor review.", "Simple language explanation: Routine 12-month recall or priority doctor review.")}
                       </p>
                     </div>
                   )}
@@ -513,10 +555,10 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                         <BellRing className="w-6 h-6" />
                       </div>
                       <p className="text-xs font-semibold text-[#2B2024]">
-                        Annual Recall & Care Reminders
+                        {t("Annual Recall & Care Reminders", "Annual Recall & Care Reminders")}
                       </p>
                       <p className="text-[11px] text-[#6F6267] max-w-xs mx-auto">
-                        SMS & WhatsApp reminders help keep your vision protected year after year.
+                        {t("SMS & WhatsApp reminders help keep your vision protected year after year.", "SMS & WhatsApp reminders help keep your vision protected year after year.")}
                       </p>
                     </div>
                   )}
@@ -542,11 +584,11 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                     }}
                     className="text-xs font-semibold text-[#6F6267] hover:text-[#2B2024] py-1 px-2 rounded-lg hover:bg-[#FFFDF9] transition-colors"
                   >
-                    ← Previous
+                    ← {t("Previous", "Previous")}
                   </button>
 
                   <span className="text-[11px] font-bold text-[#6F6267]">
-                    Step {activeStepIndex + 1} of {journeySteps.length}
+                    {t("Step", "Step")} {activeStepIndex + 1} {t("of", "of")} {journeySteps.length}
                   </span>
 
                   <button
@@ -556,7 +598,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                     }}
                     className="text-xs font-semibold text-[#F05A28] hover:text-[#D84818] py-1 px-2 rounded-lg hover:bg-[#FFE5D8]/40 transition-colors"
                   >
-                    Next Step →
+                    {t("Next Step", "Next Step")} →
                   </button>
                 </div>
 
@@ -575,13 +617,16 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
       <section aria-label="Essential screening information" className="space-y-4">
         <div className="text-center max-w-xl mx-auto space-y-1.5">
           <span className="text-xs font-bold uppercase tracking-wider text-[#D94A78]">
-            Clear Understanding
+            {t("Clear Understanding", "Clear Understanding")}
           </span>
           <h2 className="text-2xl sm:text-3xl font-serif font-semibold text-[#2B2024] tracking-tight">
-            Everything you need to know
+            {t("Everything you need to know", "Everything you need to know")}
           </h2>
           <p className="text-xs sm:text-sm text-[#6F6267]">
-            Transparent, doctor-grounded guidance for every patient and family member.
+            {t(
+              "Transparent, doctor-grounded guidance for every patient and family member.",
+              "Transparent, doctor-grounded guidance for every patient and family member."
+            )}
           </p>
         </div>
 
@@ -592,20 +637,23 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#D84818] bg-[#FFE5D8] px-2 py-0.5 rounded-md border border-[#FED7AA]">
-                  What It Is
+                  {t("What It Is", "What It Is")}
                 </span>
                 <Eye className="w-4 h-4 text-[#F05A28]" />
               </div>
               <h3 className="text-base font-serif font-semibold text-[#2B2024]">
-                Digital Retinal Check
+                {t("Digital Retinal Check", "Digital Retinal Check")}
               </h3>
               <p className="text-xs text-[#6F6267] leading-relaxed">
-                A non-contact eye photograph that looks at the delicate microscopic blood vessels at the back of your eye (the retina).
+                {t(
+                  "A non-contact eye photograph that looks at the delicate microscopic blood vessels at the back of your eye (the retina).",
+                  "A non-contact eye photograph that looks at the delicate microscopic blood vessels at the back of your eye (the retina)."
+                )}
               </p>
             </div>
             <div className="pt-2 border-t border-[#EFE4DC] text-[11px] text-[#087F6A] flex items-center gap-1.5 font-medium">
               <CheckCircle2 className="w-3.5 h-3.5 text-[#087F6A] shrink-0" />
-              <span>Takes under 3 minutes</span>
+              <span>{t("Takes under 3 minutes", "Takes under 3 minutes")}</span>
             </div>
           </div>
 
@@ -614,20 +662,23 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#BF3663] bg-[#FBE4EC] px-2 py-0.5 rounded-md border border-[#FBCFE8]">
-                  Why It Matters
+                  {t("Why It Matters", "Why It Matters")}
                 </span>
                 <Heart className="w-4 h-4 text-[#D94A78]" />
               </div>
               <h3 className="text-base font-serif font-semibold text-[#2B2024]">
-                Changes Happen Silently
+                {t("Changes Happen Silently", "Changes Happen Silently")}
               </h3>
               <p className="text-xs text-[#6F6267] leading-relaxed">
-                Diabetic retinopathy causes zero pain and zero blurriness in its earliest stages. Annual checks catch issues years before sight is lost.
+                {t(
+                  "Diabetic retinopathy causes zero pain and zero blurriness in its earliest stages. Annual checks catch issues years before sight is lost.",
+                  "Diabetic retinopathy causes zero pain and zero blurriness in its earliest stages. Annual checks catch issues years before sight is lost."
+                )}
               </p>
             </div>
             <div className="pt-2 border-t border-[#EFE4DC] text-[11px] text-[#087F6A] flex items-center gap-1.5 font-medium">
               <CheckCircle2 className="w-3.5 h-3.5 text-[#087F6A] shrink-0" />
-              <span>90%+ preventable sight loss</span>
+              <span>{t("90%+ preventable sight loss", "90%+ preventable sight loss")}</span>
             </div>
           </div>
 
@@ -636,15 +687,18 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#D84818] bg-[#FFE5D8] px-2 py-0.5 rounded-md border border-[#FED7AA]">
-                  What You Should Do
+                  {t("What You Should Do", "What You Should Do")}
                 </span>
                 <Calendar className="w-4 h-4 text-[#F05A28]" />
               </div>
               <h3 className="text-base font-serif font-semibold text-[#2B2024]">
-                Get Screened Yearly
+                {t("Get Screened Yearly", "Get Screened Yearly")}
               </h3>
               <p className="text-xs text-[#6F6267] leading-relaxed">
-                Select a nearby community health clinic, free camp, or eye hospital below. Walk in or reserve a free preferred slot in seconds.
+                {t(
+                  "Select a nearby community health clinic, free camp, or eye hospital below. Walk in or reserve a free preferred slot in seconds.",
+                  "Select a nearby community health clinic, free camp, or eye hospital below. Walk in or reserve a free preferred slot in seconds."
+                )}
               </p>
             </div>
             <div className="pt-2 border-t border-[#EFE4DC]">
@@ -652,7 +706,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                 onClick={scrollToFindScreening}
                 className="text-[11px] font-bold text-[#F05A28] hover:text-[#D84818] flex items-center gap-1"
               >
-                <span>Find screening locations</span>
+                <span>{t("Find screening locations", "Find screening locations")}</span>
                 <ArrowRight className="w-3 h-3" />
               </button>
             </div>
@@ -663,20 +717,23 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
             <div className="space-y-2.5">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-[#BF3663] bg-[#FBE4EC] px-2 py-0.5 rounded-md border border-[#FBCFE8]">
-                  What Happens Next
+                  {t("What Happens Next", "What Happens Next")}
                 </span>
                 <ShieldCheck className="w-4 h-4 text-[#D94A78]" />
               </div>
               <h3 className="text-base font-serif font-semibold text-[#2B2024]">
-                Clear Guided Care
+                {t("Clear Guided Care", "Clear Guided Care")}
               </h3>
               <p className="text-xs text-[#6F6267] leading-relaxed">
-                You receive a doctor-verified summary. If any changes are noticed, our team connects you directly to specialist care without delay.
+                {t(
+                  "You receive a doctor-verified summary. If any changes are noticed, our team connects you directly to specialist care without delay.",
+                  "You receive a doctor-verified summary. If any changes are noticed, our team connects you directly to specialist care without delay."
+                )}
               </p>
             </div>
             <div className="pt-2 border-t border-[#EFE4DC] text-[11px] text-[#087F6A] flex items-center gap-1.5 font-medium">
               <CheckCircle2 className="w-3.5 h-3.5 text-[#087F6A] shrink-0" />
-              <span>Full follow-up support</span>
+              <span>{t("Full follow-up support", "Full follow-up support")}</span>
             </div>
           </div>
 
@@ -695,28 +752,34 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
           <div>
             <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-[#FFE5D8] border border-[#FED7AA] text-[#D84818] text-xs font-semibold mb-2">
               <BookOpen className="w-3 h-3 text-[#F05A28]" />
-              <span>Procedure Guide</span>
+              <span>{t("Procedure Guide", "Procedure Guide")}</span>
             </div>
             <h2 id="how-it-works-heading" className="text-2xl sm:text-3xl font-serif font-semibold text-[#2B2024] tracking-tight">
-              How Screening Works
+              {t("How Screening Works", "How Screening Works")}
             </h2>
             <p className="text-xs sm:text-sm text-[#6F6267] mt-1 max-w-2xl">
-              From arrival to verified results, here is exactly what happens during your 3-minute eye screening.
+              {t(
+                "From arrival to verified results, here is exactly what happens during your 3-minute eye screening.",
+                "From arrival to verified results, here is exactly what happens during your 3-minute eye screening."
+              )}
             </p>
           </div>
 
           <button
             onClick={() =>
               handleSpeak(
-                "How Screening Works in five steps. Step one: Walk in or reserve a slot. Step two: Sit comfortably in front of the gentle camera. Step three: Rapid three-minute photo capture. Step four: Doctor verification and AI triage. Step five: Plain language plan and follow-up support.",
-                "How Screening Works",
+                t(
+                  "How Screening Works in five steps. Step one: Walk in or reserve a slot. Step two: Sit comfortably in front of the gentle camera. Step three: Rapid three-minute photo capture. Step four: Doctor verification and AI triage. Step five: Plain language plan and follow-up support.",
+                  "How Screening Works in five steps. Step one: Walk in or reserve a slot. Step two: Sit comfortably in front of the gentle camera. Step three: Rapid three-minute photo capture. Step four: Doctor verification and AI triage. Step five: Plain language plan and follow-up support."
+                ),
+                t("How Screening Works", "How Screening Works"),
                 "how-screening-works"
               )
             }
             className="px-3.5 py-2 rounded-xl bg-white hover:bg-[#FFFDF9] border border-[#EFE4DC] text-[#2B2024] font-semibold text-xs flex items-center gap-2 shrink-0 min-h-[40px] transition-colors shadow-xs"
           >
             <Volume2 className="w-3.5 h-3.5 text-[#F05A28]" />
-            <span>Listen to Guide</span>
+            <span>{t("Listen to Guide", "Listen to Guide")}</span>
           </button>
         </div>
 
@@ -730,14 +793,17 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                 01
               </span>
               <h3 className="text-base font-serif font-semibold text-[#2B2024]">
-                Arrive or Book
+                {t("Arrive or Book", "Arrive or Book")}
               </h3>
               <p className="text-xs text-[#6F6267] leading-relaxed">
-                Visit a free community camp or partner health clinic. No special doctor referral or complicated paperwork needed.
+                {t(
+                  "Visit a free community camp or partner health clinic. No special doctor referral or complicated paperwork needed.",
+                  "Visit a free community camp or partner health clinic. No special doctor referral or complicated paperwork needed."
+                )}
               </p>
             </div>
             <div className="text-[11px] text-[#087F6A] font-medium pt-2 border-t border-[#EFE4DC]">
-              Zero fee at community camps
+              {t("Zero fee at community camps", "Zero fee at community camps")}
             </div>
           </div>
 
@@ -748,14 +814,17 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                 02
               </span>
               <h3 className="text-base font-serif font-semibold text-[#2B2024]">
-                Sit Comfortably
+                {t("Sit Comfortably", "Sit Comfortably")}
               </h3>
               <p className="text-xs text-[#6F6267] leading-relaxed">
-                You sit in front of a modern digital camera and look into a gentle green fixation target. Nothing touches your eyeball.
+                {t(
+                  "You sit in front of a modern digital camera and look into a gentle green fixation target. Nothing touches your eyeball.",
+                  "You sit in front of a modern digital camera and look into a gentle green fixation target. Nothing touches your eyeball."
+                )}
               </p>
             </div>
             <div className="text-[11px] text-[#6F6267] pt-2 border-t border-[#EFE4DC]">
-              No stinging drops needed
+              {t("No stinging drops needed", "No stinging drops needed")}
             </div>
           </div>
 
@@ -766,14 +835,17 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                 03
               </span>
               <h3 className="text-base font-serif font-semibold text-[#2B2024]">
-                Soft Photo Flash
+                {t("Soft Photo Flash", "Soft Photo Flash")}
               </h3>
               <p className="text-xs text-[#6F6267] leading-relaxed">
-                A brief, gentle flash takes a high-detail digital image of the light-sensitive retina and optic disc in under 3 minutes.
+                {t(
+                  "A brief, gentle flash takes a high-detail digital image of the light-sensitive retina and optic disc in under 3 minutes.",
+                  "A brief, gentle flash takes a high-detail digital image of the light-sensitive retina and optic disc in under 3 minutes."
+                )}
               </p>
             </div>
             <div className="text-[11px] text-[#6F6267] pt-2 border-t border-[#EFE4DC]">
-              100% painless capture
+              {t("100% painless capture", "100% painless capture")}
             </div>
           </div>
 
@@ -784,14 +856,17 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                 04
               </span>
               <h3 className="text-base font-serif font-semibold text-[#2B2024]">
-                Doctor Verification
+                {t("Doctor Verification", "Doctor Verification")}
               </h3>
               <p className="text-xs text-[#6F6267] leading-relaxed">
-                Smart triage assists the review, while certified eye care specialists confirm all clinical findings for complete peace of mind.
+                {t(
+                  "Smart triage assists the review, while certified eye care specialists confirm all clinical findings for complete peace of mind.",
+                  "Smart triage assists the review, while certified eye care specialists confirm all clinical findings for complete peace of mind."
+                )}
               </p>
             </div>
             <div className="text-[11px] text-[#087F6A] font-medium pt-2 border-t border-[#EFE4DC]">
-              Dual safety verification
+              {t("Dual safety verification", "Dual safety verification")}
             </div>
           </div>
 
@@ -802,14 +877,17 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                 05
               </span>
               <h3 className="text-base font-serif font-semibold text-[#2B2024]">
-                Clear Plan & Follow-up
+                {t("Clear Plan & Follow-up", "Clear Plan & Follow-up")}
               </h3>
               <p className="text-xs text-[#6F6267] leading-relaxed">
-                You leave with clear, simple instructions: an all-clear for next year, or priority specialist referral scheduling.
+                {t(
+                  "You leave with clear, simple instructions: an all-clear for next year, or priority specialist referral scheduling.",
+                  "You leave with clear, simple instructions: an all-clear for next year, or priority specialist referral scheduling."
+                )}
               </p>
             </div>
             <div className="text-[11px] text-[#6F6267] pt-2 border-t border-[#EFE4DC]">
-              Printed & digital report
+              {t("Printed & digital report", "Printed & digital report")}
             </div>
           </div>
 
@@ -918,7 +996,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                       : "text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFFDF9]"
                   }`}
                 >
-                  {c}
+                  {c === "All" ? t("cityAll", "All") : t(c, c)}
                 </button>
               ))}
             </div>
@@ -943,7 +1021,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
 
                   <div className="flex items-start justify-between gap-2">
                     <span className="text-[11px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md bg-[#FFFDF9] text-[#6F6267] border border-[#EFE4DC]">
-                      {center.type || (center.isCampActive ? "Camp" : "Primary Clinic")}
+                      {t(center.type || (center.isCampActive ? "Camp" : "Primary Clinic"), center.type || (center.isCampActive ? "Camp" : "Primary Clinic"))}
                     </span>
                     <span className="text-xs font-medium text-[#6F6267] bg-[#FFFDF9] px-2 py-0.5 rounded-md border border-[#EFE4DC]">
                       {center.distance || center.distanceKm || '2.5'} {t("distanceAway", "km away")}
@@ -951,17 +1029,17 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                   </div>
 
                   <h4 className="text-base sm:text-lg font-semibold text-[#2B2024] leading-snug">
-                    {center.name}
+                    {t(center.name, center.name)}
                   </h4>
 
                   <p className="text-xs text-[#6F6267] flex items-start gap-1.5">
                     <MapPin className="w-3.5 h-3.5 text-[#6F6267] shrink-0 mt-0.5" />
-                    <span>{center.address}, {center.city} - {center.pinCode}</span>
+                    <span>{t(center.address, center.address)}, {t(center.city, center.city)} - {center.pinCode}</span>
                   </p>
 
                   <div className="flex items-center gap-1.5 text-xs text-[#6F6267]">
                     <Clock className="w-3 h-3 text-[#087F6A]" />
-                    <span className="font-medium text-[#087F6A]">{center.hours || center.operatingHours || "8:30 AM – 5:00 PM"}</span>
+                    <span className="font-medium text-[#087F6A]">{t(center.hours || center.operatingHours || "8:30 AM – 5:00 PM", center.hours || center.operatingHours || "8:30 AM – 5:00 PM")}</span>
                   </div>
                 </div>
 
@@ -1035,7 +1113,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
               <span>{t("learnTitle", "Patient Knowledge Guide")}</span>
             </div>
             <h2 id="learn-heading" className="text-2xl sm:text-3xl font-serif font-semibold text-[#2B2024] tracking-tight">
-              Essential Questions Answered
+              {t("Essential Questions Answered", "Essential Questions Answered")}
             </h2>
             <p className="text-xs sm:text-sm text-[#6F6267] mt-1 max-w-2xl">
               {t(
@@ -1273,13 +1351,16 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
         <div className="space-y-1.5 max-w-xl">
           <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-semibold bg-[#FFE5D8] text-[#D84818] border border-[#FED7AA]">
             <Eye className="w-3 h-3 text-[#F05A28]" />
-            <span>Interactive Retinal Demo</span>
+            <span>{t("Interactive Retinal Demo", "Interactive Retinal Demo")}</span>
           </div>
           <h3 className="text-xl font-serif font-semibold text-[#2B2024]">
             {t("sampleEyeCheckTitle", "See a Sample Retinal Check")}
           </h3>
           <p className="text-xs sm:text-sm text-[#6F6267] leading-relaxed">
-            Take a look at what an eye photograph looks like, how early microvascular changes are identified, and what friendly advice is provided to patients.
+            {t(
+              "Take a look at what an eye photograph looks like, how early microvascular changes are identified, and what friendly advice is provided to patients.",
+              "Take a look at what an eye photograph looks like, how early microvascular changes are identified, and what friendly advice is provided to patients."
+            )}
           </p>
         </div>
 
@@ -1331,10 +1412,10 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                     </button>
                   </div>
                   <h3 className="text-xl font-serif font-semibold text-[#2B2024] mt-1">
-                    {bookingCenter.name}
+                    {t(bookingCenter.name, bookingCenter.name)}
                   </h3>
                   <p className="text-xs text-[#6F6267] mt-0.5">
-                    {bookingCenter.address}, {bookingCenter.city}
+                    {t(bookingCenter.address, bookingCenter.address)}, {t(bookingCenter.city, bookingCenter.city)}
                   </p>
                 </div>
 
@@ -1416,7 +1497,7 @@ export const SimplifiedPatientHome: React.FC<SimplifiedPatientHomeProps> = ({
                   )}
                 </p>
                 <div className="bg-[#FFFDF9] p-3.5 rounded-xl border border-[#EFE4DC] text-xs text-left space-y-1 text-[#2B2024]">
-                  <div><strong>{t("centerLabel", "Center:")}</strong> {bookingCenter.name}</div>
+                  <div><strong>{t("centerLabel", "Center:")}</strong> {t(bookingCenter.name, bookingCenter.name)}</div>
                   <div><strong>{t("slotLabel", "Slot:")}</strong> {preferredDate}</div>
                   <div><strong>{t("patientLabel", "Patient:")}</strong> {patientName || t("patientDefault", "Patient")}</div>
                 </div>

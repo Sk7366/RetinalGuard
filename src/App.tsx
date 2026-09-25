@@ -674,9 +674,9 @@ function AppContent() {
               <Stethoscope className="w-7 h-7 text-[#059669]" />
             </div>
             <div className="space-y-1">
-              <h2 className="text-xl font-serif font-bold text-[#1F181A]">Medical Worker Mode Required</h2>
+              <h2 className="text-xl font-serif font-bold text-[#1F181A]">{t("Medical Worker Mode Required")}</h2>
               <p className="text-xs text-[#6F6267] leading-relaxed">
-                The frontline Screening Helper workspace is enabled only for signed-in Medical Worker profiles. For your current profile, this mode is not enabled.
+                {t("The frontline Screening Helper workspace is enabled only for signed-in Medical Worker profiles. For your current profile, this mode is not enabled.")}
               </p>
             </div>
             <div className="flex flex-col sm:flex-row gap-2.5 justify-center pt-2">
@@ -685,7 +685,7 @@ function AppContent() {
                 onClick={() => setIsRoleModalOpen(true)}
                 className="px-5 py-2.5 rounded-xl bg-[#059669] hover:bg-[#047857] text-white text-xs font-bold shadow-xs cursor-pointer"
               >
-                Sign In to Medical Worker Mode
+                {t("Sign In to Medical Worker Mode")}
               </button>
               <button
                 type="button"
@@ -696,7 +696,7 @@ function AppContent() {
                 }}
                 className="px-4 py-2.5 rounded-xl border border-[#EFE4DC] text-xs font-bold text-[#6F6267] hover:bg-[#FAF7F4] cursor-pointer"
               >
-                Return to Patient Mode
+                {t("Return to Patient Mode")}
               </button>
             </div>
           </div>

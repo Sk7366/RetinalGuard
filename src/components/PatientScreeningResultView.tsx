@@ -73,28 +73,51 @@ export const PatientScreeningResultView: React.FC<PatientScreeningResultViewProp
       return;
     }
 
-    const narration = `
-      Screening Summary for reference ${result.patientId}.
-      What was reviewed: Retinal photograph${result.oct?.present ? ' and cross-sectional scan' : ''}.
-      What the screening support indicates: ${
-        isRoutine
-          ? 'Routine Follow-up. No significant retinal changes detected on this screening.'
-          : 'Further professional evaluation may be appropriate.'
-      }
-      What this may mean: ${
-        isRoutine
-          ? 'Your retinal photograph shows typical features. Continue regular monitoring.'
-          : 'Minor or notable retinal features were observed. Early detection allows timely care to protect eyesight.'
-      }
-      Recommended next step: ${
-        isRoutine
-          ? 'Schedule your next routine annual eye examination in 12 months.'
-          : isMild
-          ? 'Please consult a qualified eye-care professional for clinical evaluation within 30 to 60 days.'
-          : 'Please consult a qualified eye-care professional for clinical evaluation within 2 to 4 weeks.'
-      }
-      Notice: This AI-assisted screening result does not confirm or rule out a diagnosis. Further professional evaluation may be appropriate.
-    `;
+    let narration = '';
+    if (language === 'hi') {
+      narration = isRoutine
+        ? `स्क्रीनिंग सारांश। नियमित फॉलो-अप। इस जांच में रेटिना में कोई गंभीर बदलाव नहीं पाया गया। आपकी रेटिना की फोटो सामान्य दिख रही है। कृपया 12 महीने बाद अपनी अगली नियमित वार्षिक आंख जांच कराएं। ध्यान दें: यह एआई-सहायता प्राप्त स्क्रीनिंग है और डॉक्टर की पुष्टि आवश्यक है।`
+        : `स्क्रीनिंग सारांश। विशेषज्ञ डॉक्टर से परामर्श की आवश्यकता है। आपकी रेटिना की जांच में कुछ शुरुआती बदलाव देखे गए हैं। समय पर जांच और डॉक्टर की सलाह आपकी दृष्टि को सुरक्षित रखती है। कृपया अगले ${isMild ? '30 से 60 दिनों' : '2 से 4 हफ्तों'} में किसी योग्य नेत्र चिकित्सक से परामर्श लें।`;
+    } else if (language === 'kn') {
+      narration = isRoutine
+        ? `ತಪಾಸಣಾ ಸಾರಾಂಶ. ನಿಯಮಿತ ಅನುಸರಣೆ. ಈ ತಪಾಸಣೆಯಲ್ಲಿ ಯಾವುದೇ ಗಂಭೀರ ಬದಲಾವಣೆ ಕಂಡುಬಂದಿಲ್ಲ. ನಿಮ್ಮ ರೆಟಿನಾ ಫೋಟೋ ಸಾಮಾನ್ಯ ಲಕ್ಷಣಗಳನ್ನು ತೋರಿಸುತ್ತದೆ. 12 ತಿಂಗಳಲ್ಲಿ ಮುಂದಿನ ವಾರ್ಷಿಕ ಕಣ್ಣಿನ ತಪಾಸಣೆಯನ್ನು ನಿಗದಿಪಡಿಸಿ. ಇದು ಎಐ ತಪಾಸಣಾ ಸಹಾಯವಾಗಿದ್ದು ವೈದ್ಯರ ದೃಢೀಕರಣ ಅಗತ್ಯವಿದೆ.`
+        : `ತಪಾಸಣಾ ಸಾರಾಂಶ. ತಜ್ಞ ನೇತ್ರ ವೈದ್ಯರ ಭೇಟಿ ಅಗತ್ಯವಿದೆ. ಆರಂಭಿಕ ಬದಲಾವಣೆಗಳು ಕಂಡುಬಂದಿವೆ. ಆರಂಭಿಕ ಪತ್ತೆಯಿಂದ ದೃಷ್ಟಿಯನ್ನು ರಕ್ಷಿಸಬಹುದು. ದಯವಿಟ್ಟು ${isMild ? '30 ರಿಂದ 60 ದಿನಗಳಲ್ಲಿ' : '2 ರಿಂದ 4 ವಾರಗಳಲ್ಲಿ'} ನೇತ್ರ ತಜ್ಞರನ್ನು ಭೇಟಿ ಮಾಡಿ.`;
+    } else if (language === 'ta') {
+      narration = isRoutine
+        ? `பரிசோதனை சுருக்கம். வழக்கமான பின்தொடர்தல். இந்த பரிசோதனையில் தீவிர மாற்றங்கள் எதுவும் கண்டறியப்படவில்லை. உங்கள் விழித்திரை புகைப்படம் வழக்கமான அம்சங்களைக் காட்டுகிறது. 12 மாதங்களில் அடுத்த வருடாந்திர பரிசோதனையை திட்டமிடுங்கள்.`
+        : `பரிசோதனை சுருக்கம். கண் மருத்துவரிடம் ஆலோசனை பெற பரிந்துரைக்கப்படுகிறது. ஆரம்பகால கண்டறிதல் பார்வையை பாதுகாக்கும். தயவுசெய்து ${isMild ? '30 முதல் 60 நாட்களுக்குள்' : '2 முதல் 4 வாரங்களுக்குள்'} கண் மருத்துவரை அணுகவும்.`;
+    } else if (language === 'te') {
+      narration = isRoutine
+        ? `స్క్రీనింగ్ సారాంశం. సాధారణ ఫాలో-అప్. ఈ స్క్రీనింగ్‌లో ఎటువంటి తీవ్రమైన మార్పులు గుర్తించబడలేదు. మీ రెటీనా ఫోటో సాధారణంగా ఉంది. 12 నెలల్లో తదుపరి వార్షిక కంటి పరీక్షను చేయించుకోండి.`
+        : `స్క్రీనింగ్ సారాంశం. కంటి వైద్యుని సంప్రదించడం అవసరం. ప్రారంభ మార్పులు గుర్తించబడ్డాయి. ముందస్తు గుర్తింపు చూపును కాపాడుతుంది. దయచేసి ${isMild ? '30 నుండి 60 రోజుల్లోపు' : '2 నుండి 4 వారాల్లోపు'} కంటి నిపుణుడిని సంప్రదించండి.`;
+    } else if (language === 'ml') {
+      narration = isRoutine
+        ? `പരിശോധനാ സംഗ്രഹം. സാധാരണ ഫോളോ-അപ്പ്. ഈ പരിശോധനയിൽ ഗുരുതരമായ മാറ്റങ്ങളൊന്നും കണ്ടെത്തിയില്ല. നിങ്ങളുടെ റെറ്റിന ഫോട്ടോ സാധാരണ ലക്ഷണങ്ങൾ കാണിക്കുന്നു. 12 മാസത്തിനുള്ളിൽ അടുത്ത വാർഷിക നേത്ര പരിശോധന നടത്തുക.`
+        : `പരിശോധനാ സംഗ്രഹം. നേത്രരോഗ വിദഗ്ദ്ധന്റെ പരിശോധന ശുപാർശ ചെയ്യുന്നു. ആദ്യഘട്ട കണ്ടെത്തൽ കാഴ്ച സംരക്ഷിക്കാൻ സഹായിക്കും. ദയവായി ${isMild ? '30 മുതൽ 60 ദിവസത്തിനകം' : '2 മുതൽ 4 ആഴ്ചയ്ക്കുള്ളിൽ'} കണ്ണ് ഡോക്ടറെ കാണുക.`;
+    } else {
+      narration = `
+        Screening Summary for reference ${result.patientId}.
+        What was reviewed: Retinal photograph${result.oct?.present ? ' and cross-sectional scan' : ''}.
+        What the screening support indicates: ${
+          isRoutine
+            ? 'Routine Follow-up. No significant retinal changes detected on this screening.'
+            : 'Further professional evaluation may be appropriate.'
+        }
+        What this may mean: ${
+          isRoutine
+            ? 'Your retinal photograph shows typical features. Continue regular monitoring.'
+            : 'Minor or notable retinal features were observed. Early detection allows timely care to protect eyesight.'
+        }
+        Recommended next step: ${
+          isRoutine
+            ? 'Schedule your next routine annual eye examination in 12 months.'
+            : isMild
+            ? 'Please consult a qualified eye-care professional for clinical evaluation within 30 to 60 days.'
+            : 'Please consult a qualified eye-care professional for clinical evaluation within 2 to 4 weeks.'
+        }
+        Notice: This AI-assisted screening result does not confirm or rule out a diagnosis. Further professional evaluation may be appropriate.
+      `;
+    }
 
     voiceService.speak({
       text: narration,

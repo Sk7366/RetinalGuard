@@ -161,13 +161,13 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
 
               {/* Title & Address */}
               <h3 className="font-serif font-semibold text-base text-stone-900 group-hover:text-[#F05A28] transition-colors leading-snug">
-                {center.name}
+                {t(center.name, center.name)}
               </h3>
 
               <p className="text-xs text-stone-600 mt-2 flex items-start gap-1.5 leading-relaxed">
                 <MapPin className="w-3.5 h-3.5 text-stone-400 shrink-0 mt-0.5" />
                 <span>
-                  {center.address}, {center.city} — {center.pinCode}
+                  {t(center.address, center.address)}, {t(center.city, center.city)} — {center.pinCode}
                 </span>
               </p>
 
@@ -175,7 +175,7 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
               {center.campDates && (
                 <div className="mt-2.5 p-2 rounded-lg bg-stone-50 border border-stone-200 text-[11px] text-stone-700 flex items-center gap-1.5 font-medium">
                   <Calendar className="w-3.5 h-3.5 text-stone-500 shrink-0" />
-                  <span>{center.campDates}</span>
+                  <span>{t(center.campDates, center.campDates)}</span>
                 </div>
               )}
 
@@ -183,7 +183,7 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
               <div className="mt-3 space-y-1.5 text-xs text-stone-600 pt-3 border-t border-stone-100">
                 <div className="flex items-center gap-2">
                   <Clock className="w-3.5 h-3.5 text-stone-400" />
-                  <span>{center.hours}</span>
+                  <span>{t(center.hours, center.hours)}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Phone className="w-3.5 h-3.5 text-stone-400" />
@@ -200,7 +200,7 @@ export const FindScreeningSection: React.FC<FindScreeningSectionProps> = ({
                     key={i}
                     className="text-[10px] px-2 py-0.5 rounded-md bg-stone-50 border border-stone-200/70 text-stone-700 font-medium"
                   >
-                    {srv}
+                    {t(srv, srv)}
                   </span>
                 ))}
               </div>

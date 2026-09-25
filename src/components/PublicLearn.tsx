@@ -91,18 +91,18 @@ export const PublicLearn: React.FC<PublicLearnProps> = ({ onGetScreened, onOpenF
                     {t('gradeLabel', 'Grade')} {grade.grade}
                   </span>
                   <span className="text-[10px] font-mono text-stone-500 font-medium">
-                    {grade.shortName}
+                    {t(grade.shortName, grade.shortName)}
                   </span>
                 </div>
-                <h3 className="font-semibold text-sm text-stone-900">{grade.name}</h3>
+                <h3 className="font-semibold text-sm text-stone-900">{t(grade.name, grade.name)}</h3>
                 <p className="text-[11px] text-stone-600 leading-relaxed">
-                  {grade.description}
+                  {t(grade.description, grade.description)}
                 </p>
               </div>
 
               <div className="pt-2 border-t border-stone-200/80 text-[11px]">
                 <span className="text-stone-400 block text-[10px] uppercase font-medium tracking-wider">{t('actionLabel', 'Action')}</span>
-                <span className="font-medium text-stone-800">{grade.action}</span>
+                <span className="font-medium text-stone-800">{t(grade.action, grade.action)}</span>
               </div>
             </div>
           ))}

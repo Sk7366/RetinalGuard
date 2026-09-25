@@ -632,22 +632,22 @@ export const PublicGetScreened: React.FC<PublicGetScreenedProps> = ({
         <div className="bg-[#FAF7F4] dark:bg-[#221C1F] border border-[#EFE4DC] dark:border-[#382E32] rounded-2xl p-4 sm:p-5">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:divide-x divide-y md:divide-y-0 divide-[#EFE4DC] dark:divide-[#382E32]">
             <div className="space-y-1">
-              <span className="text-[11px] font-bold text-[#F05A28] uppercase tracking-wider block">Where you are</span>
+              <span className="text-[11px] font-bold text-[#F05A28] uppercase tracking-wider block">{t("Where you are", "Where you are")}</span>
               <p className="text-xs sm:text-sm font-bold text-[#1F181A] dark:text-white flex items-center gap-1.5">
                 <span className="w-5 h-5 rounded-md bg-[#FFE5D8] dark:bg-[#3D2619] text-[#F05A28] flex items-center justify-center text-[11px] font-extrabold">{currentStepObj.label}</span>
-                <span>{currentStepObj.title}</span>
+                <span>{t(currentStepObj.title, currentStepObj.title)}</span>
               </p>
             </div>
             <div className="space-y-1 pt-2 md:pt-0 md:pl-4">
-              <span className="text-[11px] font-bold text-[#6E5C5F] dark:text-[#A8989B] uppercase tracking-wider block">What you need to do</span>
+              <span className="text-[11px] font-bold text-[#6E5C5F] dark:text-[#A8989B] uppercase tracking-wider block">{t("What you need to do", "What you need to do")}</span>
               <p className="text-xs text-[#2E2628] dark:text-[#E8E2DD] leading-relaxed">
-                {currentStepObj.whatToDo}
+                {t(currentStepObj.whatToDo, currentStepObj.whatToDo)}
               </p>
             </div>
             <div className="space-y-1 pt-2 md:pt-0 md:pl-4">
-              <span className="text-[11px] font-bold text-[#6E5C5F] dark:text-[#A8989B] uppercase tracking-wider block">What happens next</span>
+              <span className="text-[11px] font-bold text-[#6E5C5F] dark:text-[#A8989B] uppercase tracking-wider block">{t("What happens next", "What happens next")}</span>
               <p className="text-xs text-[#2E2628] dark:text-[#E8E2DD] leading-relaxed">
-                {currentStepObj.whatNext}
+                {t(currentStepObj.whatNext, currentStepObj.whatNext)}
               </p>
             </div>
           </div>

@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { PRESET_CASES, PresetPatientCase } from '../data/sampleCases';
 import { MultimodalTriageResult } from '../types';
+import { useTranslation } from '../i18n/I18nContext';
 
 interface PublicExploreDemoProps {
   onSelectCaseForFullInspection?: (caseId: string) => void;
@@ -25,6 +26,7 @@ export const PublicExploreDemo: React.FC<PublicExploreDemoProps> = ({
   onSelectCaseForFullInspection,
   onGetScreened,
 }) => {
+  const { t } = useTranslation();
   const [selectedCaseId, setSelectedCaseId] = useState<string>(PRESET_CASES[0].id);
   const [showTechnicalDetails, setShowTechnicalDetails] = useState<boolean>(false);
 
@@ -39,13 +41,16 @@ export const PublicExploreDemo: React.FC<PublicExploreDemoProps> = ({
       <div className="bg-white rounded-3xl border border-[#EFE4DC] p-6 sm:p-10 shadow-xs">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FFF7ED] text-[#C2410C] border border-[#FED7AA] mb-3">
           <Sparkles className="w-3.5 h-3.5 text-[#EA580C]" />
-          <span>Interactive Patient Stories</span>
+          <span>{t("Interactive Patient Stories", "Interactive Patient Stories")}</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#2E2628] tracking-tight">
-          Explore How Screening Catches Eye Damage Early
+          {t("Explore How Screening Catches Eye Damage Early", "Explore How Screening Catches Eye Damage Early")}
         </h1>
         <p className="text-xs sm:text-sm text-[#6E5C5F] mt-2 leading-relaxed">
-          Walk through sample eye screening results below to see how standard retinal photographs and depth scans identify early diabetic changes before noticeable sight loss occurs.
+          {t(
+            "Walk through sample eye screening results below to see how standard retinal photographs and depth scans identify early diabetic changes before noticeable sight loss occurs.",
+            "Walk through sample eye screening results below to see how standard retinal photographs and depth scans identify early diabetic changes before noticeable sight loss occurs."
+          )}
         </p>
       </div>
 
@@ -138,7 +143,7 @@ export const PublicExploreDemo: React.FC<PublicExploreDemoProps> = ({
               />
             </div>
             <div className="text-center text-[11px] text-[#6E5C5F]">
-              Color photograph of the retina (surface view)
+              {t("Color photograph of the retina (surface view)", "Color photograph of the retina (surface view)")}
             </div>
           </div>
 
@@ -147,20 +152,20 @@ export const PublicExploreDemo: React.FC<PublicExploreDemoProps> = ({
             <div className="p-5 rounded-2xl bg-[#FAF8F6] border border-[#EFE4DC] space-y-2">
               <h3 className="text-xs font-bold text-[#2E2628] uppercase tracking-wider flex items-center gap-1.5">
                 <Stethoscope className="w-3.5 h-3.5 text-[#EA580C]" />
-                <span>What Was Found in This Eye</span>
+                <span>{t("What Was Found in This Eye", "What Was Found in This Eye")}</span>
               </h3>
               <p className="text-xs sm:text-sm text-[#2E2628] leading-relaxed">
-                {currentCase.description}
+                {t(currentCase.description, currentCase.description)}
               </p>
             </div>
 
             <div className="p-5 rounded-2xl bg-[#FAF8F6] border border-[#EFE4DC] space-y-2">
               <h3 className="text-xs font-bold text-[#2E2628] uppercase tracking-wider flex items-center gap-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5 text-[#15803D]" />
-                <span>Next Step Recommendation</span>
+                <span>{t("Next Step Recommendation", "Next Step Recommendation")}</span>
               </h3>
               <p className="text-xs sm:text-sm text-[#2E2628] leading-relaxed font-medium">
-                {triage.recommendation}
+                {t(triage.recommendation, triage.recommendation)}
               </p>
             </div>
 
@@ -171,7 +176,7 @@ export const PublicExploreDemo: React.FC<PublicExploreDemoProps> = ({
                   className="bg-gradient-to-r from-[#EA580C] to-[#DB2777] text-white px-4 py-2.5 rounded-xl text-xs font-semibold shadow-xs hover:from-[#C2410C] hover:to-[#BE185D] transition-all flex items-center gap-1.5"
                 >
                   <Eye className="w-3.5 h-3.5" />
-                  <span>Check Your Own Eyes Now</span>
+                  <span>{t("Check Your Own Eyes Now", "Check Your Own Eyes Now")}</span>
                 </button>
               )}
 
@@ -180,7 +185,7 @@ export const PublicExploreDemo: React.FC<PublicExploreDemoProps> = ({
                   onClick={() => onSelectCaseForFullInspection(currentCase.id)}
                   className="px-4 py-2.5 rounded-xl border border-[#EFE4DC] bg-white text-xs font-semibold text-[#2E2628] hover:border-[#EA580C] hover:text-[#EA580C] transition-colors"
                 >
-                  Inspect in Full Clinical Viewer →
+                  {t("Inspect in Full Clinical Viewer →", "Inspect in Full Clinical Viewer →")}
                 </button>
               )}
             </div>

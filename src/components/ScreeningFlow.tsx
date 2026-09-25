@@ -688,7 +688,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               >
                 {MOCK_SCREENING_CENTERS.map((c) => (
                   <option key={c.id} value={c.id}>
-                    {c.name} ({c.city}, {c.state}) {c.isCampActive ? `— [${t('activeCamp', 'Active Camp')}]` : ''}
+                    {t(c.name, c.name)} ({t(c.city, c.city)}, {t(c.state, c.state)}) {c.isCampActive ? `— [${t('activeCamp', 'Active Camp')}]` : ''}
                   </option>
                 ))}
               </select>
@@ -1814,7 +1814,7 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               >
                 {MOCK_SCREENING_CENTERS.map((c) => (
                   <option key={c.id} value={c.name}>
-                    {c.name} — {c.city} ({c.hours})
+                    {t(c.name, c.name)} — {t(c.city, c.city)} ({t(c.hours, c.hours)})
                   </option>
                 ))}
               </select>

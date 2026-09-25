@@ -691,20 +691,20 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {isPatient ? (
                   <>
                     <Eye className="w-3.5 h-3.5 text-[#EA580C]" />
-                    <span className="hidden sm:inline">Patient Mode</span>
-                    <span className="sm:hidden">Patient</span>
+                    <span className="hidden sm:inline">{t('navPatientMode', 'Patient Mode')}</span>
+                    <span className="sm:hidden">{t('rolePatientTitle', 'Patient')}</span>
                   </>
                 ) : isHelper ? (
                   <>
                     <Stethoscope className="w-3.5 h-3.5 text-[#059669]" />
-                    <span className="hidden sm:inline">Medical Worker Mode</span>
-                    <span className="sm:hidden">Worker</span>
+                    <span className="hidden sm:inline">{t('navMedicalWorkerMode', 'Medical Worker Mode')}</span>
+                    <span className="sm:hidden">{t('roleHelperTitle', 'Worker')}</span>
                   </>
                 ) : (
                   <>
                     <Microscope className="w-3.5 h-3.5 text-[#18181B]" />
-                    <span className="hidden sm:inline">Researcher Mode</span>
-                    <span className="sm:hidden">Research</span>
+                    <span className="hidden sm:inline">{t('navResearcherMode', 'Researcher Mode')}</span>
+                    <span className="sm:hidden">{t('roleResearcherTitle', 'Research')}</span>
                   </>
                 )}
                 <ChevronDown className={`w-3 h-3 transition-transform ${modeMenuOpen ? 'rotate-180' : ''}`} />
@@ -718,17 +718,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <div className="pb-2.5 border-b border-[#EFE4DC]">
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-bold text-[#8E7E81] uppercase tracking-wider">
-                        Active Workspace
+                        {t('navActiveWorkspace', 'Active Workspace')}
                       </span>
                       <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-[#ECFDF5] text-[#059669] border border-[#A7F3D0]">
-                        ENABLED
+                        {t('navEnabled', 'ENABLED')}
                       </span>
                     </div>
                     <div className="text-sm font-bold text-[#1F181A] mt-0.5">
-                      {isPatient ? 'Patient Mode' : isHelper ? 'Medical Worker Mode' : 'Researcher Mode'}
+                      {isPatient ? t('navPatientMode', 'Patient Mode') : isHelper ? t('navMedicalWorkerMode', 'Medical Worker Mode') : t('navResearcherMode', 'Researcher Mode')}
                     </div>
                     <p className="text-[11px] text-[#6F6267] mt-1 leading-relaxed">
-                      For your signed profile, only this mode is enabled. To enable another mode, sign in with that role profile.
+                      {t('roleModalSubtitle', 'For your signed profile, only this mode is enabled. To enable another mode, sign in with that role profile.')}
                     </p>
                   </div>
 
@@ -743,7 +743,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     >
                       <div className="flex items-center gap-2">
                         <RotateCcw className="w-3.5 h-3.5 text-white" />
-                        <span>Switch Mode (Sign In)</span>
+                        <span>{t('navSwitchModeSignIn', 'Switch Mode (Sign In)')}</span>
                       </div>
                       <ArrowRight className="w-3.5 h-3.5 text-white" />
                     </button>
@@ -757,7 +757,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                         }}
                         className="w-full text-left px-3 py-1.5 rounded-xl text-xs font-semibold text-[#DC2626] hover:bg-red-50 flex items-center justify-between transition-colors cursor-pointer mt-1"
                       >
-                        <span>Sign Out to Guest</span>
+                        <span>{t('navSignOutToGuest', 'Sign Out to Guest')}</span>
                         <LogOut className="w-3.5 h-3.5 text-[#DC2626]" />
                       </button>
                     )}
@@ -1147,18 +1147,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="p-3.5 rounded-2xl bg-[#FFFDF9] border border-[#FED7AA] space-y-2 shadow-2xs">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-bold text-[#C2410C] uppercase tracking-wider">
-                Current Workspace Mode
+                {t('navActiveMode', 'Current Workspace Mode')}
               </span>
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black bg-[#FFE5D8] text-[#EA580C] border border-[#FED7AA]">
-                {isPatient ? 'Patient Mode' : isHelper ? 'Medical Worker Mode' : 'Researcher Mode'}
+                {isPatient ? t('navPatientMode', 'Patient Mode') : isHelper ? t('navMedicalWorkerMode', 'Medical Worker Mode') : t('navResearcherMode', 'Researcher Mode')}
               </span>
             </div>
             <p className="text-xs text-[#6F6267] leading-relaxed">
               {isPatient
-                ? 'Patient Mode: Find screening centers, view reports, and book appointments.'
+                ? t('rolePatientDesc', 'Patient Mode: Find screening centers, view reports, and book appointments.')
                 : isHelper
-                ? 'Medical Worker Mode: Screening helper intake, clarity checks, and clinical review queue.'
-                : 'Researcher Mode: Multimodal late fusion, model evaluation, and benchmarks.'}
+                ? t('roleHelperDesc', 'Medical Worker Mode: Screening helper intake, clarity checks, and clinical review queue.')
+                : t('roleResearcherDesc', 'Researcher Mode: Multimodal late fusion, model evaluation, and benchmarks.')}
             </p>
             <button
               type="button"
@@ -1169,7 +1169,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="w-full py-2.5 px-3 rounded-xl bg-[#F05A28] hover:bg-[#D84818] text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
             >
               <RotateCcw className="w-3.5 h-3.5 text-white" />
-              <span>Switch Mode (Sign In)</span>
+              <span>{t('navSwitchModeSignIn', 'Switch Mode (Sign In)')}</span>
             </button>
           </div>
 

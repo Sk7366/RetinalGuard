@@ -1,4 +1,5 @@
 import { LanguageCode } from '../i18n/translations';
+import { PHRASE_MAP } from '../i18n/comprehensiveTranslations';
 
 // BCP 47 voice tag mappings for the 6 languages
 export const LANGUAGE_VOICE_TAGS: Record<LanguageCode, string[]> = {
@@ -35,6 +36,16 @@ class VoiceService {
 
   private listeners: Set<Listener> = new Set();
   private currentUtterance: SpeechSynthesisUtterance | null = null;
+  private cachedVoices: SpeechSynthesisVoice[] = [];
+
+  constructor() {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      this.cachedVoices = window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = () => {
+        this.cachedVoices = window.speechSynthesis.getVoices();
+      };
+    }
+  }
 
   public subscribe(listener: Listener): () => void {
     this.listeners.add(listener);
@@ -52,22 +63,29 @@ class VoiceService {
 
   public getVoices(): SpeechSynthesisVoice[] {
     if (!this.isSupported()) return [];
-    return window.speechSynthesis.getVoices();
+    if (this.cachedVoices.length > 0) return this.cachedVoices;
+    this.cachedVoices = window.speechSynthesis.getVoices();
+    return this.cachedVoices;
   }
 
   private findBestVoice(lang: LanguageCode): SpeechSynthesisVoice | null {
     if (!this.isSupported()) return null;
     const voices = this.getVoices();
+    if (voices.length === 0) return null;
+
     const tags = LANGUAGE_VOICE_TAGS[lang] || ['en-IN', 'en-US'];
 
+    // 1. Exact or prefix tag match
     for (const tag of tags) {
       const match = voices.find(
-        (v) => v.lang.toLowerCase() === tag.toLowerCase() || v.lang.toLowerCase().startsWith(tag.toLowerCase())
+        (v) =>
+          v.lang.toLowerCase() === tag.toLowerCase() ||
+          v.lang.toLowerCase().replace('_', '-').startsWith(tag.toLowerCase())
       );
       if (match) return match;
     }
 
-    // Fallback: search for voice name containing language
+    // 2. Language name match
     const langNames: Record<LanguageCode, string> = {
       en: 'english',
       hi: 'hindi',
@@ -76,12 +94,42 @@ class VoiceService {
       te: 'telugu',
       ml: 'malayalam',
     };
-    const nameMatch = voices.find((v) =>
-      v.name.toLowerCase().includes(langNames[lang] || 'english')
-    );
-    if (nameMatch) return nameMatch;
+    const targetName = langNames[lang];
+    if (targetName) {
+      const nameMatch = voices.find((v) =>
+        v.name.toLowerCase().includes(targetName)
+      );
+      if (nameMatch) return nameMatch;
+    }
 
-    return voices[0] || null;
+    // If English, voices[0] is acceptable
+    if (lang === 'en') {
+      return voices[0] || null;
+    }
+
+    // For non-English: do NOT return an English voice! Return null so utterance.lang tag is used directly.
+    return null;
+  }
+
+  public translateForSpeech(text: string, lang: LanguageCode): string {
+    if (lang === 'en' || !text.trim()) return text;
+
+    const phrases = PHRASE_MAP[lang];
+    if (!phrases) return text;
+
+    const trimmed = text.trim();
+    if (phrases[trimmed]) {
+      return phrases[trimmed];
+    }
+
+    // Replace known sentences or clauses
+    let result = text;
+    for (const [enPhrase, localized] of Object.entries(phrases)) {
+      if (enPhrase.length > 8 && result.includes(enPhrase)) {
+        result = result.split(enPhrase).join(localized);
+      }
+    }
+    return result;
   }
 
   public speak(params: {
@@ -99,8 +147,11 @@ class VoiceService {
 
     this.stop();
 
-    const textToSpeak = params.text.trim();
-    if (!textToSpeak) return;
+    const rawText = params.text.trim();
+    if (!rawText) return;
+
+    // Automatically ensure the spoken text is in the requested language
+    const textToSpeak = this.translateForSpeech(rawText, params.lang);
 
     const rate = params.rate || this.state.rate || 1.0;
     const utterance = new SpeechSynthesisUtterance(textToSpeak);
@@ -139,7 +190,6 @@ class VoiceService {
     };
 
     utterance.onerror = (e) => {
-      // Don't log canceled speech as an error
       if (e.error !== 'canceled' && e.error !== 'interrupted') {
         console.warn('Speech error:', e.error);
       }

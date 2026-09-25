@@ -149,10 +149,10 @@ export const PatientReportsView: React.FC<PatientReportsViewProps> = ({
         <ShieldCheck className="w-5 h-5 text-[#F05A28] shrink-0 mt-0.5" />
         <div className="space-y-1">
           <p className="font-bold">
-            Notice: This is an AI-assisted screening result and does not confirm or rule out a diagnosis.
+            {t("patientSafetyNoticeTitle", "Notice: This is an AI-assisted screening result and does not confirm or rule out a diagnosis.")}
           </p>
           <p className="text-xs text-[#B83A12] dark:text-[#FB923C]">
-            Please consult a qualified eye-care professional for comprehensive examination and medical diagnosis.
+            {t("patientSafetyNoticeSub", "Please consult a qualified eye-care professional for comprehensive examination and medical diagnosis.")}
           </p>
         </div>
       </div>
@@ -235,20 +235,20 @@ export const PatientReportsView: React.FC<PatientReportsViewProps> = ({
               {/* CENTER NAME */}
               <div className="flex items-center gap-2 text-xs font-medium text-[#6F6267]">
                 <Building className="w-3.5 h-3.5 text-[#9E8D91]" />
-                <span>{report.centerName}</span>
+                <span>{t(report.centerName, report.centerName)}</span>
               </div>
 
               {/* PLAIN LANGUAGE SUMMARY */}
               <div className="p-4 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC]/80 space-y-2">
                 <div className="text-sm font-bold text-[#2B2024]">
-                  {report.gradeName}
+                  {t(report.gradeName, report.gradeName)}
                 </div>
                 <p className="text-xs sm:text-sm text-[#57534E] leading-relaxed">
-                  {report.plainSummary}
+                  {t(report.plainSummary, report.plainSummary)}
                 </p>
                 <div className="pt-2 border-t border-[#EFE4DC]/60 flex items-start gap-2 text-xs text-[#2B2024]">
                   <span className="font-bold text-[#F05A28] shrink-0">{t("recommendedNextStepLabel", "Recommended Next Step:")}</span>
-                  <span>{report.recommendedAction}</span>
+                  <span>{t(report.recommendedAction, report.recommendedAction)}</span>
                 </div>
               </div>
 

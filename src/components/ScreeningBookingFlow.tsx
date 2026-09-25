@@ -525,23 +525,23 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                           </span>
                         ) : (
                           <span className="text-[11px] text-[#8E7E81] uppercase font-semibold">
-                            Fixed Clinic
+                            {t('Fixed Clinic', 'Fixed Clinic')}
                           </span>
                         )}
                       </div>
 
                       {/* Center Name */}
                       <h3 className="font-serif font-bold text-base text-[#1F181A] dark:text-white group-hover:text-[#EA580C] transition-colors">
-                        {center.name}
+                        {t(center.name, center.name)}
                       </h3>
 
                       {/* Location: address, city, pinCode */}
                       <div className="text-xs text-[#524346] dark:text-[#C4B7BA] flex items-start gap-1.5 leading-relaxed">
                         <MapPin className="w-3.5 h-3.5 text-[#EA580C] shrink-0 mt-0.5" />
                         <div>
-                          <span className="font-semibold text-[#1F181A] dark:text-white block">Location:</span>
+                          <span className="font-semibold text-[#1F181A] dark:text-white block">{t('Location:', 'Location:')}</span>
                           <span>
-                            {center.address}, {center.city} — {center.pinCode}
+                            {t(center.address, center.address)}, {t(center.city, center.city)} — {center.pinCode}
                           </span>
                         </div>
                       </div>
@@ -551,7 +551,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                         <div className="flex items-center gap-1.5">
                           <Clock className="w-3.5 h-3.5 text-[#8E7E81]" />
                           <span>
-                            <strong>Available time slots:</strong> {center.operatingHours}
+                            <strong>{t('Available time slots:', 'Available time slots:')}</strong> {t(center.operatingHours, center.operatingHours)}
                           </span>
                         </div>
                         <div className="flex items-center gap-1.5 font-mono text-[11px]">
@@ -563,7 +563,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                       {/* Available dates preview */}
                       <div className="text-xs text-[#15803D] dark:text-[#4ADE80] font-semibold flex items-center gap-1.5">
                         <Calendar className="w-3.5 h-3.5" />
-                        <span>Available dates: Daily slots open this week</span>
+                        <span>{t('Available dates: Daily slots open this week', 'Available dates: Daily slots open this week')}</span>
                         {!isLive && (
                           <span className="text-[9px] px-1 py-0.2 rounded bg-[#FEF3C7] text-[#92400E] border border-[#FDE68A] uppercase font-bold">
                             DEMO DATA
@@ -576,7 +576,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                         <div className="pt-2 border-t border-[#F2ECE7] dark:border-[#2C2428] text-[11px] text-[#6E5C5F] dark:text-[#A8989B] flex items-center gap-1.5">
                           <Globe className="w-3.5 h-3.5 text-[#EA580C] shrink-0" />
                           <span>
-                            <strong>Languages supported:</strong> {center.languagesSupported.join(', ')}
+                            <strong>{t('Languages supported:', 'Languages supported:')}</strong> {center.languagesSupported.join(', ')}
                           </span>
                         </div>
                       )}
@@ -584,7 +584,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                       {/* Available services */}
                       <div className="pt-2 border-t border-[#F2ECE7] dark:border-[#2C2428] space-y-1.5">
                         <span className="text-[11px] font-bold uppercase tracking-wider text-[#8E7E81] block">
-                          Available Services:
+                          {t('Available Services:', 'Available Services:')}
                         </span>
                         <div className="flex flex-wrap gap-1">
                           {center.services.map((s, i) => (
@@ -592,7 +592,7 @@ export const ScreeningBookingFlow: React.FC<ScreeningBookingFlowProps> = ({
                               key={i}
                               className="text-[10px] px-2 py-0.5 rounded-md bg-[#FAF7F4] dark:bg-[#251E22] border border-[#EFE4DC] dark:border-[#382E32] text-[#6E5C5F] dark:text-[#C4B7BA]"
                             >
-                              {s}
+                              {t(s, s)}
                             </span>
                           ))}
                         </div>
