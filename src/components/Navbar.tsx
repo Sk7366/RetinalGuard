@@ -168,7 +168,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <header
       id="main-navbar-header"
-      className="bg-white/95 backdrop-blur-md border-b border-[#EFE4DC] sticky top-0 z-40 w-full overflow-x-clip"
+      className="bg-white/95 dark:bg-[#1B161A]/95 backdrop-blur-md border-b border-[#EFE4DC] dark:border-[#33292F] sticky top-0 z-40 w-full overflow-x-clip"
     >
       <div className="max-w-7xl mx-auto px-3 sm:px-5 lg:px-8">
         <div className="flex items-center justify-between h-16 gap-2 sm:gap-4 w-full min-w-0">
@@ -196,7 +196,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
               <div className="flex flex-col justify-center">
                 <div className="flex items-center gap-1 leading-none">
-                  <span className="font-serif font-bold text-base sm:text-lg tracking-tight text-[#2B2024] group-hover:text-[#F05A28] transition-colors">
+                  <span className="font-serif font-bold text-base sm:text-lg tracking-tight text-[#2B2024] dark:text-[#FAF5F7] group-hover:text-[#F05A28] transition-colors">
                     RETINAGUARD
                   </span>
                   {!isPatient && (
@@ -213,7 +213,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </span>
                 )}
                 {!isPatient && isResearcher && (
-                  <span className="text-[9px] font-bold text-[#2B2024] tracking-wide uppercase mt-0.5">
+                  <span className="text-[9px] font-bold text-[#2B2024] dark:text-[#FAF5F7] tracking-wide uppercase mt-0.5">
                     RESEARCH
                   </span>
                 )}
@@ -241,8 +241,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handlePublicNav('why-screening')}
                   className={`px-2.5 xl:px-3.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     publicRoute === 'why-screening'
-                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
-                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFE5D8]/40'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] dark:bg-[#3D251E] dark:text-[#FF7A4D] font-semibold'
+                      : 'text-[#6F6267] dark:text-[#C8BCC2] hover:text-[#2B2024] dark:hover:text-[#FAF5F7] hover:bg-[#FFE5D8]/40 dark:hover:bg-[#3D251E]/40'
                   }`}
                 >
                   {t('navWhyScreening', 'Why Screening')}
@@ -254,8 +254,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handlePublicNav('how-it-works')}
                   className={`px-2.5 xl:px-3.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     publicRoute === 'how-it-works'
-                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
-                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFE5D8]/40'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] dark:bg-[#3D251E] dark:text-[#FF7A4D] font-semibold'
+                      : 'text-[#6F6267] dark:text-[#C8BCC2] hover:text-[#2B2024] dark:hover:text-[#FAF5F7] hover:bg-[#FFE5D8]/40 dark:hover:bg-[#3D251E]/40'
                   }`}
                 >
                   {t('navHowItWorks', 'How It Works')}
@@ -267,8 +267,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handlePublicNav('find-screening')}
                   className={`px-2.5 xl:px-3.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     publicRoute === 'find-screening'
-                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
-                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFE5D8]/40'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] dark:bg-[#3D251E] dark:text-[#FF7A4D] font-semibold'
+                      : 'text-[#6F6267] dark:text-[#C8BCC2] hover:text-[#2B2024] dark:hover:text-[#FAF5F7] hover:bg-[#FFE5D8]/40 dark:hover:bg-[#3D251E]/40'
                   }`}
                 >
                   {t('navFindCenter', 'Find a Center')}
@@ -280,8 +280,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handlePublicNav('my-screening')}
                   className={`px-2.5 xl:px-3.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     publicRoute === 'my-screening'
-                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
-                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFE5D8]/40'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] dark:bg-[#3D251E] dark:text-[#FF7A4D] font-semibold'
+                      : 'text-[#6F6267] dark:text-[#C8BCC2] hover:text-[#2B2024] dark:hover:text-[#FAF5F7] hover:bg-[#FFE5D8]/40 dark:hover:bg-[#3D251E]/40'
                   }`}
                 >
                   {t('navMyScreening', 'My Screening')}
@@ -293,8 +293,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                   onClick={() => handlePublicNav('learn')}
                   className={`px-2.5 xl:px-3.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap ${
                     publicRoute === 'learn'
-                      ? 'text-[#F05A28] bg-[#FFE5D8] font-semibold'
-                      : 'text-[#6F6267] hover:text-[#2B2024] hover:bg-[#FFE5D8]/40'
+                      ? 'text-[#F05A28] bg-[#FFE5D8] dark:bg-[#3D251E] dark:text-[#FF7A4D] font-semibold'
+                      : 'text-[#6F6267] dark:text-[#C8BCC2] hover:text-[#2B2024] dark:hover:text-[#FAF5F7] hover:bg-[#FFE5D8]/40 dark:hover:bg-[#3D251E]/40'
                   }`}
                 >
                   {t('navLearn', 'Learn')}
@@ -931,6 +931,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                   </button>
                 )}
 
+                {/* ACCESSIBILITY & DISPLAY PREFERENCES */}
+                <div className="hidden sm:block">
+                  <AccessibilityMenu
+                    settings={accessibilitySettings}
+                    onUpdateSettings={onUpdateAccessibilitySettings}
+                    currentLanguage={currentLanguage}
+                    onLanguageChange={onLanguageChange}
+                    onOpenFullSettings={onOpenAccessibilityModal}
+                  />
+                </div>
+
                 {/* 3. PRIMARY CTA: START SCREENING (The most visually prominent navigation action) */}
                 <button
                   type="button"
@@ -983,7 +994,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     type="button"
                     id="navbar-provider-language-btn"
                     onClick={() => setLangMenuOpen(!langMenuOpen)}
-                    className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl border border-[#EFE4DC] bg-[#FFFDF9] hover:bg-white text-xs text-[#2B2024] flex items-center gap-1 sm:gap-1.5 transition-colors"
+                    className="p-1.5 sm:px-2.5 sm:py-1.5 rounded-xl border border-[#EFE4DC] dark:border-[#33292F] bg-[#FFFDF9] dark:bg-[#1B161A] hover:bg-white dark:hover:bg-[#251E23] text-xs text-[#2B2024] dark:text-[#FAF5F7] flex items-center gap-1 sm:gap-1.5 transition-colors"
                   >
                     <Globe className="w-3.5 h-3.5 text-[#F05A28]" />
                     <span className="font-semibold hidden xl:inline text-xs">
@@ -1001,9 +1012,9 @@ export const Navbar: React.FC<NavbarProps> = ({
 
                   {langMenuOpen && (
                     <div
-                      className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-[#EFE4DC] py-1.5 z-50 animate-in fade-in"
+                      className="absolute right-0 mt-2 w-48 bg-white dark:bg-[#1B161A] rounded-xl shadow-xl border border-[#EFE4DC] dark:border-[#33292F] py-1.5 z-50 animate-in fade-in"
                     >
-                      <div className="px-3 py-1 text-[10px] font-bold text-[#9E8D91] uppercase tracking-wider border-b border-[#EFE4DC]">
+                      <div className="px-3 py-1 text-[10px] font-bold text-[#9E8D91] uppercase tracking-wider border-b border-[#EFE4DC] dark:border-[#33292F]">
                         {t('navSelectLanguage', 'Select Language')}
                       </div>
                       {SUPPORTED_LANGUAGES.map((lang) => (
@@ -1016,8 +1027,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                           }}
                           className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between transition-colors ${
                             currentLanguage === lang.code
-                              ? 'bg-[#FFE5D8] text-[#F05A28] font-bold'
-                              : 'text-[#2B2024] hover:bg-[#FFFDF9]'
+                              ? 'bg-[#FFE5D8] dark:bg-[#3D251E] text-[#F05A28] dark:text-[#FF7A4D] font-bold'
+                              : 'text-[#2B2024] dark:text-[#FAF5F7] hover:bg-[#FFFDF9] dark:hover:bg-[#251E23]'
                           }`}
                         >
                           <span className="font-medium">{lang.nativeLabel}</span>
@@ -1567,14 +1578,14 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Accessibility button in Drawer */}
           {onOpenAccessibilityModal && (
-            <div className="pt-2 border-t border-[#EFE4DC]">
+            <div className="pt-2 border-t border-[#EFE4DC] dark:border-[#33292F]">
               <button
                 type="button"
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onOpenAccessibilityModal();
                 }}
-                className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center justify-between text-[#2B2024] hover:bg-[#FFFDF9]"
+                className="w-full text-left px-3.5 py-2.5 rounded-xl text-sm font-medium flex items-center justify-between text-[#2B2024] dark:text-[#FAF5F7] hover:bg-[#FFFDF9] dark:hover:bg-[#251E23] transition-colors"
               >
                 <div className="flex items-center gap-2.5">
                   <Eye className="w-4 h-4 text-[#F05A28]" />

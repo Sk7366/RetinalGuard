@@ -69,14 +69,14 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-stone-200 dark:border-[#33292F] bg-white dark:bg-[#1B161A] text-xs font-medium text-stone-700 dark:text-[#FAF5F7] hover:bg-stone-50 dark:hover:bg-[#2A2226] transition-colors shadow-2xs"
+        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-stone-200 dark:border-[#33292F] bg-white dark:bg-[#1B161A] text-xs font-medium text-[#2B2024] dark:text-[#FAF5F7] hover:bg-stone-50 dark:hover:bg-[#2A2226] transition-colors shadow-2xs"
         title={t('accessibilityAndLangPref', 'Accessibility & Language Preferences')}
         aria-label={t('accessibilityOptions', 'Accessibility options')}
         aria-expanded={isOpen}
       >
         <Sliders className="w-3.5 h-3.5 text-[#F05A28]" />
-        <Globe className="w-3.5 h-3.5 text-stone-400" />
-        <span className="hidden sm:inline font-semibold text-[11px]">
+        <Globe className="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" />
+        <span className="hidden sm:inline font-semibold text-[11px] text-[#2B2024] dark:text-[#FAF5F7]">
           {SUPPORTED_LANGUAGES.find((l) => l.code === currentLanguage)?.nativeLabel || t('language', 'Language')}
         </span>
       </button>
@@ -86,13 +86,13 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
           <div className="flex items-center justify-between pb-3 border-b border-stone-100 dark:border-[#33292F] mb-3">
             <div className="flex items-center gap-2">
               <Sliders className="w-4 h-4 text-[#F05A28]" />
-              <h4 className="text-xs font-bold uppercase tracking-wider">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-[#2B2024] dark:text-[#FAF5F7]">
                 {t('preferencesAndAccessibility', 'Accessibility & Display')}
               </h4>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-[#2A2226] transition-colors"
+              className="p-1 rounded-lg text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-[#2A2226] transition-colors"
             >
               <X className="w-4 h-4" />
             </button>
@@ -101,7 +101,7 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
           {/* 1. Global Text Sizing Quick Selector (Default, Large, Extra Large) */}
           <div className="mb-3">
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[11px] font-bold text-stone-700 dark:text-stone-200 flex items-center gap-1.5">
+              <span className="text-[11px] font-bold text-[#2B2024] dark:text-[#FAF5F7] flex items-center gap-1.5">
                 <Type className="w-3.5 h-3.5 text-[#F05A28]" />
                 {t('textSize', 'Text Size')}
               </span>
@@ -122,11 +122,11 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
                   className={`px-2 py-1.5 rounded-xl text-xs font-semibold flex flex-col items-center justify-center transition-all ${
                     config.textSize === s.id
                       ? 'bg-[#F05A28] text-white shadow-2xs font-bold'
-                      : 'border border-stone-200 dark:border-[#33292F] text-stone-700 dark:text-[#FAF5F7] hover:bg-stone-50 dark:hover:bg-[#2A2226]'
+                      : 'border border-stone-200 dark:border-[#33292F] bg-stone-50/60 dark:bg-[#211B1F] text-[#2B2024] dark:text-[#FAF5F7] hover:bg-stone-100 dark:hover:bg-[#2A2226]'
                   }`}
                 >
                   <span>{s.label}</span>
-                  <span className="text-[9px] opacity-80">{s.scale}</span>
+                  <span className="text-[9px] text-[#6F6267] dark:text-[#C8BCC2] font-medium">{s.scale}</span>
                 </button>
               ))}
             </div>
@@ -135,11 +135,11 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
           {/* 2. Color Vision Quick Selector */}
           <div className="mb-3">
             <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[11px] font-bold text-stone-700 dark:text-stone-200 flex items-center gap-1.5">
+              <span className="text-[11px] font-bold text-[#2B2024] dark:text-[#FAF5F7] flex items-center gap-1.5">
                 <Palette className="w-3.5 h-3.5 text-[#F05A28]" />
                 {t('colorVision', 'Color Vision')}
               </span>
-              <span className="text-[10px] text-stone-500 dark:text-stone-400">
+              <span className="text-[10px] text-[#6F6267] dark:text-[#C8BCC2] font-medium">
                 Icon + Text + Color
               </span>
             </div>
@@ -157,7 +157,7 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
                   className={`px-2 py-1.5 rounded-xl text-[11px] font-semibold flex items-center justify-between transition-all ${
                     config.colorVision === cv.id
                       ? 'bg-[#F05A28] text-white shadow-2xs font-bold'
-                      : 'border border-stone-200 dark:border-[#33292F] text-stone-700 dark:text-[#FAF5F7] hover:bg-stone-50 dark:hover:bg-[#2A2226]'
+                      : 'border border-stone-200 dark:border-[#33292F] bg-stone-50/60 dark:bg-[#211B1F] text-[#2B2024] dark:text-[#FAF5F7] hover:bg-stone-100 dark:hover:bg-[#2A2226]'
                   }`}
                 >
                   <span className="truncate">{cv.label}</span>
@@ -169,7 +169,7 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
 
           {/* 3. Theme Mode Quick Toggle (Light, Dark, System) */}
           <div className="mb-3">
-            <span className="text-[11px] font-bold text-stone-700 dark:text-stone-200 block mb-1.5">
+            <span className="text-[11px] font-bold text-[#2B2024] dark:text-[#FAF5F7] block mb-1.5">
               {t('colorTheme', 'Color Theme')}
             </span>
             <div className="grid grid-cols-3 gap-1.5">
@@ -188,7 +188,7 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
                     className={`px-2 py-1.5 rounded-xl text-xs font-medium flex items-center justify-center gap-1 transition-all ${
                       isSel
                         ? 'bg-[#F05A28] text-white font-bold shadow-2xs'
-                        : 'border border-stone-200 dark:border-[#33292F] text-stone-700 dark:text-[#FAF5F7] hover:bg-stone-50 dark:hover:bg-[#2A2226]'
+                        : 'border border-stone-200 dark:border-[#33292F] bg-stone-50/60 dark:bg-[#211B1F] text-[#2B2024] dark:text-[#FAF5F7] hover:bg-stone-100 dark:hover:bg-[#2A2226]'
                     }`}
                   >
                     <IconComp className="w-3.5 h-3.5" />
@@ -206,10 +206,10 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
               <div className="flex items-center gap-2">
                 <Eye className="w-3.5 h-3.5 text-[#F05A28]" />
                 <div>
-                  <span className="text-xs font-semibold text-stone-800 dark:text-stone-100 block">
+                  <span className="text-xs font-semibold text-[#2B2024] dark:text-[#FAF5F7] block">
                     {t('highContrast', 'High Contrast')}
                   </span>
-                  <span className="text-[10px] text-stone-500 dark:text-stone-400">
+                  <span className="text-[10px] text-[#6F6267] dark:text-[#C8BCC2]">
                     WCAG AAA &gt; 12:1
                   </span>
                 </div>
@@ -235,10 +235,10 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
               <div className="flex items-center gap-2">
                 <Sparkles className="w-3.5 h-3.5 text-[#F05A28]" />
                 <div>
-                  <span className="text-xs font-semibold text-stone-800 dark:text-stone-100 block">
+                  <span className="text-xs font-semibold text-[#2B2024] dark:text-[#FAF5F7] block">
                     {t('reduceMotion', 'Reduce Motion')}
                   </span>
-                  <span className="text-[10px] text-stone-500 dark:text-stone-400">
+                  <span className="text-[10px] text-[#6F6267] dark:text-[#C8BCC2]">
                     {config.reduceMotion ? 'Reduced Motion' : 'Standard'}
                   </span>
                 </div>
@@ -262,7 +262,7 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
 
           {/* 5. Language Selector */}
           <div className="mb-3 pt-2.5 border-t border-stone-100 dark:border-[#33292F]">
-            <label className="text-[11px] font-bold text-stone-600 dark:text-stone-300 block mb-1.5 flex items-center gap-1.5">
+            <label className="text-[11px] font-bold text-[#2B2024] dark:text-[#FAF5F7] block mb-1.5 flex items-center gap-1.5">
               <Globe className="w-3.5 h-3.5 text-[#F05A28]" />
               {t('selectLanguageHeader', 'Language (ಭಾಷೆ / भाषा / தமிழ் / తెలుగు / മലയാളം)')}
             </label>
@@ -275,7 +275,7 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
                   className={`px-2 py-1.5 rounded-xl text-xs font-medium text-left flex items-center justify-between transition-all ${
                     currentLanguage === lang.code
                       ? 'bg-[#F05A28] text-white font-bold shadow-2xs'
-                      : 'border border-stone-200 dark:border-[#33292F] text-stone-700 dark:text-[#FAF5F7] hover:bg-stone-50 dark:hover:bg-[#2A2226]'
+                      : 'border border-stone-200 dark:border-[#33292F] bg-stone-50/60 dark:bg-[#211B1F] text-[#2B2024] dark:text-[#FAF5F7] hover:bg-stone-100 dark:hover:bg-[#2A2226]'
                   }`}
                 >
                   <span className="text-[11px]">{lang.nativeLabel}</span>
@@ -302,7 +302,7 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
             </button>
           )}
 
-          <div className="mt-2.5 pt-2 text-[10px] text-stone-400 dark:text-stone-500 text-center border-t border-stone-100 dark:border-[#33292F]">
+          <div className="mt-2.5 pt-2 text-[10px] text-[#6F6267] dark:text-[#C8BCC2] text-center border-t border-stone-100 dark:border-[#33292F]">
             {t('preferencesApplyInstantly', 'Settings persist across refresh and sessions.')}
           </div>
         </div>

@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
+
 /* =========================================================================
    RETINAGUARD AI GLOBAL DESIGN SYSTEM
    Palette centered around Primary Orange & Raspberry Pink for a premium,
@@ -655,18 +657,50 @@ html.dark[data-contrast="high"] body {
 html.dark.high-contrast .card-natural,
 html.dark.high-contrast .bg-white,
 html.dark.high-contrast .bg-\[\#FFFDF9\],
+html.dark.high-contrast .bg-\[\#FFFDFB\],
+html.dark.high-contrast .bg-\[\#FAF8F6\],
+html.dark.high-contrast .bg-\[\#FAF7F4\],
+html.dark.high-contrast .bg-\[\#FAF6F2\],
+html.dark.high-contrast .bg-\[\#F3ECE5\],
+html.dark.high-contrast .bg-\[\#FFE5D8\],
+html.dark.high-contrast .bg-\[\#FBE4EC\],
 html.dark[data-contrast="high"] .card-natural,
 html.dark[data-contrast="high"] .bg-white,
-html.dark[data-contrast="high"] .bg-\[\#FFFDF9\] {
+html.dark[data-contrast="high"] .bg-\[\#FFFDF9\],
+html.dark[data-contrast="high"] .bg-\[\#FFFDFB\],
+html.dark[data-contrast="high"] .bg-\[\#FAF8F6\],
+html.dark[data-contrast="high"] .bg-\[\#FAF7F4\],
+html.dark[data-contrast="high"] .bg-\[\#FAF6F2\],
+html.dark[data-contrast="high"] .bg-\[\#F3ECE5\],
+html.dark[data-contrast="high"] .bg-\[\#FFE5D8\],
+html.dark[data-contrast="high"] .bg-\[\#FBE4EC\] {
   background-color: #000000 !important;
   color: #FFFFFF !important;
   border: 2px solid #FFFFFF !important;
 }
 
 html.dark.high-contrast .text-\[\#2B2024\],
+html.dark.high-contrast .text-\[\#2E2628\],
+html.dark.high-contrast .text-\[\#1F181A\],
 html.dark.high-contrast .text-\[\#6F6267\],
-html.dark[data-contrast="high"] .text-\[\#2B2024\],
-html.dark[data-contrast="high"] .text-\[\#6F6267\] {
+html.dark.high-contrast .text-\[\#6E5C5F\],
+html.dark.high-contrast .text-\[\#8E7E81\],
+html.dark.high-contrast .text-stone-900,
+html.dark.high-contrast .text-stone-800,
+html.dark.high-contrast .text-stone-700,
+html.dark.high-contrast .text-stone-600,
+html.dark.high-contrast .text-stone-500,
+html[data-contrast="high"] .text-\[\#2B2024\],
+html[data-contrast="high"] .text-\[\#2E2628\],
+html[data-contrast="high"] .text-\[\#1F181A\],
+html[data-contrast="high"] .text-\[\#6F6267\],
+html[data-contrast="high"] .text-\[\#6E5C5F\],
+html[data-contrast="high"] .text-\[\#8E7E81\],
+html[data-contrast="high"] .text-stone-900,
+html[data-contrast="high"] .text-stone-800,
+html[data-contrast="high"] .text-stone-700,
+html[data-contrast="high"] .text-stone-600,
+html[data-contrast="high"] .text-stone-500 {
   color: #FFFFFF !important;
   font-weight: 600 !important;
 }
@@ -853,32 +887,602 @@ html[data-theme="dark"] body {
   color: #FAF5F7 !important;
 }
 
+/* Light / Off-White Card & Section Surfaces */
 html.dark .bg-white,
 html.dark .bg-\[\#FFFDF9\],
+html.dark .bg-\[\#FFFDFB\],
+html.dark .bg-\[\#FAF8F6\],
+html.dark .bg-\[\#FAF7F4\],
+html.dark .bg-\[\#FAF6F2\],
+html.dark .bg-\[\#F3ECE5\],
 html.dark .card-natural,
+html.dark .bg-warm-ivory,
 html[data-theme="dark"] .bg-white,
 html[data-theme="dark"] .bg-\[\#FFFDF9\],
-html[data-theme="dark"] .card-natural {
+html[data-theme="dark"] .bg-\[\#FFFDFB\],
+html[data-theme="dark"] .bg-\[\#FAF8F6\],
+html[data-theme="dark"] .bg-\[\#FAF7F4\],
+html[data-theme="dark"] .bg-\[\#FAF6F2\],
+html[data-theme="dark"] .bg-\[\#F3ECE5\],
+html[data-theme="dark"] .card-natural,
+html[data-theme="dark"] .bg-warm-ivory {
   background-color: #1B161A !important;
   color: #FAF5F7 !important;
   border-color: #33292F !important;
 }
 
-html.dark .text-\[\#2B2024\],
-html[data-theme="dark"] .text-\[\#2B2024\] {
+/* Elevated Light-Tinted Components & Secondary Backgrounds */
+html.dark .bg-stone-50,
+html.dark .bg-stone-100,
+html.dark .bg-neutral-50,
+html.dark .bg-neutral-100,
+html.dark .bg-gray-50,
+html.dark .bg-gray-100,
+html.dark .bg-slate-50,
+html.dark .bg-slate-100,
+html[data-theme="dark"] .bg-stone-50,
+html[data-theme="dark"] .bg-stone-100,
+html[data-theme="dark"] .bg-neutral-50,
+html[data-theme="dark"] .bg-neutral-100,
+html[data-theme="dark"] .bg-gray-50,
+html[data-theme="dark"] .bg-gray-100,
+html[data-theme="dark"] .bg-slate-50,
+html[data-theme="dark"] .bg-slate-100 {
+  background-color: #241E22 !important;
   color: #FAF5F7 !important;
+  border-color: #382E32 !important;
 }
 
-html.dark .text-\[\#6F6267\],
-html[data-theme="dark"] .text-\[\#6F6267\] {
-  color: #C4B6BC !important;
-}
-
-html.dark .border-\[\#EFE4DC\],
-html[data-theme="dark"] .border-\[\#EFE4DC\] {
+/* Translucent Frosted Headers & Floating Toolbars */
+html.dark .bg-white\/95,
+html.dark .bg-white\/90,
+html.dark .bg-white\/80,
+html.dark .bg-white\/70,
+html.dark .bg-white\/60,
+html[data-theme="dark"] .bg-white\/95,
+html[data-theme="dark"] .bg-white\/90,
+html[data-theme="dark"] .bg-white\/80,
+html[data-theme="dark"] .bg-white\/70,
+html[data-theme="dark"] .bg-white\/60 {
+  background-color: rgba(27, 22, 26, 0.95) !important;
+  color: #FAF5F7 !important;
   border-color: #33292F !important;
 }
 
+/* Hover States on Surfaces */
+html.dark .hover\:bg-\[\#FFFDF9\]:hover,
+html.dark .hover\:bg-\[\#FAF8F6\]:hover,
+html.dark .hover\:bg-\[\#FAF7F4\]:hover,
+html.dark .hover\:bg-white:hover,
+html.dark .hover\:bg-stone-50:hover,
+html.dark .hover\:bg-stone-100:hover,
+html[data-theme="dark"] .hover\:bg-\[\#FFFDF9\]:hover,
+html[data-theme="dark"] .hover\:bg-\[\#FAF8F6\]:hover,
+html[data-theme="dark"] .hover\:bg-\[\#FAF7F4\]:hover,
+html[data-theme="dark"] .hover\:bg-white:hover,
+html[data-theme="dark"] .hover\:bg-stone-50:hover,
+html[data-theme="dark"] .hover\:bg-stone-100:hover {
+  background-color: #261F24 !important;
+}
+
+/* Tables, Theads & Divider Lines */
+html.dark thead,
+html.dark thead.bg-\[\#FAF8F6\],
+html.dark thead.bg-stone-50,
+html[data-theme="dark"] thead,
+html[data-theme="dark"] thead.bg-\[\#FAF8F6\],
+html[data-theme="dark"] thead.bg-stone-50 {
+  background-color: #211B1F !important;
+  color: #FAF5F7 !important;
+  border-color: #33292F !important;
+}
+
+html.dark tbody tr:hover,
+html[data-theme="dark"] tbody tr:hover {
+  background-color: #241D22 !important;
+}
+
+html.dark .divide-\[\#EFE4DC\] > * + *,
+html.dark .divide-stone-100 > * + *,
+html.dark .divide-stone-200 > * + *,
+html[data-theme="dark"] .divide-\[\#EFE4DC\] > * + *,
+html[data-theme="dark"] .divide-stone-100 > * + *,
+html[data-theme="dark"] .divide-stone-200 > * + * {
+  border-color: #33292F !important;
+}
+
+html.dark .border-\[\#EFE4DC\],
+html.dark .border-\[\#D9CBC2\],
+html.dark .border-\[\#E5D7CE\],
+html.dark .border-stone-200,
+html.dark .border-stone-100,
+html.dark .border-stone-200\/90,
+html[data-theme="dark"] .border-\[\#EFE4DC\],
+html[data-theme="dark"] .border-\[\#D9CBC2\],
+html[data-theme="dark"] .border-\[\#E5D7CE\],
+html[data-theme="dark"] .border-stone-200,
+html[data-theme="dark"] .border-stone-100,
+html[data-theme="dark"] .border-stone-200\/90 {
+  border-color: #33292F !important;
+}
+
+/* --- High-Emphasis Headings & Primary Body Text in Dark Mode --- */
+html.dark .text-\[\#2B2024\],
+html.dark .text-\[\#2E2628\],
+html.dark .text-\[\#1F181A\],
+html.dark .text-\[\#1A1516\],
+html.dark .text-\[\#1C1719\],
+html.dark .text-\[\#241E22\],
+html.dark .text-\[\#2C2428\],
+html.dark .text-\[\#382E30\],
+html.dark .text-\[\#524346\],
+html.dark .text-primary-text,
+html.dark .brand-title,
+html.dark .text-stone-900,
+html.dark .text-stone-800,
+html.dark .text-stone-700,
+html.dark .text-neutral-900,
+html.dark .text-neutral-800,
+html.dark .text-neutral-700,
+html.dark .text-gray-900,
+html.dark .text-gray-800,
+html.dark .text-gray-700,
+html.dark .text-slate-900,
+html.dark .text-slate-800,
+html.dark .text-slate-700,
+html[data-theme="dark"] .text-\[\#2B2024\],
+html[data-theme="dark"] .text-\[\#2E2628\],
+html[data-theme="dark"] .text-\[\#1F181A\],
+html[data-theme="dark"] .text-\[\#1A1516\],
+html[data-theme="dark"] .text-\[\#1C1719\],
+html[data-theme="dark"] .text-\[\#241E22\],
+html[data-theme="dark"] .text-\[\#2C2428\],
+html[data-theme="dark"] .text-\[\#382E30\],
+html[data-theme="dark"] .text-\[\#524346\],
+html[data-theme="dark"] .text-primary-text,
+html[data-theme="dark"] .brand-title,
+html[data-theme="dark"] .text-stone-900,
+html[data-theme="dark"] .text-stone-800,
+html[data-theme="dark"] .text-stone-700,
+html[data-theme="dark"] .text-neutral-900,
+html[data-theme="dark"] .text-neutral-800,
+html[data-theme="dark"] .text-neutral-700,
+html[data-theme="dark"] .text-gray-900,
+html[data-theme="dark"] .text-gray-800,
+html[data-theme="dark"] .text-gray-700,
+html[data-theme="dark"] .text-slate-900,
+html[data-theme="dark"] .text-slate-800,
+html[data-theme="dark"] .text-slate-700 {
+  color: #FAF5F7 !important;
+}
+
+html.dark .hover\:text-\[\#2B2024\]:hover,
+html.dark .hover\:text-\[\#2E2628\]:hover,
+html.dark .hover\:text-\[\#1F181A\]:hover,
+html[data-theme="dark"] .hover\:text-\[\#2B2024\]:hover,
+html[data-theme="dark"] .hover\:text-\[\#2E2628\]:hover,
+html[data-theme="dark"] .hover\:text-\[\#1F181A\]:hover {
+  color: #FAF5F7 !important;
+}
+
+/* --- Secondary & Muted Typography in Dark Mode --- */
+html.dark .text-\[\#6F6267\],
+html.dark .text-\[\#6E5C5F\],
+html.dark .text-\[\#7A696C\],
+html.dark .text-\[\#8E7E81\],
+html.dark .text-\[\#9E8D91\],
+html.dark .text-\[\#9C8E91\],
+html.dark .text-\[\#9F8F92\],
+html.dark .text-\[\#A8989B\],
+html.dark .text-secondary-text,
+html.dark .text-stone-600,
+html.dark .text-stone-500,
+html.dark .text-stone-400,
+html.dark .text-neutral-600,
+html.dark .text-neutral-500,
+html.dark .text-gray-600,
+html.dark .text-gray-500,
+html.dark .text-slate-600,
+html.dark .text-slate-500,
+html[data-theme="dark"] .text-\[\#6F6267\],
+html[data-theme="dark"] .text-\[\#6E5C5F\],
+html[data-theme="dark"] .text-\[\#7A696C\],
+html[data-theme="dark"] .text-\[\#8E7E81\],
+html[data-theme="dark"] .text-\[\#9E8D91\],
+html[data-theme="dark"] .text-\[\#9C8E91\],
+html[data-theme="dark"] .text-\[\#9F8F92\],
+html[data-theme="dark"] .text-\[\#A8989B\],
+html[data-theme="dark"] .text-secondary-text,
+html[data-theme="dark"] .text-stone-600,
+html[data-theme="dark"] .text-stone-500,
+html[data-theme="dark"] .text-stone-400,
+html[data-theme="dark"] .text-neutral-600,
+html[data-theme="dark"] .text-neutral-500,
+html[data-theme="dark"] .text-gray-600,
+html[data-theme="dark"] .text-gray-500,
+html[data-theme="dark"] .text-slate-600,
+html[data-theme="dark"] .text-slate-500 {
+  color: #C8BCC2 !important;
+}
+
+/* --- 1. Soft Peach & Warm Amber-Orange Containers & Badges --- */
+html.dark .bg-\[\#FFE5D8\],
+html.dark .bg-\[\#FFE5D8\]\/30,
+html.dark .bg-\[\#FFE5D8\]\/40,
+html.dark .bg-\[\#FFE5D8\]\/50,
+html.dark .bg-\[\#FFEDD5\],
+html.dark .bg-\[\#FFF7ED\],
+html.dark .bg-\[\#FFF7ED\]\/50,
+html.dark .bg-soft-peach,
+html.dark .highlight-soft-peach,
+html.dark .bg-orange-50,
+html.dark .bg-orange-100,
+html[data-theme="dark"] .bg-\[\#FFE5D8\],
+html[data-theme="dark"] .bg-\[\#FFE5D8\]\/30,
+html[data-theme="dark"] .bg-\[\#FFE5D8\]\/40,
+html[data-theme="dark"] .bg-\[\#FFE5D8\]\/50,
+html[data-theme="dark"] .bg-\[\#FFEDD5\],
+html[data-theme="dark"] .bg-\[\#FFF7ED\],
+html[data-theme="dark"] .bg-\[\#FFF7ED\]\/50,
+html[data-theme="dark"] .bg-soft-peach,
+html[data-theme="dark"] .highlight-soft-peach,
+html[data-theme="dark"] .bg-orange-50,
+html[data-theme="dark"] .bg-orange-100 {
+  background-color: #2F1B14 !important;
+  border-color: #5C321E !important;
+}
+
+html.dark .border-\[\#FED7AA\],
+html[data-theme="dark"] .border-\[\#FED7AA\] {
+  border-color: #5C321E !important;
+}
+
+html.dark .text-\[\#C2410C\],
+html.dark .text-\[\#D84818\],
+html.dark .text-\[\#EA580C\],
+html.dark .text-\[\#7C2D12\],
+html.dark .text-\[\#B83A12\],
+html.dark .text-orange-700,
+html.dark .text-orange-800,
+html[data-theme="dark"] .text-\[\#C2410C\],
+html[data-theme="dark"] .text-\[\#D84818\],
+html[data-theme="dark"] .text-\[\#EA580C\],
+html[data-theme="dark"] .text-\[\#7C2D12\],
+html[data-theme="dark"] .text-\[\#B83A12\],
+html[data-theme="dark"] .text-orange-700,
+html[data-theme="dark"] .text-orange-800 {
+  color: #FF8F6B !important;
+}
+
+html.dark .text-\[\#F05A28\],
+html[data-theme="dark"] .text-\[\#F05A28\] {
+  color: #FF7A4D !important;
+}
+
+/* --- 2. Blush & Raspberry Pink Containers & Badges --- */
+html.dark .bg-\[\#FBE4EC\],
+html.dark .bg-\[\#FDF2F8\],
+html.dark .bg-\[\#F8D7E3\],
+html.dark .bg-blush,
+html.dark .highlight-blush,
+html.dark .bg-pink-50,
+html.dark .bg-pink-100,
+html[data-theme="dark"] .bg-\[\#FBE4EC\],
+html[data-theme="dark"] .bg-\[\#FDF2F8\],
+html[data-theme="dark"] .bg-\[\#F8D7E3\],
+html[data-theme="dark"] .bg-blush,
+html[data-theme="dark"] .highlight-blush,
+html[data-theme="dark"] .bg-pink-50,
+html[data-theme="dark"] .bg-pink-100 {
+  background-color: #311624 !important;
+  border-color: #5E2642 !important;
+}
+
+html.dark .border-\[\#FBCFE8\],
+html[data-theme="dark"] .border-\[\#FBCFE8\] {
+  border-color: #5E2642 !important;
+}
+
+html.dark .text-\[\#BE185D\],
+html.dark .text-\[\#BF3663\],
+html.dark .text-\[\#9D174D\],
+html.dark .text-\[\#DB2777\],
+html.dark .text-pink-700,
+html.dark .text-pink-800,
+html[data-theme="dark"] .text-\[\#BE185D\],
+html[data-theme="dark"] .text-\[\#BF3663\],
+html[data-theme="dark"] .text-\[\#9D174D\],
+html[data-theme="dark"] .text-\[\#DB2777\],
+html[data-theme="dark"] .text-pink-700,
+html[data-theme="dark"] .text-pink-800 {
+  color: #F472B6 !important;
+}
+
+html.dark .text-\[\#D94A78\],
+html.dark .text-raspberry-pink,
+html[data-theme="dark"] .text-\[\#D94A78\],
+html[data-theme="dark"] .text-raspberry-pink {
+  color: #FB7185 !important;
+}
+
+/* --- 3. Teal & Emerald Success Containers & Badges --- */
+html.dark .bg-\[\#E6F5F2\],
+html.dark .bg-\[\#ECFDF5\],
+html.dark .bg-\[\#DCFCE7\],
+html.dark .bg-\[\#F0FDF4\],
+html.dark .bg-teal-50,
+html.dark .bg-teal-100,
+html.dark .bg-emerald-50,
+html.dark .bg-emerald-100,
+html.dark .badge-verified,
+html.dark .badge-success,
+html.dark .status-badge-completed,
+html[data-theme="dark"] .bg-\[\#E6F5F2\],
+html[data-theme="dark"] .bg-\[\#ECFDF5\],
+html[data-theme="dark"] .bg-\[\#DCFCE7\],
+html[data-theme="dark"] .bg-\[\#F0FDF4\],
+html[data-theme="dark"] .bg-teal-50,
+html[data-theme="dark"] .bg-teal-100,
+html[data-theme="dark"] .bg-emerald-50,
+html[data-theme="dark"] .bg-emerald-100,
+html[data-theme="dark"] .badge-verified,
+html[data-theme="dark"] .badge-success,
+html[data-theme="dark"] .status-badge-completed {
+  background-color: #0E2B23 !important;
+  border-color: #175244 !important;
+}
+
+html.dark .border-\[\#CCEBE5\],
+html.dark .border-\[\#A7F3D0\],
+html.dark .border-\[\#BBF7D0\],
+html.dark .border-emerald-200,
+html[data-theme="dark"] .border-\[\#CCEBE5\],
+html[data-theme="dark"] .border-\[\#A7F3D0\],
+html[data-theme="dark"] .border-\[\#BBF7D0\],
+html[data-theme="dark"] .border-emerald-200 {
+  border-color: #175244 !important;
+}
+
+html.dark .text-\[\#087F6A\],
+html.dark .text-\[\#15803D\],
+html.dark .text-\[\#059669\],
+html.dark .text-\[\#047857\],
+html.dark .text-\[\#065F46\],
+html.dark .text-success-teal,
+html.dark .text-emerald-800,
+html.dark .text-emerald-700,
+html.dark .text-emerald-600,
+html.dark .text-teal-800,
+html.dark .text-teal-700,
+html[data-theme="dark"] .text-\[\#087F6A\],
+html[data-theme="dark"] .text-\[\#15803D\],
+html[data-theme="dark"] .text-\[\#059669\],
+html[data-theme="dark"] .text-\[\#047857\],
+html[data-theme="dark"] .text-\[\#065F46\],
+html[data-theme="dark"] .text-success-teal,
+html[data-theme="dark"] .text-emerald-800,
+html[data-theme="dark"] .text-emerald-700,
+html[data-theme="dark"] .text-emerald-600,
+html[data-theme="dark"] .text-teal-800,
+html[data-theme="dark"] .text-teal-700 {
+  color: #34D399 !important;
+}
+
+/* --- 4. Amber & Yellow Attention Containers & Badges --- */
+html.dark .bg-\[\#FFF8E6\],
+html.dark .bg-\[\#FFF1CC\],
+html.dark .bg-\[\#FFFBEB\],
+html.dark .bg-\[\#FEF3C7\],
+html.dark .bg-amber-50,
+html.dark .bg-amber-100,
+html.dark .badge-warning,
+html.dark .badge-amber,
+html.dark .status-badge-review,
+html[data-theme="dark"] .bg-\[\#FFF8E6\],
+html[data-theme="dark"] .bg-\[\#FFF1CC\],
+html[data-theme="dark"] .bg-\[\#FFFBEB\],
+html[data-theme="dark"] .bg-\[\#FEF3C7\],
+html[data-theme="dark"] .bg-amber-50,
+html[data-theme="dark"] .bg-amber-100,
+html[data-theme="dark"] .badge-warning,
+html[data-theme="dark"] .badge-amber,
+html[data-theme="dark"] .status-badge-review {
+  background-color: #302008 !important;
+  border-color: #573B11 !important;
+}
+
+html.dark .border-\[\#FFF1CC\],
+html.dark .border-amber-200,
+html.dark .border-\[\#FCD34D\],
+html[data-theme="dark"] .border-\[\#FFF1CC\],
+html[data-theme="dark"] .border-amber-200,
+html[data-theme="dark"] .border-\[\#FCD34D\] {
+  border-color: #573B11 !important;
+}
+
+html.dark .text-\[\#B86B00\],
+html.dark .text-\[\#D97706\],
+html.dark .text-\[\#92400E\],
+html.dark .text-\[\#B45309\],
+html.dark .text-warning-amber,
+html.dark .text-amber-800,
+html.dark .text-amber-700,
+html.dark .text-amber-600,
+html[data-theme="dark"] .text-\[\#B86B00\],
+html[data-theme="dark"] .text-\[\#D97706\],
+html[data-theme="dark"] .text-\[\#92400E\],
+html[data-theme="dark"] .text-\[\#B45309\],
+html[data-theme="dark"] .text-warning-amber,
+html[data-theme="dark"] .text-amber-800,
+html[data-theme="dark"] .text-amber-700,
+html[data-theme="dark"] .text-amber-600 {
+  color: #FBBF24 !important;
+}
+
+/* --- 5. Red & Error Containers & Badges --- */
+html.dark .bg-\[\#FDF2F2\],
+html.dark .bg-\[\#FDE8E8\],
+html.dark .bg-\[\#FEF2F2\],
+html.dark .bg-\[\#FEE2E2\],
+html.dark .bg-rose-50,
+html.dark .bg-red-50,
+html.dark .bg-red-100,
+html.dark .badge-error,
+html.dark .status-badge-evaluation,
+html[data-theme="dark"] .bg-\[\#FDF2F2\],
+html[data-theme="dark"] .bg-\[\#FDE8E8\],
+html[data-theme="dark"] .bg-\[\#FEF2F2\],
+html[data-theme="dark"] .bg-\[\#FEE2E2\],
+html[data-theme="dark"] .bg-rose-50,
+html[data-theme="dark"] .bg-red-50,
+html[data-theme="dark"] .bg-red-100,
+html[data-theme="dark"] .badge-error,
+html[data-theme="dark"] .status-badge-evaluation {
+  background-color: #331313 !important;
+  border-color: #5E2121 !important;
+}
+
+html.dark .border-\[\#FDE8E8\],
+html.dark .border-red-200,
+html.dark .border-rose-200,
+html[data-theme="dark"] .border-\[\#FDE8E8\],
+html[data-theme="dark"] .border-red-200,
+html[data-theme="dark"] .border-rose-200 {
+  border-color: #5E2121 !important;
+}
+
+html.dark .text-\[\#B42318\],
+html.dark .text-\[\#DC2626\],
+html.dark .text-\[\#991B1B\],
+html.dark .text-\[\#B91C1C\],
+html.dark .text-error-red,
+html.dark .text-red-800,
+html.dark .text-red-700,
+html.dark .text-red-600,
+html.dark .text-rose-800,
+html.dark .text-rose-700,
+html.dark .text-rose-600,
+html[data-theme="dark"] .text-\[\#B42318\],
+html[data-theme="dark"] .text-\[\#DC2626\],
+html[data-theme="dark"] .text-\[\#991B1B\],
+html[data-theme="dark"] .text-\[\#B91C1C\],
+html[data-theme="dark"] .text-error-red,
+html[data-theme="dark"] .text-red-800,
+html[data-theme="dark"] .text-red-700,
+html[data-theme="dark"] .text-red-600,
+html[data-theme="dark"] .text-rose-800,
+html[data-theme="dark"] .text-rose-700,
+html[data-theme="dark"] .text-rose-600 {
+  color: #F87171 !important;
+}
+
+/* --- 6. Blue Containers & Badges --- */
+html.dark .bg-blue-50,
+html.dark .bg-blue-100,
+html[data-theme="dark"] .bg-blue-50,
+html[data-theme="dark"] .bg-blue-100 {
+  background-color: #11223B !important;
+  border-color: #1E3A63 !important;
+}
+
+html.dark .border-blue-200,
+html[data-theme="dark"] .border-blue-200 {
+  border-color: #1E3A63 !important;
+}
+
+html.dark .text-blue-800,
+html.dark .text-blue-700,
+html.dark .text-blue-600,
+html[data-theme="dark"] .text-blue-800,
+html[data-theme="dark"] .text-blue-700,
+html[data-theme="dark"] .text-blue-600 {
+  color: #60A5FA !important;
+}
+
+/* --- 7. Risk Chips (inline style overrides for benchmarks.ts) --- */
+html.dark [id^="risk-chip-grade-0"],
+html[data-theme="dark"] [id^="risk-chip-grade-0"] {
+  background-color: #0E291C !important;
+  border-color: #1B5C3D !important;
+  color: #6EE7B7 !important;
+}
+html.dark [id^="risk-chip-grade-0"] span,
+html[data-theme="dark"] [id^="risk-chip-grade-0"] span {
+  color: #6EE7B7 !important;
+}
+
+html.dark [id^="risk-chip-grade-1"],
+html[data-theme="dark"] [id^="risk-chip-grade-1"] {
+  background-color: #2E2208 !important;
+  border-color: #5C4312 !important;
+  color: #FCD34D !important;
+}
+html.dark [id^="risk-chip-grade-1"] span,
+html[data-theme="dark"] [id^="risk-chip-grade-1"] span {
+  color: #FCD34D !important;
+}
+
+html.dark [id^="risk-chip-grade-2"],
+html[data-theme="dark"] [id^="risk-chip-grade-2"] {
+  background-color: #331C0D !important;
+  border-color: #6E3B16 !important;
+  color: #FDBA74 !important;
+}
+html.dark [id^="risk-chip-grade-2"] span,
+html[data-theme="dark"] [id^="risk-chip-grade-2"] span {
+  color: #FDBA74 !important;
+}
+
+html.dark [id^="risk-chip-grade-3"],
+html[data-theme="dark"] [id^="risk-chip-grade-3"] {
+  background-color: #381212 !important;
+  border-color: #7A2828 !important;
+  color: #FCA5A5 !important;
+}
+html.dark [id^="risk-chip-grade-3"] span,
+html[data-theme="dark"] [id^="risk-chip-grade-3"] span {
+  color: #FCA5A5 !important;
+}
+
+html.dark [id^="risk-chip-grade-4"],
+html[data-theme="dark"] [id^="risk-chip-grade-4"] {
+  background-color: #380E1B !important;
+  border-color: #7A1C38 !important;
+  color: #F472B6 !important;
+}
+html.dark [id^="risk-chip-grade-4"] span,
+html[data-theme="dark"] [id^="risk-chip-grade-4"] span {
+  color: #F472B6 !important;
+}
+
+/* --- 8. Secondary Buttons & Interactive Controls in Dark Mode --- */
+html.dark .btn-natural-secondary,
+html[data-theme="dark"] .btn-natural-secondary {
+  background-color: #241E22 !important;
+  color: #FAF5F7 !important;
+  border-color: #382E32 !important;
+}
+
+html.dark .btn-natural-secondary:hover,
+html[data-theme="dark"] .btn-natural-secondary:hover {
+  background-color: #2C2428 !important;
+  border-color: #4D3F45 !important;
+}
+
+html.dark .btn-secondary-accent,
+html[data-theme="dark"] .btn-secondary-accent {
+  background-color: #281B23 !important;
+  color: #F472B6 !important;
+  border-color: #5E2642 !important;
+}
+
+html.dark .btn-secondary-accent:hover,
+html[data-theme="dark"] .btn-secondary-accent:hover {
+  background-color: #331C2A !important;
+  border-color: #D94A78 !important;
+}
+
+/* Form Controls & Inputs */
 html.dark input,
 html.dark select,
 html.dark textarea,
@@ -886,6 +1490,21 @@ html[data-theme="dark"] input,
 html[data-theme="dark"] select,
 html[data-theme="dark"] textarea {
   background-color: #241E22 !important;
+  color: #FAF5F7 !important;
+  border-color: #382E32 !important;
+}
+
+html.dark input::placeholder,
+html.dark textarea::placeholder,
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder {
+  color: #8E7E81 !important;
+}
+
+/* Clinical Disclaimer Banner in Dark Mode */
+html.dark #bottom-right-clinical-disclaimer > div,
+html[data-theme="dark"] #bottom-right-clinical-disclaimer > div {
+  background-color: rgba(27, 22, 26, 0.95) !important;
   color: #FAF5F7 !important;
   border-color: #382E32 !important;
 }
