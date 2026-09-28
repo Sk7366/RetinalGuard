@@ -79,9 +79,14 @@ export type ScreeningStepNumber = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 interface ScreeningFlowProps {
   onComplete: (result: MultimodalTriageResult) => void;
   initialPreset?: PresetPatientCase | null;
+  onOpenBatchScreening?: () => void;
 }
 
-export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initialPreset }) => {
+export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({
+  onComplete,
+  initialPreset,
+  onOpenBatchScreening,
+}) => {
   const { language, t } = useTranslation();
 
   // Current active workflow step (1 to 9)
@@ -614,6 +619,35 @@ export const ScreeningFlow: React.FC<ScreeningFlowProps> = ({ onComplete, initia
               ))}
             </div>
           </div>
+
+          {/* Batch Screening Callout Banner */}
+          {onOpenBatchScreening && (
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 bg-[#FFF7ED] rounded-2xl border border-[#FED7AA] gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[#FFEDD5] text-[#EA580C] flex items-center justify-center shrink-0">
+                  <Users className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-xs font-bold text-[#9A3412] block">
+                    {t('batchScreeningCalloutTitle', 'Screening Multiple Patients Today?')}
+                  </span>
+                  <span className="text-[11px] text-[#C2410C]">
+                    {t(
+                      'batchScreeningCalloutDesc',
+                      'Use Batch Screening to intake cohorts, upload multiple fundus images, and run parallel AI triage at once.'
+                    )}
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={onOpenBatchScreening}
+                className="shrink-0 px-3.5 py-1.5 rounded-xl bg-[#EA580C] hover:bg-[#C2410C] text-white text-xs font-bold transition-colors cursor-pointer shadow-2xs"
+              >
+                {t('openBatchScreeningBtn', 'Launch Batch Screening')}
+              </button>
+            </div>
+          )}
 
           {/* Registration Form Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">

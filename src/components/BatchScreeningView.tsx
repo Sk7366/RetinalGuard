@@ -33,11 +33,13 @@ import { RiskChip } from './RiskChip';
 interface BatchScreeningViewProps {
   onSelectResult: (result: MultimodalTriageResult) => void;
   onNavigateStartScreening: () => void;
+  onNavigateCampMode?: () => void;
 }
 
 export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
   onSelectResult,
   onNavigateStartScreening,
+  onNavigateCampMode,
 }) => {
   const [batchItems, setBatchItems] = useState<BatchScreeningItem[]>(MOCK_BATCH_SCREENINGS);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
@@ -248,10 +250,26 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
+            {onNavigateCampMode && (
+              <button
+                type="button"
+                onClick={onNavigateCampMode}
+                className="px-3.5 py-2 rounded-xl bg-[#FFF7ED] border border-[#FED7AA] text-[#EA580C] hover:bg-[#FFEDD5] text-xs font-bold transition-colors flex items-center gap-2 cursor-pointer shadow-2xs"
+              >
+                <span>← Return to Camp Mode</span>
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={onNavigateStartScreening}
+              className="px-3.5 py-2 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] text-[#2B2024] hover:bg-white text-xs font-bold transition-colors flex items-center gap-2 cursor-pointer shadow-2xs"
+            >
+              <span>← Single Encounter Flow</span>
+            </button>
             <button
               type="button"
               onClick={handleDownloadTemplate}
-              className="px-3.5 py-2 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] text-[#2B2024] hover:bg-[#FFE5D8] text-xs font-bold transition-colors flex items-center gap-2"
+              className="px-3.5 py-2 rounded-xl bg-[#FAF8F6] border border-[#EFE4DC] text-[#2B2024] hover:bg-[#FFE5D8] text-xs font-bold transition-colors flex items-center gap-2 cursor-pointer"
             >
               <FileSpreadsheet className="w-4 h-4 text-[#F05A28]" />
               <span>Download CSV Template</span>
@@ -259,7 +277,7 @@ export const BatchScreeningView: React.FC<BatchScreeningViewProps> = ({
             <button
               type="button"
               onClick={handleExportResultsCsv}
-              className="px-3.5 py-2 rounded-xl bg-white border border-[#EFE4DC] text-[#2B2024] hover:bg-[#FAF8F6] text-xs font-bold transition-colors flex items-center gap-2"
+              className="px-3.5 py-2 rounded-xl bg-white border border-[#EFE4DC] text-[#2B2024] hover:bg-[#FAF8F6] text-xs font-bold transition-colors flex items-center gap-2 cursor-pointer"
             >
               <Download className="w-4 h-4 text-[#6F6267]" />
               <span>Export Triage CSV</span>

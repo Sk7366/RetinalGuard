@@ -38,7 +38,7 @@ import { SimplifiedPatientHome } from './components/SimplifiedPatientHome';
 import { WelcomeModal } from './components/WelcomeModal';
 import { PatientAuthModal } from './components/PatientAuthModal';
 import { AccessibilitySettingsModal } from './components/AccessibilitySettingsModal';
-import { Stethoscope } from 'lucide-react';
+import { Stethoscope, Users } from 'lucide-react';
 import { PatientReportsView } from './components/PatientReportsView';
 import { PatientJourneyView } from './components/PatientJourneyView';
 import { PatientProfileView } from './components/PatientProfileView';
@@ -864,6 +864,7 @@ function AppContent() {
               <ScreeningCampFlow
                 onComplete={handleScreeningComplete}
                 onExitCampMode={() => navigateProvider('dashboard')}
+                onOpenBatchScreening={() => navigateProvider('batch-screening')}
               />
             )}
 
@@ -882,15 +883,23 @@ function AppContent() {
                   <div className="flex items-center gap-2">
                     <button
                       type="button"
+                      onClick={() => navigateProvider('batch-screening')}
+                      className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-[#FED7AA] bg-[#FFF7ED] text-[#EA580C] hover:bg-[#FFEDD5] transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                    >
+                      <Users className="w-3.5 h-3.5" />
+                      <span>{t("batchScreeningBtn", "Batch Screening (Multi-Patient)")}</span>
+                    </button>
+                    <button
+                      type="button"
                       onClick={() => navigateProvider('camp-mode')}
-                      className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-[#FED7AA] bg-[#FFE5D8] text-[#D84818] hover:bg-[#FFEDD5] transition-colors"
+                      className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-[#FED7AA] bg-[#FFE5D8] text-[#D84818] hover:bg-[#FFEDD5] transition-colors cursor-pointer"
                     >
                       {t("campOfflineModeBtn", "Camp Offline Mode")}
                     </button>
                     <button
                       type="button"
                       onClick={() => setIsGuideOpen(true)}
-                      className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-[#EFE4DC] bg-[#FAF8F6] text-[#2B2024] hover:border-[#F05A28] hover:text-[#F05A28] transition-colors"
+                      className="text-xs font-semibold px-3 py-1.5 rounded-xl border border-[#EFE4DC] bg-[#FAF8F6] text-[#2B2024] hover:border-[#F05A28] hover:text-[#F05A28] transition-colors cursor-pointer"
                     >
                       {t("captureGuidelinesBtn", "Capture Guidelines")}
                     </button>
@@ -901,6 +910,7 @@ function AppContent() {
                   key={activePreset ? activePreset.id : 'provider-screening'}
                   initialPreset={activePreset}
                   onComplete={handleScreeningComplete}
+                  onOpenBatchScreening={() => navigateProvider('batch-screening')}
                 />
               </div>
             )}
@@ -932,6 +942,9 @@ function AppContent() {
                 onNavigateStartScreening={() => {
                   setActivePreset(null);
                   navigateProvider('start-screening');
+                }}
+                onNavigateCampMode={() => {
+                  navigateProvider('camp-mode');
                 }}
               />
             )}
