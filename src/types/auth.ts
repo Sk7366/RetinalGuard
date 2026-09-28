@@ -3,13 +3,14 @@
  */
 
 export type UserRole =
-  | 'public'        // Public User / Patient
-  | 'patient'       // Common Person / Patient
-  | 'helper'        // Screening Helper / Healthcare Team
-  | 'technician'    // Screening Technician
-  | 'provider'      // Healthcare Provider / Ophthalmologist
-  | 'admin'         // Administrator
-  | 'researcher';   // Researcher
+  | 'public'          // Public User / Patient
+  | 'patient'         // Common Person / Patient
+  | 'helper'          // Screening Helper / Healthcare Team
+  | 'medical_worker'   // Medical Worker / Social Helper
+  | 'technician'      // Screening Technician
+  | 'provider'        // Healthcare Provider / Ophthalmologist
+  | 'admin'           // Administrator
+  | 'researcher';     // Researcher
 
 export type HelperRoleTitle =
   | 'Community Health Worker'
@@ -52,6 +53,13 @@ export interface User {
   experience?: UserExperience;
   helperRoleTitle?: HelperRoleTitle;
   organization?: string;
+  department?: string;
+  institution?: string;
+  researchArea?: string;
+  researchPurpose?: string;
+  orcid?: string;
+  professionalId?: string;
+  areaOfWork?: string;
   location?: string;
   phone?: string;
   emailVerified?: boolean;

@@ -27,6 +27,7 @@ interface ScreeningHelperVerificationGateProps {
   onOpenSignInModal?: () => void;
   onNavigateToPatientPortal?: () => void;
   onSwitchToPatient?: () => void;
+  onLogout?: () => void;
 }
 
 export const ScreeningHelperVerificationGate: React.FC<ScreeningHelperVerificationGateProps> = ({
@@ -37,6 +38,7 @@ export const ScreeningHelperVerificationGate: React.FC<ScreeningHelperVerificati
   onOpenSignInModal,
   onNavigateToPatientPortal,
   onSwitchToPatient,
+  onLogout,
 }) => {
   const currentUser = propCurrentUser || propUser || authService.getCurrentUser();
   const rawStatus = currentUser.verificationStatus || 'Pending Verification';
@@ -75,12 +77,10 @@ export const ScreeningHelperVerificationGate: React.FC<ScreeningHelperVerificati
           <span>Screening Helper Access Restricted</span>
         </div>
         <h1 className="text-2xl sm:text-3xl font-serif font-bold text-[#2E2628]">
-          Verification Required for Clinical Workspace
+          Medical Worker Verification Pending
         </h1>
-        <p className="text-xs sm:text-sm text-[#6E5C5F] max-w-xl mx-auto">
-          To protect patient confidentiality and ensure clinical diagnostic accuracy, only accredited and{' '}
-          <strong className="text-[#2E2628]">VERIFIED Screening Helpers</strong> can access patient imaging,
-          AI triage results, and referral dispatch.
+        <p className="text-xs sm:text-sm text-[#6E5C5F] max-w-xl mx-auto leading-relaxed">
+          Your account has been created. Professional screening tools will become available after your role has been verified.
         </p>
       </div>
 
@@ -312,14 +312,26 @@ export const ScreeningHelperVerificationGate: React.FC<ScreeningHelperVerificati
           <span>Sign In / Register with Different Credentials</span>
         </button>
 
-        <button
-          type="button"
-          onClick={handleReturnToPatient}
-          className="text-[#6E5C5F] hover:text-[#2E2628] font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
-        >
-          <span>Return to Patient Portal</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            type="button"
+            onClick={handleReturnToPatient}
+            className="text-[#6E5C5F] hover:text-[#2E2628] font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <span>Return to Patient Portal</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+          {onLogout && (
+            <button
+              type="button"
+              onClick={onLogout}
+              className="text-red-600 hover:text-red-700 font-semibold flex items-center gap-1 transition-colors cursor-pointer"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Sign Out</span>
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

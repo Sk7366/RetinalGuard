@@ -43,6 +43,7 @@ import { PatientReportsView } from './components/PatientReportsView';
 import { PatientJourneyView } from './components/PatientJourneyView';
 import { PatientProfileView } from './components/PatientProfileView';
 import { ScreeningHelperVerificationGate } from './components/ScreeningHelperVerificationGate';
+import { ResearcherVerificationGate } from './components/ResearcherVerificationGate';
 import { accessibilityService } from './services/accessibilityService';
 import { authService } from './auth/authService';
 import {
@@ -56,12 +57,19 @@ import {
 } from './types';
 
 function AppContent() {
-  // Current logged in user (defaults to guest patient)
+  // Current logged in user (persisted in session)
   const [currentUser, setCurrentUser] = useState<User>(() => authService.getCurrentUser());
 
   // App Experience: 'patient' (default) | 'helper' | 'researcher'
   const [experience, setExperience] = useState<AppExperience>(() => {
+    const user = authService.getCurrentUser();
     const hash = typeof window !== 'undefined' ? window.location.hash.replace('#', '').trim() : '';
+    // If authenticated user has saved role, honor their account role
+    if (user.isLoggedIn) {
+      if (user.role === 'researcher') return 'researcher';
+      if (['helper', 'medical_worker', 'technician', 'provider', 'admin'].includes(user.role)) return 'helper';
+      return 'patient';
+    }
     if (hash.startsWith('researcher/')) return 'researcher';
     if (hash.startsWith('helper/') || hash.startsWith('provider/')) return 'helper';
     return 'patient';
@@ -69,7 +77,14 @@ function AppContent() {
 
   // Navigation State
   const [isProviderMode, setIsProviderMode] = useState<boolean>(() => {
+    const user = authService.getCurrentUser();
     const hash = typeof window !== 'undefined' ? window.location.hash.replace('#', '').trim() : '';
+    if (user.isLoggedIn) {
+      return (
+        user.role === 'researcher' ||
+        ['helper', 'medical_worker', 'technician', 'provider', 'admin'].includes(user.role)
+      );
+    }
     return hash.startsWith('helper/') || hash.startsWith('provider/') || hash.startsWith('researcher/');
   });
   const [publicRoute, setPublicRoute] = useState<PublicRoute>(() => {
@@ -80,7 +95,11 @@ function AppContent() {
     }
     return 'overview';
   });
-  const [providerRoute, setProviderRoute] = useState<ProviderRoute>('dashboard');
+  const [providerRoute, setProviderRoute] = useState<ProviderRoute>(() => {
+    const user = authService.getCurrentUser();
+    if (user.isLoggedIn && user.role === 'researcher') return 'research';
+    return 'dashboard';
+  });
   const [isViewingActiveResult, setIsViewingActiveResult] = useState<boolean>(false);
 
   // Authentication & Role modals
@@ -151,8 +170,11 @@ function AppContent() {
       const hash = window.location.hash.replace('#', '').trim();
       const activeUser = authService.getCurrentUser();
       const authorizedRoles = activeUser.authorizedRoles || [activeUser.role];
-      const hasStaffAccess = authorizedRoles.some((r) => ['helper', 'technician', 'provider', 'admin'].includes(r));
-      const hasResearchAccess = authorizedRoles.includes('researcher') || activeUser.role === 'researcher';
+      const hasStaffAccess = authorizedRoles.some((r) =>
+        ['helper', 'medical_worker', 'technician', 'provider', 'admin'].includes(r)
+      );
+      const hasResearchAccess =
+        authorizedRoles.includes('researcher') || activeUser.role === 'researcher';
 
       // Help route
       if (hash === 'help') {
@@ -177,8 +199,29 @@ function AppContent() {
         return;
       }
 
-      // Default to Public Patient Overview if hash is empty or root
+      // Default to Home / Overview if hash is empty or root - stay in active authenticated mode
       if (!hash || hash === '' || hash === '/' || hash === 'public/overview' || hash === 'overview') {
+        if (
+          activeUser.isLoggedIn &&
+          (activeUser.role === 'researcher' || authorizedRoles.includes('researcher'))
+        ) {
+          setExperience('researcher');
+          setIsProviderMode(true);
+          setProviderRoute('research');
+          setIsViewingActiveResult(false);
+          return;
+        }
+        if (
+          activeUser.isLoggedIn &&
+          (['medical_worker', 'helper', 'technician', 'provider', 'admin'].includes(activeUser.role) ||
+            hasStaffAccess)
+        ) {
+          setExperience('helper');
+          setIsProviderMode(true);
+          setProviderRoute('dashboard');
+          setIsViewingActiveResult(false);
+          return;
+        }
         setExperience('patient');
         setIsProviderMode(false);
         setPublicRoute('overview');
@@ -289,7 +332,7 @@ function AppContent() {
       setExperience('researcher');
       window.location.hash = `researcher/overview`;
     } else {
-      if (!authorized.some((r) => ['helper', 'technician', 'provider', 'admin'].includes(r))) {
+      if (!authorized.some((r) => ['helper', 'medical_worker', 'technician', 'provider', 'admin'].includes(r))) {
         setIsRoleModalOpen(true);
         return;
       }
@@ -355,7 +398,12 @@ function AppContent() {
       setExperience('researcher');
       setIsProviderMode(true);
       navigateProvider('research');
-    } else if (user.role === 'helper' || user.role === 'technician' || user.role === 'provider') {
+    } else if (
+      user.role === 'helper' ||
+      user.role === 'medical_worker' ||
+      user.role === 'technician' ||
+      user.role === 'provider'
+    ) {
       setExperience('helper');
       setIsProviderMode(true);
       navigateProvider('dashboard');
@@ -364,6 +412,35 @@ function AppContent() {
       setIsProviderMode(false);
       navigatePublic('overview');
     }
+  };
+
+  // Navigate to current mode's home page when clicking RetinaGuard brand
+  const handleNavigateHome = () => {
+    setIsViewingActiveResult(false);
+    const activeUser = currentUser || authService.getCurrentUser();
+    const authorized = activeUser.authorizedRoles || [activeUser.role];
+
+    if (experience === 'researcher' || activeUser.role === 'researcher' || authorized.includes('researcher')) {
+      setExperience('researcher');
+      setIsProviderMode(true);
+      setProviderRoute('research');
+      window.location.hash = 'researcher/overview';
+    } else if (
+      experience === 'helper' ||
+      ['medical_worker', 'helper', 'technician', 'provider', 'admin'].includes(activeUser.role) ||
+      authorized.some((r) => ['medical_worker', 'helper', 'technician', 'provider', 'admin'].includes(r))
+    ) {
+      setExperience('helper');
+      setIsProviderMode(true);
+      setProviderRoute('dashboard');
+      window.location.hash = 'helper/dashboard';
+    } else {
+      setExperience('patient');
+      setIsProviderMode(false);
+      setPublicRoute('overview');
+      window.location.hash = 'public/overview';
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Logout handler
@@ -387,6 +464,7 @@ function AppContent() {
         providerRoute={providerRoute}
         onNavigatePublic={navigatePublic}
         onNavigateProvider={navigateProvider}
+        onNavigateHome={handleNavigateHome}
         onSwitchToProvider={switchToProvider}
         onSwitchToPublic={switchToPublic}
         onTryDemo={handleTryDemo}
@@ -484,7 +562,7 @@ function AppContent() {
         ) : experience === 'researcher' ? (
           /* =========================================================================
              RESEARCHER EXPERIENCE
-             Researcher Sign In ↓ Research Workspace
+             Researcher Sign In ↓ Researcher Verification Gate ↓ Research Workspace
              Keep Grad-CAM, SHAP, model evaluation, research metrics inside Researcher workspace.
              ========================================================================= */
           currentUser.role !== 'researcher' ? (
@@ -502,6 +580,20 @@ function AppContent() {
                 setPublicRoute('overview');
                 window.location.hash = 'public/overview';
               }}
+            />
+          ) : currentUser.verificationStatus !== 'verified' && currentUser.verificationStatus !== 'Verified' ? (
+            <ResearcherVerificationGate
+              currentUser={currentUser}
+              onStatusUpdated={(updated) => {
+                setCurrentUser(updated);
+              }}
+              onSwitchToPatient={() => {
+                setExperience('patient');
+                setIsProviderMode(false);
+                setPublicRoute('overview');
+                window.location.hash = 'public/overview';
+              }}
+              onLogout={handleLogout}
             />
           ) : (
             <ResearchWorkspaceView
@@ -640,14 +732,23 @@ function AppContent() {
               />
             )}
 
-            {/* PUBLIC: Research Link - Gated by Researcher Authentication */}
+            {/* PUBLIC: Research Link - Gated by Researcher Authentication & Verification */}
             {publicRoute === 'research' && (
               currentUser.role === 'researcher' ? (
-                <ResearchWorkspaceView
-                  initialTab="overview"
-                  onSwitchWorkspace={() => setIsRoleModalOpen(true)}
-                  currentUser={currentUser}
-                />
+                currentUser.verificationStatus !== 'verified' && currentUser.verificationStatus !== 'Verified' ? (
+                  <ResearcherVerificationGate
+                    currentUser={currentUser}
+                    onStatusUpdated={(updated) => setCurrentUser(updated)}
+                    onSwitchToPatient={() => navigatePublic('overview')}
+                    onLogout={handleLogout}
+                  />
+                ) : (
+                  <ResearchWorkspaceView
+                    initialTab="overview"
+                    onSwitchWorkspace={() => setIsRoleModalOpen(true)}
+                    currentUser={currentUser}
+                  />
+                )
               ) : (
                 <ResearcherSignIn
                   onAuthenticate={(user) => {
@@ -664,7 +765,7 @@ function AppContent() {
               )
             )}
           </>
-        ) : experience === 'helper' && currentUser.role !== 'helper' ? (
+        ) : experience === 'helper' && !['helper', 'medical_worker', 'technician', 'provider', 'admin'].includes(currentUser.role) ? (
           /* =========================================================================
              MEDICAL WORKER MODE RESTRICTION GATE
              Only a signed-in Medical Worker profile can enter this workspace.
@@ -700,7 +801,7 @@ function AppContent() {
               </button>
             </div>
           </div>
-        ) : currentUser.role === 'helper' &&
+        ) : ['helper', 'medical_worker', 'technician', 'provider', 'admin'].includes(currentUser.role) &&
           currentUser.verificationStatus !== 'Verified' &&
           currentUser.verificationStatus !== 'verified' ? (
           /* =========================================================================

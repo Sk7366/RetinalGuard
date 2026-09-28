@@ -22,6 +22,15 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'ANALYTICS_VIEW',
     'AUDIT_LOG_VIEW',
   ],
+  medical_worker: [
+    'SCREENING_CREATE',
+    'SCREENING_READ',
+    'SCREENING_BATCH',
+    'REFERRAL_READ',
+    'REFERRAL_UPDATE',
+    'ANALYTICS_VIEW',
+    'AUDIT_LOG_VIEW',
+  ],
   technician: [
     'SCREENING_CREATE',
     'SCREENING_READ',
@@ -82,6 +91,12 @@ export const ROLE_METADATA: Record<
     name: 'Screening Helper',
     description: 'Community health workers and frontline screeners conducting non-mydriatic eye assessments.',
     badge: 'Screening Helper',
+    defaultRoute: 'helper/dashboard',
+  },
+  medical_worker: {
+    name: 'Medical Worker / Social Helper',
+    description: 'ASHA/community health workers, nurses, outreach workers, and trained screening assistants.',
+    badge: 'Medical Worker',
     defaultRoute: 'helper/dashboard',
   },
   technician: {

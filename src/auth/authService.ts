@@ -262,15 +262,131 @@ export const authService = {
   },
 
   /**
-   * Quick demo login for Researcher Mode
+   * Register a new Screening Helper / Medical Worker
    */
-  async loginDemoResearcher(): Promise<User> {
-    return this.login('sai.krishnan@visionai.edu', 'researcher', {
-      name: 'Dr. Sai Krishnan',
-      organization: 'Medical AI & Retina Imaging Lab',
+  async registerMedicalWorker(data: {
+    name: string;
+    email: string;
+    phone: string;
+    organization: string;
+    roleTitle?: HelperRoleTitle;
+    areaOfWork?: string;
+    professionalId?: string;
+    verificationStatus?: VerificationStatus;
+  }): Promise<User> {
+    const isVerified = data.verificationStatus === 'Verified' || data.verificationStatus === 'verified';
+    const status: VerificationStatus = data.verificationStatus || 'Pending Verification';
+    const user: User = {
+      id: `mw-${Math.random().toString(36).substring(2, 9)}`,
+      email: data.email,
+      name: data.name,
+      role: 'helper',
+      experience: 'helper',
+      helperRoleTitle: data.roleTitle || 'Community Health Worker',
+      organization: data.organization,
+      areaOfWork: data.areaOfWork || 'Community Outreach Center',
+      location: data.areaOfWork || 'Bengaluru, Karnataka',
+      phone: data.phone,
+      professionalId: data.professionalId,
+      emailVerified: true,
+      phoneVerified: true,
+      verificationStatus: status,
+      isDemoVerification: isVerified,
+      permissions: ROLE_PERMISSIONS.helper,
+      authorizedRoles: ['helper'],
+      clinicId: 'clinic-blr-01',
+      clinicName: data.organization,
+      token: `jwt_helper_${Date.now()}`,
+      voiceGuidanceEnabled: true,
+      registeredAt: new Date().toISOString(),
+      isLoggedIn: true,
+    };
+
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    } catch {
+      // ignore
+    }
+
+    return user;
+  },
+
+  /**
+   * Register a new Researcher
+   */
+  async registerResearcher(data: {
+    name: string;
+    email: string;
+    phone: string;
+    institution: string;
+    department: string;
+    researchArea: string;
+    researchPurpose: string;
+    orcid?: string;
+    verificationStatus?: VerificationStatus;
+  }): Promise<User> {
+    const isVerified = data.verificationStatus === 'Verified' || data.verificationStatus === 'verified';
+    const status: VerificationStatus = data.verificationStatus || 'Pending Verification';
+    const user: User = {
+      id: `res-${Math.random().toString(36).substring(2, 9)}`,
+      email: data.email,
+      name: data.name,
+      role: 'researcher',
+      experience: 'researcher',
+      institution: data.institution,
+      department: data.department,
+      organization: `${data.institution} - ${data.department}`,
+      researchArea: data.researchArea,
+      researchPurpose: data.researchPurpose,
+      orcid: data.orcid,
+      location: data.department || data.institution,
+      phone: data.phone,
+      emailVerified: true,
+      phoneVerified: true,
+      verificationStatus: status,
+      isDemoVerification: isVerified,
+      permissions: ROLE_PERMISSIONS.researcher,
+      authorizedRoles: ['researcher'],
+      token: `jwt_researcher_${Date.now()}`,
+      voiceGuidanceEnabled: true,
+      registeredAt: new Date().toISOString(),
+      isLoggedIn: true,
+    };
+
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    } catch {
+      // ignore
+    }
+
+    return user;
+  },
+
+  /**
+   * Quick demo login for Researcher Mode (verified or pending)
+   */
+  async loginDemoResearcher(preset?: {
+    name?: string;
+    email?: string;
+    institution?: string;
+    department?: string;
+    researchArea?: string;
+    verificationStatus?: VerificationStatus;
+  }): Promise<User> {
+    const status = preset?.verificationStatus || 'verified';
+    const isVerified = status === 'Verified' || status === 'verified';
+    return this.login(preset?.email || 'sai.krishnan@visionai.edu', 'researcher', {
+      name: preset?.name || 'Dr. Sai Krishnan',
+      institution: preset?.institution || 'Indian Institute of Science / AIIMS',
+      department: preset?.department || 'Medical AI & Retina Imaging Lab',
+      organization: preset?.institution || 'Indian Institute of Science / AIIMS',
+      researchArea: preset?.researchArea || 'Multimodal Late Fusion DR Trial (IRB #2024-AI-0418)',
+      researchPurpose: 'Deep learning validation for community DR triage',
       location: 'Bengaluru, Karnataka',
-      verificationStatus: 'verified',
-      isDemoVerification: true,
+      verificationStatus: status,
+      isDemoVerification: isVerified,
+      emailVerified: true,
+      phoneVerified: true,
     });
   },
 

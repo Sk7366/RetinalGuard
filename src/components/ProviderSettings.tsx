@@ -42,6 +42,7 @@ export const ProviderSettings: React.FC<ProviderSettingsProps> = ({
     patient: 'Patient & Public (Community Member)',
     public: 'Public User (Patient & Community)',
     helper: 'Screening Helper (Field Worker / CHW)',
+    medical_worker: 'Medical Worker / Social Helper (CHW / Nurse / Outreach)',
     technician: 'Screening Technician (Field Camp Operator)',
     provider: 'Healthcare Provider (Optometrist / Physician)',
     admin: 'Administrator (Facility & Clinical Governance)',
