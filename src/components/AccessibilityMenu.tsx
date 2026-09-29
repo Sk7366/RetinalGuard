@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Check,
   Eye,
@@ -39,11 +39,24 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [config, setConfig] = useState<AccessibilityConfig>(accessibilityService.getConfig());
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const unsub = accessibilityService.subscribe((c) => setConfig(c));
     return () => unsub();
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [isOpen]);
 
   const handleTextSizeChange = (size: TextSizeOption) => {
     accessibilityService.update({ textSize: size });
@@ -66,17 +79,17 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
   };
 
   return (
-    <div className="relative">
+    <div className="relative shrink-0" ref={containerRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-stone-200 dark:border-[#33292F] bg-white dark:bg-[#1B161A] text-xs font-medium text-[#2B2024] dark:text-[#FAF5F7] hover:bg-stone-50 dark:hover:bg-[#2A2226] transition-colors shadow-2xs"
+        className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-stone-200 dark:border-[#33292F] bg-white dark:bg-[#1B161A] text-xs font-medium text-[#2B2024] dark:text-[#FAF5F7] hover:bg-stone-50 dark:hover:bg-[#2A2226] transition-colors shadow-2xs whitespace-nowrap cursor-pointer shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F05A28]"
         title={t('accessibilityAndLangPref', 'Accessibility & Language Preferences')}
         aria-label={t('accessibilityOptions', 'Accessibility options')}
         aria-expanded={isOpen}
       >
-        <Sliders className="w-3.5 h-3.5 text-[#F05A28]" />
-        <Globe className="w-3.5 h-3.5 text-stone-500 dark:text-stone-400" />
-        <span className="hidden sm:inline font-semibold text-[11px] text-[#2B2024] dark:text-[#FAF5F7]">
+        <Sliders className="w-3.5 h-3.5 text-[#F05A28] shrink-0" />
+        <Globe className="w-3.5 h-3.5 text-stone-500 dark:text-stone-400 shrink-0" />
+        <span className="hidden xl:inline font-semibold text-[11px] text-[#2B2024] dark:text-[#FAF5F7] whitespace-nowrap">
           {SUPPORTED_LANGUAGES.find((l) => l.code === currentLanguage)?.nativeLabel || t('language', 'Language')}
         </span>
       </button>
@@ -106,14 +119,14 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
                 {t('textSize', 'Text Size')}
               </span>
               <span className="text-[10px] font-bold text-[#F05A28] uppercase">
-                {config.textSize === 'xl' ? 'Extra Large (1.50x)' : config.textSize === 'large' ? 'Large (1.25x)' : 'Default (1.0x)'}
+                {config.textSize === 'xl' ? 'Extra Large (1.16x)' : config.textSize === 'large' ? 'Large (1.08x)' : 'Default (1.0x)'}
               </span>
             </div>
             <div className="grid grid-cols-3 gap-1.5">
               {[
                 { id: 'standard', label: 'Default', scale: '1.0x' },
-                { id: 'large', label: 'Large', scale: '1.25x' },
-                { id: 'xl', label: 'Extra Large', scale: '1.50x' },
+                { id: 'large', label: 'Large', scale: '1.08x' },
+                { id: 'xl', label: 'Extra Large', scale: '1.16x' },
               ].map((s) => (
                 <button
                   key={s.id}
@@ -145,10 +158,10 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
             </div>
             <div className="grid grid-cols-2 gap-1.5">
               {[
-                { id: 'default', label: 'Standard' },
-                { id: 'redGreen', label: 'Red-Green Friendly' },
-                { id: 'blueYellow', label: 'Blue-Yellow Friendly' },
-                { id: 'monochrome', label: 'Monochrome' },
+                { id: 'default', label: 'Standard', color: '#F05A28' },
+                { id: 'redGreen', label: 'Red-Green', color: '#2563EB' },
+                { id: 'blueYellow', label: 'Blue-Yellow', color: '#0D9488' },
+                { id: 'monochrome', label: 'Monochrome', color: '#6B7280' },
               ].map((cv) => (
                 <button
                   key={cv.id}
@@ -160,7 +173,13 @@ export const AccessibilityMenu: React.FC<AccessibilityMenuProps> = ({
                       : 'border border-stone-200 dark:border-[#33292F] bg-stone-50/60 dark:bg-[#211B1F] text-[#2B2024] dark:text-[#FAF5F7] hover:bg-stone-100 dark:hover:bg-[#2A2226]'
                   }`}
                 >
-                  <span className="truncate">{cv.label}</span>
+                  <span className="flex items-center gap-1.5 truncate">
+                    <span
+                      className="w-2.5 h-2.5 rounded-full shrink-0 border border-black/10 dark:border-white/20"
+                      style={{ backgroundColor: cv.color }}
+                    />
+                    <span className="truncate">{cv.label}</span>
+                  </span>
                   {config.colorVision === cv.id && <Check className="w-3 h-3 ml-1 shrink-0" />}
                 </button>
               ))}

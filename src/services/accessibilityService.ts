@@ -18,8 +18,8 @@ const USER_STORAGE_KEY = 'retinaguard_auth_user';
 
 export const TEXT_SIZE_SCALES: Record<TextSizeOption, { scale: number; rootPx: number; label: string }> = {
   standard: { scale: 1.0, rootPx: 16, label: 'Default' },
-  large: { scale: 1.25, rootPx: 20, label: 'Large' },
-  xl: { scale: 1.50, rootPx: 24, label: 'Extra Large' },
+  large: { scale: 1.08, rootPx: 17.25, label: 'Large' },
+  xl: { scale: 1.16, rootPx: 18.5, label: 'Extra Large' },
 };
 
 const DEFAULT_CONFIG: AccessibilityConfig = {

@@ -133,8 +133,8 @@ export const AccessibilitySettingsModal: React.FC<AccessibilitySettingsModalProp
             <div className="grid grid-cols-3 gap-2.5 pt-1">
               {[
                 { id: 'standard', label: 'Default', scale: '1.0x', display: 'A' },
-                { id: 'large', label: 'Large', scale: '1.25x', display: 'A+' },
-                { id: 'xl', label: 'Extra Large', scale: '1.50x', display: 'A++' },
+                { id: 'large', label: 'Large', scale: '1.08x', display: 'A+' },
+                { id: 'xl', label: 'Extra Large', scale: '1.16x', display: 'A++' },
               ].map((opt) => {
                 const isSelected = config.textSize === opt.id;
                 return (
@@ -231,9 +231,9 @@ export const AccessibilitySettingsModal: React.FC<AccessibilitySettingsModalProp
 
             <div className="grid grid-cols-2 gap-2 pt-1">
               {[
-                { id: 'default', label: 'Default', desc: 'Natural clinical palette' },
-                { id: 'redGreen', label: 'Red-Green Friendly', desc: 'Cyan & Magenta distinction' },
-                { id: 'blueYellow', label: 'Blue-Yellow Friendly', desc: 'Violet & Amber distinction' },
+                { id: 'default', label: 'Default', desc: 'Warm clinical orange & plum' },
+                { id: 'redGreen', label: 'Red-Green Friendly', desc: 'Vivid Royal Blue & Amber' },
+                { id: 'blueYellow', label: 'Blue-Yellow Friendly', desc: 'Deep Sea Teal & Crimson' },
                 { id: 'monochrome', label: 'Monochrome', desc: 'High-contrast grayscale' },
               ].map((item) => {
                 const isSelected = config.colorVision === item.id;

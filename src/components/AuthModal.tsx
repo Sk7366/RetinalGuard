@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Lock, Mail, Shield, CheckCircle2, ArrowRight } from 'lucide-react';
 import { useTranslation } from '../i18n/I18nContext';
+import { RetinaGuardLogo } from './RetinaGuardLogo';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -53,9 +54,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
         {/* Header */}
         <div className="space-y-1.5 mb-6">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#FFE5D8] text-[#D84818] border border-[#FED7AA]">
-            <Shield className="w-3.5 h-3.5 text-[#F05A28]" />
-            <span>{t('researchClinicalPortalBadge', 'Research & Clinical Portal')}</span>
+          <div className="flex items-center gap-2.5 mb-2">
+            <div className="w-9 h-9 rounded-full shrink-0">
+              <RetinaGuardLogo className="w-full h-full" />
+            </div>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#FFE5D8] text-[#D84818] border border-[#FED7AA]">
+              <Shield className="w-3.5 h-3.5 text-[#F05A28]" />
+              <span>{t('researchClinicalPortalBadge', 'Research & Clinical Portal')}</span>
+            </div>
           </div>
           <h2 className="text-xl font-serif font-bold text-[#2B2024]">
             {t('signInRetinaGuardTitle', 'Sign in to RetinaGuard')}

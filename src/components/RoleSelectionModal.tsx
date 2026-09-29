@@ -27,6 +27,7 @@ import { useTranslation } from '../i18n/I18nContext';
 import { HelperRoleTitle, User, UserRole, VerificationStatus } from '../types';
 import { authService } from '../auth/authService';
 import { SUPPORTED_LANGUAGES } from '../i18n/translations';
+import { RetinaGuardLogo } from './RetinaGuardLogo';
 
 interface RoleSelectionModalProps {
   isOpen: boolean;
@@ -304,20 +305,25 @@ export const RoleSelectionModal: React.FC<RoleSelectionModalProps> = ({
                 <ArrowLeft className="w-4 h-4" />
               </button>
             )}
-            <div>
-              <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#F05A28] uppercase tracking-wider mb-0.5">
-                <LogIn className="w-3.5 h-3.5" />
-                <span>{t('authSessionTitle', 'Account Role & Authentication')}</span>
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full shrink-0 drop-shadow-xs">
+                <RetinaGuardLogo className="w-full h-full" />
               </div>
-              <h2 id="role-auth-modal-title" className="text-xl sm:text-2xl font-serif font-bold text-[#2B2024] dark:text-[#FAF5F7]">
-                {view === 'select'
-                  ? t('roleModalTitle', "Choose how you'll use RetinaGuard")
-                  : view === 'patient-auth'
-                  ? t('patientAuthHeader', 'Patient Account Access')
-                  : view === 'helper-auth'
-                  ? t('helperAuthHeader', 'Medical Worker / Social Helper Access')
-                  : t('researcherAuthHeader', 'Researcher Lab Access')}
-              </h2>
+              <div>
+                <div className="flex items-center gap-1.5 text-[11px] font-bold text-[#F05A28] uppercase tracking-wider mb-0.5">
+                  <LogIn className="w-3.5 h-3.5" />
+                  <span>{t('authSessionTitle', 'Account Role & Authentication')}</span>
+                </div>
+                <h2 id="role-auth-modal-title" className="text-xl sm:text-2xl font-serif font-bold text-[#2B2024] dark:text-[#FAF5F7]">
+                  {view === 'select'
+                    ? t('roleModalTitle', "Choose how you'll use RetinaGuard")
+                    : view === 'patient-auth'
+                    ? t('patientAuthHeader', 'Patient Account Access')
+                    : view === 'helper-auth'
+                    ? t('helperAuthHeader', 'Medical Worker / Social Helper Access')
+                    : t('researcherAuthHeader', 'Researcher Lab Access')}
+                </h2>
+              </div>
             </div>
           </div>
 

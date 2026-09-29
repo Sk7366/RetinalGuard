@@ -50,6 +50,7 @@ import {
 import { LanguageCode, SUPPORTED_LANGUAGES } from '../i18n/translations';
 import { AccessibilityMenu } from './AccessibilityMenu';
 import { useTranslation } from '../i18n/I18nContext';
+import { RetinaGuardLogo } from './RetinaGuardLogo';
 
 interface NavbarProps {
   experience?: AppExperience;
@@ -109,13 +110,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   // Dropdown states
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [moreMenuOpen, setMoreMenuOpen] = useState(false);
-  const [langMenuOpen, setLangMenuOpen] = useState(false);
   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
   const [modeMenuOpen, setModeMenuOpen] = useState(false);
 
   // Refs for click outside handling
   const moreRef = useRef<HTMLDivElement>(null);
-  const langRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
   const modeMenuRef = useRef<HTMLDivElement>(null);
 
@@ -139,17 +138,11 @@ export const Navbar: React.FC<NavbarProps> = ({
     currentUser?.id !== 'guest-patient' &&
     Boolean(currentUser?.email);
 
-  const currentLangObj =
-    SUPPORTED_LANGUAGES.find((l) => l.code === currentLanguage) || SUPPORTED_LANGUAGES[0];
-
   // Close menus on click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (moreRef.current && !moreRef.current.contains(event.target as Node)) {
         setMoreMenuOpen(false);
-      }
-      if (langRef.current && !langRef.current.contains(event.target as Node)) {
-        setLangMenuOpen(false);
       }
       if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
         setProfileMenuOpen(false);
@@ -211,8 +204,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               className="flex items-center gap-2 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F05A28] rounded-xl group transition-transform active:scale-[0.98] cursor-pointer"
               aria-label="RetinaGuard AI Home"
             >
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white bg-[#F05A28] group-hover:bg-[#D84818] transition-colors shrink-0 shadow-xs">
-                <Eye className="w-4 h-4" />
+              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center transition-transform group-hover:scale-105 shrink-0">
+                <RetinaGuardLogo className="w-full h-full" />
               </div>
 
               <div className="flex flex-col justify-center">
@@ -250,7 +243,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <nav
             id="desktop-main-navigation"
             aria-label="Primary Navigation"
-            className="hidden lg:flex items-center gap-0.5 xl:gap-1.5 min-w-0"
+            className="hidden lg:flex items-center gap-1 xl:gap-2 shrink-0"
           >
             {/* -------------------------------------------------------------
                 A. PATIENT NAVIGATION
@@ -277,7 +270,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   type="button"
                   id="nav-patient-how-it-works"
                   onClick={() => handlePublicNav('how-it-works')}
-                  className={`px-2 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F05A28] ${
+                  className={`hidden 2xl:inline-block px-2 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F05A28] ${
                     publicRoute === 'how-it-works'
                       ? 'text-[#F05A28] bg-[#FFE5D8] dark:bg-[#3D251E] dark:text-[#FF7A4D] font-semibold'
                       : 'text-[#6F6267] dark:text-[#C8BCC2] hover:text-[#2B2024] dark:hover:text-[#FAF5F7] hover:bg-[#FFE5D8]/40 dark:hover:bg-[#3D251E]/40'
@@ -325,7 +318,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   {t('navLearn', 'Learn')}
                 </button>
 
-                {/* MORE DROPDOWN ON TABLET/COMPACT DESKTOP (1024-1279px for My Screening & Learn; 1280-1535px for Learn) */}
+                {/* MORE DROPDOWN ON TABLET/COMPACT DESKTOP (1024-1535px for How It Works & Learn; 1280-1535px for How It Works & Learn) */}
                 <div className="relative 2xl:hidden" ref={moreRef}>
                   <button
                     type="button"
@@ -348,18 +341,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                       id="nav-patient-more-dropdown"
                       className="absolute left-0 mt-2 w-52 bg-white dark:bg-[#1B161A] rounded-xl shadow-xl border border-[#EFE4DC] dark:border-[#33292F] py-1.5 z-50 animate-in fade-in"
                     >
-                      <div className="xl:hidden">
+                      <div className="2xl:hidden">
                         <button
                           type="button"
-                          onClick={() => handlePublicNav('my-screening')}
+                          onClick={() => handlePublicNav('how-it-works')}
                           className={`w-full text-left px-3.5 py-2 text-xs flex items-center gap-2 transition-colors ${
-                            publicRoute === 'my-screening'
+                            publicRoute === 'how-it-works'
                               ? 'text-[#F05A28] bg-[#FFE5D8] dark:bg-[#3D251E] font-semibold'
                               : 'text-[#2B2024] dark:text-[#FAF5F7] hover:bg-[#FFFDF9] dark:hover:bg-[#251E23]'
                           }`}
                         >
-                          <Activity className="w-3.5 h-3.5 text-[#F05A28]" />
-                          <span>{t('navMyScreening', 'My Screening')}</span>
+                          <HelpCircle className="w-3.5 h-3.5 text-[#F05A28]" />
+                          <span>{t('navHowItWorks', 'How It Works')}</span>
                         </button>
                       </div>
 
@@ -414,6 +407,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   {t('navStartScreening', 'Start Screening')}
                 </button>
 
+                {/* Review Queue is a primary screening workflow step */}
                 <button
                   type="button"
                   id="nav-helper-review-queue"
@@ -427,12 +421,12 @@ export const Navbar: React.FC<NavbarProps> = ({
                   {t('navReviewQueue', 'Review Queue')}
                 </button>
 
-                {/* Visible on Desktop (>= 1280px), Collapsed into 'More' on Tablet (1024-1279px) */}
+                {/* Visible on Ultra-Wide Desktop (>= 1536px), Collapsed into 'More' on Standard Desktop/Laptop */}
                 <button
                   type="button"
                   id="nav-helper-appointments-desktop"
                   onClick={() => handleProviderNav('appointments')}
-                  className={`hidden xl:inline-block px-2 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F05A28] ${
+                  className={`hidden 2xl:inline-block px-2 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F05A28] ${
                     providerRoute === 'appointments'
                       ? 'text-[#F05A28] bg-[#FFE5D8] dark:bg-[#3D251E] font-semibold'
                       : 'text-[#6F6267] dark:text-[#C8BCC2] hover:text-[#2B2024] dark:hover:text-[#FAF5F7] hover:bg-[#FFE5D8]/40 dark:hover:bg-[#3D251E]/40'
@@ -445,7 +439,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   type="button"
                   id="nav-helper-referrals-desktop"
                   onClick={() => handleProviderNav('referrals')}
-                  className={`hidden xl:inline-block px-2 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F05A28] ${
+                  className={`hidden 2xl:inline-block px-2 xl:px-3 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F05A28] ${
                     providerRoute === 'referrals'
                       ? 'text-[#F05A28] bg-[#FFE5D8] dark:bg-[#3D251E] font-semibold'
                       : 'text-[#6F6267] dark:text-[#C8BCC2] hover:text-[#2B2024] dark:hover:text-[#FAF5F7] hover:bg-[#FFE5D8]/40 dark:hover:bg-[#3D251E]/40'
@@ -475,8 +469,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                       id="nav-helper-more-dropdown"
                       className="absolute left-0 mt-2 w-56 bg-white dark:bg-[#1B161A] rounded-xl shadow-xl border border-[#EFE4DC] dark:border-[#33292F] py-1.5 z-50 animate-in fade-in"
                     >
-                      {/* Secondary Items Collapsed on Tablet */}
-                      <div className="xl:hidden pb-1 mb-1 border-b border-[#EFE4DC] dark:border-[#33292F]">
+                      {/* Secondary Items Collapsed on Desktop/Laptop (< 1536px) */}
+                      <div className="2xl:hidden pb-1 mb-1 border-b border-[#EFE4DC] dark:border-[#33292F]">
                         <button
                           type="button"
                           onClick={() => handleProviderNav('appointments')}
@@ -615,7 +609,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                   type="button"
                   id="nav-researcher-experiments"
                   onClick={() => handleProviderNav('experiments')}
-                  className={`hidden xl:inline-block px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F05A28] ${
+                  className={`hidden 2xl:inline-block px-2 xl:px-2.5 py-1.5 rounded-lg text-xs xl:text-sm font-medium transition-colors whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F05A28] ${
                     providerRoute === 'experiments'
                       ? 'text-[#F05A28] bg-[#FFE5D8] dark:bg-[#3D251E] font-semibold'
                       : 'text-[#6F6267] dark:text-[#C8BCC2] hover:text-[#2B2024] dark:hover:text-[#FAF5F7] hover:bg-[#FFE5D8]/40 dark:hover:bg-[#3D251E]/40'
@@ -645,8 +639,8 @@ export const Navbar: React.FC<NavbarProps> = ({
                       id="nav-researcher-more-dropdown"
                       className="absolute left-0 mt-2 w-56 bg-white dark:bg-[#1B161A] rounded-xl shadow-xl border border-[#EFE4DC] dark:border-[#33292F] py-1.5 z-50 animate-in fade-in"
                     >
-                      {/* Secondary items collapsed on Tablet */}
-                      <div className="xl:hidden pb-1 mb-1 border-b border-[#EFE4DC] dark:border-[#33292F]">
+                      {/* Secondary items collapsed on Desktop/Laptop (< 1536px) */}
+                      <div className="2xl:hidden pb-1 mb-1 border-b border-[#EFE4DC] dark:border-[#33292F]">
                         <button
                           type="button"
                           onClick={() => handleProviderNav('experiments')}
@@ -723,73 +717,14 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* =====================================================================
               3. RIGHT SIDE CONTROLS
               - Workspace Mode Selector (Patient / Medical Worker / Researcher)
-              - Language Selector
-              - Accessibility & Display Preferences
+              - Accessibility & Display Preferences (Includes integrated Language Selector)
               - Sign In / Profile
               - Primary CTA (START SCREENING)
               - Hamburger Toggle (< 1024px)
               ===================================================================== */}
-          <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2 lg:gap-2.5 shrink-0 min-w-0">
+          <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-2.5 shrink-0">
             {/* -------------------------------------------------------------
-                LANGUAGE SELECTOR
-                (Visible in top bar on tablet/desktop >= 768px)
-                ------------------------------------------------------------- */}
-            <div className="relative hidden md:block" ref={langRef}>
-              <button
-                type="button"
-                id="navbar-language-btn"
-                onClick={() => setLangMenuOpen(!langMenuOpen)}
-                className="p-1.5 sm:px-2 lg:px-2.5 sm:py-1.5 rounded-xl border border-[#EFE4DC] dark:border-[#33292F] bg-[#FFFDF9] dark:bg-[#1B161A] hover:bg-white dark:hover:bg-[#251E23] text-xs text-[#2B2024] dark:text-[#FAF5F7] flex items-center gap-1 sm:gap-1.5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F05A28]"
-                title="Change language"
-                aria-label="Language selection"
-                aria-expanded={langMenuOpen}
-              >
-                <Globe className="w-3.5 h-3.5 text-[#F05A28] shrink-0" />
-                <span className="font-semibold hidden xl:inline text-xs">
-                  {currentLangObj.nativeLabel}
-                </span>
-                <span className="font-semibold hidden md:inline xl:hidden text-xs uppercase">
-                  {currentLangObj.code}
-                </span>
-                <ChevronDown
-                  className={`w-3 h-3 text-[#9E8D91] transition-transform ${
-                    langMenuOpen ? 'rotate-180' : ''
-                  }`}
-                />
-              </button>
-
-              {langMenuOpen && (
-                <div
-                  id="navbar-language-dropdown"
-                  className="absolute right-0 mt-2 w-48 bg-white dark:bg-[#1B161A] rounded-xl shadow-xl border border-[#EFE4DC] dark:border-[#33292F] py-1.5 z-50 animate-in fade-in"
-                >
-                  <div className="px-3 py-1 text-[10px] font-bold text-[#9E8D91] uppercase tracking-wider border-b border-[#EFE4DC] dark:border-[#33292F]">
-                    {t('navSelectLanguage', 'Select Language')}
-                  </div>
-                  {SUPPORTED_LANGUAGES.map((lang) => (
-                    <button
-                      key={lang.code}
-                      type="button"
-                      onClick={() => {
-                        onLanguageChange(lang.code);
-                        setLangMenuOpen(false);
-                      }}
-                      className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between transition-colors ${
-                        currentLanguage === lang.code
-                          ? 'bg-[#FFE5D8] dark:bg-[#3D251E] text-[#F05A28] dark:text-[#FF7A4D] font-bold'
-                          : 'text-[#2B2024] dark:text-[#FAF5F7] hover:bg-[#FFFDF9] dark:hover:bg-[#251E23]'
-                      }`}
-                    >
-                      <span className="font-medium">{lang.nativeLabel}</span>
-                      <span className="text-[11px] text-[#9E8D91]">{lang.label}</span>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* -------------------------------------------------------------
-                ACCESSIBILITY & DISPLAY PREFERENCES
+                ACCESSIBILITY & DISPLAY PREFERENCES (Includes Language Selection)
                 (Quick drawer on desktop >= 1024px; accessible via mobile/tablet drawer)
                 ------------------------------------------------------------- */}
             <div className="hidden lg:block shrink-0">
@@ -801,22 +736,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onOpenFullSettings={onOpenAccessibilityModal}
               />
             </div>
-
-            {/* -------------------------------------------------------------
-                ACTIVE RESULT INDICATOR (Staff only)
-                ------------------------------------------------------------- */}
-            {!isPatient && hasActiveResult && (
-              <button
-                type="button"
-                id="navbar-helper-active-result-btn"
-                onClick={onViewResults}
-                className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#FFE5D8] dark:bg-[#3D251E] border border-[#FED7AA] dark:border-[#582A1B] text-[#D84818] dark:text-[#FF9D73] hover:bg-[#FFEDD5] text-xs font-semibold transition-colors shadow-2xs whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F05A28]"
-                title="View active examination triage"
-              >
-                <Activity className="w-3.5 h-3.5 text-[#F05A28] animate-pulse" />
-                <span>{t('navResultsActive', 'Results • 1 active')}</span>
-              </button>
-            )}
 
             {/* -------------------------------------------------------------
                 AUTHENTICATED ROLE INDICATOR OR SIGN IN
@@ -965,10 +884,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 type="button"
                 id="navbar-signin-get-started-btn"
                 onClick={onOpenRoleModal}
-                className="hidden sm:inline-flex px-3 py-1.5 rounded-xl bg-[#F05A28] hover:bg-[#D84818] text-white text-xs font-bold items-center gap-1.5 transition-colors whitespace-nowrap shadow-xs cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F05A28]"
+                className="hidden sm:inline-flex px-2.5 xl:px-3 py-1.5 rounded-xl bg-[#F05A28] hover:bg-[#D84818] text-white text-xs font-bold items-center gap-1.5 transition-colors whitespace-nowrap shadow-xs cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F05A28]"
               >
                 <LogIn className="w-3.5 h-3.5" />
-                <span>{t('navSignInGetStarted', 'Sign In / Get Started')}</span>
+                <span className="hidden xl:inline">{t('navSignInGetStarted', 'Sign In / Get Started')}</span>
+                <span className="xl:hidden">{t('navSignIn', 'Sign In')}</span>
               </button>
             )}
 
@@ -981,11 +901,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 type="button"
                 id="navbar-primary-cta-start-screening"
                 onClick={() => handlePublicNav('get-screened')}
-                className="inline-flex items-center justify-center gap-1.5 px-3 sm:px-3.5 xl:px-4 py-2 rounded-xl bg-[#F05A28] hover:bg-[#D84818] active:bg-[#C23C10] text-white font-extrabold text-xs sm:text-xs xl:text-sm uppercase tracking-wider shadow-sm hover:shadow-md transition-all whitespace-nowrap ring-2 ring-[#F05A28]/25 shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#F05A28]"
+                className="inline-flex items-center justify-center gap-1.5 px-2.5 sm:px-3 xl:px-4 py-2 rounded-xl bg-[#F05A28] hover:bg-[#D84818] active:bg-[#C23C10] text-white font-extrabold text-xs sm:text-xs xl:text-sm uppercase tracking-wider shadow-sm hover:shadow-md transition-all whitespace-nowrap ring-2 ring-[#F05A28]/25 shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#F05A28]"
               >
                 <Eye className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white shrink-0" />
-                <span className="hidden sm:inline">{t('navStartScreeningAction', 'START SCREENING')}</span>
-                <span className="sm:hidden text-[11px] font-bold">{t('navStartShort', 'START')}</span>
+                <span className="hidden xl:inline">{t('navStartScreeningAction', 'START SCREENING')}</span>
+                <span className="xl:hidden text-[11px] font-bold">{t('navStartShort', 'START')}</span>
               </button>
             )}
 

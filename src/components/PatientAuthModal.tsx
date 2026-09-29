@@ -16,6 +16,7 @@ import {
 import { useTranslation } from '../i18n/I18nContext';
 import { authService } from '../auth/authService';
 import { User } from '../types';
+import { RetinaGuardLogo } from './RetinaGuardLogo';
 
 interface PatientAuthModalProps {
   isOpen: boolean;
@@ -135,9 +136,9 @@ export const PatientAuthModal: React.FC<PatientAuthModalProps> = ({
       <div className="bg-white rounded-3xl border border-[#EFE4DC] shadow-2xl max-w-md w-full overflow-hidden animate-in fade-in zoom-in-95 duration-150 text-[#2B2024]">
         {/* HEADER */}
         <div className="bg-[#FFFDF9] border-b border-[#EFE4DC] px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-xl bg-[#F05A28] text-white flex items-center justify-center shadow-2xs">
-              <Eye className="w-3.5 h-3.5" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0">
+              <RetinaGuardLogo className="w-full h-full" />
             </div>
             <span className="font-serif font-bold text-base text-[#2B2024]">
               RetinaGuard<span className="text-[#F05A28] text-xs font-sans ml-1">{t('patientPortalBadge', 'Patient Portal')}</span>

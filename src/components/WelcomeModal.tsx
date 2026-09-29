@@ -16,6 +16,7 @@ import {
 import { LanguageCode, SUPPORTED_LANGUAGES } from '../i18n/translations';
 import { useTranslation } from '../i18n/I18nContext';
 import { voiceService, VoicePlaybackState } from '../services/voiceService';
+import { RetinaGuardLogo } from './RetinaGuardLogo';
 
 interface WelcomeModalProps {
   isOpen: boolean;
@@ -340,8 +341,8 @@ export const WelcomeModal: React.FC<WelcomeModalProps> = ({
         {/* TOP HEADER: TITLE + CLOSE BUTTON */}
         <div className="px-6 py-4 sm:px-8 sm:py-5 border-b border-[#EFE4DC] bg-white flex items-center justify-between gap-4 shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-[#FFE5D8] border border-[#FED7AA] flex items-center justify-center text-[#F05A28] shadow-2xs">
-              <Eye className="w-5 h-5" />
+            <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 drop-shadow-xs">
+              <RetinaGuardLogo className="w-full h-full" />
             </div>
             <div>
               <span className="text-[10px] font-bold text-[#F05A28] uppercase tracking-wider block">
